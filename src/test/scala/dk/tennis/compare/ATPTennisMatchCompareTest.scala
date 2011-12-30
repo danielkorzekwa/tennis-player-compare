@@ -34,8 +34,8 @@ class ATPTennisMatchCompareTest {
     assertEquals(0.489, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, 2011), 0.001)
     assertEquals(0.717, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", GRASS, THREE_SET_MATCH, 2011), 0.001)
     assertEquals(0.669, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", HARD, THREE_SET_MATCH, 2011), 0.001)
-    
-     assertEquals(0.087, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, 2010), 0.001)
+
+    assertEquals(0.087, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, 2010), 0.001)
     assertEquals(0.358, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", GRASS, THREE_SET_MATCH, 2010), 0.001)
     assertEquals(0.4034, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", HARD, THREE_SET_MATCH, 2010), 0.001)
 
