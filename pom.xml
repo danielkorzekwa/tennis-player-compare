@@ -157,7 +157,7 @@
 		<dependency>
 			<groupId>dk.atp</groupId>
 			<artifactId>atpworldtour-api</artifactId>
-			<version>0.1-20111229.121520-2</version>
+			<version>0.1-20111230.232203-3</version>
 		</dependency>
 
 		<dependency>

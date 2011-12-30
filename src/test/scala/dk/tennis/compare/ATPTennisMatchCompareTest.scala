@@ -25,9 +25,14 @@ class ATPTennisMatchCompareTest {
     assertEquals(0.749, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, 2011), 0.001)
     assertEquals(0.8366, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, 2011), 0.001)
 
-    //exception should be thrown here - no data for playerB
-    assertEquals(-1, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, 2010), 0.001)
+  }
 
+  @Test(expected = classOf[IllegalArgumentException]) def matchProb_not_enough_data_for_player_A {
+    assertEquals(1, matchCompare.matchProb("Milos Raonic", "Roger Federer", CLAY, THREE_SET_MATCH, 2010), 0.001)
+  }
+
+  @Test(expected = classOf[IllegalArgumentException]) def matchProb_not_enough_data_for_player_B {
+    assertEquals(1, matchCompare.matchProb("Roger Federer", "Milos Raonic", CLAY, THREE_SET_MATCH, 2010), 0.001)
   }
 
   @Test def matchProb_various_players_2011 {

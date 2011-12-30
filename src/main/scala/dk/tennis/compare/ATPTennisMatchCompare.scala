@@ -27,6 +27,9 @@ class ATPTennisMatchCompare(atpApi: AtpWorldTourApiImpl) extends TennisPlayerCom
     val playerAFacts = atpApi.playerFacts(fullNamePlayerA, surface, year)
     val playerBFacts = atpApi.playerFacts(fullNamePlayerB, surface, year)
 
+    require(playerAFacts.serviceGamesPlayed > 0 && playerAFacts.returnGamesPlayed > 0, "Number of games served/returned by player % is zero.".format(fullNamePlayerA))
+    require(playerBFacts.serviceGamesPlayed > 0 && playerBFacts.returnGamesPlayed > 0, "Number of games served/returned by player % is zero.".format(fullNamePlayerB))
+
     val firstServeAvpProb = atpApi.firstServeFacts(surface, year).firstServeAvgPct() / 100
 
     val firstReturnAvgProb = atpApi.pointWonFacts(PointWonFactEnum.FIRST_SERVE_RETURN_POINTS_WON, surface, year).pointWonAvgPct() / 100
