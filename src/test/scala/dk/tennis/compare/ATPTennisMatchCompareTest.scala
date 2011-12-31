@@ -60,6 +60,8 @@ class ATPTennisMatchCompareTest {
     assertEquals(0.990, matchCompare.matchProb("Roger Federer", "Robin Soderling", GRASS, THREE_SET_MATCH, 2011), 0.001)
     assertEquals(0.667, matchCompare.matchProb("Roger Federer", "Robin Soderling", HARD, THREE_SET_MATCH, 2011), 0.001)
 
+  }
+  @Test def matchProb_various_players2_2011 {
     assertEquals(-1, matchCompare.matchProb("Novak Djokovic", "Michael Russell", CLAY, THREE_SET_MATCH, 2011), 0)
     assertEquals(-1, matchCompare.matchProb("Novak Djokovic", "Michael Russell", GRASS, THREE_SET_MATCH, 2011), 0)
     assertEquals(-1, matchCompare.matchProb("Novak Djokovic", "Michael Russell", HARD, THREE_SET_MATCH, 2011), 0)
@@ -67,6 +69,6 @@ class ATPTennisMatchCompareTest {
     assertEquals(-1, matchCompare.matchProb("Roger Federer", "Michael Russell", CLAY, THREE_SET_MATCH, 2011), 0)
     assertEquals(-1, matchCompare.matchProb("Roger Federer", "Michael Russell", GRASS, THREE_SET_MATCH, 2011), 0)
     assertEquals(-1, matchCompare.matchProb("Roger Federer", "Michael Russell", HARD, THREE_SET_MATCH, 2011), 0)
-  }
 
+  }
 }
