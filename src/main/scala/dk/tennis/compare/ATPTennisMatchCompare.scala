@@ -24,30 +24,33 @@ class ATPTennisMatchCompare(atpApi: AtpWorldTourApiImpl) extends TennisPlayerCom
    */
   def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, year: Int): Double = {
 
-    val playerAFacts = atpApi.playerFacts(fullNamePlayerA, surface, year)
-    val playerBFacts = atpApi.playerFacts(fullNamePlayerB, surface, year)
+    /**@return Tuple2[winOnServeAGivenBProb,winOnServeBGivenAProb]*/
+    def winOnServe(): Tuple2[Double, Double] = {
 
-    require(playerAFacts.serviceGamesPlayed > 0 && playerAFacts.returnGamesPlayed > 0, "Number of games served/returned by player % is zero.".format(fullNamePlayerA))
-    require(playerBFacts.serviceGamesPlayed > 0 && playerBFacts.returnGamesPlayed > 0, "Number of games served/returned by player % is zero.".format(fullNamePlayerB))
+      val playerAFacts = atpApi.playerFacts(fullNamePlayerA, surface, year)
+      val playerBFacts = atpApi.playerFacts(fullNamePlayerB, surface, year)
 
-    val firstServeAvpProb = atpApi.firstServeFacts(surface, year).firstServeAvgPct() / 100
+      require(playerAFacts.serviceGamesPlayed > 0 && playerAFacts.returnGamesPlayed > 0, "Number of games served/returned by player % is zero.".format(fullNamePlayerA))
+      require(playerBFacts.serviceGamesPlayed > 0 && playerBFacts.returnGamesPlayed > 0, "Number of games served/returned by player % is zero.".format(fullNamePlayerB))
 
-    val firstReturnAvgProb = atpApi.pointWonFacts(PointWonFactEnum.FIRST_SERVE_RETURN_POINTS_WON, surface, year).pointWonAvgPct() / 100
-    val secondReturnAvgProb = atpApi.pointWonFacts(PointWonFactEnum.SECOND_SERVE_RETURN_POINTS_WON, surface, year).pointWonAvgPct() / 100
+      val firstServeAvpProb = atpApi.firstServeFacts(surface, year).firstServeAvgPct() / 100
 
-    val winOnReturnAvgProb = TennisProbFormulaCalc.pointAvgProb(firstServeAvpProb, firstReturnAvgProb, secondReturnAvgProb)
+      val firstReturnAvgProb = atpApi.pointWonFacts(PointWonFactEnum.FIRST_SERVE_RETURN_POINTS_WON, surface, year).pointWonAvgPct() / 100
+      val secondReturnAvgProb = atpApi.pointWonFacts(PointWonFactEnum.SECOND_SERVE_RETURN_POINTS_WON, surface, year).pointWonAvgPct() / 100
+      val winOnReturnAvgProb = TennisProbFormulaCalc.pointAvgProb(firstServeAvpProb, firstReturnAvgProb, secondReturnAvgProb)
 
-    val winOnServeProbA = TennisProbFormulaCalc.pointAvgProb(playerAFacts.firstServePct / 100, playerAFacts.firstServeWonPct / 100, playerAFacts.secondServeWonPct / 100)
-    val winOnReturnProbA = TennisProbFormulaCalc.pointAvgProb(firstServeAvpProb, playerAFacts.firstReturnWonPct / 100, playerAFacts.secondReturnWonPct / 100)
+      //calculate match prob
+      val winOnServeAGivenBProb = TennisProbFormulaCalc.pointProb(winOnServeProb(playerAFacts), winOnReturnProb(playerBFacts,firstServeAvpProb), winOnReturnAvgProb)
+      val winOnServeBGivenAProb = TennisProbFormulaCalc.pointProb(winOnServeProb(playerBFacts), winOnReturnProb(playerAFacts,firstServeAvpProb), winOnReturnAvgProb)
 
-    val winOnServeProbB = TennisProbFormulaCalc.pointAvgProb(playerBFacts.firstServePct / 100, playerBFacts.firstServeWonPct / 100, playerBFacts.secondServeWonPct / 100)
-    val winOnReturnProbB = TennisProbFormulaCalc.pointAvgProb(firstServeAvpProb, playerBFacts.firstReturnWonPct / 100, playerBFacts.secondReturnWonPct / 100)
+      Tuple2(winOnServeAGivenBProb, winOnServeBGivenAProb)
+    }
 
-    //calculate match prob
-    val winOnServeAGivenBProb = TennisProbFormulaCalc.pointProb(winOnServeProbA, winOnReturnProbB, winOnReturnAvgProb)
-    val winOnServeBGivenAProb = TennisProbFormulaCalc.pointProb(winOnServeProbB, winOnReturnProbA, winOnReturnAvgProb)
-
+    val (winOnServeAGivenBProb, winOnServeBGivenAProb) = winOnServe()
     val matchProbAGivenB = TennisProbFormulaCalc.matchProb(winOnServeAGivenBProb, 1 - winOnServeBGivenAProb, matchType)
     matchProbAGivenB
   }
+
+  def winOnServeProb(playerFacts: PlayerFacts): Double = TennisProbFormulaCalc.pointAvgProb(playerFacts.firstServePct / 100, playerFacts.firstServeWonPct / 100, playerFacts.secondServeWonPct / 100)
+  def winOnReturnProb(playerFacts: PlayerFacts, firstServeAvpProb: Double) = TennisProbFormulaCalc.pointAvgProb(firstServeAvpProb, playerFacts.firstReturnWonPct / 100, playerFacts.secondReturnWonPct / 100)
 }
