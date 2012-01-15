@@ -10,6 +10,9 @@ import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import java.util.Date
 import java.text.SimpleDateFormat
+import dk.atp.api.AtpWorldTourApiImpl
+import org.apache.commons.math.util._
+
 /**
  * Calculates tennis market probabilities for a list of markets in a batch process.
  *
@@ -83,6 +86,15 @@ class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
     writeLines(marketProbFile, header :: marketProbsData)
   }
 
-  private def toMarketProb(m: Market): MarketProb = MarketProb(m, Map(2263582L -> 0.6d, 4720522L -> 0.4d), HARD, THREE_SET_MATCH)
+  private def toMarketProb(m: Market): MarketProb = {
+    val atpApi = new AtpWorldTourApiImpl()
+    val matchCompare = new ATPTennisMatchCompare(atpApi)
+    val runners = m.runnerMap.keys.toList
+
+    val surface = HARD
+    val matchType = THREE_SET_MATCH
+    val probability = matchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, 2011)
+    MarketProb(m, Map(runners(0) -> MathUtils.round(probability, 4), runners(1) -> (1 - MathUtils.round(probability, 4))), surface, matchType)
+  }
 
 }
