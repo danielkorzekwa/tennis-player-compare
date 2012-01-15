@@ -2,6 +2,14 @@ package dk.tennis.compare
 
 import scala.io.Source
 import ATPTennisMatchBulkCompare._
+import org.apache.commons.io.FileUtils._
+import java.io.File
+import scala.collection.JavaConversions._
+import dk.atp.api.AtpWorldTourApi._
+import SurfaceEnum._
+import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import java.util.Date
+import java.text.SimpleDateFormat
 /**
  * Calculates tennis market probabilities for a list of markets in a batch process.
  *
@@ -9,16 +17,31 @@ import ATPTennisMatchBulkCompare._
  */
 
 object ATPTennisMatchBulkCompare {
+  private val DATA_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
 
   object Market {
-    def fromCSV(marketData: Iterator[String]): List[Market] = Nil
+    def fromCSV(marketData: Iterator[String]): List[Market] = {
+      val df = new SimpleDateFormat(DATA_FORMAT)
+      Market(100270800, "Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev", df.parse("2011-01-03 05:45:00.000"), Map(2263582L -> "Igor Andreev", 4720522L -> "Alexandr Dolgopolov")) :: Nil
+    }
   }
-  case class Market
+  /**@param selectionMap[selectionId, selectionName]*/
+  case class Market(eventId: Long, fullDescription: String, scheduledOff: Date, runnerMap: Map[Long, String])
 
-  case class MarketProb {
-    def toCSV(): List[String] = {Nil}
+  /**@param runnerProbs[selectionId, probability]*/
+  case class MarketProb(market: Market, runnerProbs: Map[Long, Double], surface: SurfaceEnum, matchType: MatchTypeEnum) {
+    def toCSV(): List[String] = {
+      val df = new SimpleDateFormat(DATA_FORMAT)
+      val marketData = for {
+        (selectionId, prob) <- runnerProbs
+        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: selectionId :: market.runnerMap(selectionId) :: prob :: surface :: matchType :: Nil
+      } yield runnerRecord.mkString(",")
+
+      marketData.toList
+    }
   }
 }
+
 class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
 
   /**
@@ -38,12 +61,15 @@ class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
     val marketDataSource = Source.fromFile(marketDataFileIn)
 
     val markets = Market.fromCSV(marketDataSource.getLines())
-    
+
     val marketProbabilities = markets.map(m => toMarketProb(m))
-    
-    marketProbabilities.foreach(prob => writeToFile(prob.toCSV()))
+    val marketProbsData = List.flatten(marketProbabilities.map(p => p.toCSV()))
+
+    val marketProbFile = new File(marketProbFileOut)
+    val header = "event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type"
+    writeLines(marketProbFile, header :: marketProbsData)
   }
-  
-    private def toMarketProb(m: Market): MarketProb = MarketProb()
-    private def writeToFile(data: List[String]) {}
+
+  private def toMarketProb(m: Market): MarketProb = MarketProb(m, Map(2263582L -> 0.6d, 4720522L -> 0.4d), HARD, THREE_SET_MATCH)
+
 }
