@@ -50,7 +50,7 @@ object ATPTennisMatchBulkCompare {
       val df = new SimpleDateFormat(DATA_FORMAT)
       val marketData = for {
         (selectionId, prob) <- runnerProbs
-        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: selectionId :: market.runnerMap(selectionId) :: prob :: surface :: matchType :: Nil
+        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: selectionId :: market.runnerMap(selectionId) :: MathUtils.round(prob,4) :: surface :: matchType :: Nil
       } yield runnerRecord.mkString(",")
 
       marketData.toList
@@ -94,7 +94,7 @@ class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
     val surface = HARD
     val matchType = THREE_SET_MATCH
     val probability = matchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, 2011)
-    MarketProb(m, Map(runners(0) -> MathUtils.round(probability, 4), runners(1) -> (1 - MathUtils.round(probability, 4))), surface, matchType)
+    MarketProb(m, Map(runners(0) -> probability, runners(1) -> (1 - probability)), surface, matchType)
   }
 
 }
