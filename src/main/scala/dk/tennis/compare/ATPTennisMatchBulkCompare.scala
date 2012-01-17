@@ -23,6 +23,7 @@ object ATPTennisMatchBulkCompare {
   private val DATA_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
 
   object Market {
+    
     def fromCSV(marketData: List[String]): List[Market] = {
       val df = new SimpleDateFormat(DATA_FORMAT)
 
@@ -35,22 +36,25 @@ object ATPTennisMatchBulkCompare {
 
       val markets = for {
         (marketId, marketRunners) <- singleRunnerMarkets.groupBy(m => m.eventId)
-        val market = marketRunners(0).copy(runnerMap = marketRunners(0).runnerMap ++ marketRunners(1).runnerMap)
+        val market = marketRunners(0).copy(runnerMap = mergeMarketRunners(marketRunners))
       } yield market
 
-      markets.toList
+      markets.filter(m => m.runnerMap.size==2).toList
     }
+    
+    private def mergeMarketRunners(markets: List[Market]): Map[Long, String] = markets.foldLeft(Map[Long, String]())((map, market) => map ++ market.runnerMap)
   }
   /**@param runnerMap[selectionId, selectionName]*/
   case class Market(eventId: Long, fullDescription: String, scheduledOff: Date, runnerMap: Map[Long, String])
 
   /**@param runnerProbs[selectionId, probability]*/
   case class MarketProb(market: Market, runnerProbs: Map[Long, Double], surface: SurfaceEnum, matchType: MatchTypeEnum) {
+    
     def toCSV(): List[String] = {
       val df = new SimpleDateFormat(DATA_FORMAT)
       val marketData = for {
         (selectionId, prob) <- runnerProbs
-        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: selectionId :: market.runnerMap(selectionId) :: MathUtils.round(prob,4) :: surface :: matchType :: Nil
+        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: selectionId :: market.runnerMap(selectionId) :: MathUtils.round(prob, 4) :: surface :: matchType :: Nil
       } yield runnerRecord.mkString(",")
 
       marketData.toList
@@ -77,9 +81,12 @@ class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
     val marketDataSource = Source.fromFile(marketDataFileIn)
 
     val markets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
-
-    val marketProbabilities = markets.map(m => toMarketProb(m))
-    val marketProbsData = List.flatten(marketProbabilities.map(p => p.toCSV()))
+    val marketsSize = markets.size
+    val marketProbabilities = for ((market, index) <- markets.zipWithIndex) yield {
+      progress(marketsSize - index)
+      toMarketProb(market)
+    }
+    val marketProbsData = List.flatten(marketProbabilities.filter(p => p.runnerProbs.values.exists(!_.isNaN)).map(p => p.toCSV()))
 
     val marketProbFile = new File(marketProbFileOut)
     val header = "event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type"
@@ -93,7 +100,9 @@ class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
 
     val surface = HARD
     val matchType = THREE_SET_MATCH
-    val probability = matchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, 2011)
+
+    val probability = try { matchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, 2011) } catch { case _ => Double.NaN }
+
     MarketProb(m, Map(runners(0) -> probability, runners(1) -> (1 - probability)), surface, matchType)
   }
 
