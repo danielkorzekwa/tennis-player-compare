@@ -58,11 +58,11 @@ class ATPTennisMatchBulkCompareTest {
     assertEquals(5, probSource.getLines().size)
 
     assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
-    assertEquals("100270788,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Berrer v Sela,2011-01-03 00:30:00.000,2263684,Michael Berrer,0.7053,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
-    assertEquals("100270788,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Berrer v Sela,2011-01-03 00:30:00.000,2263685,Dudi Sela,0.2947,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
-    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-03 05:45:00.000,2263582,Igor Andreev,0.3434,HARD,THREE_SET_MATCH", probSource.reset().getLine(4))
-    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-03 05:45:00.000,4720522,Alexandr Dolgopolov,0.6566,HARD,THREE_SET_MATCH", probSource.reset().getLine(5))
-
+    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-02 05:45:00.000,2263582,Igor Andreev,0.3434,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-02 05:45:00.000,4720522,Alexandr Dolgopolov,0.6566,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
+    assertEquals("100270788,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Berrer v Sela,2011-01-03 00:30:00.000,2263684,Michael Berrer,0.7053,HARD,THREE_SET_MATCH", probSource.reset().getLine(4))
+    assertEquals("100270788,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Berrer v Sela,2011-01-03 00:30:00.000,2263685,Dudi Sela,0.2947,HARD,THREE_SET_MATCH", probSource.reset().getLine(5))
+   
   }
 
   //market with no probabilities should be ignored
