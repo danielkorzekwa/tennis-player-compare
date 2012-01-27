@@ -17,7 +17,7 @@ trait TennisMatchBulkCompare {
    *  @param marketProbFileOut CVS file for exporting market probabilities.
    *  Columns: The same columns as for input file, and:  'probability' of winning a tennis match, surface (CLAY,GRASS,HARD), matchType (THREE_SET_MATCH/FIVE_SET_MATCH).
    *
-   *  @param progress Current number of processed market.
+   *  @param progress Number of markets remaining for processing.
    *
    */
   def matchProb(marketDataFileIn: String, marketProbFileOut: String, progress: (Int) => Unit): Unit

@@ -8,9 +8,14 @@ import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import scala.collection.mutable.ListBuffer
+import dk.atp.api.AtpWorldTourApiImpl
+
 class ATPTennisMatchBulkCompareTest {
 
-  private val atpBulkCompare = new ATPTennisMatchBulkCompare(2011, HARD, THREE_SET_MATCH)
+  private val atpApi = new AtpWorldTourApiImpl()
+  private val matchCompare = new ATPTennisMatchCompare(atpApi)
+
+  private val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare,2011, HARD, THREE_SET_MATCH)
 
   private val tennisMarketsFile = "src/test/resources/tennis_markets_single_market.csv"
   private val tennisProbFile = "./target/tennisprobfile_probabilities.csv"
@@ -36,7 +41,7 @@ class ATPTennisMatchBulkCompareTest {
   }
 
   @Test def two_markets {
-    val progressUpdate:ListBuffer[Int] = ListBuffer()
+    val progressUpdate: ListBuffer[Int] = ListBuffer()
     def progress(marketNumber: Int): Unit = progressUpdate += marketNumber
 
     atpBulkCompare.matchProb("src/test/resources/tennis_markets_two_markets.csv", tennisProbFile, progress)
@@ -87,7 +92,7 @@ class ATPTennisMatchBulkCompareTest {
 
   @Test def market_with_zero_probabilities_predictions_based_on_2010_year_data {
 
-    val atpBulkCompare = new ATPTennisMatchBulkCompare(2010, HARD, THREE_SET_MATCH)
+    val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare,2010, HARD, THREE_SET_MATCH)
 
     def progress(marketNumber: Int): Unit = {}
 
