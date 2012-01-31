@@ -52,12 +52,9 @@ object ATPTennisMatchBulkCompare {
     
     def toCSV(): List[String] = {
       val df = new SimpleDateFormat(DATA_FORMAT)
-       val numberFormat = new java.text.DecimalFormat("#.####")
       val marketData = for {
         (selectionId, prob) <- runnerProbs
-        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: 
-        selectionId :: market.runnerMap(selectionId) :: numberFormat.format(prob) :: surface.toString :: matchType :: Nil
-      
+        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: selectionId :: market.runnerMap(selectionId) :: MathUtils.round(prob, 4) :: surface :: matchType :: Nil
       } yield runnerRecord.mkString(",")
 
       marketData.toList
@@ -65,8 +62,7 @@ object ATPTennisMatchBulkCompare {
   }
 }
 
-/**@TODO Those hard coded year, surface and match type should be obtained per market. Year should be replaced with a current market time.*/
-class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare,year:Int,surface:SurfaceEnum,matchType:MatchTypeEnum) extends TennisMatchBulkCompare {
+class ATPTennisMatchBulkCompare extends TennisMatchBulkCompare {
 
   /**
    * Calculates tennis market probabilities for a list of markets in a batch process and exports it to CSV file.
@@ -78,7 +74,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare,year:Int
    *  @param marketProbFileOut CVS file for exporting market probabilities.
    *  Columns: The same columns as for input file, and:  'probability' of winning a tennis match, surface (CLAY,GRASS,HARD), matchType (THREE_SET_MATCH/FIVE_SET_MATCH).
    *
-   *  @param progress Number of markets remaining for processing..
+   *  @param progress Current number of processed market.
    *
    */
   def matchProb(marketDataFileIn: String, marketProbFileOut: String, progress: (Int) => Unit): Unit = {
@@ -90,20 +86,22 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare,year:Int
       progress(marketsSize - index)
       toMarketProb(market)
     }
-    
-    val filteredAndSortedMarketProbs = marketProbabilities.filter(p => p.runnerProbs.values.exists(!_.isNaN)).sortWith(_.market.scheduledOff.getTime()<_.market.scheduledOff.getTime)
-    val marketProbsData = List.flatten(filteredAndSortedMarketProbs.map(p => p.toCSV()))
-   
+    val marketProbsData = List.flatten(marketProbabilities.filter(p => p.runnerProbs.values.exists(!_.isNaN)).map(p => p.toCSV()))
+
     val marketProbFile = new File(marketProbFileOut)
     val header = "event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type"
     writeLines(marketProbFile, header :: marketProbsData)
   }
 
   private def toMarketProb(m: Market): MarketProb = {
+    val atpApi = new AtpWorldTourApiImpl()
+    val matchCompare = new ATPTennisMatchCompare(atpApi)
     val runners = m.runnerMap.keys.toList
 
-    /**@TODO Those hard coded year, surface and match type should be obtained per market. Year should be replaced with a current market time.*/
-    val probability = try { tennisMatchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, year) } catch { case _ => Double.NaN }
+    val surface = HARD
+    val matchType = THREE_SET_MATCH
+
+    val probability = try { matchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, 2011) } catch { case _ => Double.NaN }
 
     MarketProb(m, Map(runners(0) -> probability, runners(1) -> (1 - probability)), surface, matchType)
   }
