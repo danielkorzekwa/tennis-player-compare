@@ -157,7 +157,7 @@
 		<dependency>
 			<groupId>dk.atp</groupId>
 			<artifactId>atpworldtour-api</artifactId>
-			<version>0.1-20120101.151516-4</version>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -181,6 +181,18 @@
 			<groupId>commons-math</groupId>
 			<artifactId>commons-math</artifactId>
 			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>joda-convert</artifactId>
+			<version>1.1</version>
 		</dependency>
 
 		<!-- Test dependencies -->

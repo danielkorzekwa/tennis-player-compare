@@ -3,6 +3,7 @@ package dk.tennis.compare
 import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import java.util.Date
 
 /**
  * Calculates probability of winning a tennis match by player A against player B. For instance Roger Federer vs Novak Djokovic
@@ -17,10 +18,10 @@ trait TennisPlayerCompare {
    * @param fullNamePlayerB e.g. Novak Djokovic
    * @param surface Clay, grass or hard.
    * @param matchType Three or five set match.
-   * @param year Probability is calculated for the last day of a year.
+   * @param marketTime When the tennis match was played.
    *
    * @return Probability between 0 and 1.
    */
-  def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, year:Int): Double
+  def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, marketTime:Date): Double
 
 }

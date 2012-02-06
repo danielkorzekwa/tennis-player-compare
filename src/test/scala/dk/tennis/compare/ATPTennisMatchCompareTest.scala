@@ -6,70 +6,74 @@ import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.atp.api.AtpWorldTourApiImpl
+import org.joda.time.DateTime
 
 class ATPTennisMatchCompareTest {
 
   private val atpApi = new AtpWorldTourApiImpl()
   private val matchCompare = new ATPTennisMatchCompare(atpApi)
 
+   val marketTime2011 = new DateTime().withYear(2011).toDate()
+   val marketTime2010 = new DateTime().withYear(2010).toDate()
+  
   @Test def matchProb_Roger_Federer_vs_Milos_Raonic {
 
     val playerAFullName = "Roger Federer"
     val playerBFullName = "Milos Raonic"
+    
+    assertEquals(0.768, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.231, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
 
-    assertEquals(0.768, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.231, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.820, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2011), 0.001)
 
-    assertEquals(0.820, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, 2011), 0.001)
-
-    assertEquals(0.749, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.8366, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.749, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.8366, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2011), 0.001)
 
   }
 
   @Test(expected = classOf[IllegalArgumentException]) def matchProb_not_enough_data_for_player_A {
-    assertEquals(1, matchCompare.matchProb("Milos Raonic", "Roger Federer", CLAY, THREE_SET_MATCH, 2010), 0.001)
+    assertEquals(1, matchCompare.matchProb("Milos Raonic", "Roger Federer", CLAY, THREE_SET_MATCH, marketTime2010), 0.001)
   }
 
   @Test(expected = classOf[IllegalArgumentException]) def matchProb_not_enough_data_for_player_B {
-    assertEquals(1, matchCompare.matchProb("Roger Federer", "Milos Raonic", CLAY, THREE_SET_MATCH, 2010), 0.001)
+    assertEquals(1, matchCompare.matchProb("Roger Federer", "Milos Raonic", CLAY, THREE_SET_MATCH, marketTime2010), 0.001)
   }
 
   @Test def matchProb_various_players_2011 {
-    assertEquals(0.489, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.717, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", GRASS, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.669, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", HARD, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.489, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.717, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", GRASS, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.669, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", HARD, THREE_SET_MATCH, marketTime2011), 0.001)
 
-    assertEquals(0.087, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, 2010), 0.001)
-    assertEquals(0.358, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", GRASS, THREE_SET_MATCH, 2010), 0.001)
-    assertEquals(0.4034, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", HARD, THREE_SET_MATCH, 2010), 0.001)
+    assertEquals(0.087, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", CLAY, THREE_SET_MATCH, marketTime2010), 0.001)
+    assertEquals(0.358, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", GRASS, THREE_SET_MATCH, marketTime2010), 0.001)
+    assertEquals(0.4034, matchCompare.matchProb("Novak Djokovic", "Rafael Nadal", HARD, THREE_SET_MATCH, marketTime2010), 0.001)
 
-    assertEquals(0.761, matchCompare.matchProb("Rafael Nadal", "Roger Federer", CLAY, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.186, matchCompare.matchProb("Rafael Nadal", "Roger Federer", GRASS, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.304, matchCompare.matchProb("Rafael Nadal", "Roger Federer", HARD, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.761, matchCompare.matchProb("Rafael Nadal", "Roger Federer", CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.186, matchCompare.matchProb("Rafael Nadal", "Roger Federer", GRASS, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.304, matchCompare.matchProb("Rafael Nadal", "Roger Federer", HARD, THREE_SET_MATCH, marketTime2011), 0.001)
 
-    assertEquals(0.747, matchCompare.matchProb("Novak Djokovic", "Roger Federer", CLAY, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.366, matchCompare.matchProb("Novak Djokovic", "Roger Federer", GRASS, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.464, matchCompare.matchProb("Novak Djokovic", "Roger Federer", HARD, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.747, matchCompare.matchProb("Novak Djokovic", "Roger Federer", CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.366, matchCompare.matchProb("Novak Djokovic", "Roger Federer", GRASS, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.464, matchCompare.matchProb("Novak Djokovic", "Roger Federer", HARD, THREE_SET_MATCH, marketTime2011), 0.001)
 
-    assertEquals(0.783, matchCompare.matchProb("Novak Djokovic", "Robin Soderling", CLAY, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.980, matchCompare.matchProb("Novak Djokovic", "Robin Soderling", GRASS, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.642, matchCompare.matchProb("Novak Djokovic", "Robin Soderling", HARD, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.783, matchCompare.matchProb("Novak Djokovic", "Robin Soderling", CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.980, matchCompare.matchProb("Novak Djokovic", "Robin Soderling", GRASS, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.642, matchCompare.matchProb("Novak Djokovic", "Robin Soderling", HARD, THREE_SET_MATCH, marketTime2011), 0.001)
 
-    assertEquals(0.534, matchCompare.matchProb("Roger Federer", "Robin Soderling", CLAY, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.990, matchCompare.matchProb("Roger Federer", "Robin Soderling", GRASS, THREE_SET_MATCH, 2011), 0.001)
-    assertEquals(0.667, matchCompare.matchProb("Roger Federer", "Robin Soderling", HARD, THREE_SET_MATCH, 2011), 0.001)
+    assertEquals(0.534, matchCompare.matchProb("Roger Federer", "Robin Soderling", CLAY, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.990, matchCompare.matchProb("Roger Federer", "Robin Soderling", GRASS, THREE_SET_MATCH, marketTime2011), 0.001)
+    assertEquals(0.667, matchCompare.matchProb("Roger Federer", "Robin Soderling", HARD, THREE_SET_MATCH, marketTime2011), 0.001)
 
   }
   
   @Test def matchProb_various_players2_2011 {
-    assertEquals(0.9999, matchCompare.matchProb("Novak Djokovic", "Michael Russell", CLAY, THREE_SET_MATCH, 2011), 0.0001)
-    assertEquals(0.9847, matchCompare.matchProb("Novak Djokovic", "Michael Russell", GRASS, THREE_SET_MATCH, 2011), 0.0001)
-    assertEquals(0.9346, matchCompare.matchProb("Novak Djokovic", "Michael Russell", HARD, THREE_SET_MATCH, 2011), 0.0001)
+    assertEquals(0.9999, matchCompare.matchProb("Novak Djokovic", "Michael Russell", CLAY, THREE_SET_MATCH, marketTime2011), 0.0001)
+    assertEquals(0.9847, matchCompare.matchProb("Novak Djokovic", "Michael Russell", GRASS, THREE_SET_MATCH, marketTime2011), 0.0001)
+    assertEquals(0.9346, matchCompare.matchProb("Novak Djokovic", "Michael Russell", HARD, THREE_SET_MATCH, marketTime2011), 0.0001)
 
-    assertEquals(0.9995, matchCompare.matchProb("Roger Federer", "Michael Russell", CLAY, THREE_SET_MATCH, 2011), 0.0001)
-    assertEquals(0.9924, matchCompare.matchProb("Roger Federer", "Michael Russell", GRASS, THREE_SET_MATCH, 2011), 0.0001)
-    assertEquals(0.9382, matchCompare.matchProb("Roger Federer", "Michael Russell", HARD, THREE_SET_MATCH, 2011), 0.0001)
+    assertEquals(0.9995, matchCompare.matchProb("Roger Federer", "Michael Russell", CLAY, THREE_SET_MATCH, marketTime2011), 0.0001)
+    assertEquals(0.9924, matchCompare.matchProb("Roger Federer", "Michael Russell", GRASS, THREE_SET_MATCH, marketTime2011), 0.0001)
+    assertEquals(0.9382, matchCompare.matchProb("Roger Federer", "Michael Russell", HARD, THREE_SET_MATCH, marketTime2011), 0.0001)
 
   }
   

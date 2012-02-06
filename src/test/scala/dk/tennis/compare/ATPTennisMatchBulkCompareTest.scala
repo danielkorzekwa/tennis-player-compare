@@ -9,13 +9,25 @@ import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import scala.collection.mutable.ListBuffer
 import dk.atp.api.AtpWorldTourApiImpl
+import ATPTennisMatchBulkCompare._
+import dk.atp.api._
+import TournamentAtpApi._
+import dk.atp.api.AtpWorldTourApi._
+import SurfaceEnum._
+import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 
 class ATPTennisMatchBulkCompareTest {
 
   private val atpApi = new AtpWorldTourApiImpl()
   private val matchCompare = new ATPTennisMatchCompare(atpApi)
 
-  private val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare,2011, HARD, THREE_SET_MATCH)
+  def marketLookup(market: Market): Tuple2[SurfaceEnum, MatchTypeEnum] =
+    {
+      val tournaments = GenericTournamentAtpApi.parseTournaments(2011, 5)
+      val matches = tournaments.flatMap(_.matches)
+      Tuple2(HARD,THREE_SET_MATCH)
+    }
+  private val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare, marketLookup)
 
   private val tennisMarketsFile = "src/test/resources/tennis_markets_single_market.csv"
   private val tennisProbFile = "./target/tennisprobfile_probabilities.csv"
@@ -92,8 +104,6 @@ class ATPTennisMatchBulkCompareTest {
 
   @Test def market_with_zero_probabilities_predictions_based_on_2010_year_data {
 
-    val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare,2010, HARD, THREE_SET_MATCH)
-
     def progress(marketNumber: Int): Unit = {}
 
     atpBulkCompare.matchProb("src/test/resources/tennis_markets_zero_probability.csv", tennisProbFile, progress)
@@ -102,8 +112,8 @@ class ATPTennisMatchBulkCompareTest {
     assertEquals(3, probSource.getLines().size)
 
     assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
-    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2011-01-18 01:15:00.000,2251410,Rafael Nadal,0.9998,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
-    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2011-01-18 01:15:00.000,2303581,Marcos Daniel,0.0002,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
+    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2251410,Rafael Nadal,0.9998,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2303581,Marcos Daniel,0.0002,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
 
   }
 }

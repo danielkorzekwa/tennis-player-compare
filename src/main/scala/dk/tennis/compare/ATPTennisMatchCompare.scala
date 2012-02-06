@@ -5,7 +5,8 @@ import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.tennisprob._
-
+import java.util.Date
+import org.joda.time.DateTime
 /**
  * Calculates probability of winning a tennis match by player A against player B. For instance Roger Federer vs Novak Djokovic
  *
@@ -22,8 +23,10 @@ class ATPTennisMatchCompare(atpApi: AtpWorldTourApiImpl) extends TennisPlayerCom
    * @param year Probability is calculated for the last day of a year.
    * @return Probability between 0 and 1.
    */
-  def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, year: Int): Double = {
+  def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, marketTime:Date): Double = {
 
+    val year = new DateTime().withMillis(marketTime.getTime()).getYear()
+    
     /**@return Tuple2[winOnServeAGivenBProb,winOnServeBGivenAProb]*/
     def winOnServe(): Tuple2[Double, Double] = {
 

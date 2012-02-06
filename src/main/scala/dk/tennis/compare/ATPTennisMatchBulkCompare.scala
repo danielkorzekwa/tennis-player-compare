@@ -23,7 +23,7 @@ object ATPTennisMatchBulkCompare {
   private val DATA_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
 
   object Market {
-    
+
     def fromCSV(marketData: List[String]): List[Market] = {
       val df = new SimpleDateFormat(DATA_FORMAT)
 
@@ -39,9 +39,9 @@ object ATPTennisMatchBulkCompare {
         val market = marketRunners(0).copy(runnerMap = mergeMarketRunners(marketRunners))
       } yield market
 
-      markets.filter(m => m.runnerMap.size==2).toList
+      markets.filter(m => m.runnerMap.size == 2).toList
     }
-    
+
     private def mergeMarketRunners(markets: List[Market]): Map[Long, String] = markets.foldLeft(Map[Long, String]())((map, market) => map ++ market.runnerMap)
   }
   /**@param runnerMap[selectionId, selectionName]*/
@@ -49,15 +49,15 @@ object ATPTennisMatchBulkCompare {
 
   /**@param runnerProbs[selectionId, probability]*/
   case class MarketProb(market: Market, runnerProbs: Map[Long, Double], surface: SurfaceEnum, matchType: MatchTypeEnum) {
-    
+
     def toCSV(): List[String] = {
       val df = new SimpleDateFormat(DATA_FORMAT)
-       val numberFormat = new java.text.DecimalFormat("#.####")
+      val numberFormat = new java.text.DecimalFormat("#.####")
       val marketData = for {
         (selectionId, prob) <- runnerProbs
-        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) :: 
-        selectionId :: market.runnerMap(selectionId) :: numberFormat.format(prob) :: surface.toString :: matchType :: Nil
-      
+        val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) ::
+          selectionId :: market.runnerMap(selectionId) :: numberFormat.format(prob) :: surface.toString :: matchType :: Nil
+
       } yield runnerRecord.mkString(",")
 
       marketData.toList
@@ -65,8 +65,7 @@ object ATPTennisMatchBulkCompare {
   }
 }
 
-/**@TODO Those hard coded year, surface and match type should be obtained per market. Year should be replaced with a current market time.*/
-class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare,year:Int,surface:SurfaceEnum,matchType:MatchTypeEnum) extends TennisMatchBulkCompare {
+class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, marketLookup: (Market) => Tuple2[SurfaceEnum, MatchTypeEnum]) extends TennisMatchBulkCompare {
 
   /**
    * Calculates tennis market probabilities for a list of markets in a batch process and exports it to CSV file.
@@ -88,22 +87,22 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare,year:Int
     val marketsSize = markets.size
     val marketProbabilities = for ((market, index) <- markets.zipWithIndex) yield {
       progress(marketsSize - index)
-      toMarketProb(market)
+      val tournamentInfo = marketLookup(market)
+      toMarketProb(market, tournamentInfo._1, tournamentInfo._2)
     }
-    
-    val filteredAndSortedMarketProbs = marketProbabilities.filter(p => p.runnerProbs.values.exists(!_.isNaN)).sortWith(_.market.scheduledOff.getTime()<_.market.scheduledOff.getTime)
+
+    val filteredAndSortedMarketProbs = marketProbabilities.filter(p => p.runnerProbs.values.exists(!_.isNaN)).sortWith(_.market.scheduledOff.getTime() < _.market.scheduledOff.getTime)
     val marketProbsData = List.flatten(filteredAndSortedMarketProbs.map(p => p.toCSV()))
-   
+
     val marketProbFile = new File(marketProbFileOut)
     val header = "event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type"
     writeLines(marketProbFile, header :: marketProbsData)
   }
 
-  private def toMarketProb(m: Market): MarketProb = {
+  private def toMarketProb(m: Market, surface: SurfaceEnum, matchType: MatchTypeEnum): MarketProb = {
     val runners = m.runnerMap.keys.toList
 
-    /**@TODO Those hard coded year, surface and match type should be obtained per market. Year should be replaced with a current market time.*/
-    val probability = try { tennisMatchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, year) } catch { case _ => Double.NaN }
+    val probability = try { tennisMatchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), surface, matchType, m.scheduledOff) } catch { case _ => Double.NaN }
 
     MarketProb(m, Map(runners(0) -> probability, runners(1) -> (1 - probability)), surface, matchType)
   }
