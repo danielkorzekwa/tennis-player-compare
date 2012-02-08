@@ -26,7 +26,7 @@ class ATPTennisMatchCompare(atpApi: AtpWorldTourApiImpl) extends TennisPlayerCom
   def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, marketTime:Date): Double = {
 
     val year = new DateTime().withMillis(marketTime.getTime()).getYear()
-    
+   
     /**@return Tuple2[winOnServeAGivenBProb,winOnServeBGivenAProb]*/
     def winOnServe(): Tuple2[Double, Double] = {
 

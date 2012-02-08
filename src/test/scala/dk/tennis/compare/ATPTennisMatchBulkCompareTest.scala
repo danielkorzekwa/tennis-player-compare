@@ -9,25 +9,27 @@ import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import scala.collection.mutable.ListBuffer
 import dk.atp.api.AtpWorldTourApiImpl
-import ATPTennisMatchBulkCompare._
 import dk.atp.api._
 import TournamentAtpApi._
 import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import domain._
+import ATPTennisMatchBulkCompareTest._
+
+object ATPTennisMatchBulkCompareTest {
+
+  private var tournamentApi: GenericTournamentAtpApi = new GenericTournamentAtpApi(10000)
+  private val tournamentLookup = new CachedTournamentLookup(tournamentApi)
+
+}
 
 class ATPTennisMatchBulkCompareTest {
 
   private val atpApi = new AtpWorldTourApiImpl()
   private val matchCompare = new ATPTennisMatchCompare(atpApi)
 
-  def marketLookup(market: Market): Tuple2[SurfaceEnum, MatchTypeEnum] =
-    {
-      val tournaments = GenericTournamentAtpApi.parseTournaments(2011, 5)
-      val matches = tournaments.flatMap(_.matches)
-      Tuple2(HARD,THREE_SET_MATCH)
-    }
-  private val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare, marketLookup)
+  private val atpBulkCompare = new ATPTennisMatchBulkCompare(matchCompare, tournamentLookup)
 
   private val tennisMarketsFile = "src/test/resources/tennis_markets_single_market.csv"
   private val tennisProbFile = "./target/tennisprobfile_probabilities.csv"
@@ -38,7 +40,7 @@ class ATPTennisMatchBulkCompareTest {
   }
 
   @Test def single_market {
-
+  
     def progress(marketNumber: Int): Unit = {}
 
     atpBulkCompare.matchProb(tennisMarketsFile, tennisProbFile, progress)
@@ -112,8 +114,38 @@ class ATPTennisMatchBulkCompareTest {
     assertEquals(3, probSource.getLines().size)
 
     assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
-    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2251410,Rafael Nadal,0.9998,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
-    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2303581,Marcos Daniel,0.0002,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
+    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2251410,Rafael Nadal,1,HARD,FIVE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2303581,Marcos Daniel,0,HARD,FIVE_SET_MATCH", probSource.reset().getLine(3))
+
+  }
+  
+   @Test def market_grass {
+
+    def progress(marketNumber: Int): Unit = {}
+
+    atpBulkCompare.matchProb("src/test/resources/tennis_markets_grass.csv", tennisProbFile, progress)
+
+    val probSource = Source.fromFile(tennisProbFile)
+    assertEquals(3, probSource.getLines().size)
+
+    assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
+    assertEquals("102994153,Group A/Wimbledon 2011/Mens Tournament/First Round Matches/Soderling v Petzschner,2011-06-21 15:15:00.000,2263597,Robin Soderling,0.0945,GRASS,FIVE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("102994153,Group A/Wimbledon 2011/Mens Tournament/First Round Matches/Soderling v Petzschner,2011-06-21 15:15:00.000,2525241,Philipp Petzschner,0.9055,GRASS,FIVE_SET_MATCH", probSource.reset().getLine(3))
+
+  }
+   
+    @Test def market_clay {
+
+    def progress(marketNumber: Int): Unit = {}
+
+    atpBulkCompare.matchProb("src/test/resources/tennis_markets_clay.csv", tennisProbFile, progress)
+
+    val probSource = Source.fromFile(tennisProbFile)
+    assertEquals(3, probSource.getLines().size)
+
+    assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
+    assertEquals("102860782,Group A/French Open 2011/Mens Tournament/First Round Matches/Ferrer v Nieminen,2011-05-22 10:15:00.000,2257304,Jarkko Nieminen,0.0197,CLAY,FIVE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("102860782,Group A/French Open 2011/Mens Tournament/First Round Matches/Ferrer v Nieminen,2011-05-22 10:15:00.000,2257314,David Ferrer,0.9803,CLAY,FIVE_SET_MATCH", probSource.reset().getLine(3))
 
   }
 }
