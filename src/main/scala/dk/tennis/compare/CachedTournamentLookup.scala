@@ -9,26 +9,48 @@ import org.joda.time.DateTime
 import scala.collection.mutable.Map
 import scala.collection.immutable.TreeMap
 import scala.Math._
+import CachedTournamentLookup._
+
+object CachedTournamentLookup {
+  case class MatchComposite(tournament: Tournament, tennisMatch: Match, matchFacts: MatchFacts)
+}
 
 class CachedTournamentLookup(tournamentAtpApi: TournamentAtpApi) extends TournamentLookup {
 
   /**key - year.*/
-  val cachedTournaments: Map[Int, List[Tournament]] = Map()
+  val cachedMatches: Map[Int, List[MatchComposite]] = Map()
 
   /**Look for tournament matching given market.*/
   def lookup(market: Market): Option[Tournament] = {
     val year = new DateTime(market.scheduledOff).getYear()
 
-    val tournaments = cachedTournaments.getOrElseUpdate(year, tournamentAtpApi.parseTournaments(year))
+    val matches = cachedMatches.getOrElseUpdate(year, loadMarkets(year))
 
-    def matchMarket(tournament: Tournament): Boolean = {
-      tournament.matches.exists(m => { m.players.sorted.equals(market.runnerMap.values.toList.sorted) })
+    def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
+
+    val filteredMatches = matches.filter(m => playerNames(m.matchFacts).sorted.equals(market.runnerMap.values.toList.sorted))
+    val timeDiffMatches = TreeMap[Long, Tournament]() ++ filteredMatches.map(m => (abs(market.scheduledOff.getTime() - m.tournament.tournamentTime.getTime()), m.tournament))
+
+    if (timeDiffMatches.isEmpty) None else Option(timeDiffMatches.head._2)
+  }
+
+  private def loadMarkets(year: Int): List[MatchComposite] = {
+    collection.parallel.ForkJoinTasks.defaultForkJoinPool.setParallelism(16)
+
+    val tournaments = tournamentAtpApi.parseTournaments(year).filter(!_.tournamentUrl.isEmpty())
+
+    val matchesComposite = tournaments.par.flatMap { tournament =>
+
+      val tennisMatches = tournamentAtpApi.parseTournament(tournament.tournamentUrl)
+
+      tennisMatches.par.map { tennisMatch =>
+        val matchFacts = tournamentAtpApi.parseMatchFacts(tennisMatch.matchFactsUrl)
+
+        MatchComposite(tournament, tennisMatch, matchFacts)
+      }
     }
 
-    val filteredTournaments = tournaments.filter(matchMarket(_))
-    val timeDiffTournaments = TreeMap[Long, Tournament]() ++ filteredTournaments.map(t => (abs(market.scheduledOff.getTime() - t.tournamentTime.getTime()), t))
-
-    if (timeDiffTournaments.isEmpty) None else Option(timeDiffTournaments.head._2)
+    matchesComposite.toList
   }
 
 }

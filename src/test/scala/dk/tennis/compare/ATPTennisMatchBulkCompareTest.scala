@@ -114,8 +114,8 @@ class ATPTennisMatchBulkCompareTest {
     assertEquals(3, probSource.getLines().size)
 
     assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
-    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2251410,Rafael Nadal,1,HARD,FIVE_SET_MATCH", probSource.reset().getLine(2))
-    assertEquals("100277952,Group A/Australian Open 2011/Mens Tournament/First Round Matches/Nadal v Daniel,2010-01-18 01:15:00.000,2303581,Marcos Daniel,0,HARD,FIVE_SET_MATCH", probSource.reset().getLine(3))
+    assertEquals("100277952,London / Queen's Club/Nadal v Daniel,2010-06-07 01:15:00.000,2251410,Rafael Nadal,0.993,GRASS,THREE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("100277952,London / Queen's Club/Nadal v Daniel,2010-06-07 01:15:00.000,2303581,Marcos Daniel,0.007,GRASS,THREE_SET_MATCH", probSource.reset().getLine(3))
 
   }
   
