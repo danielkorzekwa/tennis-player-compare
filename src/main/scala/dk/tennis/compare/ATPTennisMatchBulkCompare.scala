@@ -12,13 +12,17 @@ import domain._
 import dk.atp.api.AtpWorldTourApiImpl
 import org.apache.commons.math.util._
 import dk.atp.api.TournamentAtpApi._
+import scala.collection.immutable.TreeMap
+import org.joda.time.DateTime
+import scala.Math._
+
 
 /**
  * Calculates tennis market probabilities for a list of markets in a batch process.
  *
  * @author KorzekwaD
  */
-class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, tournamentLookup: TournamentLookup) extends TennisMatchBulkCompare {
+class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatchLoader: ATPMatchesLoader) extends TennisMatchBulkCompare {
 
   /**
    * Calculates tennis market probabilities for a list of markets in a batch process and exports it to CSV file.
@@ -40,7 +44,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, tournam
     val marketsSize = markets.size
     val marketProbabilities = for ((market, index) <- markets.zipWithIndex) yield {
       progress(marketsSize - index)
-      val tournament = tournamentLookup.lookup(market)
+      val tournament =lookup(market)
 
       toMarketProb(market, tournament)
     }
@@ -68,5 +72,19 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, tournam
     } catch { case _ => None }
     marketProb
   }
+  
+   /**Look for tournament matching given market.*/
+  private def lookup(market: Market): Option[Tournament] = {
+    val year = new DateTime(market.scheduledOff).getYear()
+  
+    val matches = atpMatchLoader.loadMarkets(year)
+
+    def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
+
+    val filteredMatches = matches.filter(m => playerNames(m.matchFacts).sorted.equals(market.runnerMap.values.toList.sorted))
+    val timeDiffMatches = TreeMap[Long, Tournament]() ++ filteredMatches.map(m => (abs(market.scheduledOff.getTime() - m.tournament.tournamentTime.getTime()), m.tournament))
+
+    if (timeDiffMatches.isEmpty) None else Option(timeDiffMatches.head._2)
+  } 
 
 }
