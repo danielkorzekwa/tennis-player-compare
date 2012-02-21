@@ -6,13 +6,16 @@ import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.atp.api.AtpWorldTourApiImpl
-import dk.atp.api.GenericTournamentAtpApi
+import dk.atp.api.tournament.GenericTournamentAtpApi
 import org.joda.time.DateTime
 import ATPTennisMatchCompareTest._
+import dk.atp.api._
+import dk.atp.api.tournament._
 
 object ATPTennisMatchCompareTest {
   private var tournamentApi: GenericTournamentAtpApi = new GenericTournamentAtpApi(10000)
-  private val atpMatchesLoader = new CachedATPMatchesLoader(tournamentApi)
+   private val genericATPMatchesLoader = new GenericATPMatchesLoader(tournamentApi)
+  private val atpMatchesLoader = new CachedATPMatchesLoader(genericATPMatchesLoader)
 }
 
 class ATPTennisMatchCompareTest {
@@ -33,7 +36,7 @@ class ATPTennisMatchCompareTest {
     assertEquals(0.907, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
 
     assertEquals(0.797, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.870, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(Double.NaN, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
 
   }
 
