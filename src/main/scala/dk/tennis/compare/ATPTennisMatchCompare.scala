@@ -56,26 +56,29 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
     val playerMatches = matches.filter(m => m.matchFacts.containsPlayer(playerName))
     val timestampedWinOnServePct = playerMatches.map { m =>
       val playerFacts = m.matchFacts.playerFacts(playerName).get
-      TimestampedDouble(m.tournament.tournamentTime, playerFacts.totalServicePointsWon.toDouble / playerFacts.totalServicePoints.toDouble)
+      TimestampedDouble(m.tournament.tournamentTime, playerFacts.totalServicePointsWonPct)
     }
-    val winOnServeProb = avg(timestampedWinOnServePct)
+    val winOnServeProb = avgDiscount(timestampedWinOnServePct)
     winOnServeProb
   }
 
   private def winOnReturnProb(playerName: String, matches: List[MatchComposite]): Double = {
-    val playerMatches = matches.filter(m => m.matchFacts.containsPlayer(playerName))   
+    val playerMatches = matches.filter(m => m.matchFacts.containsPlayer(playerName))
     val timestampedWinOnReturnPct = playerMatches.map { m =>
       val opponentFacts = m.matchFacts.playerOpponentFacts(playerName).get
-      TimestampedDouble(m.tournament.tournamentTime, (opponentFacts.totalServicePoints - opponentFacts.totalServicePointsWon).toDouble / opponentFacts.totalServicePoints.toDouble)
+      TimestampedDouble(m.tournament.tournamentTime, opponentFacts.totalServicePointsLostPct)
     }
-    val winOnServeProb = avg(timestampedWinOnReturnPct)
-    winOnServeProb
+    val winOnReturnProb = avgDiscount(timestampedWinOnReturnPct)
+    winOnReturnProb
   }
 
   private def calcWinOnReturnAvgProb(matches: List[MatchComposite]): Double = {
-    val playerFacts = matches.flatMap(m => List(m.matchFacts.playerAFacts, m.matchFacts.playerBFacts))
-    val prob = playerFacts.map(f => (f.totalServicePoints - f.totalServicePointsWon).toDouble / f.totalServicePoints).sum / playerFacts.size
-    prob
+    val timestampedWinOnReturnPct = matches.flatMap { m =>
+      TimestampedDouble(m.tournament.tournamentTime, m.matchFacts.playerAFacts.totalServicePointsLostPct) ::
+        TimestampedDouble(m.tournament.tournamentTime, m.matchFacts.playerBFacts.totalServicePointsLostPct) :: Nil
+    }
+    val winOnReturnProb = avgDiscount(timestampedWinOnReturnPct)
+    winOnReturnProb
   }
 
   private def getMatches(surface: SurfaceEnum, matchTimeFrom: DateTime, matchTimeTo: DateTime): List[MatchComposite] = {
@@ -88,7 +91,7 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
     filteredByTimeRangeMatches.toList
   }
 
-  def avg(values: List[TimestampedDouble]): Double = {
+  def avgDiscount(values: List[TimestampedDouble]): Double = {
     val sortedValues = values.sortWith((a, b) => a.timestamp.getTime > b.timestamp.getTime)
     values.map(_.value).sum / values.size
   }
