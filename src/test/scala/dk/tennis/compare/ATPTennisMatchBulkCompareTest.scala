@@ -10,7 +10,8 @@ import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import scala.collection.mutable.ListBuffer
 import dk.atp.api.AtpWorldTourApiImpl
 import dk.atp.api._
-import TournamentAtpApi._
+import dk.atp.api.tournament._
+import tournament.TournamentAtpApi._
 import dk.atp.api.AtpWorldTourApi._
 import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
@@ -20,7 +21,8 @@ import ATPTennisMatchBulkCompareTest._
 object ATPTennisMatchBulkCompareTest {
 
   private var tournamentApi: GenericTournamentAtpApi = new GenericTournamentAtpApi(5000)
-  private val atpMatchesLoader = new CachedATPMatchesLoader(tournamentApi)
+  private val genericATPMatchesLoader = new GenericATPMatchesLoader(tournamentApi)
+  private val atpMatchesLoader = new CachedATPMatchesLoader(genericATPMatchesLoader)
 
 }
 

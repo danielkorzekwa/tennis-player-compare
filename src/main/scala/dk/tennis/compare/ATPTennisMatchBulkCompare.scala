@@ -11,11 +11,11 @@ import java.util.Date
 import domain._
 import dk.atp.api.AtpWorldTourApiImpl
 import org.apache.commons.math.util._
-import dk.atp.api.TournamentAtpApi._
+import dk.atp.api.tournament.TournamentAtpApi._
 import scala.collection.immutable.TreeMap
 import org.joda.time.DateTime
 import scala.Math._
-
+import dk.atp.api.ATPMatchesLoader
 
 /**
  * Calculates tennis market probabilities for a list of markets in a batch process.
