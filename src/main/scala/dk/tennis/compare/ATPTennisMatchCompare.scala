@@ -45,7 +45,7 @@ object ATPTennisMatchCompare {
   }
 
   def avg(values: List[TimestampedDouble]): Double = {
-    val sortedValues = values.sortWith((a,b) => a.timestamp.getTime() > b.timestamp.getTime())
+    val sortedValues = values.sortWith((a,b) => a.timestamp.getTime>b.timestamp.getTime)
     values.map(_.value).sum / values.size
   }
 
