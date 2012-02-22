@@ -83,7 +83,7 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
 
   private def getMatches(surface: SurfaceEnum, matchTimeFrom: DateTime, matchTimeTo: DateTime): List[MatchComposite] = {
     val matches = (matchTimeFrom.getYear() to matchTimeTo.getYear()).flatMap { year =>
-      atpMatchLoader.loadMarkets(year).filter(m => m.tournament.surface.equals(surface))
+      atpMatchLoader.loadMatches(year).filter(m => m.tournament.surface.equals(surface))
     }
 
     val filteredByTimeRangeMatches = matches.filter(m => m.tournament.tournamentTime.getTime() > matchTimeFrom.getMillis()

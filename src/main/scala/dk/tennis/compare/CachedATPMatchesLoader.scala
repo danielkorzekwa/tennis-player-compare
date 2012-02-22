@@ -10,5 +10,5 @@ class CachedATPMatchesLoader(atpMatchesLoader: ATPMatchesLoader) extends ATPMatc
   /**key - year.*/
   private val cachedMatches: Map[Int, List[MatchComposite]] = Map()
 
-  def loadMarkets(year: Int): List[MatchComposite] = cachedMatches.getOrElseUpdate(year, atpMatchesLoader.loadMarkets(year))
+  def loadMatches(year: Int): List[MatchComposite] = cachedMatches.getOrElseUpdate(year, atpMatchesLoader.loadMatches(year))
 }

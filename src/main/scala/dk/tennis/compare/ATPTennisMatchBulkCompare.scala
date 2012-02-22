@@ -77,7 +77,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
   private def lookup(market: Market): Option[Tournament] = {
     val year = new DateTime(market.scheduledOff).getYear()
   
-    val matches = atpMatchLoader.loadMarkets(year)
+    val matches = atpMatchLoader.loadMatches(year)
 
     def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
 
