@@ -44,8 +44,13 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
 
     val winOnReturnAvgProb = calcWinOnReturnAvgProb(matches)
 
-    val winOnServeAGivenBProb = TennisProbFormulaCalc.pointProb(winOnServeProb(fullNamePlayerA, matches), winOnReturnProb(fullNamePlayerB, matches), winOnReturnAvgProb)
-    val winOnServeBGivenAProb = TennisProbFormulaCalc.pointProb(winOnServeProb(fullNamePlayerB, matches), winOnReturnProb(fullNamePlayerA, matches), winOnReturnAvgProb)
+    val playerAwinOnServeProb = winOnServeProb(fullNamePlayerA, matches)
+    val playerBwinOnServeProb = winOnServeProb(fullNamePlayerB, matches)
+    val playerAwinOnReturnProb = winOnReturnProb(fullNamePlayerA, matches)
+    val playerBwinOnReturnProb = winOnReturnProb(fullNamePlayerB, matches)
+
+    val winOnServeAGivenBProb = TennisProbFormulaCalc.pointProb(playerAwinOnServeProb, playerBwinOnReturnProb, winOnReturnAvgProb)
+    val winOnServeBGivenAProb = TennisProbFormulaCalc.pointProb(playerBwinOnServeProb, playerAwinOnReturnProb, winOnReturnAvgProb)
 
     val matchProbAGivenB = TennisProbFormulaCalc.matchProb(winOnServeAGivenBProb, 1 - winOnServeBGivenAProb, matchType)
     matchProbAGivenB
@@ -76,7 +81,8 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
     val timestampedWinOnReturnPct = matches.flatMap { m =>
       TimestampedDouble(m.tournament.tournamentTime, m.matchFacts.playerAFacts.totalServicePointsLostPct) ::
         TimestampedDouble(m.tournament.tournamentTime, m.matchFacts.playerBFacts.totalServicePointsLostPct) :: Nil
-    }
+    }.filter(tsValue => !tsValue.value.isNaN())
+    
     val winOnReturnProb = avgDiscount(timestampedWinOnReturnPct)
     winOnReturnProb
   }
