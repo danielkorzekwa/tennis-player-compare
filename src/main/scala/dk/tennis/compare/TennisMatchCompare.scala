@@ -1,7 +1,7 @@
 package dk.tennis.compare
 
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
+import dk.atp.api.facts.AtpFactsApi._
+import dk.atp.api.domain.SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import java.util.Date
 

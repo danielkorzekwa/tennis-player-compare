@@ -2,10 +2,9 @@ package dk.tennis.compare
 
 import org.junit._
 import Assert._
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
+import dk.atp.api.facts.AtpFactsApi._
+import dk.atp.api.domain.SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
-import dk.atp.api.AtpWorldTourApiImpl
 import dk.atp.api.tournament.GenericTournamentAtpApi
 import org.joda.time.DateTime
 import ATPTennisMatchCompareTest._
@@ -13,17 +12,17 @@ import dk.atp.api._
 import dk.atp.api.tournament._
 
 object ATPTennisMatchCompareTest {
-  private var tournamentApi: GenericTournamentAtpApi = new GenericTournamentAtpApi(10000)
-   private val genericATPMatchesLoader = new GenericATPMatchesLoader(tournamentApi)
-  private val atpMatchesLoader = new CachedATPMatchesLoader(genericATPMatchesLoader)
+
+  private val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2010_2011.csv")
+
 }
 
 class ATPTennisMatchCompareTest {
 
   private val matchCompare = new ATPTennisMatchCompare(atpMatchesLoader)
 
-  val marketTime2012 = new DateTime().withYear(2012).toDate()
-  val marketTime2011 = new DateTime().withYear(2011).toDate()
+  val marketTime2012 = new DateTime(0).withYear(2012).toDate()
+  val marketTime2011 = new DateTime(0).withYear(2011).toDate()
 
   @Test def matchProb_Roger_Federer_vs_Milos_Raonic {
 
@@ -36,7 +35,7 @@ class ATPTennisMatchCompareTest {
     assertEquals(0.907, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
 
     assertEquals(0.797, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.817, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.8735, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
 
   }
 

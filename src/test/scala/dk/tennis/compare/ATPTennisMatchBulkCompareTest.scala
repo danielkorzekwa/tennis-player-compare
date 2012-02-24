@@ -4,26 +4,21 @@ import org.junit._
 import Assert._
 import java.io._
 import scala.io._
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
+import dk.atp.api.facts.AtpFactsApi._
+import dk.atp.api.domain.SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import scala.collection.mutable.ListBuffer
-import dk.atp.api.AtpWorldTourApiImpl
+import dk.atp.api.facts.GenericAtpFactsApi
 import dk.atp.api._
 import dk.atp.api.tournament._
 import tournament.TournamentAtpApi._
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
+import dk.atp.api.facts.GenericAtpFactsApi._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import domain._
 import ATPTennisMatchBulkCompareTest._
 
 object ATPTennisMatchBulkCompareTest {
-
-  private var tournamentApi: GenericTournamentAtpApi = new GenericTournamentAtpApi(5000)
-  private val genericATPMatchesLoader = new GenericATPMatchesLoader(tournamentApi)
-  private val atpMatchesLoader = new CachedATPMatchesLoader(genericATPMatchesLoader)
-
+  private val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2010_2011.csv")
 }
 
 class ATPTennisMatchBulkCompareTest {
@@ -40,7 +35,7 @@ class ATPTennisMatchBulkCompareTest {
     new File(tennisProbFile).delete()
   }
 
-  @Test @Ignore def single_market {
+  @Test def single_market {
   
     def progress(marketNumber: Int): Unit = {}
 
@@ -50,8 +45,8 @@ class ATPTennisMatchBulkCompareTest {
     assertEquals(3, probSource.getLines().size)
 
     assertEquals("event_id,full_description,scheduled_off,selection_id,selection,probability, surface, match_type", probSource.reset().getLine(1))
-    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-03 05:45:00.000,2263582,Igor Andreev,0.3434,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
-    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-03 05:45:00.000,4720522,Alexandr Dolgopolov,0.6566,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
+    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-03 05:45:00.000,2263582,Igor Andreev,0.3604,HARD,THREE_SET_MATCH", probSource.reset().getLine(2))
+    assertEquals("100270800,Group A/Brisbane International 2011/Mens Tournament/First Round Matches/Dolgopolov v Andreev,2011-01-03 05:45:00.000,4720522,Alexandr Dolgopolov,0.6396,HARD,THREE_SET_MATCH", probSource.reset().getLine(3))
 
   }
 

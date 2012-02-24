@@ -1,9 +1,9 @@
 package dk.tennis.compare.domain
 
 import java.text.SimpleDateFormat
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import dk.atp.api.domain._
+import SurfaceEnum._
 
 /**@param runnerProbs[selectionId, probability]*/
 case class MarketProb(market: Market, runnerProbs: Map[Long, Double], surface: SurfaceEnum, matchType: MatchTypeEnum) {

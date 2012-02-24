@@ -4,12 +4,11 @@ import scala.io.Source
 import org.apache.commons.io.FileUtils._
 import java.io.File
 import scala.collection.JavaConversions._
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
+import dk.atp.api.facts.AtpFactsApi._
+import dk.atp.api.domain.SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import java.util.Date
 import domain._
-import dk.atp.api.AtpWorldTourApiImpl
 import org.apache.commons.math.util._
 import dk.atp.api.tournament.TournamentAtpApi._
 import scala.collection.immutable.TreeMap

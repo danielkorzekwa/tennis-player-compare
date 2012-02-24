@@ -3,7 +3,7 @@ package dk.tennis.compare
 import dk.atp.api.tournament.TournamentAtpApi
 import scala.collection.mutable.Map
 import dk.atp.api.ATPMatchesLoader
-import dk.atp.api.ATPMatchesLoader._
+import dk.atp.api.domain._
 
 class CachedATPMatchesLoader(atpMatchesLoader: ATPMatchesLoader) extends ATPMatchesLoader {
 

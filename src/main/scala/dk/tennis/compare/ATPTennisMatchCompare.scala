@@ -1,16 +1,16 @@
 package dk.tennis.compare
 
 import dk.atp.api._
-import dk.atp.api.AtpWorldTourApi._
-import SurfaceEnum._
+import dk.atp.api.facts.AtpFactsApi._
+import dk.atp.api.domain.SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.tennisprob._
 import java.util.Date
 import org.joda.time.DateTime
 import dk.atp.api.tournament.TournamentAtpApi._
-import ATPMatchesLoader._
 import ATPTennisMatchCompare._
 import java.util.Date
+import dk.atp.api.domain._
 
 /**
  * Calculates probability of winning a tennis match by player A against player B. For instance Roger Federer vs Novak Djokovic
@@ -82,7 +82,7 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
       TimestampedDouble(m.tournament.tournamentTime, m.matchFacts.playerAFacts.totalServicePointsLostPct) ::
         TimestampedDouble(m.tournament.tournamentTime, m.matchFacts.playerBFacts.totalServicePointsLostPct) :: Nil
     }.filter(tsValue => !tsValue.value.isNaN())
-    
+
     val winOnReturnProb = avgDiscount(timestampedWinOnReturnPct)
     winOnReturnProb
   }
