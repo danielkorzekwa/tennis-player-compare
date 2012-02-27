@@ -22,8 +22,10 @@ object ATPTennisMatchCompare {
 
 /**
  * @param discountFactor How much discount old market data. 1 = no discount.
+ * @param discountPeriodInDays With what time interval historical data should be discounted.
+ *
  */
-class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Double = 1) extends TennisPlayerCompare {
+class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Double = 1, discountPeriodInDays: Int = 7) extends TennisPlayerCompare {
 
   /**
    * Calculates probability of winning a tennis match by player A against player B.
@@ -98,8 +100,25 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
   }
 
   def avgDiscount(values: List[TimestampedDouble]): Double = {
-    val sortedValues = values.sortWith((a, b) => a.timestamp.getTime > b.timestamp.getTime)
-    values.map(_.value).sum / values.size
+
+    values match {
+      case Nil => Double.NaN
+      case values => {
+        val sortedValues = values.sortWith((a, b) => a.timestamp.getTime > b.timestamp.getTime)
+        val maxTime = sortedValues.head.timestamp
+
+        val weightedValues = sortedValues.map { tsValue =>
+          val deltaTime = maxTime.getTime() - tsValue.timestamp.getTime()
+          val discountLevel = (deltaTime / 1000/ 3600 / 24) / discountPeriodInDays
+          val discountValue = Math.pow(discountFactor,discountLevel)
+          (discountValue, tsValue)
+        }
+        val weightsSum = weightedValues.map { case (weight, tsValue) => weight }.sum
+        val discountAvg = weightedValues.map { case (weight, tsValue) => weight * tsValue.value }.sum / weightsSum
+        discountAvg
+      }
+    }
+
   }
 
 }

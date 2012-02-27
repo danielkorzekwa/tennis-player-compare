@@ -10,6 +10,8 @@ import org.joda.time.DateTime
 import ATPTennisMatchCompareTest._
 import dk.atp.api._
 import dk.atp.api.tournament._
+import ATPTennisMatchCompare._
+import java.util.Date
 
 object ATPTennisMatchCompareTest {
 
@@ -36,6 +38,23 @@ class ATPTennisMatchCompareTest {
 
     assertEquals(0.797, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
     assertEquals(0.8735, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
+
+  }
+  
+   @Test def matchProb_Roger_Federer_vs_Milos_Raonic_discount_0_9_week_period {
+
+     val matchCompare = new ATPTennisMatchCompare(atpMatchesLoader,0.9,7)
+     
+    val playerAFullName = "Roger Federer"
+    val playerBFullName = "Milos Raonic"
+
+    assertEquals(0.87, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.129, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+
+    assertEquals(0.920, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
+
+    assertEquals(0.806, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.925, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
 
   }
 
@@ -84,5 +103,42 @@ class ATPTennisMatchCompareTest {
     assertEquals(0.9382, matchCompare.matchProb("Roger Federer", "Michael Russell", HARD, THREE_SET_MATCH, marketTime2012), 0.0001)
 
   }
+
+  /**Tests for avgDiscount.*/
+  @Test def discountAvgNoData {
+    val compare = new ATPTennisMatchCompare(atpMatchesLoader, 1, 7)
+    val values: List[TimestampedDouble] = Nil
+    assertEquals(Double.NaN, compare.avgDiscount(values), 0)
+  }
+
+  @Test def discountAvgNoDiscount {
+    val compare = new ATPTennisMatchCompare(atpMatchesLoader, 1, 7)
+    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
+      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    assertEquals(5, compare.avgDiscount(values), 0)
+  }
+
+  @Test def discountAvgDiscount0_9_week_period {
+    val compare = new ATPTennisMatchCompare(atpMatchesLoader, 0.9, 7)
+    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
+      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    assertEquals(4.601, compare.avgDiscount(values), 0.001)
+  }
+
+  @Test def discountAvgDiscount0_9_month_period {
+    val compare = new ATPTennisMatchCompare(atpMatchesLoader, 0.9, 30)
+    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
+      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    assertEquals(4.920, compare.avgDiscount(values), 0.001)
+  }
+
+  @Test def discountAvgDiscount0_9_year_period {
+    val compare = new ATPTennisMatchCompare(atpMatchesLoader, 0.9, 365)
+    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
+      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    assertEquals(5, compare.avgDiscount(values), 0.001)
+  }
+
+  implicit def toDate(dateTime: DateTime): Date = dateTime.toDate()
 
 }
