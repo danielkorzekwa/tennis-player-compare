@@ -8,20 +8,26 @@ object GenericEloRating extends EloRating {
   /**
    * @return Map[player,rating]
    */
-  def calcRatings(results: List[Result]): Map[String, Double] = {
+  def calcRatings(results: List[Result],kFactor:Double=32): Map[String, Double] = {
 
-    def updateRatings(ratings:Map[String,Double],result:Result):Map[String,Double] = {
-      val currentRatingA:Double = ratings.getOrElse(result.playerA,1000) 
-      val currentRatingB:Double = ratings.getOrElse(result.playerB,1000) 
-      val newRatingA =  currentRatingA + 32 * (result.gamesWon - calcExpectedScore(currentRatingA,currentRatingB)*result.gamesPlayed)
-      val newRatingB = currentRatingA + 32 * ((result.gamesPlayed-result.gamesWon) - calcExpectedScore(currentRatingB,currentRatingA)*result.gamesPlayed)
+    def updateRatings(ratings: Map[String, Double], result: Result): Map[String, Double] = {
+      val currentRatingA: Double = ratings.getOrElse(result.playerA, 1000)
+      val currentRatingB: Double = ratings.getOrElse(result.playerB, 1000)
       
-      val newRatings = ratings + (result.playerA-> newRatingA,result.playerB-> newRatingB)
+      val actualScoreA = result.gamesWon.toDouble/result.gamesPlayed
+      val actualScoreB = 1 - actualScoreA
+      val expectedScoreA =  calcExpectedScore(currentRatingA, currentRatingB)
+      val expectedScoreB =  calcExpectedScore(currentRatingB, currentRatingA)
+     
+      val newRatingA = currentRatingA + kFactor * (actualScoreA - expectedScoreA)
+      val newRatingB = currentRatingB + kFactor * (actualScoreB - expectedScoreB)
+
+      val newRatings = ratings + (result.playerA -> newRatingA, result.playerB -> newRatingB)
       newRatings
     }
-    
+
     /**Map[player,rating]*/
-    val ratings = results.foldLeft(Map[String, Double]())((currentRatings, result) => updateRatings(currentRatings,result))
+    val ratings = results.foldLeft(Map[String, Double]())((currentRatings, result) => updateRatings(currentRatings, result))
     ratings
   }
 

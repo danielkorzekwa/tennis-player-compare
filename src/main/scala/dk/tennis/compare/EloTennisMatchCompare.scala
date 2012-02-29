@@ -33,7 +33,7 @@ class EloTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: 
       val won = if (m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)) 1 else 0
       Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, won, 1)
     }
-    val ratings = GenericEloRating.calcRatings(eloResults)
+    val ratings = GenericEloRating.calcRatings(eloResults,48)
 
     val playerARating = ratings(fullNamePlayerA)
     val playerBRating = ratings(fullNamePlayerB)

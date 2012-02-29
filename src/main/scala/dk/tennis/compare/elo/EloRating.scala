@@ -19,7 +19,7 @@ trait EloRating {
   /**
    * @return Map[player,rating]
    */
-  def calcRatings(results:List[Result]):Map[String,Double]
+  def calcRatings(results:List[Result],kFactor:Double=32):Map[String,Double]
   
   def calcExpectedScore(ratingA:Double,ratingB:Double):Double
 }
