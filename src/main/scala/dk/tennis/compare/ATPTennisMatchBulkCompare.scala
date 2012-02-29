@@ -65,7 +65,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
         case 2 => THREE_SET_MATCH
         case 3 => FIVE_SET_MATCH
       }
-      val probability = tennisMatchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), tournament.get.surface, matchType, m.scheduledOff)
+      val probability = tennisMatchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), tournament.get.surface, matchType, tournament.get.tournamentTime)
 
       Option(MarketProb(m, Map(runners(0) -> probability, runners(1) -> (1 - probability)), tournament.get.surface, matchType))
     } catch { case _ => None }

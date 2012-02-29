@@ -21,11 +21,12 @@ object ATPTennisMatchCompare {
 }
 
 /**
+ * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.
  * @param discountFactor How much discount old market data. 1 = no discount.
  * @param discountPeriodInDays With what time interval historical data should be discounted.
  *
  */
-class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Double = 1, discountPeriodInDays: Int = 7) extends TennisPlayerCompare {
+class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths:Int=12, discountFactor: Double = 1, discountPeriodInDays: Int = 7) extends TennisPlayerCompare {
 
   /**
    * Calculates probability of winning a tennis match by player A against player B.
@@ -39,8 +40,8 @@ class ATPTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, discountFactor: Do
    */
   def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, marketTime: Date): Double = {
 
-    val matchTimeFrom = new DateTime(marketTime.getTime()).minusMonths(12)
-    val matchTimeTo = new DateTime(marketTime.getTime()).minusDays(7)
+    val matchTimeFrom = new DateTime(marketTime.getTime()).minusMonths(histDataInMonths)
+    val matchTimeTo = new DateTime(marketTime.getTime()).minusDays(1)
 
     val matches = getMatches(surface, matchTimeFrom, matchTimeTo)
 
