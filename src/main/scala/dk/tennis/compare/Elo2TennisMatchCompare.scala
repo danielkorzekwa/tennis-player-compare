@@ -37,8 +37,8 @@ class Elo2TennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths:
           Result(m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.totalServicePointsWonPct) :: Nil
 
       results
-    }
-    
+    }.filter(!_.score.isNaN())
+       
     val ratings = new GenericEloRating(eloKFactor).calcServeReturnRatings(eloResults)
 
     val playerARating = ratings(fullNamePlayerA)
