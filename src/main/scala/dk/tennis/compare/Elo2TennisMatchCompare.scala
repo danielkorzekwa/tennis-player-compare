@@ -7,11 +7,12 @@ import org.joda.time._
 import dk.atp.api.domain.MatchComposite
 import elo.EloRating._
 import dk.tennis.compare.elo.GenericEloRating
+import dk.tennisprob._
 
 /**
  * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.
  */
-class EloTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12,eloKFactor:Double=48) extends TennisPlayerCompare {
+class Elo2TennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12, eloKFactor: Double = 48) extends TennisPlayerCompare {
 
   /**
    * Calculates probability of winning a tennis match by player A against player B.
@@ -28,17 +29,25 @@ class EloTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: 
     val matchTimeFrom = new DateTime(marketTime.getTime()).minusMonths(histDataInMonths)
     val matchTimeTo = new DateTime(marketTime.getTime()).minusDays(1)
 
-    val matches = getMatches(surface, matchTimeFrom, matchTimeTo)
-    val eloResults = matches.map { m =>
-      val won = if (m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)) 1 else 0
-      Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, won)
+    val matches = getMatches(surface, matchTimeFrom, matchTimeTo).sortWith((a, b) => a.tournament.tournamentTime.getTime() < b.tournament.tournamentTime.getTime())
+    
+    val eloResults = matches.flatMap { m =>
+      val results =
+        Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.totalServicePointsWonPct) ::
+          Result(m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.totalServicePointsWonPct) :: Nil
+
+      results
     }
-    val ratings = new GenericEloRating(eloKFactor).calcRatings(eloResults)
+    
+    val ratings = new GenericEloRating(eloKFactor).calcServeReturnRatings(eloResults)
 
     val playerARating = ratings(fullNamePlayerA)
     val playerBRating = ratings(fullNamePlayerB)
-    val matchProb = new GenericEloRating().calcExpectedScore(playerARating, playerBRating)
-    matchProb
+    val playerAOnServeProb = new GenericEloRating().calcExpectedScore(playerARating._1, playerBRating._2)
+    val playerBOnServeProb = new GenericEloRating().calcExpectedScore(playerBRating._1, playerARating._2)
+
+    val matchProbAGivenB = TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, matchType)
+    matchProbAGivenB
   }
 
   private def getMatches(surface: SurfaceEnum, matchTimeFrom: DateTime, matchTimeTo: DateTime): List[MatchComposite] = {
