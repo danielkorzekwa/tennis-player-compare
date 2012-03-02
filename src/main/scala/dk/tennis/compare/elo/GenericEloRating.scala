@@ -14,13 +14,10 @@ class GenericEloRating(kFactor: Double = 32, initialRating: Double = 1000) exten
       val currentRatingA: Double = ratings.getOrElse(result.playerA, initialRating)
       val currentRatingB: Double = ratings.getOrElse(result.playerB, initialRating)
 
-      val actualScoreA = result.score
-      val actualScoreB = 1 - actualScoreA
       val expectedScoreA = calcExpectedScore(currentRatingA, currentRatingB)
-      val expectedScoreB = 1 - expectedScoreA
 
-      val newRatingA = currentRatingA + kFactor * (actualScoreA - expectedScoreA)
-      val newRatingB = currentRatingB + kFactor * (actualScoreB - expectedScoreB)
+      val newRatingA = newRating(currentRatingA, result.score, expectedScoreA)
+      val newRatingB = newRating(currentRatingB, 1 - result.score, 1 - expectedScoreA)
 
       val newRatings = ratings + (result.playerA -> newRatingA, result.playerB -> newRatingB)
       newRatings
@@ -42,16 +39,13 @@ class GenericEloRating(kFactor: Double = 32, initialRating: Double = 1000) exten
       val currRatingB = ratings.getOrElse(result.playerB, Tuple2(initialRating, initialRating))
       val currRatingBOnReturn = currRatingB._2
 
-      val actualScoreA = result.score
-      val actualScoreB = 1 - actualScoreA
       val expectedScoreA = calcExpectedScore(currRatingAOnServe, currRatingBOnReturn)
-      val expectedScoreB = 1 - expectedScoreA
+      
+      val newRatingAOnServe = newRating(currRatingAOnServe, result.score, expectedScoreA)
+      val newRatingOnReturnB = newRating(currRatingBOnReturn, 1-result.score, 1 - expectedScoreA)
 
-      val newRatingAOnServe = currRatingAOnServe + kFactor * (actualScoreA - expectedScoreA)
-      val newRatingOnReturnB = currRatingBOnReturn + kFactor * (actualScoreB - expectedScoreB)
-
-      val newRatings = ratings + (result.playerA -> (newRatingAOnServe,currRatingA._2), result.playerB -> (currRatingB._1,newRatingOnReturnB))
-     newRatings
+      val newRatings = ratings + (result.playerA -> (newRatingAOnServe, currRatingA._2), result.playerB -> (currRatingB._1, newRatingOnReturnB))
+      newRatings
     }
 
     val ratings = results.foldLeft(Map[String, Tuple2[Double, Double]]())((currentRatings, result) => updateRatings(currentRatings, result))
@@ -59,4 +53,5 @@ class GenericEloRating(kFactor: Double = 32, initialRating: Double = 1000) exten
   }
 
   def calcExpectedScore(ratingA: Double, ratingB: Double): Double = 1 / (1 + pow(10, (ratingB - ratingA) / 400))
+  def newRating(currentRating: Double, actualScore: Double, expectedScore: Double): Double = currentRating + kFactor * (actualScore - expectedScore)
 }

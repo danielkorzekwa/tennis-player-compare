@@ -125,13 +125,30 @@ class GenericEloRatingTest {
     assertEquals(0.650, elo.calcExpectedScore(ratings("C")._1, ratings("A")._2), 0.001)
   }
 
+  /**Tests for primitive rating functions.*/
+
   @Test def calExpectedScore {
     assertEquals(0.759, elo.calcExpectedScore(1200, 1000), 0.001)
     assertEquals(0.759, elo.calcExpectedScore(1500, 1300), 0.001)
+     assertEquals(0.240, elo.calcExpectedScore(1500, 1700), 0.001)
 
     assertEquals(0.5, elo.calcExpectedScore(1500, 1500), 0.001)
 
     assertEquals(0.545, elo.calcExpectedScore(1016, 984), 0.001)
     assertEquals(0.676, elo.calcExpectedScore(1064, 936), 0.001)
+  }
+
+  @Test def newRating {
+    assertEquals(1006.4, elo.newRating(1000, 1, 0.8), 0.001)
+    assertEquals(1016, elo.newRating(1000, 1, 0.5), 0.001)
+    assertEquals(1025.6, elo.newRating(1000, 1, 0.2), 0.001)
+
+    assertEquals(974.4, elo.newRating(1000, 0, 0.8), 0.001)
+    assertEquals(984, elo.newRating(1000, 0, 0.5), 0.001)
+    assertEquals(993.6, elo.newRating(1000, 0, 0.2), 0.001)
+
+    assertEquals(996.8, elo.newRating(1000, 0.7, 0.8), 0.001)
+    assertEquals(1006.4, elo.newRating(1000, 0.7, 0.5), 0.001)
+    assertEquals(1016.0, elo.newRating(1000, 0.7, 0.2), 0.001)
   }
 }

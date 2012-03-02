@@ -24,6 +24,5 @@ trait EloRating {
    * @return Map[player,Tuple2[rating on serve, rating on return]
    */
   def calcServeReturnRatings(results: List[Result]):Map[String, Tuple2[Double,Double]]
-  
-  def calcExpectedScore(ratingA:Double,ratingB:Double):Double
+ 
 }
