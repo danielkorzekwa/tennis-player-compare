@@ -17,6 +17,14 @@ class GenericEloRatingTest {
     assertEquals(984, ratings("B"), 0)
     assertEquals(0.545, elo.calcExpectedScore(ratings("A"), ratings("B")), 0.001)
   }
+  
+   @Test def calcRatingsSingleResult_0_7 {
+    val ratings = elo.calcRatings(Result("A", "B", 0.7) :: Nil)
+
+    assertEquals(1006.4, ratings("A"), 0)
+    assertEquals(993.6, ratings("B"), 0)
+    assertEquals(0.518, elo.calcExpectedScore(ratings("A"), ratings("B")), 0.001)
+  }
 
   @Test def calcRatingsSingleResult_70_games_converge {
     val results = (1 to 70).map(i => Result("A", "B", 39d / 52)).toList

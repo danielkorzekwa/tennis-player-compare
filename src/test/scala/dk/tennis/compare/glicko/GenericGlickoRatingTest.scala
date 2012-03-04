@@ -6,7 +6,7 @@ import GlickoRating._
 
 class GenericGlickoRatingTest {
 
-  val glicko = new GenericGlickoRating(1500,350)
+  val glicko = new GenericGlickoRating(1500, 350)
 
   /**Single rating tests.*/
 
@@ -18,7 +18,68 @@ class GenericGlickoRatingTest {
     assertEquals(1337.787, ratings("B").rating, 0.001)
     assertEquals(290.230, ratings("B").deviation, 0.001)
 
-    assertEquals(0.797, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation),0.001)
+    assertEquals(0.797, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation), 0.001)
+  }
+
+  @Test def calcRatingsSingleResult_0_7 {
+    val ratings = glicko.calcRatings(Result("A", "B", 0.7) :: Nil)
+
+    assertEquals(1564.884, ratings("A").rating, 0.001)
+    assertEquals(290.230, ratings("A").deviation, 0.001)
+    assertEquals(1435.115, ratings("B").rating, 0.001)
+    assertEquals(290.230, ratings("B").deviation, 0.001)
+
+    assertEquals(0.634, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation), 0.001)
+  }
+
+  @Test def calcRatingsSingleResult_70_games_converge {
+    val results = (1 to 5).map(i => Result("A", "B", 39d / 52)).toList
+    val ratings = glicko.calcRatings(results)
+
+    assertEquals(1613.215, ratings("A").rating, 0.001)
+    assertEquals(186.944, ratings("A").deviation, 0.001)
+    assertEquals(1386.784, ratings("B").rating, 0.001)
+    assertEquals(186.944, ratings("B").deviation, 0.001)
+
+    assertEquals(0.754, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation), 0.001)
+  }
+
+  @Test def calcRatingsSingleResult_70_games_converge_low_initial_deviation {
+    val glicko = new GenericGlickoRating(1500, 100)
+    val results = (1 to 70).map(i => Result("A", "B", 39d / 52)).toList
+    val ratings = glicko.calcRatings(results)
+
+    assertEquals(1593.319, ratings("A").rating, 0.001)
+    assertEquals(42.426, ratings("A").deviation, 0.001)
+    assertEquals(1406.680, ratings("B").rating, 0.001)
+    assertEquals(42.426, ratings("B").deviation, 0.001)
+
+    assertEquals(0.743, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation), 0.001)
+  }
+
+  @Test def calcRatings_for_three_players {
+    val results = Result("A", "B", 39d / 52) :: Result("B", "C", 39d / 52) :: Result("C", "A", 39d / 52) :: Nil
+    val ratings = glicko.calcRatings(results)
+
+    assertEquals(1459.482, ratings("A").rating, 0.001)
+    assertEquals(251.983, ratings("A").deviation, 0.001)
+    assertEquals(1500.309, ratings("B").rating, 0.001)
+    assertEquals(254.072, ratings("B").deviation, 0.001)
+    assertEquals(1502.122, ratings("C").rating, 0.001)
+    assertEquals(247.567, ratings("C").deviation, 0.001)
+
+    assertEquals(0.454, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation), 0.001)
+    assertEquals(0.497, glicko.expectedScore(ratings("B").rating, ratings("C").rating, ratings("C").deviation), 0.001)
+    assertEquals(0.451, glicko.expectedScore(ratings("A").rating, ratings("C").rating, ratings("C").deviation), 0.001)
+  }
+
+  @Test def calcRatings_for_three_players_2 {
+    val results = Result("A", "B", 39d / 52) :: Result("B", "C", 39d / 52) :: Nil
+    val ratings = glicko.calcRatings(results)
+
+    assertEquals(0.589, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation), 0.001)
+    assertEquals(0.619, glicko.expectedScore(ratings("B").rating, ratings("C").rating, ratings("C").deviation), 0.001)
+    assertEquals(0.697, glicko.expectedScore(ratings("A").rating, ratings("C").rating, ratings("C").deviation), 0.001)
   }
 
   /**On serve and return rating tests.*/
@@ -36,6 +97,38 @@ class GenericGlickoRatingTest {
 
     assertEquals(0.797, glicko.expectedScore(ratings("A")._1.rating, ratings("B")._2.rating, ratings("B")._2.deviation), 0.001)
     assertEquals(0.5, glicko.expectedScore(ratings("B")._1.rating, ratings("A")._2.rating, ratings("A")._2.deviation), 0.001)
+  }
+
+  @Test def calcOnServeReturn_70_games_converge_low_initial_deviation {
+    val glicko = new GenericGlickoRating(1500, 100)
+    val results = (1 to 70).map(i => Result("A", "B", 39d / 52)).toList
+    val ratings = glicko.calcServeReturnRatings(results)
+
+    assertEquals(1593.319, ratings("A")._1.rating, 0.001)
+    assertEquals(42.426, ratings("A")._1.deviation, 0.001)
+    assertEquals(1500, ratings("A")._2.rating, 0)
+    assertEquals(100, ratings("A")._2.deviation, 0)
+    assertEquals(1500, ratings("B")._1.rating, 0)
+    assertEquals(100, ratings("B")._1.deviation, 0)
+    assertEquals(1406.680, ratings("B")._2.rating, 0.001)
+    assertEquals(42.426, ratings("B")._2.deviation, 0.001)
+
+    assertEquals(0.743, glicko.expectedScore(ratings("A")._1.rating, ratings("B")._2.rating, ratings("B")._2.deviation), 0.001)
+    assertEquals(0.5, glicko.expectedScore(ratings("B")._1.rating, ratings("A")._2.rating, ratings("A")._2.deviation), 0.001)
+  }
+
+  @Test def calcOnServeReturn_for_three_players {
+    val results = Result("A", "B", 0.75) :: Result("B", "A", 0.71) :: Result("B", "C", 0.68) :: Result("C", "B", 0.62) :: Nil
+    val ratings = glicko.calcServeReturnRatings(results)
+
+    assertEquals(0.684, glicko.expectedScore(ratings("A")._1.rating, ratings("B")._2.rating, ratings("B")._2.deviation), 0.001)
+    assertEquals(0.667, glicko.expectedScore(ratings("B")._1.rating, ratings("A")._2.rating, ratings("A")._2.deviation), 0.001)
+
+    assertEquals(0.638, glicko.expectedScore(ratings("B")._1.rating, ratings("C")._2.rating, ratings("C")._2.deviation), 0.001)
+    assertEquals(0.613, glicko.expectedScore(ratings("C")._1.rating, ratings("B")._2.rating, ratings("B")._2.deviation), 0.001)
+
+    assertEquals(0.623, glicko.expectedScore(ratings("A")._1.rating, ratings("C")._2.rating, ratings("C")._2.deviation), 0.001)
+    assertEquals(0.583, glicko.expectedScore(ratings("C")._1.rating, ratings("A")._2.rating, ratings("A")._2.deviation), 0.001)
   }
 
   /**Tests for primitive rating functions.*/
