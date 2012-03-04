@@ -15,7 +15,7 @@ object GlickoTennisMatchCompareTest {
 }
 class GlickoTennisMatchCompareTest {
 
-  private val matchCompare = new GlickoTennisMatchCompare(atpMatchesLoader,24)
+  private val matchCompare = new GlickoTennisMatchCompare(atpMatchesLoader,24,1500,350)
 
   @Test def matchProb_Roger_Federer_vs_Milos_Raonic {
 

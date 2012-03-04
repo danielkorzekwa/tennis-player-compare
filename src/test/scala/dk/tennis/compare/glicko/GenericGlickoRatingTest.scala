@@ -6,7 +6,7 @@ import GlickoRating._
 
 class GenericGlickoRatingTest {
 
-  val glicko = new GenericGlickoRating()
+  val glicko = new GenericGlickoRating(1500,350)
 
   /**Single rating tests.*/
 
@@ -17,6 +17,25 @@ class GenericGlickoRatingTest {
     assertEquals(290.230, ratings("A").deviation, 0.001)
     assertEquals(1337.787, ratings("B").rating, 0.001)
     assertEquals(290.230, ratings("B").deviation, 0.001)
+
+    assertEquals(0.797, glicko.expectedScore(ratings("A").rating, ratings("B").rating, ratings("B").deviation),0.001)
+  }
+
+  /**On serve and return rating tests.*/
+  @Test def calcOnServeReturnRatingsSingleResult {
+    val ratings = glicko.calcServeReturnRatings(Result("A", "B", 1) :: Nil)
+
+    assertEquals(1662.212, ratings("A")._1.rating, 0.001)
+    assertEquals(290.230, ratings("A")._1.deviation, 0.001)
+    assertEquals(1500, ratings("A")._2.rating, 0)
+    assertEquals(350, ratings("A")._2.deviation, 0)
+    assertEquals(1500, ratings("B")._1.rating, 0)
+    assertEquals(350, ratings("B")._1.deviation, 0)
+    assertEquals(1337.787, ratings("B")._2.rating, 0.001)
+    assertEquals(290.230, ratings("B")._2.deviation, 0.001)
+
+    assertEquals(0.797, glicko.expectedScore(ratings("A")._1.rating, ratings("B")._2.rating, ratings("B")._2.deviation), 0.001)
+    assertEquals(0.5, glicko.expectedScore(ratings("B")._1.rating, ratings("A")._2.rating, ratings("A")._2.deviation), 0.001)
   }
 
   /**Tests for primitive rating functions.*/
@@ -41,22 +60,22 @@ class GenericGlickoRatingTest {
   }
 
   @Test def newRating {
-    assertEquals(1563.432, glicko.newRating(1500, 200, 1400, 30, 1), 0.001)
-    assertEquals(1387.492, glicko.newRating(1500, 200, 1400, 30, 0), 0.001)
+    assertEquals(1563.432, glicko.newRating(Rating(1500, 200), Rating(1400, 30), 1), 0.001)
+    assertEquals(1387.492, glicko.newRating(Rating(1500, 200), Rating(1400, 30), 0), 0.001)
 
-    assertEquals(1556.792, glicko.newRating(1500, 200, 1400, 300, 1), 0.001)
-    assertEquals(1413.83, glicko.newRating(1500, 200, 1400, 300, 0), 0.001)
+    assertEquals(1556.792, glicko.newRating(Rating(1500, 200), Rating(1400, 300), 1), 0.001)
+    assertEquals(1413.83, glicko.newRating(Rating(1500, 200), Rating(1400, 300), 0), 0.001)
 
-    assertEquals(1504.097, glicko.newRating(1500, 50, 1400, 300, 1), 0.001)
-    assertEquals(1493.782, glicko.newRating(1500, 50, 1400, 300, 0), 0.001)
+    assertEquals(1504.097, glicko.newRating(Rating(1500, 50), Rating(1400, 300), 1), 0.001)
+    assertEquals(1493.782, glicko.newRating(Rating(1500, 50), Rating(1400, 300), 0), 0.001)
 
-    assertEquals(1501.519, glicko.newRating(1500, 50, 1400, 300, 0.75), 0.001)
-    assertEquals(1498.424, glicko.newRating(1500, 50, 1400, 300, 0.45), 0.001)
+    assertEquals(1501.519, glicko.newRating(Rating(1500, 50), Rating(1400, 300), 0.75), 0.001)
+    assertEquals(1498.424, glicko.newRating(Rating(1500, 50), Rating(1400, 300), 0.45), 0.001)
   }
 
   @Test def newDeviation = {
-    assertEquals(175.220, glicko.newDeviation(1500, 200, 1400, 30), 0.001)
-    assertEquals(179.542, glicko.newDeviation(1500, 200, 1400, 170), 0.001)
-    assertEquals(183.081, glicko.newDeviation(1500, 200, 1400, 250), 0.001)
+    assertEquals(175.220, glicko.newDeviation(Rating(1500, 200), Rating(1400, 30)), 0.001)
+    assertEquals(179.542, glicko.newDeviation(Rating(1500, 200), Rating(1400, 170)), 0.001)
+    assertEquals(183.081, glicko.newDeviation(Rating(1500, 200), Rating(1400, 250)), 0.001)
   }
 }

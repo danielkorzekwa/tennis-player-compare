@@ -14,10 +14,8 @@ class GenericEloRating(kFactor: Double = 32, initialRating: Double = 1000) exten
       val currentRatingA: Double = ratings.getOrElse(result.playerA, initialRating)
       val currentRatingB: Double = ratings.getOrElse(result.playerB, initialRating)
 
-      val expectedScoreA = calcExpectedScore(currentRatingA, currentRatingB)
-
-      val newRatingA = newRating(currentRatingA, result.score, expectedScoreA)
-      val newRatingB = newRating(currentRatingB, 1 - result.score, 1 - expectedScoreA)
+      val newRatingA = newRating(currentRatingA, currentRatingB, result.score)
+      val newRatingB = newRating(currentRatingB, currentRatingA, 1 - result.score)
 
       val newRatings = ratings + (result.playerA -> newRatingA, result.playerB -> newRatingB)
       newRatings
@@ -39,10 +37,8 @@ class GenericEloRating(kFactor: Double = 32, initialRating: Double = 1000) exten
       val currRatingB = ratings.getOrElse(result.playerB, Tuple2(initialRating, initialRating))
       val currRatingBOnReturn = currRatingB._2
 
-      val expectedScoreA = calcExpectedScore(currRatingAOnServe, currRatingBOnReturn)
-      
-      val newRatingAOnServe = newRating(currRatingAOnServe, result.score, expectedScoreA)
-      val newRatingOnReturnB = newRating(currRatingBOnReturn, 1-result.score, 1 - expectedScoreA)
+      val newRatingAOnServe = newRating(currRatingAOnServe, currRatingBOnReturn, result.score)
+      val newRatingOnReturnB = newRating(currRatingBOnReturn, currRatingAOnServe, 1 - result.score)
 
       val newRatings = ratings + (result.playerA -> (newRatingAOnServe, currRatingA._2), result.playerB -> (currRatingB._1, newRatingOnReturnB))
       newRatings
@@ -52,6 +48,8 @@ class GenericEloRating(kFactor: Double = 32, initialRating: Double = 1000) exten
     ratings
   }
 
+  /**Elo functions.*/
   def calcExpectedScore(ratingA: Double, ratingB: Double): Double = 1 / (1 + pow(10, (ratingB - ratingA) / 400))
-  def newRating(currentRating: Double, actualScore: Double, expectedScore: Double): Double = currentRating + kFactor * (actualScore - expectedScore)
+  def newRating(currentRatingA: Double, currentRatingB: Double, actualScore: Double): Double =
+    currentRatingA + kFactor * (actualScore - calcExpectedScore(currentRatingA, currentRatingB))
 }

@@ -15,10 +15,10 @@ class GenericGlickoRating(initialRating: Double = 1500, initialDeviation: Double
       val currentRatingA: Rating = ratings.getOrElse(result.playerA, Rating(initialRating, initialDeviation))
       val currentRatingB: Rating = ratings.getOrElse(result.playerB, Rating(initialRating, initialDeviation))
 
-      val newRatingA = newRating(currentRatingA.rating, currentRatingA.deviation, currentRatingB.rating, currentRatingB.deviation, result.score)
-      val newDeviationA = newDeviation(currentRatingA.rating, currentRatingA.deviation, currentRatingB.rating, currentRatingB.deviation)
-      val newRatingB = newRating(currentRatingB.rating, currentRatingB.deviation, currentRatingA.rating, currentRatingA.deviation, 1 - result.score)
-      val newDeviationB = newDeviation(currentRatingB.rating, currentRatingB.deviation, currentRatingA.rating, currentRatingA.deviation)
+      val newRatingA = newRating(currentRatingA, currentRatingB, result.score)
+      val newDeviationA = newDeviation(currentRatingA, currentRatingB)
+      val newRatingB = newRating(currentRatingB, currentRatingA, 1 - result.score)
+      val newDeviationB = newDeviation(currentRatingB, currentRatingA)
 
       val newRatings = ratings + (result.playerA -> Rating(newRatingA, newDeviationA), result.playerB -> Rating(newRatingB, newDeviationB))
       newRatings
@@ -32,7 +32,33 @@ class GenericGlickoRating(initialRating: Double = 1500, initialDeviation: Double
   /**
    * @return Map[player,Tuple2[rating on serve, rating on return]
    */
-  def calcServeReturnRatings(results: List[Result]): Map[String, Tuple2[Rating, Rating]] = throw new UnsupportedOperationException("Not implemented yet.")
+  def calcServeReturnRatings(results: List[Result]): Map[String, Tuple2[Rating, Rating]] = {
+
+    /**Tuple2[rating on serve, rating on return]*/
+    def initRating = Tuple2(Rating(initialRating, initialDeviation), Rating(initialRating, initialDeviation))
+
+    def updateRatings(ratings: Map[String, Tuple2[Rating, Rating]], result: Result): Map[String, Tuple2[Rating, Rating]] = {
+      val currentRatingA: Tuple2[Rating, Rating] = ratings.getOrElse(result.playerA, initRating)
+      val currRatingAOnServe = currentRatingA._1
+      val currentRatingB: Tuple2[Rating, Rating] = ratings.getOrElse(result.playerB, initRating)
+      val currRatingBOnReturn = currentRatingB._2
+
+      val newRatingAOnServe = newRating(currRatingAOnServe, currRatingBOnReturn, result.score)
+      val newDeviationAOnServe = newDeviation(currRatingAOnServe, currRatingBOnReturn)
+      val newRatingA = Rating(newRatingAOnServe, newDeviationAOnServe)
+
+      val newRatingOnReturnB = newRating(currRatingBOnReturn, currRatingAOnServe, 1 - result.score)
+      val newDeviationBOnReturn = newDeviation(currRatingBOnReturn, currRatingAOnServe)
+      val newRatingB = Rating(newRatingOnReturnB, newDeviationBOnReturn)
+
+      val newRatings = ratings + (result.playerA -> (newRatingA, currentRatingA._2), result.playerB -> (currentRatingB._1, newRatingB))
+      newRatings
+    }
+
+    /**Map[player,Tuple2[rating on serve, rating on return]*/
+    val ratings = results.foldLeft(Map[String, Tuple2[Rating, Rating]]())((currentRatings, result) => updateRatings(currentRatings, result))
+    ratings
+  }
 
   /**Glicko functions.*/
 
@@ -45,8 +71,11 @@ class GenericGlickoRating(initialRating: Double = 1500, initialDeviation: Double
   def dSquare(ratingA: Double, ratingB: Double, deviationB: Double): Double =
     pow(pow(q, 2) * pow(g(deviationB), 2) * expectedScore(ratingA, ratingB, deviationB) * (1 - expectedScore(ratingA, ratingB, deviationB)), -1)
 
-  def newRating(ratingA: Double, deviationA: Double, ratingB: Double, deviationB: Double, scoreAagainstB: Double) =
-    ratingA + q / (1 / pow(deviationA, 2) + 1 / dSquare(ratingA, ratingB, deviationB)) * g(deviationB) * (scoreAagainstB - expectedScore(ratingA, ratingB, deviationB))
+  def newRating(ratingA: Rating, ratingB: Rating, scoreAagainstB: Double) =
+    ratingA.rating +
+      q / (1 / pow(ratingA.deviation, 2) + 1 / dSquare(ratingA.rating, ratingB.rating, ratingB.deviation)) *
+      g(ratingB.deviation) *
+      (scoreAagainstB - expectedScore(ratingA.rating, ratingB.rating, ratingB.deviation))
 
-  def newDeviation(ratingA: Double, deviationA: Double, ratingB: Double, deviationB: Double) = sqrt(pow(1 / pow(deviationA, 2) + 1 / dSquare(ratingA, ratingB, deviationB), -1))
+  def newDeviation(ratingA: Rating, ratingB: Rating) = sqrt(pow(1 / pow(ratingA.deviation, 2) + 1 / dSquare(ratingA.rating, ratingB.rating, ratingB.deviation), -1))
 }
