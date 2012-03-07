@@ -10,8 +10,13 @@ import dk.tennis.compare.glicko.GenericGlickoRating
 
 /**
  * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.
+ * @param initialRating
+ * @param initialDeviation
+ * @param discountConstant constant that governs the increase in uncertainty over time
+ * @param discountDurationInDays
  */
-class GlickoTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12,initialGlickoRating: Double = 1500, initialGlickoDeviation: Double = 350) extends TennisPlayerCompare {
+class GlickoTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12, 
+    initialGlickoRating: Double = 1500, initialGlickoDeviation: Double = 350, discountConstant: Double,discountDurationInDays:Int=7) extends TennisPlayerCompare {
 
   /**
    * Calculates probability of winning a tennis match by player A against player B.
@@ -31,14 +36,14 @@ class GlickoTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonth
     val matches = getMatches(surface, matchTimeFrom, matchTimeTo)
     val glickoResults = matches.map { m =>
       val won = if (m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)) 1 else 0
-      Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, won)
+      Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, won,m.tournament.tournamentTime)
     }
-    val glicko = new GenericGlickoRating(initialGlickoRating,initialGlickoDeviation)
+    val glicko = new GenericGlickoRating(initialGlickoRating, initialGlickoDeviation,discountConstant,discountDurationInDays)
     val ratings = glicko.calcRatings(glickoResults)
 
     val playerARating = ratings(fullNamePlayerA)
     val playerBRating = ratings(fullNamePlayerB)
-    val matchProb = glicko.expectedScore(playerARating.rating, playerBRating.rating,playerBRating.deviation)
+    val matchProb = glicko.expectedScore(playerARating.rating, playerBRating.rating, playerBRating.deviation)
     matchProb
   }
 

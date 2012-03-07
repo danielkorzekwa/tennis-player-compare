@@ -15,7 +15,7 @@ object GlickoTennisMatchCompareTest {
 }
 class GlickoTennisMatchCompareTest {
 
-  private val matchCompare = new GlickoTennisMatchCompare(atpMatchesLoader,24,1500,350)
+  private val matchCompare = new GlickoTennisMatchCompare(atpMatchesLoader, 24, 1500, 350, 9.607, 14)
 
   @Test def matchProb_Roger_Federer_vs_Milos_Raonic {
 
@@ -24,13 +24,13 @@ class GlickoTennisMatchCompareTest {
     val playerAFullName = "Roger Federer"
     val playerBFullName = "Milos Raonic"
 
-    assertEquals(0.869, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.124, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.874, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.119, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
 
-    assertEquals(0.869, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.874, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
 
-    assertEquals(0.846, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.897, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.847, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.903, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
 
   }
 }

@@ -11,8 +11,13 @@ import dk.tennisprob._
 
 /**
  * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.
+ * @param initialRating
+ * @param initialDeviation
+ * @param discountConstant constant that governs the increase in uncertainty over time
+ * @param discountDurationInDays
  */
-class GlickoSoftTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12, initialGlickoRating: Double = 1500, initialGlickoDeviation: Double = 350) extends TennisPlayerCompare {
+class GlickoSoftTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12,
+  initialGlickoRating: Double = 1500, initialGlickoDeviation: Double = 350, discountConstant: Double,discountDurationInDays:Int=7) extends TennisPlayerCompare {
 
   /**
    * Calculates probability of winning a tennis match by player A against player B.
@@ -33,15 +38,15 @@ class GlickoSoftTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInM
 
     val eloResults = matches.flatMap { m =>
       val results =
-        Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.totalServicePointsWonPct) ::
-          Result(m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.totalServicePointsWonPct) :: Nil
+        Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.totalServicePointsWonPct,m.tournament.tournamentTime) ::
+          Result(m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.totalServicePointsWonPct,m.tournament.tournamentTime) :: Nil
 
       results
     }.filter(!_.score.isNaN())
 
-    val glicko = new GenericGlickoRating(initialGlickoRating, initialGlickoDeviation)
+    val glicko = new GenericGlickoRating(initialGlickoRating, initialGlickoDeviation, discountConstant,discountDurationInDays)
     val ratings = glicko.calcServeReturnRatings(eloResults)
-
+    
     val playerARating = ratings(fullNamePlayerA)
     val playerBRating = ratings(fullNamePlayerB)
     val playerAOnServeProb = glicko.expectedScore(playerARating._1.rating, playerBRating._2.rating, playerBRating._2.deviation)
