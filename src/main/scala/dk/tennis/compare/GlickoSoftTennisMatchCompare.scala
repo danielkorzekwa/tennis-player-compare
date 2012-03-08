@@ -8,16 +8,9 @@ import dk.atp.api.domain.MatchComposite
 import glicko.GlickoRating._
 import dk.tennis.compare.glicko.GenericGlickoRating
 import dk.tennisprob._
+import glicko._
 
-/**
- * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.
- * @param initialRating
- * @param initialDeviation
- * @param discountConstant constant that governs the increase in uncertainty over time
- * @param discountDurationInDays
- */
-class GlickoSoftTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12,
-  initialGlickoRating: Double = 1500, initialGlickoDeviation: Double = 350, discountConstant: Double,discountDurationInDays:Int=7) extends TennisPlayerCompare {
+class GlickoSoftTennisMatchCompare(glickoRatingLoader: GlickoRatingsLoader) extends TennisPlayerCompare {
 
   /**
    * Calculates probability of winning a tennis match by player A against player B.
@@ -31,38 +24,16 @@ class GlickoSoftTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInM
    * @return Probability between 0 and 1.
    */
   def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, marketTime: Date): Double = {
-    val matchTimeFrom = new DateTime(marketTime.getTime()).minusMonths(histDataInMonths)
-    val matchTimeTo = new DateTime(marketTime.getTime()).minusDays(1)
 
-    val matches = getMatches(surface, matchTimeFrom, matchTimeTo).sortWith((a, b) => a.tournament.tournamentTime.getTime() < b.tournament.tournamentTime.getTime())
+    val ratings = glickoRatingLoader.ratings(marketTime, surface)
 
-    val eloResults = matches.flatMap { m =>
-      val results =
-        Result(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.totalServicePointsWonPct,m.tournament.tournamentTime) ::
-          Result(m.matchFacts.playerBFacts.playerName, m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.totalServicePointsWonPct,m.tournament.tournamentTime) :: Nil
-
-      results
-    }.filter(!_.score.isNaN())
-
-    val glicko = new GenericGlickoRating(initialGlickoRating, initialGlickoDeviation, discountConstant,discountDurationInDays)
-    val ratings = glicko.calcServeReturnRatings(eloResults)
-    
     val playerARating = ratings(fullNamePlayerA)
     val playerBRating = ratings(fullNamePlayerB)
-    val playerAOnServeProb = glicko.expectedScore(playerARating._1.rating, playerBRating._2.rating, playerBRating._2.deviation)
-    val playerBOnServeProb = glicko.expectedScore(playerBRating._1.rating, playerARating._2.rating, playerARating._2.deviation)
+    val playerAOnServeProb = GenericGlickoRating.expectedScore(playerARating._1.rating, playerBRating._2.rating, playerBRating._2.deviation)
+    val playerBOnServeProb = GenericGlickoRating.expectedScore(playerBRating._1.rating, playerARating._2.rating, playerARating._2.deviation)
 
     val matchProbAGivenB = TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, matchType)
     matchProbAGivenB
   }
 
-  private def getMatches(surface: SurfaceEnum, matchTimeFrom: DateTime, matchTimeTo: DateTime): List[MatchComposite] = {
-    val matches = (matchTimeFrom.getYear() to matchTimeTo.getYear()).flatMap { year =>
-      atpMatchLoader.loadMatches(year).filter(m => m.tournament.surface.equals(surface))
-    }
-
-    val filteredByTimeRangeMatches = matches.filter(m => m.tournament.tournamentTime.getTime() > matchTimeFrom.getMillis()
-      && m.tournament.tournamentTime.getTime() < matchTimeTo.getMillis())
-    filteredByTimeRangeMatches.toList
-  }
 }

@@ -22,7 +22,7 @@ object Market {
       val market = marketRunners(0).copy(runnerMap = mergeMarketRunners(marketRunners))
     } yield market
 
-    markets.filter(m => m.runnerMap.size == 2).toList
+    markets.filter(m => m.runnerMap.size == 2).toList.sortWith((a,b) => a.scheduledOff.getTime() < b.scheduledOff.getTime())
   }
 
   private def mergeMarketRunners(markets: List[Market]): Map[Long, String] = markets.foldLeft(Map[Long, String]())((map, market) => map ++ market.runnerMap)

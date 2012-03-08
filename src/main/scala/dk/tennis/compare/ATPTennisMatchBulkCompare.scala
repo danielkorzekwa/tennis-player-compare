@@ -40,16 +40,16 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
     val marketDataSource = Source.fromFile(marketDataFileIn)
 
     val markets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
+
     val marketsSize = markets.size
     val marketProbabilities = for ((market, index) <- markets.zipWithIndex) yield {
       progress(marketsSize - index)
-      val tournament =lookup(market)
-
+      val tournament = lookup(market)
       toMarketProb(market, tournament)
     }
 
     val filteredAndSortedMarketProbs = marketProbabilities.filter(p => p.isDefined && p.get.runnerProbs.values.exists(!_.isNaN)).
-    sortWith(_.get.market.scheduledOff.getTime() < _.get.market.scheduledOff.getTime)
+      sortWith(_.get.market.scheduledOff.getTime() < _.get.market.scheduledOff.getTime)
     val marketProbsData = filteredAndSortedMarketProbs.flatMap(p => p.get.toCSV())
 
     val marketProbFile = new File(marketProbFileOut)
@@ -71,19 +71,20 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
     } catch { case _ => None }
     marketProb
   }
-  
-   /**Look for tournament matching given market.*/
+
+  /**Look for tournament matching given market.*/
   private def lookup(market: Market): Option[Tournament] = {
     val year = new DateTime(market.scheduledOff).getYear()
-  
+
     val matches = atpMatchLoader.loadMatches(year)
 
     def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
 
     val filteredMatches = matches.filter(m => playerNames(m.matchFacts).sorted.equals(market.runnerMap.values.toList.sorted))
     val timeDiffMatches = TreeMap[Long, Tournament]() ++ filteredMatches.map(m => (abs(market.scheduledOff.getTime() - m.tournament.tournamentTime.getTime()), m.tournament))
-
-    if (timeDiffMatches.isEmpty) None else Option(timeDiffMatches.head._2)
-  } 
+    
+    /**Time difference between matched markets must be lower than 30 days.*/
+    if (!timeDiffMatches.isEmpty && timeDiffMatches.head._1/1000/3600/24<30) Option(timeDiffMatches.head._2) else None
+  }
 
 }

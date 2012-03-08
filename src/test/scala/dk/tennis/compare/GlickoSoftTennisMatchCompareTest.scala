@@ -7,6 +7,8 @@ import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import org.joda.time.DateTime
 import dk.atp.api.CSVATPMatchesLoader
 import GlickoSoftTennisMatchCompareTest._
+import dk.tennis.compare.glicko.GenericGlickoRating
+import glicko._
 
 object GlickoSoftTennisMatchCompareTest {
 
@@ -15,7 +17,8 @@ object GlickoSoftTennisMatchCompareTest {
 }
 class GlickoSoftTennisMatchCompareTest {
 
-  private val matchCompare = new GlickoSoftTennisMatchCompare(atpMatchesLoader, 24, 1500, 100, 9.607, 30)
+  private val glickoLoader = CachedGlickoRatingsLoader(atpMatchesLoader,24,1500, 100, 9.607, 30)
+  private val matchCompare = new GlickoSoftTennisMatchCompare(glickoLoader)
 
   @Test def matchProb_Roger_Federer_vs_Milos_Raonic {
 

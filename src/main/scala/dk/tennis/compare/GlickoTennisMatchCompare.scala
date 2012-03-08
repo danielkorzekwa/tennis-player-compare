@@ -43,7 +43,7 @@ class GlickoTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonth
 
     val playerARating = ratings(fullNamePlayerA)
     val playerBRating = ratings(fullNamePlayerB)
-    val matchProb = glicko.expectedScore(playerARating.rating, playerBRating.rating, playerBRating.deviation)
+    val matchProb = GenericGlickoRating.expectedScore(playerARating.rating, playerBRating.rating, playerBRating.deviation)
     matchProb
   }
 
