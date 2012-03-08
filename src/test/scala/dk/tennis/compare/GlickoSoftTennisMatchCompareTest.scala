@@ -15,7 +15,7 @@ object GlickoSoftTennisMatchCompareTest {
 }
 class GlickoSoftTennisMatchCompareTest {
 
-  private val matchCompare = new GlickoSoftTennisMatchCompare(atpMatchesLoader,24,1500,100,9.607,30)
+  private val matchCompare = new GlickoSoftTennisMatchCompare(atpMatchesLoader, 24, 1500, 100, 9.607, 30)
 
   @Test def matchProb_Roger_Federer_vs_Milos_Raonic {
 
@@ -32,5 +32,15 @@ class GlickoSoftTennisMatchCompareTest {
     assertEquals(0.753, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
     assertEquals(0.920, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
 
+  }
+
+  @Test(expected = classOf[NoSuchElementException]) def matchProb_Roger_Federer_vs_UnknownPlayer {
+
+    val marketTime2012 = new DateTime(0).withYear(2012).toDate()
+
+    val playerAFullName = "Roger Federer"
+    val playerBFullName = "xxx"
+
+    matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012)
   }
 }
