@@ -22,37 +22,70 @@ import java.util.Date
 import dk.atp.api.tournament.GenericTournamentAtpApi
 import dk.atp.api._
 import TennisLiveTrader._
+import dk.tennis.compare.glicko._
 
 object TennisLiveTrader {
 
   case class MarketDetails(eventName: String, surface: SurfaceEnum, matchType: MatchTypeEnum)
-  case class CompositeMarket(marketData: BFMarketData, marketRunners: BFMarketDetails, marketDetails: Option[MarketDetails], probability: Option[Double])
 
+  /**@param probability Map[runnerName,probability]*/
+  case class CompositeMarket(marketData: BFMarketData, marketRunners: BFMarketDetails, marketDetails: Option[MarketDetails], marketPrices: Option[BFMarketRunners], tradedVolume: Option[BFMarketTradedVolume], probability: Option[Map[String, Double]])
+  case class Bet(marketId: Int, selectionId: Int, price: Double, truePrice: Double, tradedVolume: Double, priceToLay: Double)
 }
 
 /**Tests TennisMatchCompare live by placing real bets on Betfair.*/
 class TennisLiveTrader {
 
   private val MAIN_LOOP_INTERVAL_IN_SEC = 60
-  private val marketDetailsFile = "./target/market_details.csv"
-  private val atpMatchesFile = "./target/matches.csv"
+  private val MARKET_TIME_TO_IN_HOURS = 24
+  private val marketDetailsFile = "./market_details.csv"
+  private val atpMatchesFile = "./matches.csv"
 
   private val log = LoggerFactory.getLogger(getClass)
+
+  /**key - timestamp + surface.*/
+  private val placedBets: scala.collection.mutable.Set[String] = scala.collection.mutable.Set()
 
   private lazy val betfairService = createBetfairService()
 
   def run() {
     while (true) {
-      val startFrom = new Date(System.currentTimeMillis + 1000 * 60) //in 1 minute
-      val startTo = new Date(System.currentTimeMillis + 1000 * 3600 * 24 * 3) //in 3 days
-      val markets = loadBetfairTennisMarkets(startFrom, startTo)
+      try {
 
-      val marketsWithDetails = matchMarketsWithDetails(markets)
-      val marketsWithDetailsAndProbs = matchMarketsWithProbability(marketsWithDetails)
+        val startFrom = new Date(System.currentTimeMillis + 1000 * 60) //in 1 minute
+        val startTo = new Date(System.currentTimeMillis + 1000 * 3600 * MARKET_TIME_TO_IN_HOURS) //in 3 days
+        val markets = loadBetfairTennisMarkets(startFrom, startTo)
 
-      val bets = loadCurrentBets()
-      log.info(markets.size + ":" + marketsWithDetails.size + ":" + marketsWithDetailsAndProbs.size)
-      Thread.sleep(MAIN_LOOP_INTERVAL_IN_SEC * 1000)
+        val marketsWithDetails = matchMarketsWithDetails(markets)
+        val marketsWithDetailsAndProbs = matchMarketsWithProbability(marketsWithDetails)
+
+        val marketsWithTradedVolume = matchWithTradedVolumeAndPrices(marketsWithDetailsAndProbs)
+
+        val allBets = mapToBets(marketsWithTradedVolume)
+        val filteredBets = allBets.filter(b => b.tradedVolume > 1000 && b.price < 20 && b.price / b.truePrice > 1.02)
+        log.info("Generating bets matching betting criteria  = " + filteredBets.size)
+
+        val unmatchedBets = filteredBets.filter(b => b.price >= b.priceToLay)
+        log.info("Generating unmatched bets only  = " + unmatchedBets.size)
+
+        val currentBets = loadCurrentBets()
+        val betsNotPlacedYet = unmatchedBets
+          .filterNot(b => currentBets.exists(cb => cb.getMarketId() == b.marketId && cb.getSelectionId() == b.selectionId && cb.getPrice() == b.price))
+          .filterNot(b => placedBets.contains(b.marketId + ":" + b.selectionId + ":" + b.price))
+        log.info("Generating bets not placed yet  = " + betsNotPlacedYet.size)
+
+        log.info("Placing bets = " + betsNotPlacedYet.size)
+        betsNotPlacedYet.foreach { b =>
+          betfairService.placeBet(b.marketId, b.selectionId, BFBetType.B, b.price, 2, false)
+          placedBets += b.marketId + ":" + b.selectionId + ":" + b.price
+        }
+
+        log.info("Placed bets = " + betsNotPlacedYet.size)
+        println(betsNotPlacedYet.mkString("\n"))
+        Thread.sleep(MAIN_LOOP_INTERVAL_IN_SEC * 1000)
+      } catch {
+        case e: Exception => log.error("Error", e)
+      }
     }
   }
 
@@ -70,10 +103,10 @@ class TennisLiveTrader {
   def loadBetfairTennisMarkets(startFrom: Date, startTo: Date): List[CompositeMarket] = {
     log.info("Loading betfair markets...")
     val eventTypeIds: java.util.Set[Integer] = Set(new Integer(2))
-    val markets = betfairService.getMarkets(startFrom, startTo, eventTypeIds)
+    val markets = betfairService.getMarkets(startFrom, startTo, eventTypeIds).filter(m => m.getMarketName().equals("Match Odds"))
     val compositeMarkets = markets.map { m =>
       val marketDetails = betfairService.getMarketDetails(m.getMarketId())
-      CompositeMarket(m, marketDetails, None, None)
+      CompositeMarket(m, marketDetails, None, None, None, None)
     }
     log.info("Loading betfair markets = " + compositeMarkets.size)
     compositeMarkets.toList
@@ -117,8 +150,11 @@ class TennisLiveTrader {
   }
 
   def matchMarketsWithProbability(markets: List[CompositeMarket]): List[CompositeMarket] = {
+    log.info("Matching probabilities...")
+
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(atpMatchesFile)
-    val matchCompare = new GlickoSoftTennisMatchCompare(atpMatchesLoader, 60, 1500, 100, 9.607, 7)
+    val glickoLoader = CachedGlickoRatingsLoader(atpMatchesLoader, 60, 1500, 100, 9.607, 7)
+    val matchCompare = new GlickoSoftTennisMatchCompare(glickoLoader)
     matchCompare
 
     val marketsWithProb = markets.map { m =>
@@ -127,13 +163,54 @@ class TennisLiveTrader {
 
       val prob = try {
         val prob = matchCompare.matchProb(playerA, playerB, m.marketDetails.get.surface, m.marketDetails.get.matchType, m.marketData.getEventDate())
-        Some(prob)
+        Some(Map(playerA -> prob, playerB -> (1 - prob)))
       } catch {
         case e: java.util.NoSuchElementException => None
       }
       m.copy(probability = prob)
 
     }
-    marketsWithProb.filter(m => m.probability.isDefined)
+    val matchedMarkets = marketsWithProb.filter(m => m.probability.isDefined)
+    log.info("Matching probabilities = " + marketsWithProb.size + "/" + matchedMarkets.size)
+    matchedMarkets
+  }
+
+  def matchWithTradedVolumeAndPrices(markets: List[CompositeMarket]): List[CompositeMarket] = {
+    log.info("Matching with traded volume and prices...")
+    val matchedMarkets = markets.map { m =>
+      val marketTradedVolume = betfairService.getMarketTradedVolume(m.marketData.getMarketId())
+      val marketPricesObject = betfairService.getMarketRunners(m.marketData.getMarketId())
+      m.copy(marketPrices = Some(marketPricesObject), tradedVolume = Some(marketTradedVolume))
+    }
+    log.info("Matching with traded volume and prices... - done")
+    matchedMarkets
+    val filteredMarkets = matchedMarkets.filter(m => m.marketPrices.get.getInPlayDelay() == 0)
+    log.info("Filtering not inplay markets = " + matchedMarkets.size)
+    filteredMarkets
+  }
+
+  def mapToBets(markets: List[CompositeMarket]): List[Bet] = {
+
+    val bets: List[Bet] = markets.flatMap { m =>
+      val marketBets = m.tradedVolume.get.getRunnerTradedVolume().flatMap { runnerTv =>
+        val runnerBets = runnerTv.getPriceTradedVolume().map { priceTv =>
+          val truePrice = getTruePrice(m, runnerTv.getSelectionId())
+          val currentPrice = m.marketPrices.get.getMarketRunner(runnerTv.getSelectionId()).getPriceToLay()
+          val bet = Bet(m.marketData.getMarketId(), runnerTv.getSelectionId(), priceTv.getPrice(), truePrice, priceTv.getTradedVolume(), currentPrice)
+          bet
+        }
+        runnerBets
+      }
+      marketBets
+    }
+    log.info("Generating all bets = " + bets.size)
+    bets
+
+  }
+
+  def getTruePrice(market: CompositeMarket, selectionId: Int): Double = {
+    val runner = market.marketRunners.getRunners().find(r => r.getSelectionId() == selectionId).get
+    val probability = market.probability.get(runner.getSelectionName())
+    1 / probability
   }
 }
