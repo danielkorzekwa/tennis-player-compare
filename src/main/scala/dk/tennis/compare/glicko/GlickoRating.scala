@@ -3,7 +3,7 @@ package dk.tennis.compare.glicko
 import GlickoRating._
 import java.util.Date
 
-/**Implementation of Glicko rating: http://www.glicko.net/glicko/glicko.pdf*/
+/** Implementation of Glicko rating: http://www.glicko.net/glicko/glicko.pdf*/
 object GlickoRating {
   /**
    * @param playerA
