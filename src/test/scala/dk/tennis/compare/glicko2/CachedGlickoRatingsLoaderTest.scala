@@ -9,7 +9,7 @@ import dk.atp.api.domain.SurfaceEnum._
 class CachedGlicko2RatingsLoaderTest {
 
   private val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2009_2011.csv")
-  private val glickoLoader = CachedGlicko2RatingsLoader(atpMatchesLoader, 24, 0, 350d / 173.7178, 0.06)
+  private val glickoLoader = CachedGlicko2RatingsLoader(atpMatchesLoader, 24, 0, 350d / 173.7178, 0.06,0.5,7)
 
   @Test def ratings {
 

@@ -12,8 +12,8 @@ import  scala.collection._
 object CachedGlicko2RatingsLoader {
   def apply(
     atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12,
-    initialRating: Double = 0, initialDeviation: Double = 350d / 173.7178, initialVolatility: Double = 0.06): CachedGlicko2RatingsLoader = {
-    val glickoRating = new GenericGlicko2Rating(initialRating, initialDeviation, initialVolatility)
+    initialRating: Double = 0, initialDeviation: Double = 350d / 173.7178, initialVolatility: Double = 0.06,tau:Double=0.5,discountDurationInDays: Int): CachedGlicko2RatingsLoader = {
+    val glickoRating = new GenericGlicko2Rating(initialRating, initialDeviation, initialVolatility,tau,discountDurationInDays)
     new CachedGlicko2RatingsLoader(glickoRating, atpMatchLoader, histDataInMonths)
   }
 }

@@ -7,24 +7,47 @@ import java.util.Date
 
 class GenericGlicko2RatingTest {
 
-  val glicko2 = new GenericGlicko2Rating(0, 350d / 173.7178, 0.06)
+  val glicko2 = new GenericGlicko2Rating(0, 350d / 173.7178, 0.06, 0.5, 7)
 
   /**Single rating tests.*/
   /**On serve and return rating tests.*/
   @Test def calcOnServeReturnRatingsSingleResult {
     val ratings = glicko2.calcServeReturnRatings(Result("A", "B", 1, new Date(0)) :: Nil)
 
-    //    assertEquals(1662.212, ratings("A").ratingOnServe.rating, 0.001)
-    //    assertEquals(290.230, ratings("A").ratingOnServe.deviation, 0.001)
-    //    assertEquals(1500, ratings("A").ratingOnReturn.rating, 0)
-    //    assertEquals(350, ratings("A").ratingOnReturn.deviation, 0)
-    //    assertEquals(1500, ratings("B").ratingOnServe.rating, 0)
-    //    assertEquals(350, ratings("B").ratingOnServe.deviation, 0)
-    //    assertEquals(1337.787, ratings("B").ratingOnReturn.rating, 0.001)
-    //    assertEquals(290.230, ratings("B").ratingOnReturn.deviation, 0.001)
+    assertEquals(0.934, ratings("A").ratingOnServe.rating, 0.001)
+    assertEquals(1.671, ratings("A").ratingOnServe.deviation, 0.001)
+    assertEquals(0, ratings("A").ratingOnReturn.rating, 0)
+    assertEquals(2.014, ratings("A").ratingOnReturn.deviation, 0.001)
+    assertEquals(0, ratings("B").ratingOnServe.rating, 0)
+    assertEquals(2.014, ratings("B").ratingOnServe.deviation, 0.001)
+    assertEquals(-0.934, ratings("B").ratingOnReturn.rating, 0.001)
+    assertEquals(1.671, ratings("B").ratingOnReturn.deviation, 0.001)
 
-    assertEquals(0.798, GenericGlicko2Rating.E(ratings("A").ratingOnServe.rating, ratings("B").ratingOnReturn.rating, ratings("B").ratingOnReturn.deviation), 0.001)
-    assertEquals(0.5, GenericGlicko2Rating.E(ratings("B").ratingOnServe.rating, ratings("A").ratingOnReturn.rating, ratings("A").ratingOnReturn.deviation), 0.001)
+    assertEquals(0.7980, GenericGlicko2Rating.E(ratings("A").ratingOnServe.rating, ratings("B").ratingOnReturn.rating, ratings("B").ratingOnReturn.deviation), 0.0001)
+    assertEquals(0.5, GenericGlicko2Rating.E(ratings("B").ratingOnServe.rating, ratings("A").ratingOnReturn.rating, ratings("A").ratingOnReturn.deviation), 0.0001)
+  }
+
+  @Test def calcOnServeReturnRatingsDoubleResult {
+    val ratings = glicko2.calcServeReturnRatings(Result("A", "B", 0.64, new Date(0)) :: Result("A", "B", 0.14, new Date(0)) :: Nil)
+
+    assertEquals(-0.423, ratings("A").ratingOnServe.rating, 0.001)
+    assertEquals(1.431, ratings("A").ratingOnServe.deviation, 0.001)
+    assertEquals(0, ratings("A").ratingOnReturn.rating, 0)
+    assertEquals(2.014, ratings("A").ratingOnReturn.deviation, 0.001)
+    assertEquals(0, ratings("B").ratingOnServe.rating, 0)
+    assertEquals(2.014, ratings("B").ratingOnServe.deviation, .001)
+    assertEquals(0.423, ratings("B").ratingOnReturn.rating, 0.001)
+    assertEquals(1.431, ratings("B").ratingOnReturn.deviation, 0.001)
+
+    assertEquals(0.3395, GenericGlicko2Rating.E(ratings("A").ratingOnServe.rating, ratings("B").ratingOnReturn.rating, ratings("B").ratingOnReturn.deviation), 0.00001)
+    assertEquals(0.5, GenericGlicko2Rating.E(ratings("B").ratingOnServe.rating, ratings("A").ratingOnReturn.rating, ratings("A").ratingOnReturn.deviation), 0.00001)
+  }
+
+  @Test def calcOnServeReturnRatingsDoubleResultDiscountPeriod {
+    val ratings = glicko2.calcServeReturnRatings(Result("A", "B", 0.64, new Date(System.currentTimeMillis())) :: Result("A", "B", 0.14, new Date(System.currentTimeMillis() + 1000l * 3600 * 24 * 30)) :: Nil)
+
+    assertEquals(0.3390, GenericGlicko2Rating.E(ratings("A").ratingOnServe.rating, ratings("B").ratingOnReturn.rating, ratings("B").ratingOnReturn.deviation), 0.0001)
+    assertEquals(0.5, GenericGlicko2Rating.E(ratings("B").ratingOnServe.rating, ratings("A").ratingOnReturn.rating, ratings("A").ratingOnReturn.deviation), 0.0001)
   }
 
   @Test def calcOnServeReturn_70_games_converge {
@@ -32,16 +55,16 @@ class GenericGlicko2RatingTest {
     val results = (1 to 12).map(i => Result("A", "B", 39d / 52, new Date(0))).toList
     val ratings = glicko2.calcServeReturnRatings(results)
 
-    //    assertEquals(1662.212, ratings("A").ratingOnServe.rating, 0.001)
-    //    assertEquals(290.230, ratings("A").ratingOnServe.deviation, 0.001)
-    //    assertEquals(1500, ratings("A").ratingOnReturn.rating, 0)
-    //    assertEquals(350, ratings("A").ratingOnReturn.deviation, 0)
-    //    assertEquals(1500, ratings("B").ratingOnServe.rating, 0)
-    //    assertEquals(350, ratings("B").ratingOnServe.deviation, 0)
-    //    assertEquals(1337.787, ratings("B").ratingOnReturn.rating, 0.001)
-    //    assertEquals(290.230, ratings("B").ratingOnReturn.deviation, 0.001)
-
     assertEquals(0.759, GenericGlicko2Rating.E(ratings("A").ratingOnServe.rating, ratings("B").ratingOnReturn.rating, ratings("B").ratingOnReturn.deviation), 0.001)
+    assertEquals(0.5, GenericGlicko2Rating.E(ratings("B").ratingOnServe.rating, ratings("A").ratingOnReturn.rating, ratings("A").ratingOnReturn.deviation), 0.001)
+  }
+
+  @Test def calcOnServeReturn_70_games_converge_then_loss {
+
+    val results = (1 to 12).map(i => Result("A", "B", 39d / 52, new Date(0))).toList ::: List(Result("A", "B", 15d / 52, new Date(0)))
+    val ratings = glicko2.calcServeReturnRatings(results)
+
+    assertEquals(0.679, GenericGlicko2Rating.E(ratings("A").ratingOnServe.rating, ratings("B").ratingOnReturn.rating, ratings("B").ratingOnReturn.deviation), 0.001)
     assertEquals(0.5, GenericGlicko2Rating.E(ratings("B").ratingOnServe.rating, ratings("A").ratingOnReturn.rating, ratings("A").ratingOnReturn.deviation), 0.001)
   }
 
@@ -67,6 +90,13 @@ class GenericGlicko2RatingTest {
 
     assertEquals(2.4295, GenericGlicko2Rating.delta(4.4861, 0.95315, 1, 0.4318), 0.0001)
     assertEquals(-1.846, GenericGlicko2Rating.delta(4.4861, 0.95315, 0, 0.4318), 0.001)
+  }
+
+  @Test def newVolatility {
+    assertEquals(0.06, GenericGlicko2Rating.newVolatility(1.1513, 0.06, 1.7785, -0.4834, 0), 0.0001)
+    assertEquals(0.05986, GenericGlicko2Rating.newVolatility(1.1513, 0.06, 1.7785, -0.4834, 0.3), 0.0001)
+    assertEquals(0.059631, GenericGlicko2Rating.newVolatility(1.1513, 0.06, 1.7785, -0.4834, 0.5), 0.0001)
+    assertEquals(0.05801, GenericGlicko2Rating.newVolatility(1.1513, 0.06, 1.7785, -0.4834, 1.2), 0.0001)
   }
 
   @Test def deviationGivenVolatility = assertEquals(1.152862, GenericGlicko2Rating.deviationGivenVolatility(1.1513, 0.05999), 0.000001)
