@@ -5,9 +5,14 @@ import Assert._
 import MarkovRating._
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc._
+import java.util.Date
 
 class GenericMarkovRatingTest {
 
+  def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double =
+    playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
+
+  private val markovRating = new GenericMarkovRating(1, 10, calculateWinProbOnServe)
   /**
    * Tests for calcRatings
    */
@@ -16,9 +21,8 @@ class GenericMarkovRatingTest {
     val playerARatingOnServe = List(Rating(1, 1d / 3), Rating(2, 1d / 3), Rating(3, 1d / 3))
     val playerBRatingOnReturn = List(Rating(1, 1d / 3), Rating(2, 1d / 3), Rating(3, 1d / 3))
     val (pointsWon, pointsLost) = (1, 0)
-    def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.24074), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.34815), playerANewRating(1), 0.00001)
@@ -36,7 +40,7 @@ class GenericMarkovRatingTest {
     val (pointsWon, pointsLost) = (1, 1)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.32190), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.34752), playerANewRating(1), 0.00001)
@@ -54,7 +58,7 @@ class GenericMarkovRatingTest {
     val (pointsWon, pointsLost) = (2, 0)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.17286), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.34868), playerANewRating(1), 0.00001)
@@ -72,7 +76,7 @@ class GenericMarkovRatingTest {
     val (pointsWon, pointsLost) = (6, 4)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.19533), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.38207), playerANewRating(1), 0.00001)
@@ -90,7 +94,7 @@ class GenericMarkovRatingTest {
     val (pointsWon, pointsLost) = (1, 1)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.11494), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.38150), playerANewRating(1), 0.00001)
@@ -108,7 +112,7 @@ class GenericMarkovRatingTest {
     val (pointsWon, pointsLost) = (0, 2)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.22897), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.40385), playerANewRating(1), 0.00001)
@@ -126,7 +130,7 @@ class GenericMarkovRatingTest {
     val (pointsWon, pointsLost) = (2, 1)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val (playerANewRating, playerBNewRating) = GenericMarkovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost, calculateWinProbOnServe)
+    val (playerANewRating, playerBNewRating) = markovRating.calcRatings(playerARatingOnServe, playerBRatingOnReturn, pointsWon, pointsLost)
 
     assertRating(Rating(1, 0.08901), playerANewRating(0), 0.00001)
     assertRating(Rating(2, 0.37215), playerANewRating(1), 0.00001)
@@ -142,12 +146,13 @@ class GenericMarkovRatingTest {
     val initialRating = Rating.generateRatings(1, 100)
 
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
+    val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
 
-    var ratingAagainstB = GenericMarkovRating.calcRatings(initialRating, initialRating, 58, 34, calculateWinProbOnServe)
-    var ratingBagainstA = GenericMarkovRating.calcRatings(initialRating, initialRating, 44, 33, calculateWinProbOnServe)
+    var ratingAagainstB = markovRating.calcRatings(initialRating, initialRating, 58, 34)
+    var ratingBagainstA = markovRating.calcRatings(initialRating, initialRating, 44, 33)
 
-    val winProbAagainstB = GenericMarkovRating.calcWinProb(ratingAagainstB._1, ratingAagainstB._2, calculateWinProbOnServe)
-    val winProbBagainstA = GenericMarkovRating.calcWinProb(ratingBagainstA._1, ratingBagainstA._2, calculateWinProbOnServe)
+    val winProbAagainstB = markovRating.calcWinProb(ratingAagainstB._1, ratingAagainstB._2)
+    val winProbBagainstA = markovRating.calcWinProb(ratingBagainstA._1, ratingBagainstA._2)
 
     val matchProbAGivenB = TennisProbFormulaCalc.matchProb(winProbAagainstB, 1 - winProbBagainstA, MatchTypeEnum.THREE_SET_MATCH)
 
@@ -165,7 +170,7 @@ class GenericMarkovRatingTest {
     val playerBRatingOnReturn = Rating.generateRatings(1, 3)
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val winProb = GenericMarkovRating.calcWinProb(playerARatingOnServe, playerBRatingOnReturn, calculateWinProbOnServe)
+    val winProb = markovRating.calcWinProb(playerARatingOnServe, playerBRatingOnReturn)
     assertEquals(0.5, winProb, 0.0001)
   }
 
@@ -174,7 +179,7 @@ class GenericMarkovRatingTest {
     val playerBRatingOnReturn = List(Rating(1, 0.3), Rating(2, 0.5), Rating(3, 0.2))
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
 
-    val winProb = GenericMarkovRating.calcWinProb(playerARatingOnServe, playerBRatingOnReturn, calculateWinProbOnServe)
+    val winProb = markovRating.calcWinProb(playerARatingOnServe, playerBRatingOnReturn)
     assertEquals(0.57067, winProb, 0.00001)
 
   }
@@ -183,9 +188,91 @@ class GenericMarkovRatingTest {
     assertEquals(expectedRating.ratingValue, actualRating.ratingValue)
     assertEquals(expectedRating.ratingProb, actualRating.ratingProb, delta)
   }
-  
+
   /**
    * Tests for calcPlayerRatings
-   * */
+   */
+  @Test def calcPlayerRatingsSingleResult {
+
+    def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
+    val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
+
+    val ratings = markovRating.calcPlayerRatings(Result("A", "B", 1, 0, new Date(0)) :: Nil)
+
+    assertEquals(1, ratings("A").ratingOnServe(0).ratingValue)
+    assertEquals(0.0034, ratings("A").ratingOnServe(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("A").ratingOnServe(99).ratingValue)
+    assertEquals(0.0165, ratings("A").ratingOnServe(99).ratingProb, 0.0001)
+
+    assertEquals(1, ratings("A").ratingOnReturn(0).ratingValue)
+    assertEquals(0.01, ratings("A").ratingOnReturn(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("A").ratingOnReturn(99).ratingValue)
+    assertEquals(0.01, ratings("A").ratingOnReturn(99).ratingProb, 0.0001)
+
+    assertEquals(1, ratings("B").ratingOnServe(0).ratingValue)
+    assertEquals(0.01, ratings("B").ratingOnServe(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("B").ratingOnServe(99).ratingValue)
+    assertEquals(0.01, ratings("B").ratingOnServe(99).ratingProb, 0.0001)
+
+    assertEquals(1, ratings("B").ratingOnReturn(0).ratingValue)
+    assertEquals(0.0165, ratings("B").ratingOnReturn(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("B").ratingOnReturn(99).ratingValue)
+    assertEquals(0.0034, ratings("B").ratingOnReturn(99).ratingProb, 0.0001)
+
+    assertEquals(0.6638, markovRating.calcWinProb(ratings("A").ratingOnServe, ratings("B").ratingOnReturn), 0.0001)
+    assertEquals(0.5, markovRating.calcWinProb(ratings("B").ratingOnServe, ratings("A").ratingOnReturn), 0.0001)
+  }
+
+  @Test def calcPlayerRatingsDoubleResult {
+
+    def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
+    val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
+
+    val ratings = markovRating.calcPlayerRatings(Result("A", "B", 64, 36, new Date(0)) :: Result("A", "B", 14, 86, new Date(0)) :: Nil)
+
+    assertEquals(1, ratings("A").ratingOnServe(0).ratingValue)
+    assertEquals(0.00012, ratings("A").ratingOnServe(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("A").ratingOnServe(99).ratingValue)
+    assertEquals(0.0000, ratings("A").ratingOnServe(99).ratingProb, 0.0001)
+
+    assertEquals(1, ratings("A").ratingOnReturn(0).ratingValue)
+    assertEquals(0.01, ratings("A").ratingOnReturn(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("A").ratingOnReturn(99).ratingValue)
+    assertEquals(0.01, ratings("A").ratingOnReturn(99).ratingProb, 0.0001)
+
+    assertEquals(1, ratings("B").ratingOnServe(0).ratingValue)
+    assertEquals(0.01, ratings("B").ratingOnServe(0).ratingProb, 0.0001)
+    assertEquals(100, ratings("B").ratingOnServe(99).ratingValue)
+    assertEquals(0.01, ratings("B").ratingOnServe(99).ratingProb, 0.0001)
+
+    assertEquals(51, ratings("B").ratingOnReturn(50).ratingValue)
+    assertEquals(0.0051, ratings("B").ratingOnReturn(50).ratingProb, 0.0001)
+    assertEquals(61, ratings("B").ratingOnReturn(60).ratingValue)
+    assertEquals(0.0201, ratings("B").ratingOnReturn(60).ratingProb, 0.0001)
+
+    assertEquals(0.1607, markovRating.calcWinProb(ratings("A").ratingOnServe, ratings("B").ratingOnReturn), 0.0001)
+    assertEquals(0.5, markovRating.calcWinProb(ratings("B").ratingOnServe, ratings("A").ratingOnReturn), 0.0001)
+  }
+
+  @Test def calcPlayerRatings_70_games_converge {
+    def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
+    val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
+
+    val results = (1 to 12).map(i => Result("A", "B", 39, 13, new Date(0))).toList
+    val ratings = markovRating.calcPlayerRatings(results)
+
+    assertEquals(0.7496, markovRating.calcWinProb(ratings("A").ratingOnServe, ratings("B").ratingOnReturn), 0.0001)
+    assertEquals(0.5, markovRating.calcWinProb(ratings("B").ratingOnServe, ratings("A").ratingOnReturn), 0.0001)
+  }
   
+   @Test def calcPlayerRatings_70_games_converge_then_loss {
+    def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
+    val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
+
+    val results = (1 to 12).map(i => Result("A", "B", 39, 13, new Date(0))).toList ::: List(Result("A", "B", 15, 37, new Date(0)))
+    val ratings = markovRating.calcPlayerRatings(results)
+
+    assertEquals(0.5851, markovRating.calcWinProb(ratings("A").ratingOnServe, ratings("B").ratingOnReturn), 0.0001)
+    assertEquals(0.5, markovRating.calcWinProb(ratings("B").ratingOnServe, ratings("A").ratingOnReturn), 0.0001)
+  }
 }

@@ -3,28 +3,22 @@ package dk.tennis.compare.markov
 import MarkovRating._
 import scala.Math._
 import scala.annotation.tailrec
+import java.util.Date
 
 /**
  * Calculates tennis player rating based on Markov localisation.
  *
+ * @param startRatingValue
+ * @param endRatingValue
+ * @param calculateWinProbability Function, that calculates win probability on serve by player A against player B. (playerARatingOnServe, playerBRatingOReturn) => winProbability.
  */
-object GenericMarkovRating extends MarkovRating {
+class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int,calculateWinProbOnServe: (Int, Int) => Double) extends MarkovRating {
 
-  /**
-   * Calculates new ratings for players A and B given the evidence (number of points won/lost on serve by player A against player B in a tennis match).
-   *
-   * @param playerARatingOnServe List of rating values and probabilities representing player A rating on serve.
-   *
-   * @param playerBRatingOnServe List of rating values and probabilities representing player B rating on return.
-   *
-   * @param playerAWonPoints/playerAlostPoints Number of points won/lost by player A against player B.
-   *
-   * @param calculateWinProbability Function, that calculates win probability on serve by player A against player B. (playerARatingOnServe, playerBRatingOnReturn) => winProbability.
-   *
-   * @return Tuple2[New rating on serve for player A, New rating on return for player B]
+  /**Calculates new ratings for players A and B given the evidence (number of points won/lost on serve by player A against player B in a tennis match).
+   * @see MarkovRating.calcRatings()
    */
   def calcRatings(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating],
-    playerAPointsWon: Int, playerAPointsLost: Int, calculateWinProbOnServe: (Int, Int) => Double): Tuple2[List[Rating], List[Rating]] = {
+    playerAPointsWon: Int, playerAPointsLost: Int): Tuple2[List[Rating], List[Rating]] = {
 
     val playerAMarginals = playerARatingOnServe.map(r => Rating(r.ratingValue, 0)).toArray
     val playerBMarginals = playerBRatingOnReturn.map(r => Rating(r.ratingValue, 0)).toArray
@@ -51,8 +45,9 @@ object GenericMarkovRating extends MarkovRating {
     Tuple2(normPlayerAMarginals.toList, normPlayerBMarginals.toList)
   }
 
-  /**Calculates point on serve winning probability by player A against player B.*/
-  def calcWinProb(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating], calculateWinProbOnServe: (Int, Int) => Double): Double = {
+  /**Calculates point on serve winning probability by player A against player B.
+   * @see MarkovRating.calcWinProb()*/
+  def calcWinProb(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating]): Double = {
 
     var factorWonSum = 0d
     var factorLossSum = 0d
@@ -75,7 +70,28 @@ object GenericMarkovRating extends MarkovRating {
    * @return Map[playerName, playerRating]
    */
   def calcPlayerRatings(results: List[Result]): Map[String, PlayerRating] = {
-    throw new UnsupportedOperationException("Not implemented yet.")
+     /**Map[player,Rating*/
+    val ratings = results.foldLeft(Map[String, PlayerRating]())((currentRatings, result) => updateRatings(currentRatings, result))
+    ratings
   }
+
+  private def updateRatings(ratings: Map[String, PlayerRating], result: Result): Map[String, PlayerRating] = {
+
+    val currRatingA = ratings.getOrElse(result.playerA, initRating(result.timestamp))
+    val currRatingB = ratings.getOrElse(result.playerB, initRating(result.timestamp))
+
+    val (newRatingAOnServe,newRatingBOnReturn) = calcRatings(currRatingA.ratingOnServe, currRatingB.ratingOnReturn,result.playerAPointsWon,result.playerAPointsLost)
+    
+    val newRatingA = currRatingA.copy(ratingOnServe = newRatingAOnServe)
+    val newRatingB = currRatingB.copy(ratingOnReturn = newRatingBOnReturn)
+
+    val newRatings = ratings + (result.playerA -> newRatingA, result.playerB -> newRatingB)
+    newRatings
+  }
+
+  /**Tuple2[rating on serve, rating on return]*/
+  private def initRating(timestamp: Date) = PlayerRating(
+    Rating.generateRatings(startRatingValue,endRatingValue),
+    Rating.generateRatings(startRatingValue,endRatingValue))
 
 }

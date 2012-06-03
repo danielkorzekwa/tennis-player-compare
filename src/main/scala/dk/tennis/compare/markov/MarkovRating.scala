@@ -20,7 +20,7 @@ object MarkovRating {
     override def toString = "Rating [ratingValue=%s,ratingProb=%s]".format(ratingValue, ratingProb)
   }
 
-  case class PlayerRating(ratingOnServe: Rating, ratingOnReturn: Rating)
+  case class PlayerRating(ratingOnServe: List[Rating], ratingOnReturn: List[Rating])
   
   /**
    * @param playerA
@@ -41,15 +41,20 @@ trait MarkovRating {
    *
    * @param playerAPointsWon/playerAPointsLost Number of points won/lost by player A against player B.
    *
-   * @param calculateWinProbability Function, that calculates win probability on serve by player A against player B. (playerARatingOnServe, playerBRatingOReturn) => winProbability.
-   *
    * @return Tuple2[New rating on serve for player A, New rating on return for player B]
    */
   def calcRatings(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating],
-    playerAPointsWon: Int, playerAPointsLost: Int, calculateWinProbOnServe: (Int, Int) => Double): Tuple2[List[Rating], List[Rating]]
+    playerAPointsWon: Int, playerAPointsLost: Int): Tuple2[List[Rating], List[Rating]]
 
-  /**Calculates point on serve winning probability by player A against player B.*/
-  def calcWinProb(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating], calculateWinProbOnServe: (Int, Int) => Double): Double
+  /**Calculates point on serve winning probability by player A against player B.
+   * 
+   * @param playerARatingOnServe List of rating values and probabilities representing player A rating on serve.
+   *
+   * @param playerBRatingOnServe List of rating values and probabilities representing player B rating on return.
+   * 
+   * @return Probability of winning a point by player A against player B. Between 0 and 1.
+   * */
+  def calcWinProb(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating]): Double
 
   /**
    * Calculates tennis player ratings based on a history of tennis results
