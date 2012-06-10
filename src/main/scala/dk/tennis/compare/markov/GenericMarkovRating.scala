@@ -1,9 +1,20 @@
 package dk.tennis.compare.markov
 
 import MarkovRating._
-import scala.Math._
+
 import scala.annotation.tailrec
 import java.util.Date
+
+import scalala.scalar._;
+import scalala.tensor.::;
+import scalala.tensor.mutable._;
+import scalala.tensor.dense._;
+import scalala.tensor.sparse._;
+import scalala.library.Library._;
+import scalala.library.LinearAlgebra._;
+import scalala.library.Statistics._;
+import scalala.library.Plotting._;
+import scalala.operators.Implicits._;
 
 /**
  * Calculates tennis player rating based on Markov localisation.
@@ -12,9 +23,10 @@ import java.util.Date
  * @param endRatingValue
  * @param calculateWinProbability Function, that calculates win probability on serve by player A against player B. (playerARatingOnServe, playerBRatingOReturn) => winProbability.
  */
-class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int,calculateWinProbOnServe: (Int, Int) => Double) extends MarkovRating {
+class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int, calculateWinProbOnServe: (Int, Int) => Double) extends MarkovRating {
 
-  /**Calculates new ratings for players A and B given the evidence (number of points won/lost on serve by player A against player B in a tennis match).
+  /**
+   * Calculates new ratings for players A and B given the evidence (number of points won/lost on serve by player A against player B in a tennis match).
    * @see MarkovRating.calcRatings()
    */
   def calcRatings(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating],
@@ -45,8 +57,10 @@ class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int,calculateWi
     Tuple2(normPlayerAMarginals.toList, normPlayerBMarginals.toList)
   }
 
-  /**Calculates point on serve winning probability by player A against player B.
-   * @see MarkovRating.calcWinProb()*/
+  /**
+   * Calculates point on serve winning probability by player A against player B.
+   * @see MarkovRating.calcWinProb()
+   */
   def calcWinProb(playerARatingOnServe: List[Rating], playerBRatingOnReturn: List[Rating]): Double = {
 
     var factorWonSum = 0d
@@ -64,13 +78,13 @@ class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int,calculateWi
     factorWonSum / (factorWonSum + factorLossSum)
 
   }
-  
-   /**
+
+  /**
    * Calculates tennis player ratings based on a history of tennis results
    * @return Map[playerName, playerRating]
    */
   def calcPlayerRatings(results: List[Result]): Map[String, PlayerRating] = {
-     /**Map[player,Rating*/
+    /**Map[player,Rating*/
     val ratings = results.foldLeft(Map[String, PlayerRating]())((currentRatings, result) => updateRatings(currentRatings, result))
     ratings
   }
@@ -80,18 +94,33 @@ class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int,calculateWi
     val currRatingA = ratings.getOrElse(result.playerA, initRating(result.timestamp))
     val currRatingB = ratings.getOrElse(result.playerB, initRating(result.timestamp))
 
-    val (newRatingAOnServe,newRatingBOnReturn) = calcRatings(currRatingA.ratingOnServe, currRatingB.ratingOnReturn,result.playerAPointsWon,result.playerAPointsLost)
-    
+    val (newRatingAOnServe, newRatingBOnReturn) = calcRatings(currRatingA.ratingOnServe, currRatingB.ratingOnReturn, result.playerAPointsWon, result.playerAPointsLost)
+
     val newRatingA = currRatingA.copy(ratingOnServe = newRatingAOnServe)
     val newRatingB = currRatingB.copy(ratingOnReturn = newRatingBOnReturn)
 
     val newRatings = ratings + (result.playerA -> newRatingA, result.playerB -> newRatingB)
+
+//For analysis only - plotting player ratings
+//    if (result.playerA.equals("Roger Federer") && ratings.isDefinedAt("Roger Federer") && ratings.isDefinedAt("Andy Roddick")) {
+//      val probs = newRatings("Andy Roddick").ratingOnServe.map(r => if (r.ratingProb > 0.1) (r.ratingProb * 1000).toInt else 1)
+//      println(result.timestamp + ":" + calcWinProb(ratings("Roger Federer").ratingOnServe, ratings("Andy Roddick").ratingOnReturn))
+//      val ratingHistVec = DenseVector.zeros[Double](probs.sum)
+//
+//      var position: Int = 0
+//      for ((e, index) <- probs.zipWithIndex) {
+//        ratingHistVec(position to (position + e - 1)) := index.toDouble + 1
+//        position += e
+//      }
+//      hist(ratingHistVec, 100)
+//    }
+
     newRatings
   }
 
   /**Tuple2[rating on serve, rating on return]*/
   private def initRating(timestamp: Date) = PlayerRating(
-    Rating.generateRatings(startRatingValue,endRatingValue),
-    Rating.generateRatings(startRatingValue,endRatingValue))
+    Rating.generateRatings(startRatingValue, endRatingValue),
+    Rating.generateRatings(startRatingValue, endRatingValue))
 
 }

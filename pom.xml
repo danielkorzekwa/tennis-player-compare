@@ -212,6 +212,12 @@
 			<version>0.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.scalala</groupId>
+			<artifactId>scalala_2.9.1</artifactId>
+			<version>1.0.0.RC2</version>
+		</dependency>
+
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -219,6 +225,8 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+
 
 	</dependencies>
 

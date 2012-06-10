@@ -11,14 +11,14 @@ import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 
 object MarkovTennisMatchCompareTest {
 
-  private val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2009_2011.csv")
+  private val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv")
 
 }
 
 class MarkovTennisMatchCompareTest {
 
-  def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double =
-    playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
+  def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnReturn: Int): Double =
+    1 / (1 + Math.pow(Math.E, -0.1 * (playerARatingOnServe.toDouble - playerBRatingOnReturn)))
   private val markovRating = new GenericMarkovRating(1, 10, calculateWinProbOnServe)
 
   private val markovLoader = new CachedMarkovRatingsLoader(markovRating, atpMatchesLoader, 24)
@@ -32,13 +32,13 @@ class MarkovTennisMatchCompareTest {
     val playerAFullName = "Roger Federer"
     val playerBFullName = "Milos Raonic"
 
-    assertEquals(0.8215, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.1784, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.7864, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.2135, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
 
-    assertEquals(0.8751, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.8394, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
 
-    assertEquals(0.8487, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.8593, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.766, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.875, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
 
   }
 
