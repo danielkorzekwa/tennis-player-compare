@@ -25,6 +25,8 @@ import scalala.operators.Implicits._;
  */
 class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int, calculateWinProbOnServe: (Int, Int) => Double) extends MarkovRating {
 
+   private var ratings = Map[String, PlayerRating]()
+  
   /**
    * Calculates new ratings for players A and B given the evidence (number of points won/lost on serve by player A against player B in a tennis match).
    * @see MarkovRating.calcRatings()
@@ -117,7 +119,19 @@ class GenericMarkovRating(startRatingValue: Int, endRatingValue: Int, calculateW
 
     newRatings
   }
-
+  
+   /**Processes tennis match event and updates internal player ratings.
+   * 
+   */
+  def sendResult(result:Result) {
+     ratings = updateRatings(ratings, result)
+  }
+  
+  /**
+   * @return Map [player name, player rating],
+   */
+  def getRatings(): Map[String,PlayerRating] = ratings
+  
   /**Tuple2[rating on serve, rating on return]*/
   private def initRating(timestamp: Date) = PlayerRating(
     Rating.generateRatings(startRatingValue, endRatingValue),

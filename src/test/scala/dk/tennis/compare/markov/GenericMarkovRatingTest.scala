@@ -197,7 +197,8 @@ class GenericMarkovRatingTest {
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
     val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
 
-    val ratings = markovRating.calcPlayerRatings(Result("A", "B", 1, 0, new Date(0)) :: Nil)
+    markovRating.sendResult(Result("A", "B", 1, 0, new Date(0)))
+    val ratings = markovRating.getRatings()
 
     assertEquals(1, ratings("A").ratingOnServe(0).ratingValue)
     assertEquals(0.0034, ratings("A").ratingOnServe(0).ratingProb, 0.0001)
@@ -264,8 +265,8 @@ class GenericMarkovRatingTest {
     assertEquals(0.7496, markovRating.calcWinProb(ratings("A").ratingOnServe, ratings("B").ratingOnReturn), 0.0001)
     assertEquals(0.5, markovRating.calcWinProb(ratings("B").ratingOnServe, ratings("A").ratingOnReturn), 0.0001)
   }
-  
-   @Test def calcPlayerRatings_70_games_converge_then_loss {
+
+  @Test def calcPlayerRatings_70_games_converge_then_loss {
     def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double = 1 / (1 + Math.pow(Math.E, -0.04 * (playerARatingOnServe.toDouble - playerBRatingOnServe)))
     val markovRating = new GenericMarkovRating(1, 100, calculateWinProbOnServe)
 

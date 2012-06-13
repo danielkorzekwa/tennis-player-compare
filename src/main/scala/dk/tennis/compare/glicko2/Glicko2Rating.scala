@@ -23,5 +23,15 @@ trait Glicko2Rating {
    * @return Map[playerName, playerRating]
    */
   def calcServeReturnRatings(results: List[Result]): Map[String, PlayerRating]
+  
+  /**Processes tennis match event and updates internal player ratings.
+   * 
+   */
+  def sendResult(result:Result)
+  
+  /**
+   * @return Map [player name, player rating],
+   */
+  def getRatings(): Map[String,PlayerRating]
 
 }

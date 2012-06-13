@@ -9,57 +9,73 @@ import dk.atp.api.domain.MatchComposite
 import java.util.Date
 import scala.util.Random
 import scala.Math._
+import dk.tennis.compare.glicko2._
+import dk.tennis.compare.predict.Glicko2TennisPredict;
+
+import dk.tennis.compare.predict.TennisPredict._;
+import Glicko2Rating._
+import dk.tennisprob.TennisProbFormulaCalc
+import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import org.joda.time.DateTime
+import scalala.library.Plotting._
+import scalala.tensor.dense._
+import java.awt.Color
+import scala.util.Random
+import dk.tennis.compare.predict._
 
 /**
  * Calculates log likelihood for tennis outcome prediction models.
  *
  */
 object LogLikelihoodTest {
-  case class PredictionRecord(matchTime: Date, playerA: String, playerB: String, ratingA: Double, ratingB: Double, ratingAWinner: Byte)
+
 }
 class LogLikelihoodTest {
 
   @Test def test {
 
-    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2009_2011.csv");
-    val matches = (2009 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatched = matches.filter(m => m.tournament.surface == HARD && m.tournament.numOfSet == 2)
+    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
 
-    val predictionRecords = generatePredictionRecords(filteredMatched)
+    val matches = (2006 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
+    val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.tournament.numOfSet == 2)
 
     val rand = new Random()
-    def calcPlayerAWinnerProb(r: PredictionRecord): Double = 0.5
+    val schuffledMatches = filteredMatches.map { m =>
+      rand.nextBoolean match {
+        case true => {
+          val newMatchFacts = m.matchFacts.copy(playerAFacts = m.matchFacts.playerBFacts, playerBFacts = m.matchFacts.playerAFacts)
+          m.copy(matchFacts = newMatchFacts)
+        }
+        case false => m
+      }
+    }
 
-    val logLikelihood = calcLogLikelihood(predictionRecords, calcPlayerAWinnerProb)
+    val predictionRecords = MarkovTennisPredict.predict(schuffledMatches).filter(r => new DateTime(r.matchTime).getYear() >= 2010)
+
+    val logLikelihood = calcLogLikelihood(predictionRecords)
+
+    /**Print predicted/true probabilities for scatter chart.*/
+    // val predictionsGroupedByProb = predictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner.toInt), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).groupBy(r => (r._1 * 100).toInt)
+    // val predictionsGroupedByProbSumm = predictionsGroupedByProb.mapValues(r => (r.map(_._2).sum.toDouble / r.size) * 100)
+    // predictionsGroupedByProbSumm.keys.toList.sorted.foreach(predictedProb => println("%d,%1.3f".format(predictedProb, predictionsGroupedByProbSumm(predictedProb))))
+
+    /**Print outcome classification records.*/
+    //filteredPredictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).foreach(r => println("%1.3f,%d".format(r._1,r._2)))
+
     println("Num of prediction records=%d, logLikelihoodSum=%f, logLikelihoodAvg=%f".format(predictionRecords.size, logLikelihood, logLikelihood / predictionRecords.size))
 
   }
 
-  private def generatePredictionRecords(matches: Seq[MatchComposite]): Seq[PredictionRecord] = {
+  private def calcLogLikelihood(predictionRecords: Seq[PredictionRecord]): Double = {
 
-    implicit def bool2int(b: Boolean): Byte = if (b) 1 else 0
+    val logLikelihood = predictionRecords.map { x =>
 
-    val predictionRecords = for {
-      m <- matches
+      val y = x.playerAWinner
+      val h = x.playerAWinnerProb
 
-      val ratingA = 0
-      val ratingB = 0
-
-    } yield PredictionRecord(
-      m.tournament.tournamentTime, m.matchFacts.playerAFacts.playerName,
-      m.matchFacts.playerBFacts.playerName,
-      ratingA, ratingB,
-      m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
-
-    predictionRecords
-  }
-
-  private def calcLogLikelihood(predictionRecords: Seq[PredictionRecord], playerAWinnerProb: (PredictionRecord) => Double): Double = {
-    predictionRecords.map { x =>
-      val y = x.ratingAWinner
-      val h = playerAWinnerProb
-
-      y * log(h(x)) + (1 - y) * log(1 - h(x))
+      y * log(h) + (1 - y) * log(1 - h)
     }.sum
+
+    logLikelihood
   }
 }

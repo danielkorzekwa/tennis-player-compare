@@ -12,7 +12,9 @@ class GenericGlicko2RatingTest {
   /**Single rating tests.*/
   /**On serve and return rating tests.*/
   @Test def calcOnServeReturnRatingsSingleResult {
-    val ratings = glicko2.calcServeReturnRatings(Result("A", "B", 1, new Date(0)) :: Nil)
+    glicko2.sendResult(Result("A", "B", 1, new Date(0)))
+    
+    val ratings = glicko2.getRatings()
 
     assertEquals(0.934, ratings("A").ratingOnServe.rating, 0.001)
     assertEquals(1.671, ratings("A").ratingOnServe.deviation, 0.001)

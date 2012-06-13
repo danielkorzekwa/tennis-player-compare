@@ -85,7 +85,23 @@ object GenericGlicko2Rating {
 
 }
 class GenericGlicko2Rating(initialRating: Double = 0, initialDeviation: Double = 350d / 173.7178, initialVolatility: Double = 0.06, tau: Double = 0.5, discountDurationInDays: Int) extends Glicko2Rating {
-
+  
+  private var ratings = Map[String, PlayerRating]()
+  
+  /**Processes tennis match event and updates internal player ratings.
+   * 
+   */
+  def sendResult(result:Result) {
+    ratings = updateRatings(ratings, result)
+  }
+  
+  /**
+   * @return Map [player name, player rating],
+   */
+  def getRatings(): Map[String,PlayerRating] = {
+    ratings
+  }
+  
   /**
    * @return Map[playerName, playerRating]
    */
