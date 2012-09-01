@@ -11,64 +11,20 @@
 	<inceptionYear>2011</inceptionYear>
 	<url>https://github.com/danielkorzekwa/tennis-player-compare</url>
 
-	<distributionManagement>
-		<repository>
-			<id>dk-maven2-repo-releases</id>
-			<name>dk-maven2 maven repository (releases)</name>
-			<url>
-                                svn:https://dk-maven2-repo.googlecode.com/svn/maven-repo/releases
-                        </url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
-		<snapshotRepository>
-			<id>dk-maven2-repo-snapshots</id>
-			<name>dk-maven2 maven repository (snapshots)</name>
-			<url>
-                                svn:https://dk-maven2-repo.googlecode.com/svn/maven-repo/snapshots
-                        </url>
-			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<!-- Properties -->
 	<properties>
 		<scala.version>2.9.2</scala.version>
 		<junit.version>4.4</junit.version>
 	</properties>
 
-	<!-- Repositories -->
 	<repositories>
 		<repository>
-			<id>scala-tools.org</id>
-			<name>Scala-Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
+			<id>dk-maven-repo</id>
+			<url>https://raw.github.com/danielkorzekwa/dk-maven-repo/master</url>
 		</repository>
-
-		<repository>
-			<id>dk-maven2-repo-snapshots</id>
-			<name>dk-maven2 maven repository (snapshots)</name>
-			<url>http://dk-maven2-repo.googlecode.com/svn/maven-repo/snapshots</url>
-		</repository>
-
 	</repositories>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>scala-tools.org</id>
-			<name>Scala-Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.jvnet.wagon-svn</groupId>
-				<artifactId>wagon-svn</artifactId>
-				<version>1.9</version>
-			</extension>
-		</extensions>
-
 		<sourceDirectory>src/main/scala</sourceDirectory>
 		<testSourceDirectory>src/test/scala</testSourceDirectory>
 
@@ -157,7 +113,7 @@
 		<dependency>
 			<groupId>dk.atp</groupId>
 			<artifactId>atpworldtour-api</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 
 		<dependency>
