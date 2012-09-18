@@ -14,8 +14,7 @@ object MarkovTennisPredict extends TennisPredict {
 
   implicit def bool2int(b: Boolean): Byte = if (b) 1 else 0
 
-  /**Predicts tennis match winner for a set of matches.*/
-  def predict(matches: Seq[MatchComposite]): Seq[PredictionRecord] = {
+  def predict(matches: Seq[MatchComposite], matchFilter: (MatchComposite) => Boolean): Seq[PredictionRecord] = {
 
     // def calculateWinProbOnServe(playerARatingOnServe: Int, playerBRatingOnServe: Int): Double =
     //   playerARatingOnServe.toDouble / (playerARatingOnServe + playerBRatingOnServe)
@@ -48,10 +47,9 @@ object MarkovTennisPredict extends TennisPredict {
     }
 
     val matchesSize = matches.size
-    val predictionRecords = for {
-      (m, index) <- matches.zipWithIndex
+    val predictionRecords: Seq[Tuple2[MatchComposite, PredictionRecord]] = for ((m, index) <- matches.zipWithIndex) yield {
 
-      val o = println("%d / %d".format(index, matchesSize))
+      println("Predicting winner of tennis match  (Markov model) - %d / %d".format(index, matchesSize))
 
       val (ratingA, ratingB) = updateRatings(m)
 
@@ -60,12 +58,15 @@ object MarkovTennisPredict extends TennisPredict {
 
       val matchProbAGivenB = TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, THREE_SET_MATCH)
 
-    } yield PredictionRecord(
-      m.tournament.tournamentTime, m.matchFacts.playerAFacts.playerName,
-      m.matchFacts.playerBFacts.playerName,
-      matchProbAGivenB,
-      m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
+      val predictionRecord = PredictionRecord(
+        m.tournament.tournamentTime, m.matchFacts.playerAFacts.playerName,
+        m.matchFacts.playerBFacts.playerName,
+        matchProbAGivenB,
+        m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
 
-    predictionRecords
+      (m, predictionRecord)
+    }
+
+    predictionRecords.filter(m => matchFilter(m._1)).map(_._2)
   }
 }

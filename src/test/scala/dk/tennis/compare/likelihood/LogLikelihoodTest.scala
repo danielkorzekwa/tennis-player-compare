@@ -36,7 +36,7 @@ class LogLikelihoodTest {
 
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
 
-    val matches = (2006 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
+    val matches = (2010 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.tournament.numOfSet == 2)
 
     val rand = new Random()
@@ -50,7 +50,15 @@ class LogLikelihoodTest {
       }
     }
 
-    val predictionRecords = MarkovTennisPredict.predict(schuffledMatches).filter(r => new DateTime(r.matchTime).getYear() >= 2010)
+    val matchFilter = (m: MatchComposite) => {
+      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
+        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Rafael Nadal") &&
+        new DateTime(m.tournament.tournamentTime.getTime()).getMonthOfYear() == 11
+    }
+    val predictionRecords = DbnTennisPredict.predict(filteredMatches, matchFilter)
+
+    println("")
+    predictionRecords.foreach(println(_))
 
     val logLikelihood = calcLogLikelihood(predictionRecords)
 
@@ -62,7 +70,7 @@ class LogLikelihoodTest {
     /**Print outcome classification records.*/
     //filteredPredictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).foreach(r => println("%1.3f,%d".format(r._1,r._2)))
 
-    println("Num of prediction records=%d, logLikelihoodSum=%f, logLikelihoodAvg=%f".format(predictionRecords.size, logLikelihood, logLikelihood / predictionRecords.size))
+    println("\nNum of prediction records=%d, logLikelihoodSum=%f, logLikelihoodAvg=%f".format(predictionRecords.size, logLikelihood, logLikelihood / predictionRecords.size))
 
   }
 

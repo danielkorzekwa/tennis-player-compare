@@ -123,6 +123,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>dk.tennis.em</groupId>
+			<artifactId>tennis-rating-em</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>${scala.version}</version>
