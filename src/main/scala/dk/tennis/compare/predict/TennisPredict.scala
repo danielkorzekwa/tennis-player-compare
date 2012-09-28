@@ -16,6 +16,7 @@ trait TennisPredict {
   /**Predicts tennis match winner for a set of matches.
    * 
    * @param matchFilter Returns prediction records for matches with a match filter criteria equals to true
+   * @param progress Listens on produced prediction records.
    * */
-  def predict(matches: Seq[MatchComposite],matchFilter:(MatchComposite)=> Boolean): Seq[PredictionRecord] 
+  def predict(matches: Seq[MatchComposite],matchFilter:(MatchComposite)=> Boolean, progress: (PredictionRecord) => Unit): Seq[PredictionRecord] 
 }

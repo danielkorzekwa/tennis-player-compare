@@ -22,9 +22,18 @@ import scalala.tensor.dense._
 import java.awt.Color
 import scala.util.Random
 import dk.tennis.compare.predict._
+import TennisPredict._
+import scala.collection._
 
 /**
  * Calculates log likelihood for tennis outcome prediction models.
+ *
+ *
+ * Dbn 2010-2011, no markets shuffle (Num of prediction records=2550, logLikelihoodSum=-1666.664724, logLikelihoodAvg=-0.653594)
+ * Markov 2010-2011, no market shuffle (Num of prediction records=2550, logLikelihoodSum=-1641.429274, logLikelihoodAvg=-0.643698)
+ *
+ * Dbn 2010-2011 Federer, no market shuffle (Num of prediction records=40, logLikelihoodSum=-16.031987, logLikelihoodAvg=-0.400800)
+ * Markov 2010-2011 Federer, no market shuffle (Num of prediction records=40, logLikelihoodSum=-14.085046, logLikelihoodAvg=-0.352126)
  *
  */
 object LogLikelihoodTest {
@@ -40,7 +49,7 @@ class LogLikelihoodTest {
     val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.tournament.numOfSet == 2)
 
     val rand = new Random()
-    val schuffledMatches = filteredMatches.map { m =>
+    val shuffledMatches = filteredMatches.map { m =>
       rand.nextBoolean match {
         case true => {
           val newMatchFacts = m.matchFacts.copy(playerAFacts = m.matchFacts.playerBFacts, playerBFacts = m.matchFacts.playerAFacts)
@@ -50,12 +59,20 @@ class LogLikelihoodTest {
       }
     }
 
-    val matchFilter = (m: MatchComposite) => {
-      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
-        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Rafael Nadal") &&
-        new DateTime(m.tournament.tournamentTime.getTime()).getMonthOfYear() == 11
+    //    val matchFilter = (m: MatchComposite) => {
+    //      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
+    //        m.matchFacts.containsPlayer("Roger Federer")  
+    //    }
+
+    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
+
+    val predictionRecordsProgress: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
+    val progress = (record: PredictionRecord) => {
+      predictionRecordsProgress += record
+      val llhProgress = calcLogLikelihood(predictionRecordsProgress) / predictionRecordsProgress.size
+      println("Log likelihood= " + llhProgress)
     }
-    val predictionRecords = DbnTennisPredict.predict(filteredMatches, matchFilter)
+    val predictionRecords = MarkovTennisPredict.predict(filteredMatches, matchFilter, progress)
 
     println("")
     predictionRecords.foreach(println(_))

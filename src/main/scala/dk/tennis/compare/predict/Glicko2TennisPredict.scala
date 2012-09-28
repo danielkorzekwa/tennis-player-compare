@@ -14,7 +14,7 @@ import dk.tennis.compare.predict._
  */
 object Glicko2TennisPredict extends TennisPredict {
 
-  def predict(matches: Seq[MatchComposite], matchFilter: (MatchComposite) => Boolean): Seq[PredictionRecord] = {
+  def predict(matches: Seq[MatchComposite], matchFilter: (MatchComposite) => Boolean,progress: (PredictionRecord) => Unit): Seq[PredictionRecord] = {
 
     implicit def bool2int(b: Boolean): Byte = if (b) 1 else 0
     val glicko2 = new GenericGlicko2Rating(0, 350d / 173.7178, 0.06, 0.5, 7)
@@ -61,11 +61,14 @@ object Glicko2TennisPredict extends TennisPredict {
         ratingA.ratingOnReturn.deviation < 0.5 &&
         ratingB.ratingOnReturn.deviation < 0.5)
        
-    } yield PredictionRecord(
+        val predictionRecord =PredictionRecord(
       m.tournament.tournamentTime, m.matchFacts.playerAFacts.playerName,
       m.matchFacts.playerBFacts.playerName,
       matchProbAGivenBTuned,
       m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
+      
+      
+    } yield {progress(predictionRecord);predictionRecord}
 
     predictionRecords
 
