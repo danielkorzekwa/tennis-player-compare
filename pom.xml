@@ -19,6 +19,20 @@
 
 	<repositories>
 		<repository>
+			<id>dk-maven2-repo-releases</id>
+			<name>dk-maven2 maven repository (releases)</name>
+			<url>
+                                svn:https://dk-maven2-repo.googlecode.com/svn/maven-repo/releases
+                        </url>
+		</repository>
+		<repository>
+			<id>dk-maven2-repo-snapshots</id>
+			<name>dk-maven2 maven repository (snapshots)</name>
+			<url>
+                                svn:https://dk-maven2-repo.googlecode.com/svn/maven-repo/snapshots
+                        </url>
+		</repository>
+		<repository>
 			<id>dk-maven-repo</id>
 			<url>https://raw.github.com/danielkorzekwa/dk-maven-repo/master</url>
 		</repository>
