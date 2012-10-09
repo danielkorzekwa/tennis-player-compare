@@ -47,7 +47,7 @@ object MarkovTennisPredict extends TennisPredict {
     }
 
     val matchesSize = matches.size
-    val predictionRecords: Seq[PredictionRecord] = for ((m, index) <- matches.zipWithIndex; if (matchFilter(m))) yield {
+    val predictionRecords: Seq[Tuple2[MatchComposite, PredictionRecord]] = for ((m, index) <- matches.zipWithIndex) yield {
 
       println("Predicting winner of tennis match  (Markov model) - %d / %d".format(index, matchesSize))
 
@@ -58,6 +58,9 @@ object MarkovTennisPredict extends TennisPredict {
 
       val matchProbAGivenB = TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, THREE_SET_MATCH)
 
+      /**Theta and beta are learned with logisitc regression. Prediction variable = matchProbAGivenB, predicted variable = match outcome.*/
+      val matchProbAGivenBTuned = 1 / (1 + exp(-(-1.5502 + 3.1003 * matchProbAGivenB)))
+
       val predictionRecord = PredictionRecord(
         m.tournament.tournamentTime, m.matchFacts.playerAFacts.playerName,
         m.matchFacts.playerBFacts.playerName,
@@ -65,9 +68,9 @@ object MarkovTennisPredict extends TennisPredict {
         m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
 
       progress(predictionRecord)
-      predictionRecord
+      (m, predictionRecord)
     }
 
-    predictionRecords
+    predictionRecords.filter(r => matchFilter(r._1)).map(r => r._2)
   }
 }

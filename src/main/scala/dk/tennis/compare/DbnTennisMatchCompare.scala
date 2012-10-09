@@ -13,8 +13,8 @@ import org.joda.time.Duration
 
 class DbnTennisMatchCompare(atpMatchLoader: ATPMatchesLoader, histDataInMonths: Int = 12) extends TennisPlayerCompare {
 
-  private val priorProb = List(0.4939, 0.4751, 0.0310)
-  private val emissionProb = List(0.5772, 0.4228, 0.2799, 0.7201, 0.1077, 0.8923, 0.7260, 0.2740, 0.4666, 0.5334, 0.1876, 0.8124, 0.9916, 0.0084, 0.8272, 0.1728, 0.4742, 0.5258)
+  private val priorProb = List(0.6522, 0.2059, 0.1076, 0.0343)
+  private val emissionProb = List(0.5037, 0.4963, 0.3639, 0.6361, 0.2110, 0.7890, 0.0629, 0.9371, 0.6388, 0.3612, 0.4867, 0.5133, 0.3905, 0.6095, 0.1125, 0.8875, 0.8906, 0.1094, 0.5336, 0.4664, 0.5291, 0.4709, 0.2255, 0.7745, 0.9468, 0.0532, 0.8106, 0.1894, 0.7339, 0.2661, 0.5591, 0.4409)
   private val transitionProb = List(0.9929, 0.0069, 0.0002, 0.0105, 0.9801, 0.0094, 0.0002, 0.0014, 0.9984)
 
   def matchProb(fullNamePlayerA: String, fullNamePlayerB: String, surface: SurfaceEnum, matchType: MatchTypeEnum, marketTime: Date): Double = {

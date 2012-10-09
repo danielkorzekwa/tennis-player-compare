@@ -59,12 +59,12 @@ class LogLikelihoodTest {
       }
     }
 
-    //    val matchFilter = (m: MatchComposite) => {
-    //      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
-    //        m.matchFacts.containsPlayer("Roger Federer")  
-    //    }
+    val matchFilter = (m: MatchComposite) => {
+      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
+        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Mardy Fish")
+    }
 
-    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
+    // val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
 
     val predictionRecordsProgress: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
     val progress = (record: PredictionRecord) => {
@@ -72,17 +72,24 @@ class LogLikelihoodTest {
       val llhProgress = calcLogLikelihood(predictionRecordsProgress) / predictionRecordsProgress.size
       println("Log likelihood= " + llhProgress)
     }
-    val predictionRecords = MarkovTennisPredict.predict(filteredMatches, matchFilter, progress)
+    val predictionRecords = DbnTennisPredict.predict(filteredMatches, matchFilter, progress)
 
     println("")
     predictionRecords.foreach(println(_))
 
+    val expectedWins = predictionRecords.map(r => r.playerAWinnerProb).sum
+    val actualWins = predictionRecords.map(r => r.playerAWinner).sum
+
+    println("\nExpected/actual wins: %f/%d".format(expectedWins, actualWins))
+
     val logLikelihood = calcLogLikelihood(predictionRecords)
 
     /**Print predicted/true probabilities for scatter chart.*/
-    // val predictionsGroupedByProb = predictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner.toInt), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).groupBy(r => (r._1 * 100).toInt)
-    // val predictionsGroupedByProbSumm = predictionsGroupedByProb.mapValues(r => (r.map(_._2).sum.toDouble / r.size) * 100)
-    // predictionsGroupedByProbSumm.keys.toList.sorted.foreach(predictedProb => println("%d,%1.3f".format(predictedProb, predictionsGroupedByProbSumm(predictedProb))))
+    val predictionsGroupedByProb = predictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner.toInt), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).groupBy(r => (r._1 * 100).toInt)
+    val predictionsGroupedByProbSumm = predictionsGroupedByProb.mapValues(r => (r.map(_._2).sum.toDouble / r.size) * 100)
+    println("\npredicted_prob,true_prob,sample_size")
+    predictionsGroupedByProbSumm.keys.toList.sorted.foreach(predictedProb => println("%d,%.3f,%d".format(predictedProb, predictionsGroupedByProbSumm(predictedProb),
+      predictionsGroupedByProb(predictedProb).size)))
 
     /**Print outcome classification records.*/
     //filteredPredictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).foreach(r => println("%1.3f,%d".format(r._1,r._2)))

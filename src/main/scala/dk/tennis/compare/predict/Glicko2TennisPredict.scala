@@ -67,7 +67,7 @@ object Glicko2TennisPredict extends TennisPredict {
       matchProbAGivenBTuned,
       m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
       
-      
+      if(matchFilter(m))
     } yield {progress(predictionRecord);predictionRecord}
 
     predictionRecords
