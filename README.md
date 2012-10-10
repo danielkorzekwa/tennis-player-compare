@@ -7,4 +7,4 @@ Algorithms:
  * Glicko
  * Glicko2
  * Markov localization
- * Dynamic Bayesian Network + Expectation Maximisation
+ * Dynamic Bayesian Network + EM (Expectation Maximisation)
