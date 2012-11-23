@@ -8,7 +8,6 @@ import LogLikelihoodTest._
 import dk.atp.api.domain.MatchComposite
 import java.util.Date
 import scala.util.Random
-import scala.Math._
 import dk.tennis.compare.glicko2._
 import dk.tennis.compare.predict.Glicko2TennisPredict;
 
@@ -17,13 +16,11 @@ import Glicko2Rating._
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import org.joda.time.DateTime
-import scalala.library.Plotting._
-import scalala.tensor.dense._
-import java.awt.Color
 import scala.util.Random
 import dk.tennis.compare.predict._
 import TennisPredict._
 import scala.collection._
+import java.lang.Math._
 
 /**
  * Calculates log likelihood for tennis outcome prediction models.
@@ -61,10 +58,10 @@ class LogLikelihoodTest {
 
     val matchFilter = (m: MatchComposite) => {
       new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
-        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Mardy Fish")
+        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Richard Gasquet")
     }
 
-    // val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
+    //   val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
 
     val predictionRecordsProgress: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
     val progress = (record: PredictionRecord) => {
@@ -72,7 +69,7 @@ class LogLikelihoodTest {
       val llhProgress = calcLogLikelihood(predictionRecordsProgress) / predictionRecordsProgress.size
       println("Log likelihood= " + llhProgress)
     }
-    val predictionRecords = DbnTennisPredict.predict(filteredMatches, matchFilter, progress)
+    val predictionRecords = DbnTennisPredict.predict(shuffledMatches, matchFilter, progress)
 
     println("")
     predictionRecords.foreach(println(_))
@@ -105,6 +102,9 @@ class LogLikelihoodTest {
       val y = x.playerAWinner
       val h = x.playerAWinnerProb
 
+      //   val logLikelihood = if (y==1) Math.max(-100.0, log(h)) else Math.max(-100.0,log1p(-h))
+
+      //logLikelihood
       y * log(h) + (1 - y) * log(1 - h)
     }.sum
 

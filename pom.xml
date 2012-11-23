@@ -137,8 +137,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>dk.tennis.em</groupId>
-			<artifactId>tennis-rating-em</artifactId>
+			<groupId>dk.tennis.dbn</groupId>
+			<artifactId>tennis-rating-dbn</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
@@ -186,12 +186,6 @@
 			<groupId>dk.flexibet</groupId>
 			<artifactId>flexibet-betfair</artifactId>
 			<version>0.7</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.scalala</groupId>
-			<artifactId>scalala_2.9.1</artifactId>
-			<version>1.0.0.RC2</version>
 		</dependency>
 
 		<!-- Test dependencies -->

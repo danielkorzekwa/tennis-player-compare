@@ -7,14 +7,14 @@
 #5           0.06 0.06099778        1353
 #6           0.07 0.07106265        1261
 
-data <- read.csv("prices.csv",header=T)
+data <- read.csv("dbn_10_rating_values.csv",header=T)
 data$predicted_prob <- (data$predicted_prob +1)*0.01
 data$true_prob <- (data$true_prob +1)*0.01
 #data <- subset(data,predicted_prob>0.2 & predicted_prob<0.8)
 
 #Calculate log likelihood
 winLlh <- log(data$predicted_prob)*(data$true_prob * data$sample_size)
-loseLlh <- log(1-data$predicted_prob)*((1-data$true_prob)*data$sample_size)
+loseLlh <- log(1-pmin(pmax(data$predicted_prob,0.00001),0.99999))*((1-data$true_prob)*data$sample_size)
 llh <- sum(winLlh  + loseLlh ) / sum(data$sample_size)
 sprintf("llh=%f",llh)
 

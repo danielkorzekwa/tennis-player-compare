@@ -26,13 +26,8 @@ class DbnTennisMatchCompareTest {
     val playerAFullName = "Roger Federer"
     val playerBFullName = "Milos Raonic"
 
-    assertEquals(0.8133, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.193, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
-
-    assertEquals(0.8133, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, FIVE_SET_MATCH, marketTime2012), 0.001)
-
-    assertEquals(0.7781, matchCompare.matchProb(playerAFullName, playerBFullName, GRASS, THREE_SET_MATCH, marketTime2012), 0.001)
-    assertEquals(0.739, matchCompare.matchProb(playerAFullName, playerBFullName, HARD, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.8699, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.1300, matchCompare.matchProb(playerBFullName, playerAFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
 
   }
 
@@ -43,6 +38,6 @@ class DbnTennisMatchCompareTest {
     val playerAFullName = "Roger Federer"
     val playerBFullName = "xxx"
 
-    assertEquals(0.8370, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
+    assertEquals(0.8792, matchCompare.matchProb(playerAFullName, playerBFullName, CLAY, THREE_SET_MATCH, marketTime2012), 0.001)
   }
 }
