@@ -1,8 +1,8 @@
 Import matched bets to MSSQL database (http://data.betfair.com/)
-================================
+----------------------------------------------------------------
 
-1) Create SQL schema for tennis matched prices
-----------------------------
+### 1) Create SQL schema for tennis matched prices
+
 	CREATE TABLE [dbo].[betfair_data](
 		[SPORTS_ID] [varchar](50) NOT NULL,
 		[EVENT_ID] [int] NOT NULL,
@@ -22,8 +22,8 @@ Import matched bets to MSSQL database (http://data.betfair.com/)
 		[IN_PLAY] [varchar](50) NOT NULL
 	) ON [PRIMARY]
 
-2) Import tennis matched prices for years 2010-2011 from http://data.betfair.com to MSQL database
-------------------------------------------------------------
+### 2) Import tennis matched prices for years 2010-2011 from http://data.betfair.com to MSQL database
+
 	SET DATEFORMAT dmy
 	
 	BULK INSERT betfair_data FROM 'c:\daniel\betfair_data\bfinf_other_091228to100103_100106121826.csv' WITH(DATAFILETYPE = 'char',FIELDTERMINATOR = '","',ROWTERMINATOR = '0x0a',FIRSTROW=2)
@@ -159,5 +159,6 @@ Import matched bets to MSSQL database (http://data.betfair.com/)
 	--- Remove quote <"> characters from sport_ids and in_play fields
 	update betfair_data Set SPORTS_ID = REPLACE(SPORTS_ID, CHAR(34), ''), IN_PLAY = REPLACE(IN_PLAY, CHAR(34), '')
 
-3) Keep pre_play bets on 'Match Odds' markets only
+### 3) Keep pre_play bets on 'Match Odds' markets only
+
 	delete from betfair_data where sports_id!=2 or event!='Match Odds' or SETTLED_DATE IS NULL or DT_ACTUAL_OFF IS NULL or WIN_FLAG IS NULL or LATEST_TAKEN >= DT_ACTUAL_OFF
