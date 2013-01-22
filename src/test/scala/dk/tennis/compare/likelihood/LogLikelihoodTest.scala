@@ -61,7 +61,7 @@ class LogLikelihoodTest {
         m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Richard Gasquet")
     }
 
-    //   val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
+   //    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
 
     val predictionRecordsProgress: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
     val progress = (record: PredictionRecord) => {
