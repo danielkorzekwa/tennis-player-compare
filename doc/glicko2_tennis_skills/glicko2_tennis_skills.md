@@ -57,7 +57,7 @@ History of skills for Roger Federer and Novak Djokovic tennis players
 --------------------------------------------------------------------------
 
 Roger Federer generally performs better on serve than Novak Djokovic over the period of time since 2006 till 2011. He also presents consistent performance on return over those 5 years.
-On the other side, Novak Djokovic continuously improves his skills on return, which in a consequence lifts him up to the first place in the ATP ranking in the middle of 2011. 
+On the other side, Novak Djokovic continuously improves his skills on return, which, in a consequence lifts him up to the first place in the ATP ranking in the middle of 2011. 
 Moreover, thanks to mastering his skills on return, during the year 2011 he won all but one tennis matches against Roger Federer. 
 At the end of year 2011, Novak Djokovic possessed the best tennis skills on return out of all tennis players.
 
