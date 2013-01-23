@@ -32,7 +32,7 @@ The following pictures illustrate calculation details for all tennis skills: Pla
 
 ![Tennis Glicko 2 - Details](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2-details.png "Tennis Glicko 2 - Details")
 
-Scala code example - Calculate new skill on serve for a tennis player
+Scala code example - Calculate new value of skill on serve for a tennis player
 ---------------------------------------------------
 
 This example presents an update of player skill on serve. ([source code](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/src/test/scala/dk/tennis/compare/glicko2/Glicko2SingleUpdateTest.scala)).
