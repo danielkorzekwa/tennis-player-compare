@@ -35,7 +35,7 @@ The following pictures illustrates calculation details for all tennis skills: Pl
 Scala code example - Calculate new skill on serve for a tennis player
 ---------------------------------------------------
 
-This example presents an update of player skill on serve. ([source code](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/src/test/scala/dk/tennis/compare/glicko2/GenericGlicko2SingleUpdateTest.scala)).
+This example presents an update of player skill on serve. ([source code](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/src/test/scala/dk/tennis/compare/glicko2/Glicko2SingleUpdateTest.scala)).
 
 	val df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
 	
