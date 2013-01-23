@@ -16,7 +16,7 @@ Tennis skills are estimated from a temporal sequence of tennis match statistics.
 * Total number of service points won by player B
 * Date and time of a tennis match
 
-Tennis skill is characterised by 3 numbers:
+Tennis skill is characterised by 4 variables:
 
 * Rating - Tennis skill presented on interval scale [2](#references). 
 * Variance - Amount of uncertainty in a player rating.
@@ -53,6 +53,15 @@ This example presents an update of player skill on serve. ([source code](https:/
 	assertEquals(0.269, newRatingPlayerAOnServe.deviation, 0.001)
 	assertEquals(0.024, newRatingPlayerAOnServe.volatility, 0.001)
 
+History of skills for Roger Federer and Novak Djokovic tennis players
+--------------------------------------------------------------------------
+
+Roger Federer generally performs better on serve than Novak Djokovic over the period of time since 2006 till 2011. He also presents consistent performance on return over those 5 years.
+On the other side, Novak Djokovic continuously improves his skills on return, which in a consequence lifts him up to the first place in the ATP ranking in the middle of 2011. 
+Moreover, thanks to mastering his skills on return, during the year 2011 he won all but one tennis matches against Roger Federer. 
+At the end of year 2011, Novak Djokovic possessed the best tennis skills on return out of all tennis players.
+
+![History of skills for Federer and Djokovic](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/federer_djokovic_skills_history.png "History of skills for Federer and Djokovic")
 
 References
 ----------
