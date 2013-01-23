@@ -63,10 +63,21 @@ At the end of year 2011, Novak Djokovic possessed the best tennis skills on retu
 
 ![History of skills for Federer and Djokovic](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/federer_djokovic_skills_history.png "History of skills for Federer and Djokovic")
 
+Resources for plotting this chart with a Gnuplot tool [3](#references). :
+
+* [Gnu plot script](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/glicko.gnu)
+* [Data: Roger Federer skills on serve](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerARatingOnServe.dat)
+* [Data: Roger Federer skills on return](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerARatingOnReturn.dat)
+* [Data: Novak Djokovic skills on serve](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerBRatingOnServe.dat)
+* [Data: Novak Djokovic skills on return](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerBRatingOnReturn.dat)
+* [Data: Matches won by Roger Federer](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerAWon.dat)
+* [Data: Matches won by Novak Djokovic](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerBWon.dat)
+
 References
 ----------
 1. Professor Mark E. Glickman. Glicko 2 Rating System
 2. http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
+3. Gnuplot - http://www.gnuplot.info/
 
 
 
