@@ -28,7 +28,7 @@ for both players at the beginning of the match and calculates new skills at the 
 
 ![Tennis Glicko 2](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2.png "Tennis Glicko 2")
 
-The following pictures illustrates calculation details for all tennis skills: Player A skill on serve, Player B skill on serve, Player A skill on return and Player B serve on return.
+The following pictures illustrate calculation details for all tennis skills: Player A skill on serve, Player B skill on serve, Player A skill on return and Player B serve on return.
 
 ![Tennis Glicko 2 - Details](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2-details.png "Tennis Glicko 2 - Details")
 
@@ -53,7 +53,7 @@ This example presents an update of player skill on serve. ([source code](https:/
 	assertEquals(0.269, newRatingPlayerAOnServe.deviation, 0.001)
 	assertEquals(0.024, newRatingPlayerAOnServe.volatility, 0.001)
 
-History of skills for Roger Federer and Novak Djokovic tennis players
+Analysis of skills for Roger Federer and Novak Djokovic tennis players
 --------------------------------------------------------------------------
 
 Roger Federer generally performs better on serve than Novak Djokovic over the period of time since 2006 till 2011. He also presents consistent performance on return over those 5 years.
