@@ -78,26 +78,31 @@ Resources for plotting this chart with a Gnuplot tool [3](#references):
 * [Data: Matches won by Roger Federer](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerAWon.dat)
 * [Data: Matches won by Novak Djokovic](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerBWon.dat)
 
-Modelling probability of winning a point on serve and return with Glicko2 Tennis Skills
+Modelling probability of winning a point on serve and return at the beginning of a tennis match
 ---------------------------------------------------------------------------------------
 
-Probability of winning a tennis point is modelled with a Logit function [4](#references), which is learned with Logistic Regression [5](#references) with the following predictor and target variables:
+Probability of winning a tennis point is modelled with a Logit function [4](#references), which is learned using Logistic Regression [5](#references) with the following predictor and target variables:
 
 * Predictor variables: Skills of tennis players at the beginning of a tennis match
-* Target variable: Ratio of points won serve by player A against player B
+* Target variable: Ratio of points won serve by player A against player B during a match
 
 To calculate probability of winning a point on return by player A against player B, we simply use `1 - probability of winning a point on serve by player B against player A.`
 
-It should be noted, that we might use other predictor features than just tennis skills to improve the accuracy of predicted probabilities, 
+It should be noted, that we might use other predictor features than just tennis skills to improve the accuracy of prediction model, 
 for example, weather conditions, indoor/outdoor or player's endurance.
-Nevertheless, predicting the winner of tennis point just from tennis skills gives reasonable level of accuracy as presented at chart below.
+Nevertheless, predicting the winner of tennis point, just from tennis skills, gives reasonable level of accuracy as presented at the chart below.
 
 ![Correlation Point Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_point_probability.png "Correlation Point Probability")
 
+Resources for plotting this chart with a Gnuplot tool [3](#references):
 
+* [Gnu plot script](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.gnu)
+* [Data: Probability of winning a point vs ratio of points won](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.dat)
 
-Predicting outcome of tennis match using Glicko2 Tennis SKills and Hierarchical Markov Chain
+Predicting outcome of tennis match using Glicko2 Tennis Skills and Hierarchical Markov Chain
 --------------------------------------------------------------------------------------------
+
+
 
 References
 ----------
