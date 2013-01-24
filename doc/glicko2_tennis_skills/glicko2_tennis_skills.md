@@ -2,6 +2,11 @@ Modelling tennis skills on serve and return with Glicko 2 pairwise comparison mo
 ===========================================================================
 
 This document presents the Glicko 2 [1](#references) pairwise comparison method for estimating skills of tennis players both on serve and return.
+It starts with an overview on Glicko2 Tennis model, followed by an example of Scala code for calculating skills of tennis players. Later on, 
+it demonstrates three examples of practical application for tennis skills. The first one, is a study on historical skills of Roger Federer and Novak Djokovic. 
+The second case, is about calculating probability of winning a point on serve and return at the beginning of the match by a tennis player. The last example, 
+illustrates how to predict outcomes of tennis matches using skills of tennis players on serve and return. 
+Finally, Glicko2 is discussed in a context of potential improvements in modelling skills of tennis players. 
 
 Overview
 ---------------------------------------------------
@@ -28,7 +33,7 @@ for both players at the beginning of the match and calculates new skills at the 
 
 ![Tennis Glicko 2](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2.png "Tennis Glicko 2")
 
-The following pictures illustrate calculation details for all tennis skills: Player A skill on serve, Player B skill on serve, Player A skill on return and Player B skill on return.
+The following picture illustrates calculation details for all tennis skills: Player A skill on serve, Player B skill on serve, Player A skill on return and Player B skill on return.
 
 ![Tennis Glicko 2 - Details](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2-details.png "Tennis Glicko 2 - Details")
 
@@ -73,11 +78,34 @@ Resources for plotting this chart with a Gnuplot tool [3](#references):
 * [Data: Matches won by Roger Federer](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerAWon.dat)
 * [Data: Matches won by Novak Djokovic](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerBWon.dat)
 
+Modelling probability of winning a point on serve and return with Glicko2 Tennis Skills
+---------------------------------------------------------------------------------------
+
+Probability of winning a tennis point is modelled with a Logit function [4](#references), which is learned with Logistic Regression [5](#references) with the following predictor and target variables:
+
+* Predictor variables: Skills of tennis players at the beginning of a tennis match
+* Target variable: Ratio of points won serve by player A against player B
+
+To calculate probability of winning a point on return by player A against player B, we simply use `1 - probability of winning a point on serve by player B against player A.`
+
+It should be noted, that we might use other predictor features than just tennis skills to improve the accuracy of predicted probabilities, 
+for example, weather conditions, indoor/outdoor or player's endurance.
+Nevertheless, predicting the winner of tennis point just from tennis skills gives reasonable level of accuracy as presented at chart below.
+
+![Correlation Point Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_point_probability.png "Correlation Point Probability")
+
+
+
+Predicting outcome of tennis match using Glicko2 Tennis SKills and Hierarchical Markov Chain
+--------------------------------------------------------------------------------------------
+
 References
 ----------
 1. Professor Mark E. Glickman. Glicko 2 Rating System
-2. http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
+2. Interval_scale - http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
 3. Gnuplot - http://www.gnuplot.info/
+4. Logit function - http://en.wikipedia.org/wiki/Logit
+5. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
 
 
 
