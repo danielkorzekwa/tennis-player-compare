@@ -150,8 +150,8 @@ All charts are plotted with a Gnuplot tool [3](#references).
 
 **Correlation between predicted probability of winning a match and average ratio of matches won**
 
-* [Gnu plot script](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.gnu)
-* [Data: Probability of winning a match vs ratio of matches won](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.dat)
+* [Gnu plot script](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_match_probability/match_prob_accuracy.gnu)
+* [Data: Probability of winning a match vs ratio of matches won](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_match_probability/match_prob_accuracy.dat)
 
 
 References
