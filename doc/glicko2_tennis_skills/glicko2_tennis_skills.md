@@ -123,13 +123,11 @@ presents how to calculate game, set, tiebreak and match probabilities in Scala w
 	//5 set match - Player A on serve
 	assertEquals(0.061948, TennisProbFormulaCalc.matchProb(0.6, 0.3, FIVE_SET_MATCH), 0.0001)
 	
-This picture presents the accuracy of predicting outcomes of tennis matches using hierarchical markov chain model
+The picture below presents the accuracy of predicting outcomes of tennis matches using hierarchical markov chain model
  and point winning probabilities calculated from tennis skills on serve and return.
  
  ![Correlation Match Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_match_probability.png "Correlation Match Probability")
  
-
-
 Appending A: Scripts and data for charts
 ---------------------------
 
@@ -159,12 +157,3 @@ References
 5. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
 6. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
 7. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
-
-
-
-
-
-
-
-
- 
