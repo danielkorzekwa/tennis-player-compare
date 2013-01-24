@@ -123,8 +123,8 @@ presents how to calculate game, set, tiebreak and match probabilities in Scala w
 	//5 set match - Player A on serve
 	assertEquals(0.061948, TennisProbFormulaCalc.matchProb(0.6, 0.3, FIVE_SET_MATCH), 0.0001)
 	
-The picture below presents the accuracy of predicting outcomes of tennis matches using hierarchical markov chain model
- and point winning probabilities calculated from tennis skills on serve and return.
+The picture below presents the accuracy of predicting outcomes of tennis matches, using hierarchical markov chain
+ and probabilities of winning a point calculated from tennis skills on serve and return.
  
  ![Correlation Match Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_match_probability.png "Correlation Match Probability")
  
@@ -143,10 +143,16 @@ All charts are plotted with a Gnuplot tool [3](#references).
 * [Data: Matches won by Roger Federer](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerAWon.dat)
 * [Data: Matches won by Novak Djokovic](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_federer_djokovic_chart/playerBWon.dat)
 
-**Correlation between predicted probability of winning a point on serve and average ratio of points won on serve.**
+**Correlation between predicted probability of winning a point on serve and average ratio of points won on serve**
 
 * [Gnu plot script](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.gnu)
 * [Data: Probability of winning a point vs ratio of points won](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.dat)
+
+**Correlation between predicted probability of winning a match and average ratio of matches won**
+
+* [Gnu plot script](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.gnu)
+* [Data: Probability of winning a match vs ratio of matches won](https://github.com/danielkorzekwa/tennis-player-compare/blob/master/doc/glicko2_tennis_skills/plotting_correlation_point_probability/point_prob_accuracy.dat)
+
 
 References
 ----------
