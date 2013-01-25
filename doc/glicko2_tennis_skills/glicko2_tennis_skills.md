@@ -1,6 +1,8 @@
 Modelling tennis skills on serve and return with Glicko 2 pairwise comparison model (IN PROGRESS)
 ===========================================================================
 
+Daniel Korzekwa, January 2013
+
 ### Abstract
 
 This document presents the Glicko 2 [1](#references) pairwise comparison method for estimating skills of tennis players both on serve and return.
