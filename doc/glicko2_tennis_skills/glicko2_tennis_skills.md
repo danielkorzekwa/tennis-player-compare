@@ -1,6 +1,8 @@
 Modelling tennis skills on serve and return with Glicko 2 pairwise comparison model (IN PROGRESS)
 ===========================================================================
 
+### Abstract
+
 This document presents the Glicko 2 [1](#references) pairwise comparison method for estimating skills of tennis players both on serve and return.
 It starts with review of existing literature on modelling tennis skills. Next, it gives an overview on Glicko2 Tennis model, followed by an example of Scala code for calculating skills of tennis players. 
 Later on, it demonstrates three examples of practical applications for tennis skills. The first one, is a study on historical skills of Roger Federer and Novak Djokovic. 
