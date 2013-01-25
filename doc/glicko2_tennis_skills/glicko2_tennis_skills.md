@@ -188,7 +188,7 @@ To understand, why this could be an issue, look at the following example.
 	Time T1: Player 1 (skill=100) wins against player 2 (skill=150)
 	Time T2: Glicko 2 raises skill of player 1 up and lowers skill of player 2 
 	Time T3: Player 2 (skill=140) wins against player 3 (skill=200) 
-	Time T4: Glicko2 raises skill for player 2 up and lowers skill of player 3.
+	Time T4: Glicko2 raises skill for player 2 up and lowers skill of player 3
 
 That fact, that skill for player 2 goes up at the time T3, should change our belief in his skill at the time T1, which in a consequence should impact the skill for player 1 after the time T1.
 In the world of Hidden Markov Models this concept is known as smoothing [14](#references). The idea behind smoothing is that, the more we learn about the future, the more we are certain about the past.
