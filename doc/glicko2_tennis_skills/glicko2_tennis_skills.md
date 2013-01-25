@@ -18,7 +18,7 @@ Literature review
 Most of existing literature on modelling tennis players and matches, present statistical approach for calculating skills on serve and return [2,3](#references)
 .
 For example, Paul K. Newton and Kamran Aslam present the following method for calculating the probability of winning a point by player 1 against player 2, 
-using skills on serve and return [2](#references):
+given corresponding skills on serve and return [2](#references):
 
 	P_s(P1|P2) = S_s(P1) - (S_r(P2) - S_r), where:
 	
@@ -34,7 +34,7 @@ players by following transitive connections between them. For example, consider 
 	Time T2: Player 2 wins against player 3
  
 Looking at the transitive connections between players 1,2 and 3, we might reason that player 1 has a good chance of winning against player 3.
-One technique that works particularly  well in a such environment is known as pairwise comparison [4](#references).
+One technique that works particularly  well in a such environment is known as a pairwise comparison [4](#references).
 
 Pairwise comparison models are well established in games, such as chess or multi-team computer online games, but they are not so popular in modelling skills of tennis players.
 Mark E. Glickman in his paper 'Parameter estimation in large dynamic paired comparison experiments' [5] (#references) analysed tennis players with pairwise comparison model, but he didn't
@@ -69,12 +69,12 @@ Tennis skill is characterised by 4 variables:
 * Volatility - Player's consistency in a tennis match.
 * Timestamp - Date and time, which tennis skill value refers to.
 
-Player skills are updated in an iterative scheme. For every tennis match, The Glicko 2 function takes skills
+Player skills are updated in an iterative scheme. For every tennis match, the Glicko 2 function takes skills
 for both players at the beginning of the match and calculates new skills at the end of the match.
 
 ![Tennis Glicko 2](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2.png "Tennis Glicko 2")
 
-The following picture illustrates calculation details for all tennis skills: skills on serve and return for players 1 and 2.
+The following picture illustrates calculation details for all tennis skills, on serve and return for players 1 and 2.
 
 ![Tennis Glicko 2 - Details](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/tennis-glicko2-details.png "Tennis Glicko 2 - Details")
 
@@ -186,7 +186,7 @@ presents how to calculate game, set, tiebreak and match probabilities in Scala w
 	//5 set match - Player 2 on serve
 	assertEquals(0.061948, TennisProbFormulaCalc.matchProb(0.6, 0.3, FIVE_SET_MATCH), 0.0001)
 	
-The picture below presents the accuracy of predicting outcomes of tennis matches, using hierarchical markov chain
+The picture below presents the accuracy of predicting outcomes for tennis matches, using hierarchical markov chain
  and probabilities of winning a point, calculated from tennis skills on serve and return.
  
  ![Correlation Match Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_match_probability.png "Correlation Match Probability")
