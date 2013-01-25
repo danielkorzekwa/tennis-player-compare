@@ -138,8 +138,8 @@ given the probabilities of winning a point by both players are known at this sta
 The following example ([source code](https://github.com/danielkorzekwa/tennis-probability-calculator/blob/master/src/test/scala/dk/tennisprob/TennisProbFormulaCalcTest.scala)) 
 presents how to calculate game, set, tiebreak and match probabilities in Scala with the [Tennis Probability Ccalculator] (https://github.com/danielkorzekwa/tennis-probability-calculator)
 
-	//Player 1 probability on serve = 0.7
-	//Player 2 probability on serve = 0.6
+	//Player 1 probability of winning a point on serve = 0.7
+	//Player 2 probability of winning a point on serve = 0.6
 	
 	//Game - Player 1 on serve
 	assertEquals(0.9007, TennisProbFormulaCalc.gameProb(0.7), 0.0001)
