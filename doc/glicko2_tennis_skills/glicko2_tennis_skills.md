@@ -134,7 +134,7 @@ Tristan J. Barnett [11](#references) shows that markov chain allows for computin
 given the probabilities of winning a point by both players are known at this stage.
 
 The following example ([source code](https://github.com/danielkorzekwa/tennis-probability-calculator/blob/master/src/test/scala/dk/tennisprob/TennisProbFormulaCalcTest.scala)) 
-presents how to calculate game, set, tiebreak and match probabilities in Scala with the [Tennis Probability Ccalculator] (https://github.com/danielkorzekwa/tennis-probability-calculator) library
+presents how to calculate game, set, tiebreak and match probabilities in Scala with the [Tennis Probability Ccalculator] (https://github.com/danielkorzekwa/tennis-probability-calculator)
 
 	//Player 1 probability on serve = 0.7
 	//Player 2 probability on serve = 0.6
@@ -198,7 +198,7 @@ The prototype for this model is described here:
 
 [Predicting outcomes of tennis matches with Dynamic Bayesian Networks](https://github.com/danielkorzekwa/bayes-scala#getting-started---learning-parameters-with-expectation-maximisation-in-unrolled-dynamic-bayesian-networks-from-incomplete-data--1)
 
-Appending A: Scripts and data for plotting charts
+Appendix A: Scripts and data for plotting charts
 ---------------------------
 
 All charts are plotted with a Gnuplot tool [16](#references).
