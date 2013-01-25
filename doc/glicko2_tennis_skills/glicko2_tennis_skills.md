@@ -109,13 +109,13 @@ At the end of the year 2011, Novak Djokovic possessed the best tennis skills on 
 
 ![History of skills for Federer and Djokovic](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/federer_djokovic_skills_history.png "History of skills for Federer and Djokovic")
 
-Modelling probability of winning a point on serve and return at the beginning of a tennis match
+Modelling probability of winning a point
 ---------------------------------------------------------------------------------------
 
-Probability of winning a tennis point is modelled with a Logit function [9](#references), which is learned using Logistic Regression [10](#references) with the following predictor and target variables:
+Probability of winning a tennis point on serve and return at the beginning of a tennis match, is modelled with a Logit function [9](#references), which is learned using Logistic Regression [10](#references) with the following predictor and target variables:
 
 * Predictor variables: Skills of tennis players at the beginning of a tennis match
-* Target variable: Ratio of points won on serve by player A against player B during a match
+* Target variable: Ratio of points won on serve by player 1 against player 2 during a match
 
 To calculate probability of winning a point on return by player 1 against player 2, we use:
 
@@ -174,7 +174,7 @@ The picture below presents the accuracy of predicting outcomes of tennis matches
  
  ![Correlation Match Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_match_probability.png "Correlation Match Probability")
  
-Summary on Glicko2 Tennis Model
+Summary
 -------------------------------
 
 Glicko2 gives reasonable accuracy on modelling skills of tennis players and predicting probabilities of winning a point on serve and return. 
