@@ -1,14 +1,52 @@
-Modelling tennis skills on serve and return with Glicko 2 pairwise comparison model
+Modelling tennis skills on serve and return with Glicko 2 pairwise comparison model (IN PROGRESS)
 ===========================================================================
 
 This document presents the Glicko 2 [1](#references) pairwise comparison method for estimating skills of tennis players both on serve and return.
-It starts with an overview on Glicko2 Tennis model, followed by an example of Scala code for calculating skills of tennis players. Later on, 
-it demonstrates three examples of practical application for tennis skills. The first one, is a study on historical skills of Roger Federer and Novak Djokovic. 
-The second case, is about calculating probability of winning a point on serve and return at the beginning of the match by a tennis player. The last example, 
+
+It starts with review of existing literature on modelling tennis skills. Next, it gives an overview on Glicko2 Tennis model, followed by an example of Scala code for calculating skills of tennis players. 
+Later on, it demonstrates three examples of practical applications for tennis skills. The first one, is a study on historical skills of Roger Federer and Novak Djokovic. 
+The second case, is about calculating probability of winning a point on serve and return at the beginning of a match by a tennis player. The last example, 
 illustrates how to predict outcomes of tennis matches using skills of tennis players on serve and return. 
 Finally, Glicko2 is discussed in a context of potential improvements in modelling skills of tennis players. 
 
-Overview
+Literature review
+------------------------------------
+
+Most of existing literature on modelling tennis players and matches, present statistical approach for calculating skills on serve and return [2,3](#references)
+.
+For example, Paul K. Newton and Kamran Aslam present the following method for calculating the probability of winning a point by player 1 against player 2, 
+using skills on serve and return [2](#references):
+
+	P_s(P1|P2) = S_s(P1) - (S_r(P2) - S_r), where:
+	
+	P_s(P1|P2) - Probability of winning a point on serve by player 1 against player 2.
+	S_s(P1) - Skill on serve for player 1. It is a ratio of points won on serve by player 1 against all his opponents.
+	S_r(P2) -  Skill on return for player 2. It is a ratio of points won on return by player 2 against all his opponents.
+	S_r -  Average skill on return. It is a ratio of points won on return by all tennis players.
+
+This formula works reasonably well, assuming all players played against most of other players, like if they played in a league. However, in tennis, more can be learned about
+players by following intermediate connections between them. For example, look at the following temporal sequence of tennis matches:
+
+	Time T1: Player 1 wins against player 2
+	Time T2: Player 2 wins against player 3
+ 
+Look at the transitive connections between Player 1,2 and 3, we might reason that Player 1 has a good chance of winning against Player 3.
+One technique that works particularly  well in a such environment is known as pairwise-comparison [4](#references).
+
+Pairwise comparison models are well established in games, such as chess or multi-team computer online games, but they are not so popular in modelling skills of tennis players.
+Mark E. Glickman in his paper 'Parameter estimation in large dynamic paired comparison experiments' [5] (#references) analysed tennis players with pairwise comparison model, but he didn't
+attempt to model separately skills on serve and return.
+
+The most known pair comparison models include:
+
+* Elo  - Designed for Chess game [5](#references)
+* Glicko and Glicko 2 - Designed for Chess game [1](#references)
+* TrueSkill - Designed for multi-team computer online games [6](#references)
+
+For more details about literature on modelling tennis matches, read this article (section Tennis Prediction Model):
+(http://blog.danmachine.com/2012/02/on-probability-of-winning-tennis-match.html)
+
+Overview of Glicko 2 Tennis Model 
 ---------------------------------------------------
 
 Tennis skills are estimated from a temporal sequence of tennis match statistics. A single tennis match includes the following information:
@@ -128,7 +166,36 @@ The picture below presents the accuracy of predicting outcomes of tennis matches
  
  ![Correlation Match Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_match_probability.png "Correlation Match Probability")
  
-Appending A: Scripts and data for charts
+Summary on Glicko2 Tennis Model
+-------------------------------
+
+Glicko2 gives reasonable accuracy on modelling skills of tennis players and predicting probabilities of winning a point on serve and return. 
+It is also simple to implement and very fast to run. Therefore, at the first glance, Glicko2 Tennis model is a strong candidate for a number of practical applications, 
+including creating leader boards of tennis players and predicting outcomes of tennis matches. 
+However, there are some potential improvements that could be made, in order to increase general quality of this model. 
+
+First, tennis matches are played at three major surfaces, HARD, GRASS and CLAY. Shall we create a single  model or maybe having a separate model for every surface is a better choice?. 
+Glicko2 Tennis model assumes that all tennis matches are played in the same conditions and the only thing that varies is the performance of tennis players in a match.
+
+Secondly, Glicko2 is an online model [13](#references). It maintains the current belief in tennis skills and updates them iteratively by processing results of tennis matches in a serial order. 
+To understand, why this could be an issue, look at the following example.
+
+	Time T1: Player 1 (skill=100) wins against player 2 (skill=150)
+	Time T2: Glicko 2 raises skill of player 1 up and lowers skill of player 2 
+	Time T3: Player 2 (skill  wins against player 3 (skill=200) 
+	Time T4: Glicko2 raises skill for player 2 up and lowers skill of player 3.
+
+That fact, that skill for player 2 goes up at the time T3, should change our belief in his skill at the time T1, which in a consequence should impact the skill for player 1 after time T1.
+In the world of Hidden Markov Models this concept is known as smoothing [14](#references). The idea behind smoothing is that the more we learn about the future, the more we are certain about the past.
+This technique was applied for modelling chess players by Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel in their paper 'TrueSkill Through Time: Revisiting the History of Chess' [15](#references).
+Although, TrueSkill in general is an online learning model, it was shown that it could be adapted for smoothing historical player skills as well. 
+
+Alternative technique to Glicko 2, which addresses those two issues described above is a pairwise comparison model based on Dynamic Bayesian Networks. 
+The prototype for this model is described here:
+
+[Predicting outcomes of tennis matches with Dynamic Bayesian Networks](https://github.com/danielkorzekwa/bayes-scala#getting-started---learning-parameters-with-expectation-maximisation-in-unrolled-dynamic-bayesian-networks-from-incomplete-data--1)
+
+Appending A: Scripts and data for plotting charts
 ---------------------------
 
 All charts are plotted with a Gnuplot tool [3](#references).
@@ -156,10 +223,19 @@ All charts are plotted with a Gnuplot tool [3](#references).
 
 References
 ----------
-1. Professor Mark E. Glickman. Glicko 2 Rating System
-2. Interval_scale - http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
-3. Gnuplot - http://www.gnuplot.info/
-4. Logit function - http://en.wikipedia.org/wiki/Logit
-5. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
-6. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
-7. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
+1. Professor Mark E. Glickman. Glicko and Glicko 2 Rating Systems - http://www.glicko.net/glicko.html
+2. Paul K. Newton, Kamran Aslam. Monte Carlo Tennis: A Stochastic Markov Chain Model. Journal of Quantitative Analysis in Sports, 2009
+3. Tristan Barnett and Stephen R. Clarke. Combining player statistics to predict outcomes of tennis matches. IMA journal of management mathematics 16(2), 2005
+4. Pairwise Comparison - http://en.wikipedia.org/wiki/Pairwise_comparison
+5. Mark E. Glickman. Parameter estimation in large dynamic paired comparison experiments, 1999
+6. Elo rating system - http://en.wikipedia.org/wiki/Elo_rating_system
+7. TrueSkill Rating System - http://research.microsoft.com/en-us/projects/trueskill/
+8. Interval_scale - http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
+9. Gnuplot - http://www.gnuplot.info/
+10. Logit function - http://en.wikipedia.org/wiki/Logit
+11. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
+12. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
+13. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
+14. Online algorithm - http://en.wikipedia.org/wiki/Online_algorithm
+15. Hidden Markov Model (Smoothing) - http://en.wikipedia.org/wiki/Hidden_Markov_model#Smoothing
+16. Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel. TrueSkill Through Time: Revisiting the History of Chess, 2008
