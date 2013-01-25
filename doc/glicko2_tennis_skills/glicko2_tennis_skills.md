@@ -147,6 +147,7 @@ There is an infinite number of models for predicting probability of winning a te
 in general, the model with higher correlation value is the better one. Inspecting other measures such as Entropy [11](#references), 
 Kullback–Leibler divergence [12](#references) and Log Likelihood [13](#references), gives deeper insight into comparing two models each other with similar value Pearson Correlation. 
 
+Predicting outcome of tennis match
 --------------------------------------------------------------------------------------------
 
 The probability of winning a tennis match by player 1 against player 2 is calculated with a hierachical markov chain [14,15](#references). 
