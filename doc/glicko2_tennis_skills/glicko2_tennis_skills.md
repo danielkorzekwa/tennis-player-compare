@@ -42,9 +42,9 @@ attempt to model separately skills on serve and return.
 
 The most known pair comparison models include:
 
-* Elo  - Designed for Chess [5](#references)
+* Elo  - Designed for Chess [6](#references)
 * Glicko and Glicko 2 - Designed for Chess [1](#references)
-* TrueSkill - Designed for multi-team computer online games [6](#references)
+* TrueSkill - Designed for multi-team computer online games [7](#references)
 
 For more details about literature on modelling tennis matches, read this article (section Tennis Prediction Model):
 (http://blog.danmachine.com/2012/02/on-probability-of-winning-tennis-match.html)
@@ -64,7 +64,7 @@ Tennis skills are estimated from a temporal sequence of tennis match statistics.
 
 Tennis skill is characterised by 4 variables:
 
-* Rating - Tennis skill presented on interval scale [2](#references). 
+* Rating - Tennis skill presented on interval scale [8](#references). 
 * Variance - Amount of uncertainty in a player rating.
 * Volatility - Player's consistency in a tennis match.
 * Timestamp - Date and time, which tennis skill value refers to.
@@ -112,7 +112,7 @@ At the end of the year 2011, Novak Djokovic possessed the best tennis skills on 
 Modelling probability of winning a point on serve and return at the beginning of a tennis match
 ---------------------------------------------------------------------------------------
 
-Probability of winning a tennis point is modelled with a Logit function [4](#references), which is learned using Logistic Regression [5](#references) with the following predictor and target variables:
+Probability of winning a tennis point is modelled with a Logit function [9](#references), which is learned using Logistic Regression [10](#references) with the following predictor and target variables:
 
 * Predictor variables: Skills of tennis players at the beginning of a tennis match
 * Target variable: Ratio of points won on serve by player A against player B during a match
@@ -128,9 +128,9 @@ Nevertheless, predicting the winner of tennis point, just from tennis skills, gi
 Predicting outcome of tennis match
 --------------------------------------------------------------------------------------------
 
-The probability of winning a tennis match by player 1 against player 2 is calculated with a hierachical markov chain [6,7](#references). 
+The probability of winning a tennis match by player 1 against player 2 is calculated with a hierachical markov chain [11,12](#references). 
 This model takes as inputs, the probabilities of winning a point on serve by both players and calculates probabilities of winning a game, set, tiebreak and match. 
-Tristan J. Barnett [6](#references) shows that markov chain allows for computing probability of winning a tennis match from an arbitrary starting position,
+Tristan J. Barnett [11](#references) shows that markov chain allows for computing probability of winning a tennis match from an arbitrary starting position,
 given the probabilities of winning a point by both players are known at this stage.
 
 The following example ([source code](https://github.com/danielkorzekwa/tennis-probability-calculator/blob/master/src/test/scala/dk/tennisprob/TennisProbFormulaCalcTest.scala)) 
@@ -201,7 +201,7 @@ The prototype for this model is described here:
 Appending A: Scripts and data for plotting charts
 ---------------------------
 
-All charts are plotted with a Gnuplot tool [3](#references).
+All charts are plotted with a Gnuplot tool [16](#references).
 
 **History of skills on serve/return for Roger Federer and Rafael Nadal on the HARD surface**
 
@@ -234,11 +234,11 @@ References
 6. Elo rating system - http://en.wikipedia.org/wiki/Elo_rating_system
 7. TrueSkill Rating System - http://research.microsoft.com/en-us/projects/trueskill/
 8. Interval_scale - http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
-9. Gnuplot - http://www.gnuplot.info/
-10. Logit function - http://en.wikipedia.org/wiki/Logit
-11. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
-12. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
-13. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
-14. Online algorithm - http://en.wikipedia.org/wiki/Online_algorithm
-15. Hidden Markov Model (Smoothing) - http://en.wikipedia.org/wiki/Hidden_Markov_model#Smoothing
-16. Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel. TrueSkill Through Time: Revisiting the History of Chess, 2008
+9. Logit function - http://en.wikipedia.org/wiki/Logit
+10. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
+11. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
+12. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
+13. Online algorithm - http://en.wikipedia.org/wiki/Online_algorithm
+14. Hidden Markov Model (Smoothing) - http://en.wikipedia.org/wiki/Hidden_Markov_model#Smoothing
+15. Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel. TrueSkill Through Time: Revisiting the History of Chess, 2008
+16. Gnuplot - http://www.gnuplot.info/
