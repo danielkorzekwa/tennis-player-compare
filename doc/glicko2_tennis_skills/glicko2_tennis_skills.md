@@ -128,7 +128,7 @@ Nevertheless, predicting the winner of tennis point, just from tennis skills, gi
 ![Correlation Point Probability](https://raw.github.com/danielkorzekwa/tennis-player-compare/master/doc/glicko2_tennis_skills/correlation_point_probability.png "Correlation Point Probability")
 
 The predicted probability of winning a point on serve is taken from tennis skills at the beginning of a tennis match. Whereas, the average ratio of points won 
-on serve is an arithmetic mean of all ratios of points won on serve, for those matches, which correspond to a specific value of predicted probability of winning a point on serve with a resolution of 0.01.
+on serve is an arithmetic mean of ratios of points won on serve, for those matches, which correspond to a specific value of predicted probability of winning a point on serve with a resolution of 0.01.
 
 For example, consider an example of calculating the data for a correlation chart, for a set of two tennis matches:
 
@@ -143,7 +143,7 @@ Then, the corresponding correlation data looks as follows:
 	0.6 		0.605
 	0.7 		0.695
 
-There is an infinite number of models for predicting probability of winning a tennis point, which would produce exactly the same correlation value, however, 
+There is an infinite number of models for predicting probability of winning a tennis point, which would produce exactly the same correlation value. However, 
 in general, the model with higher correlation value is the better one. Inspecting other measures such as Entropy [11](#references), 
 Kullback–Leibler divergence [12](#references) and Log Likelihood [13](#references), gives deeper insight into comparing two models each other with similar value Pearson Correlation. 
 
