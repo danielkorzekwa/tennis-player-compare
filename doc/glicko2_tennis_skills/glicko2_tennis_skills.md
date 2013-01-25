@@ -10,7 +10,7 @@ It starts with review of existing literature on modelling tennis skills. Next, i
 Later on, it demonstrates three examples of practical applications for tennis skills. The first one, is a study on historical skills of Roger Federer and Novak Djokovic. 
 The second case, is about calculating probability of winning a point on serve and return at the beginning of a tennis match. The last example, 
 illustrates how to predict outcomes of tennis matches using skills of tennis players on serve and return. 
-Finally, Glicko2 is discussed in a context of potential improvements in modelling skills of tennis players. 
+Finally, Glicko2 is discussed in a context of potential improvements in modelling skills in tennis. 
 
 Literature review
 ------------------------------------
