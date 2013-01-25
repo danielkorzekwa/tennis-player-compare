@@ -40,7 +40,7 @@ Pairwise comparison models are well established in games, such as chess or multi
 Mark E. Glickman in his paper 'Parameter estimation in large dynamic paired comparison experiments' [5] (#references) analysed tennis players with pairwise comparison model, but he didn't
 attempt to model separately skills on serve and return.
 
-The most known pair comparison models include:
+The most known pairwise comparison models include:
 
 * Elo  - Designed for Chess [6](#references)
 * Glicko and Glicko 2 - Designed for Chess [1](#references)
@@ -130,7 +130,7 @@ Nevertheless, predicting the winner of tennis point, just from tennis skills, gi
 The predicted probability of winning a point on serve is taken from tennis skills at the beginning of a tennis match. Whereas, the average ratio of points won 
 on serve is an arithmetic mean of ratios of points won on serve, for those matches, which correspond to a specific value of predicted probability of winning a point on serve with a resolution of 0.01.
 
-For example, consider an example of calculating the data for a correlation chart, for a set of two tennis matches:
+For example, consider an example of calculating the data for a correlation [11](#references) chart, for a set of two tennis matches:
 
 	Match 1, player 1 (predicted probability = 0.6, actual ratio of points won = 0.62)
 	Match 1, player 2 (predicted probability = 0.7, actual ratio of points won = 0.71)
@@ -144,15 +144,15 @@ Then, the corresponding correlation data looks as follows:
 	0.7 		0.695
 
 There is an infinite number of models for predicting probability of winning a tennis point, which would produce exactly the same correlation value. However, 
-in general, the model with higher correlation value is the better one. Inspecting other measures such as Entropy [11](#references), 
-Kullback–Leibler divergence [12](#references) and Log Likelihood [13](#references), gives deeper insight into comparing two models each other with similar value Pearson Correlation. 
+in general, the model with higher correlation value is the better one. Inspecting other measures, such as Entropy [12](#references), 
+Kullback Leibler divergence [13](#references) and Log Likelihood [14](#references), gives deeper insight into comparing two models with similar value of Pearson Correlation. 
 
 Predicting outcome of tennis match
 --------------------------------------------------------------------------------------------
 
-The probability of winning a tennis match by player 1 against player 2 is calculated with a hierachical markov chain [14,15](#references). 
+The probability of winning a tennis match by player 1 against player 2 is calculated with a hierachical markov chain [15,16](#references). 
 This model takes as inputs, the probabilities of winning a point on serve by both players and calculates probabilities of winning a game, set, tiebreak and match. 
-Tristan J. Barnett [14](#references) shows that markov chain allows for computing probability of winning a tennis match from an arbitrary starting position,
+Tristan J. Barnett [15](#references) shows that markov chain allows for computing probability of winning a tennis match from an arbitrary starting position,
 given the probabilities of winning a point by both players are known at this stage.
 
 The following example ([source code](https://github.com/danielkorzekwa/tennis-probability-calculator/blob/master/src/test/scala/dk/tennisprob/TennisProbFormulaCalcTest.scala)) 
@@ -201,10 +201,10 @@ It is also simple to implement and very fast to run. Therefore, at the first gla
 including creating leader boards of tennis players and predicting outcomes of tennis matches. 
 However, there are some potential improvements that could be made, in order to increase general quality of this model. 
 
-First, tennis matches are played at three major surfaces, HARD, GRASS and CLAY. Shall we create a single  model or maybe having a separate model for every surface is a better choice?. 
+First, tennis matches are played at three major surfaces, HARD, GRASS and CLAY. Shall we create a single  model or maybe having a separate model for every surface is a better choice? 
 Glicko2 Tennis model assumes that all tennis matches are played in the same conditions and the only thing that varies is the performance of tennis players in a match.
 
-Secondly, Glicko2 is an online model [16](#references). It maintains the current belief in tennis skills and updates it iteratively by processing results of tennis matches in a serial order. 
+Secondly, Glicko2 is an online model [17](#references). It maintains the current belief in tennis skills and updates it iteratively by processing results of tennis matches in a serial order. 
 To understand, why this could be an issue, look at the following example.
 
 	Time T1: Player 1 (skill=100) wins against player 2 (skill=150)
@@ -212,10 +212,10 @@ To understand, why this could be an issue, look at the following example.
 	Time T3: Player 2 (skill=140) wins against player 3 (skill=200) 
 	Time T4: Glicko2 raises skill for player 2 up and lowers skill of player 3
 
-That fact, that skill for player 2 goes up at the time T3, should change our belief in his skill at the time T1, which in a consequence should impact the skill for player 1 after the time T1.
-In the world of Hidden Markov Models this concept is known as smoothing [17](#references). The idea behind smoothing is that, the more we learn about the future, the more we are certain about the past.
-This technique was applied for modelling chess players by Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel in their paper 'TrueSkill Through Time: Revisiting the History of Chess' [18](#references).
-Although, TrueSkill in general is an online learning model, it was shown that it could be adapted for smoothing historical player skills as well. 
+The fact, that skill for player 2 goes up at the time T3, should change our belief in his skill at the time T1, which in a consequence should impact the skill for player 1 after the time T1.
+In the world of Hidden Markov Models this concept is known as smoothing [18](#references). The idea behind smoothing is that, the more we learn about the future, the more we are certain about the past.
+This technique was applied for modelling chess players by Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel in their paper 'TrueSkill Through Time: Revisiting the History of Chess' [19](#references).
+Although, TrueSkill in general is an online learning model, it was shown that, it could be adapted for smoothing historical player skills as well. 
 
 Alternative technique to Glicko 2, which addresses those two issues described above is a pairwise comparison model based on Dynamic Bayesian Networks. 
 The prototype for this model is described here:
@@ -225,7 +225,7 @@ The prototype for this model is described here:
 Appendix A: Scripts and data for plotting charts
 ---------------------------
 
-All charts are plotted with a Gnuplot tool [19](#references).
+All charts are plotted with a Gnuplot tool [20](#references).
 
 **History of skills on serve/return for Roger Federer and Rafael Nadal on the HARD surface**
 
@@ -260,12 +260,13 @@ References
 8. Interval_scale - http://en.wikipedia.org/wiki/Level_of_measurement#Interval_scale
 9. Logit function - http://en.wikipedia.org/wiki/Logit
 10. Logistic regression - http://en.wikipedia.org/wiki/Logistic_regression
-11. Entropy - http://en.wikipedia.org/wiki/Entropy
-12. Kullback Leibler divergence - http://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
-13. Log likelihood - http://en.wikipedia.org/wiki/Log_likelihood
-14. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
-15. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
-16. Online algorithm - http://en.wikipedia.org/wiki/Online_algorithm
-17. Hidden Markov Model (Smoothing) - http://en.wikipedia.org/wiki/Hidden_Markov_model#Smoothing
-18. Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel. TrueSkill Through Time: Revisiting the History of Chess, 2008
-19. Gnuplot - http://www.gnuplot.info/
+11. Correlation - http://en.wikipedia.org/wiki/Correlation_and_dependence
+12. Entropy - http://en.wikipedia.org/wiki/Entropy
+13. Kullback Leibler divergence - http://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
+14. Log likelihood - http://en.wikipedia.org/wiki/Log_likelihood
+15. Tristan J. Barnett. Mathematical Modelling In Hierarchical Games with specific reference to tennis, 2006
+16. O'Malley, A. James (2008) "Probability Formulas and Statistical Analysis in Tennis," Journal of Quantitative Analysis in Sports: Vol. 4: Iss. 2, Article 15
+17. Online algorithm - http://en.wikipedia.org/wiki/Online_algorithm
+18. Hidden Markov Model (Smoothing) - http://en.wikipedia.org/wiki/Hidden_Markov_model#Smoothing
+19. Pierre Dangauthier, Ralf Herbrich, Tom Minka, and Thore Graepel. TrueSkill Through Time: Revisiting the History of Chess, 2008
+20. Gnuplot - http://www.gnuplot.info/
