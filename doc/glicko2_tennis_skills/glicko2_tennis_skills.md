@@ -117,7 +117,12 @@ Probability of winning a tennis point is modelled with a Logit function [9](#ref
 * Predictor variables: Skills of tennis players at the beginning of a tennis match
 * Target variable: Ratio of points won on serve by player A against player B during a match
 
-To calculate probability of winning a point on return by player 1 against player 2, we simply use `1 - probability of winning a point on serve by player 1 against player 2.`
+To calculate probability of winning a point on return by player 1 against player 2, we use:
+
+	P_r(P1|P2) = 1 - P_s(P2|P1), where:
+	
+	P_r(P1|P2) - Probability of winning a point on return by player 1 against player 2.
+	P_s(P2|P1) - Probability of winning a point on serve by player 2 against player 1.
 
 It should be noted, that we might use other predictor features than just tennis skills to improve the accuracy of prediction model, 
 for example, weather conditions, indoor/outdoor or player's endurance.
