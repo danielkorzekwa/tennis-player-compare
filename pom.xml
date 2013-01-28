@@ -139,7 +139,7 @@
 		<dependency>
 			<groupId>dk.tennis.dbn</groupId>
 			<artifactId>tennis-rating-dbn</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 
 		<dependency>
