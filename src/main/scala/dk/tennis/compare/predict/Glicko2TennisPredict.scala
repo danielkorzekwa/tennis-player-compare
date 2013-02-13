@@ -17,7 +17,7 @@ object Glicko2TennisPredict extends TennisPredict {
   def predict(matches: Seq[MatchComposite], matchFilter: (MatchComposite) => Boolean,progress: (PredictionRecord) => Unit): Seq[PredictionRecord] = {
 
     implicit def bool2int(b: Boolean): Byte = if (b) 1 else 0
-    val glicko2 = new GenericGlicko2Rating(0, 350d / 173.7178, 0.06, 0.5, 7)
+    val glicko2 = new GenericGlicko2Rating(0, 100d / 173.7178, 0.06, 0.5, 14)
 
     //@return rating before processing new tennis result Tuple2[ratingPlayerA, ratingPlayerB]
     def updateRatings(m: MatchComposite): Tuple2[PlayerRating, PlayerRating] = {
@@ -64,7 +64,7 @@ object Glicko2TennisPredict extends TennisPredict {
         val predictionRecord =PredictionRecord(
       m.tournament.tournamentTime, m.matchFacts.playerAFacts.playerName,
       m.matchFacts.playerBFacts.playerName,
-      matchProbAGivenBTuned,
+      matchProbAGivenB,
       m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName))
       
       if(matchFilter(m))

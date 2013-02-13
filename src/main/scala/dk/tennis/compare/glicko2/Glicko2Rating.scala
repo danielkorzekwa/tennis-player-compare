@@ -14,7 +14,9 @@ object Glicko2Rating {
   case class Result(playerA: String, playerB: String, score: Double, timestamp: Date)
 
   case class PlayerRating(ratingOnServe: Rating, ratingOnReturn: Rating)
-  case class Rating(rating: Double, deviation: Double, volatility:Double, timestamp: Date)
+  case class Rating(rating: Double, deviation: Double, volatility: Double, timestamp: Date)
+
+  case class RatingsReport(currRatingA: PlayerRating, currRatingB: PlayerRating, newRatingA: PlayerRating, newRatingB: PlayerRating, result: Result)
 }
 
 trait Glicko2Rating {
@@ -22,16 +24,17 @@ trait Glicko2Rating {
   /**
    * @return Map[playerName, playerRating]
    */
-  def calcServeReturnRatings(results: List[Result]): Map[String, PlayerRating]
-  
-  /**Processes tennis match event and updates internal player ratings.
-   * 
+  def calcServeReturnRatings(results: List[Result], onRatings: Option[RatingsReport => Unit]): Map[String, PlayerRating]
+
+  /**
+   * Processes tennis match event and updates internal player ratings.
+   *
    */
-  def sendResult(result:Result)
-  
+  def sendResult(result: Result)
+
   /**
    * @return Map [player name, player rating],
    */
-  def getRatings(): Map[String,PlayerRating]
+  def getRatings(): Map[String, PlayerRating]
 
 }

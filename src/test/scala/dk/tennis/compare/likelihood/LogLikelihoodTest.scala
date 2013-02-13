@@ -42,7 +42,7 @@ class LogLikelihoodTest {
 
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
 
-    val matches = (2010 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
+    val matches = (2006 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.tournament.numOfSet == 2)
 
     val rand = new Random()
@@ -56,12 +56,12 @@ class LogLikelihoodTest {
       }
     }
 
-    val matchFilter = (m: MatchComposite) => {
-      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
-        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Richard Gasquet")
-    }
+    //   val matchFilter = (m: MatchComposite) => {
+    //    new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
+    //      m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Richard Gasquet")
+    //   }
 
-   //    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
+    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2008 }
 
     val predictionRecordsProgress: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
     val progress = (record: PredictionRecord) => {
@@ -69,7 +69,7 @@ class LogLikelihoodTest {
       val llhProgress = calcLogLikelihood(predictionRecordsProgress) / predictionRecordsProgress.size
       println("Log likelihood= " + llhProgress)
     }
-    val predictionRecords = DbnTennisPredict.predict(shuffledMatches, matchFilter, progress)
+    val predictionRecords = Glicko2TennisPredict.predict(shuffledMatches, matchFilter, progress)
 
     println("")
     predictionRecords.foreach(println(_))
@@ -95,19 +95,4 @@ class LogLikelihoodTest {
 
   }
 
-  private def calcLogLikelihood(predictionRecords: Seq[PredictionRecord]): Double = {
-
-    val logLikelihood = predictionRecords.map { x =>
-
-      val y = x.playerAWinner
-      val h = x.playerAWinnerProb
-
-      //   val logLikelihood = if (y==1) Math.max(-100.0, log(h)) else Math.max(-100.0,log1p(-h))
-
-      //logLikelihood
-      y * log(h) + (1 - y) * log(1 - h)
-    }.sum
-
-    logLikelihood
-  }
 }

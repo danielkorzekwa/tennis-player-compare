@@ -340,37 +340,37 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2005-01-31 00:00:00.000,Milan Italy ATP World Tour,HARD,2,Robin Soderling,Max Mirnyi,Robin Soderling,6-7(5); 6-3; 6-4,S,115,71,100,64,89
 2005-01-31 00:00:00.000,Milan Italy ATP World Tour,HARD,2,Radek Stepanek,Ivan Ljubicic,Radek Stepanek,6-4; 6-2,S,65,37,49,34,57
 2005-01-31 00:00:00.000,Milan Italy ATP World Tour,HARD,2,Robin Soderling,Radek Stepanek,Robin Soderling,6-3; 6-7(2); 7-6(5),F,117,78,96,77,104
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Jiri Vanek,Gaston Gaudio,7-6(6); 6-2,R32,83,51,75,45,79
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,David Sanchez,Albert Montanes,David Sanchez,5-7; 6-4; 6-4,R32,148,61,101,60,104
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Flavio Saretta,Felipe Parada,Flavio Saretta,6-4; 4-6; 6-3,R32,149,58,98,56,100
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Olivier Patience,Jose Acasuso,6-1; 3-6; 7-6(6),R32,115,62,95,61,101
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,David Ferrer,Albert Portas,David Ferrer,6-4; 6-4,R32,92,41,62,43,78
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Mariano Puerta,Juan Monaco,Mariano Puerta,6-3; 6-7(6); 7-5,R32,149,70,102,71,116
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Federico Luzzi,Janko Tipsarevic,Federico Luzzi,7-6(6); 6-0,R32,92,41,61,35,69
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Agustin Calleri,Alex Calatrava,Agustin Calleri,6-3; 6-2,R32,59,35,47,23,46
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Potito Starace,Ruben Ramirez Hidalgo,6-1; 6-2,R32,60,34,47,21,44
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Felix Mantilla,Adrian Garcia,Felix Mantilla,6-4; 3-2 RET,R32,64,33,51,22,40
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Paul-Henri Mathieu,Oscar Hernandez,Paul-Henri Mathieu,6-2; 7-6(3),R32,91,49,64,40,64
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Filippo Volandri,Guillermo Garcia-Lopez,Filippo Volandri,6-1; 6-3,R32,75,36,64,26,61
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Mariano Zabaleta,Nicolas Lapentti,Mariano Zabaleta,6-1; 6-2,R32,58,34,45,22,43
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Phillip Harboe,Santiago Ventura,6-3; 4-6; 6-2,R32,126,56,82,53,90
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Nicolas Almagro,Alex Corretja,Nicolas Almagro,7-5; 6-2,R32,93,43,57,42,76
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Peter Luczak,Fernando Gonzalez,6-3; 5-7; 6-4,R32,110,56,86,57,92
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,David Sanchez,Gaston Gaudio,6-4; 6-2,R16,77,35,50,31,57
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Flavio Saretta,Jose Acasuso,6-2; 7-6(2),R16,101,45,67,40,74
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,David Ferrer,Mariano Puerta,David Ferrer,6-2; 6-0,R16,72,37,63,20,51
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Agustin Calleri,Federico Luzzi,Agustin Calleri,6-3; 3-6; 6-3,R16,122,57,90,57,93
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Felix Mantilla,Ruben Ramirez Hidalgo,6-4; 6-3,R16,88,33,51,32,64
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Filippo Volandri,Paul-Henri Mathieu,Filippo Volandri,6-4; 6-4,R16,81,36,59,35,61
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Mariano Zabaleta,Santiago Ventura,Mariano Zabaleta,6-4; 6-3,R16,75,43,66,30,53
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Nicolas Almagro,Fernando Gonzalez,7-6(4); 7-5,R16,96,54,73,49,76
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Jose Acasuso,Gaston Gaudio,6-2; 3-6; 6-1,Q,92,50,74,42,73
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,David Ferrer,Agustin Calleri,David Ferrer,6-1; 6-3,Q,60,34,48,23,41
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Filippo Volandri,Ruben Ramirez Hidalgo,Filippo Volandri,6-4; 6-2,Q,81,47,67,31,54
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Mariano Zabaleta,Fernando Gonzalez,4-6; 7-6(4); 7-6(2),Q,176,81,122,77,126
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,David Ferrer,Gaston Gaudio,6-3; 4-6; 6-2,S,135,48,81,53,105
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Filippo Volandri,Fernando Gonzalez,6-4; 5-7; 6-2,S,109,58,80,50,78
-2005-01-31 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Fernando Gonzalez,Gaston Gaudio,6-3; 6-4,F,98,48,80,34,60
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Jiri Vanek,Gaston Gaudio,7-6(6); 6-2,R32,83,51,75,45,79
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,David Sanchez,Albert Montanes,David Sanchez,5-7; 6-4; 6-4,R32,148,61,101,60,104
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Flavio Saretta,Felipe Parada,Flavio Saretta,6-4; 4-6; 6-3,R32,149,58,98,56,100
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Olivier Patience,Jose Acasuso,6-1; 3-6; 7-6(6),R32,115,62,95,61,101
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,David Ferrer,Albert Portas,David Ferrer,6-4; 6-4,R32,92,41,62,43,78
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Mariano Puerta,Juan Monaco,Mariano Puerta,6-3; 6-7(6); 7-5,R32,149,70,102,71,116
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Federico Luzzi,Janko Tipsarevic,Federico Luzzi,7-6(6); 6-0,R32,92,41,61,35,69
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Agustin Calleri,Alex Calatrava,Agustin Calleri,6-3; 6-2,R32,59,35,47,23,46
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Potito Starace,Ruben Ramirez Hidalgo,6-1; 6-2,R32,60,34,47,21,44
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Felix Mantilla,Adrian Garcia,Felix Mantilla,6-4; 3-2 RET,R32,64,33,51,22,40
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Paul-Henri Mathieu,Oscar Hernandez,Paul-Henri Mathieu,6-2; 7-6(3),R32,91,49,64,40,64
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Filippo Volandri,Guillermo Garcia-Lopez,Filippo Volandri,6-1; 6-3,R32,75,36,64,26,61
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Mariano Zabaleta,Nicolas Lapentti,Mariano Zabaleta,6-1; 6-2,R32,58,34,45,22,43
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Phillip Harboe,Santiago Ventura,6-3; 4-6; 6-2,R32,126,56,82,53,90
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Nicolas Almagro,Alex Corretja,Nicolas Almagro,7-5; 6-2,R32,93,43,57,42,76
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Peter Luczak,Fernando Gonzalez,6-3; 5-7; 6-4,R32,110,56,86,57,92
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,David Sanchez,Gaston Gaudio,6-4; 6-2,R16,77,35,50,31,57
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Flavio Saretta,Jose Acasuso,6-2; 7-6(2),R16,101,45,67,40,74
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,David Ferrer,Mariano Puerta,David Ferrer,6-2; 6-0,R16,72,37,63,20,51
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Agustin Calleri,Federico Luzzi,Agustin Calleri,6-3; 3-6; 6-3,R16,122,57,90,57,93
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Felix Mantilla,Ruben Ramirez Hidalgo,6-4; 6-3,R16,88,33,51,32,64
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Filippo Volandri,Paul-Henri Mathieu,Filippo Volandri,6-4; 6-4,R16,81,36,59,35,61
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Mariano Zabaleta,Santiago Ventura,Mariano Zabaleta,6-4; 6-3,R16,75,43,66,30,53
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Nicolas Almagro,Fernando Gonzalez,7-6(4); 7-5,R16,96,54,73,49,76
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Jose Acasuso,Gaston Gaudio,6-2; 3-6; 6-1,Q,92,50,74,42,73
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,David Ferrer,Agustin Calleri,David Ferrer,6-1; 6-3,Q,60,34,48,23,41
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Filippo Volandri,Ruben Ramirez Hidalgo,Filippo Volandri,6-4; 6-2,Q,81,47,67,31,54
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Mariano Zabaleta,Fernando Gonzalez,4-6; 7-6(4); 7-6(2),Q,176,81,122,77,126
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,David Ferrer,Gaston Gaudio,6-3; 4-6; 6-2,S,135,48,81,53,105
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Filippo Volandri,Fernando Gonzalez,6-4; 5-7; 6-2,S,109,58,80,50,78
+2005-01-31 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Fernando Gonzalez,Gaston Gaudio,6-3; 6-4,F,98,48,80,34,60
 2005-02-07 00:00:00.000,Buenos Aires Argentina ATP World Tour,CLAY,2,Carlos Moya,Peter Luczak,Carlos Moya,6-3; 7-6(5),R32,90,50,63,51,83
 2005-02-07 00:00:00.000,Buenos Aires Argentina ATP World Tour,CLAY,2,Juan Monaco,Albert Costa,Juan Monaco,7-5; 6-4,R32,102,42,56,44,75
 2005-02-07 00:00:00.000,Buenos Aires Argentina ATP World Tour,CLAY,2,Mariano Puerta,Juan-Pablo Guzman,Mariano Puerta,6-2; 7-6(2),R32,86,42,62,38,68
@@ -3227,37 +3227,37 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2006-01-30 00:00:00.000,Delray Beach FL; U.S.A. ATP World Tour,HARD,2,Xavier Malisse,Guillermo Garcia-Lopez,Xavier Malisse,7-6(4); 6-1,S,82,49,70,38,63
 2006-01-30 00:00:00.000,Delray Beach FL; U.S.A. ATP World Tour,HARD,2,Tommy Haas,Vincent Spadea,Tommy Haas,6-3; 6-2,S,74,43,64,26,53
 2006-01-30 00:00:00.000,Delray Beach FL; U.S.A. ATP World Tour,HARD,2,Tommy Haas,Xavier Malisse,Tommy Haas,6-3; 3-6; 7-6(5),F,122,64,89,71,112
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Felipe Parada,Gaston Gaudio,6-1; 6-4,R32,70,37,46,34,60
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Nicolas Almagro,Ruben Ramirez Hidalgo,0-6; 6-3; 6-1,R32,93,44,68,37,63
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Paul Capdeville,Santiago Ventura,6-3; 0-6; 6-3,R32,101,40,69,49,80
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Albert Montanes,Juan Monaco,Albert Montanes,6-4; 6-2,R32,104,35,57,37,76
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Ivan Navarro,Jose Acasuso,6-3; 6-2,R32,76,37,55,22,45
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Gustavo Marcaccio,Luis Horna,Gustavo Marcaccio,7-6(6); 0-6; 6-3,R32,128,61,100,56,83
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jorge Aguilar,Guillermo Hormazabal,Jorge Aguilar,6-4; 6-2,R32,66,40,56,30,46
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Leos Friedl,Carlos Berlocq,Leos Friedl,6-7(5); 6-3; 6-1,R32,164,50,90,51,111
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Marcos Daniel,Nicolas Massu,6-3; 6-3,R32,72,38,61,27,49
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Antonio Marin,Hugo Armando,Juan Antonio Marin,6-2; 6-3,R32,67,37,49,25,46
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Carlos Cuadrado,Tomas Behrend,Carlos Cuadrado,7-5; 6-0,R32,61,33,45,27,54
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Agustin Calleri,Daniel Gimeno-Traver,1-6; 6-3; 6-3,R32,101,54,96,43,75
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Boris Pashanski,Flavio Saretta,Boris Pashanski,1-6; 7-5; 6-3,R32,144,56,98,56,106
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Alessio Di Mauro,Adrian Garcia,Alessio Di Mauro,6-7(6); 6-1; 6-4,R32,148,57,102,50,101
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Martin Del Potro,Albert Portas,Juan Martin Del Potro,6-2; 6-2,R32,55,35,50,19,43
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Vasilis Mazarakis,Fernando Gonzalez,6-1; 6-2,R32,52,30,43,20,50
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Gaston Gaudio,Ruben Ramirez Hidalgo,6-7(6); 6-1; 6-4,R16,157,54,85,51,104
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Albert Montanes,Santiago Ventura,Albert Montanes,4-6; 6-4; 6-3,R16,103,49,72,53,88
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Gustavo Marcaccio,Jose Acasuso,6-1; 6-1,R16,58,31,43,16,41
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Leos Friedl,Jorge Aguilar,Leos Friedl,7-6(4); 6-3,R16,98,40,65,39,71
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Juan Antonio Marin,Nicolas Massu,6-3; 6-4,R16,91,43,57,33,55
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Carlos Cuadrado,Daniel Gimeno-Traver,Carlos Cuadrado,6-3; 6-3,R16,62,39,53,29,50
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Boris Pashanski,Alessio Di Mauro,Boris Pashanski,6-7(2); 7-6(4); 6-0,R16,166,67,107,58,101
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Juan Martin Del Potro,Fernando Gonzalez,6-3; 7-6(4),R16,95,47,80,35,68
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Albert Montanes,Ruben Ramirez Hidalgo,6-2; 2-6; 6-2,Q,109,49,79,39,70
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Leos Friedl,Jose Acasuso,3-6; 6-1; 7-5,Q,143,59,94,54,97
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Carlos Cuadrado,Nicolas Massu,4-6; 7-6(4); 6-3,Q,171,70,91,73,111
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Boris Pashanski,Fernando Gonzalez,6-4; 6-3,Q,89,39,57,43,72
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Ruben Ramirez Hidalgo,Jose Acasuso,6-2; 6-4,S,96,38,49,36,64
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Fernando Gonzalez,Nicolas Massu,3-6; 7-6(3); 6-4,S,192,69,111,70,114
-2006-01-30 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Nicolas Massu,Jose Acasuso,6-4; 6-3,F,96,37,53,32,55
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gaston Gaudio,Felipe Parada,Gaston Gaudio,6-1; 6-4,R32,70,37,46,34,60
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Nicolas Almagro,Ruben Ramirez Hidalgo,0-6; 6-3; 6-1,R32,93,44,68,37,63
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Paul Capdeville,Santiago Ventura,6-3; 0-6; 6-3,R32,101,40,69,49,80
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Albert Montanes,Juan Monaco,Albert Montanes,6-4; 6-2,R32,104,35,57,37,76
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Ivan Navarro,Jose Acasuso,6-3; 6-2,R32,76,37,55,22,45
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Gustavo Marcaccio,Luis Horna,Gustavo Marcaccio,7-6(6); 0-6; 6-3,R32,128,61,100,56,83
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jorge Aguilar,Guillermo Hormazabal,Jorge Aguilar,6-4; 6-2,R32,66,40,56,30,46
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Leos Friedl,Carlos Berlocq,Leos Friedl,6-7(5); 6-3; 6-1,R32,164,50,90,51,111
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Marcos Daniel,Nicolas Massu,6-3; 6-3,R32,72,38,61,27,49
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Antonio Marin,Hugo Armando,Juan Antonio Marin,6-2; 6-3,R32,67,37,49,25,46
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Carlos Cuadrado,Tomas Behrend,Carlos Cuadrado,7-5; 6-0,R32,61,33,45,27,54
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Agustin Calleri,Daniel Gimeno-Traver,1-6; 6-3; 6-3,R32,101,54,96,43,75
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Boris Pashanski,Flavio Saretta,Boris Pashanski,1-6; 7-5; 6-3,R32,144,56,98,56,106
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Alessio Di Mauro,Adrian Garcia,Alessio Di Mauro,6-7(6); 6-1; 6-4,R32,148,57,102,50,101
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Martin Del Potro,Albert Portas,Juan Martin Del Potro,6-2; 6-2,R32,55,35,50,19,43
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Vasilis Mazarakis,Fernando Gonzalez,6-1; 6-2,R32,52,30,43,20,50
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Gaston Gaudio,Ruben Ramirez Hidalgo,6-7(6); 6-1; 6-4,R16,157,54,85,51,104
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Albert Montanes,Santiago Ventura,Albert Montanes,4-6; 6-4; 6-3,R16,103,49,72,53,88
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Gustavo Marcaccio,Jose Acasuso,6-1; 6-1,R16,58,31,43,16,41
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Leos Friedl,Jorge Aguilar,Leos Friedl,7-6(4); 6-3,R16,98,40,65,39,71
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Juan Antonio Marin,Nicolas Massu,6-3; 6-4,R16,91,43,57,33,55
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Carlos Cuadrado,Daniel Gimeno-Traver,Carlos Cuadrado,6-3; 6-3,R16,62,39,53,29,50
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Boris Pashanski,Alessio Di Mauro,Boris Pashanski,6-7(2); 7-6(4); 6-0,R16,166,67,107,58,101
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Juan Martin Del Potro,Fernando Gonzalez,6-3; 7-6(4),R16,95,47,80,35,68
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Ruben Ramirez Hidalgo,Albert Montanes,Ruben Ramirez Hidalgo,6-2; 2-6; 6-2,Q,109,49,79,39,70
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Leos Friedl,Jose Acasuso,3-6; 6-1; 7-5,Q,143,59,94,54,97
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Carlos Cuadrado,Nicolas Massu,4-6; 7-6(4); 6-3,Q,171,70,91,73,111
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Boris Pashanski,Fernando Gonzalez,6-4; 6-3,Q,89,39,57,43,72
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Ruben Ramirez Hidalgo,Jose Acasuso,6-2; 6-4,S,96,38,49,36,64
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Nicolas Massu,Fernando Gonzalez,Nicolas Massu,3-6; 7-6(3); 6-4,S,192,69,111,70,114
+2006-01-30 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Nicolas Massu,Jose Acasuso,6-4; 6-3,F,96,37,53,32,55
 2006-01-30 00:00:00.000,Zagreb Croatia ATP World Tour,HARD,2,Ivan Ljubicic,Andy Murray,Ivan Ljubicic,4-6; 6-2; 6-3,R32,118,60,93,45,73
 2006-01-30 00:00:00.000,Zagreb Croatia ATP World Tour,HARD,2,Kenneth Carlsen,Jan Hernych,Kenneth Carlsen,6-2; 6-4,R32,68,36,47,35,66
 2006-01-30 00:00:00.000,Zagreb Croatia ATP World Tour,HARD,2,Mikhail Youzhny,Tomas Zib,Mikhail Youzhny,6-4; 3-6; 6-1,R32,100,60,87,50,77
@@ -8781,36 +8781,36 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2008-01-14 00:00:00.000,Australian Open Australia Grand Slams,HARD,3,Novak Djokovic,Roger Federer,Novak Djokovic,7-5; 6-3; 7-6(5),S,146,75,113,66,109
 2008-01-14 00:00:00.000,Australian Open Australia Grand Slams,HARD,3,Jo-Wilfried Tsonga,Rafael Nadal,Jo-Wilfried Tsonga,6-2; 6-3; 6-2,S,116,57,76,38,70
 2008-01-14 00:00:00.000,Australian Open Australia Grand Slams,HARD,3,Novak Djokovic,Jo-Wilfried Tsonga,Novak Djokovic,4-6; 6-4; 6-3; 7-6(2),F,185,87,122,87,136
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Paul Capdeville,Fernando Gonzalez,7-5; 6-3,R32,75,37,57,32,63
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Diego Hartfield,Mariano Zabaleta,Diego Hartfield,6-3; 7-5,R32,91,45,71,37,71
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Carlos Berlocq,Nicolas Devilder,Carlos Berlocq,7-5; 6-2,R32,128,44,66,43,81
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Luis Horna,Agustin Calleri,Luis Horna,6-4; 6-4,R32,82,44,57,41,66
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Verdasco,Hans Podlipnik-Castillo,Fernando Verdasco,6-4; 6-3,R32,82,34,48,42,77
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Pablo Cuevas,Guillermo Coria,Pablo Cuevas,6-4; 4-6; 6-3,R32,124,52,90,50,91
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Eduardo Schwank,Daniel Gimeno-Traver,6-4; 1-6; 6-1,R32,79,41,55,40,58
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Peter Luczak,Jose Acasuso,6-2; 6-4,R32,86,43,60,33,56
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Pablo Brzezicki,Oscar Hernandez,Juan Pablo Brzezicki,7-6(4); 6-1,R32,123,39,68,27,61
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Marcel Granollers,Boris Pashanski,Marcel Granollers,7-6(4); 6-2,R32,104,44,64,48,89
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Martin Vassallo Arguello,Olivier Patience,Martin Vassallo Arguello,6-4; 6-1,R32,73,35,48,32,60
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Nicolas Lapentti,Juan Monaco,2-6; 6-3; 6-4,R32,153,62,102,53,87
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Sergio Roitman,Nicolas Massu,Sergio Roitman,6-7(3); 7-6(4); 6-3,R32,199,74,121,72,118
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Gaston Gaudio,Santiago Ventura,6-3; 6-0,R32,66,34,54,19,49
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,David Marrero,Adrian Garcia,David Marrero,6-7(2); 7-6(3); 6-4,R32,172,76,113,78,121
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fabio Fognini,Juan Ignacio Chela,Fabio Fognini,7-6(0); 6-2,R32,86,46,61,39,65
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Diego Hartfield,Fernando Gonzalez,6-3; 6-4,R16,67,41,64,26,47
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Carlos Berlocq,Luis Horna,Carlos Berlocq,7-6(3); 3-6; 7-6(3),R16,184,72,110,71,111
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Pablo Cuevas,Fernando Verdasco,Pablo Cuevas,7-5; 6-3,R16,87,52,75,41,63
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Daniel Gimeno-Traver,Jose Acasuso,6-2; 6-2,R16,60,32,41,32,62
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Pablo Brzezicki,Marcel Granollers,Juan Pablo Brzezicki,6-2; 6-2,R16,88,35,49,34,67
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Martin Vassallo Arguello,Juan Monaco,6-3; 4-6; 7-5,R16,165,66,106,61,106
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Sergio Roitman,Santiago Ventura,4-6; 6-3; 7-6(4),R16,138,52,97,51,98
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fabio Fognini,David Marrero,Fabio Fognini,6-4; 6-7(5); 6-3,R16,132,72,104,64,103
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Carlos Berlocq,Fernando Gonzalez,7-5; 6-0,Q,83,40,57,34,64
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Pablo Cuevas,Jose Acasuso,Pablo Cuevas,6-3; 6-3,Q,91,44,71,37,73
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Juan Pablo Brzezicki,Juan Monaco,6-2; 6-3,Q,84,36,53,33,66
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Fabio Fognini,Santiago Ventura,6-3; 6-3,Q,80,38,52,39,69
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Pablo Cuevas,Fernando Gonzalez,6-7(4); 7-6(6); 6-2,S,168,70,107,67,115
-2008-01-28 00:00:00.000,Vi±a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Santiago Ventura,Juan Monaco,6-2; 6-4,S,75,35,52,31,57
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Paul Capdeville,Fernando Gonzalez,7-5; 6-3,R32,75,37,57,32,63
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Diego Hartfield,Mariano Zabaleta,Diego Hartfield,6-3; 7-5,R32,91,45,71,37,71
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Carlos Berlocq,Nicolas Devilder,Carlos Berlocq,7-5; 6-2,R32,128,44,66,43,81
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Luis Horna,Agustin Calleri,Luis Horna,6-4; 6-4,R32,82,44,57,41,66
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Verdasco,Hans Podlipnik-Castillo,Fernando Verdasco,6-4; 6-3,R32,82,34,48,42,77
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Pablo Cuevas,Guillermo Coria,Pablo Cuevas,6-4; 4-6; 6-3,R32,124,52,90,50,91
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Eduardo Schwank,Daniel Gimeno-Traver,6-4; 1-6; 6-1,R32,79,41,55,40,58
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Peter Luczak,Jose Acasuso,6-2; 6-4,R32,86,43,60,33,56
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Pablo Brzezicki,Oscar Hernandez,Juan Pablo Brzezicki,7-6(4); 6-1,R32,123,39,68,27,61
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Marcel Granollers,Boris Pashanski,Marcel Granollers,7-6(4); 6-2,R32,104,44,64,48,89
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Martin Vassallo Arguello,Olivier Patience,Martin Vassallo Arguello,6-4; 6-1,R32,73,35,48,32,60
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Nicolas Lapentti,Juan Monaco,2-6; 6-3; 6-4,R32,153,62,102,53,87
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Sergio Roitman,Nicolas Massu,Sergio Roitman,6-7(3); 7-6(4); 6-3,R32,199,74,121,72,118
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Gaston Gaudio,Santiago Ventura,6-3; 6-0,R32,66,34,54,19,49
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,David Marrero,Adrian Garcia,David Marrero,6-7(2); 7-6(3); 6-4,R32,172,76,113,78,121
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fabio Fognini,Juan Ignacio Chela,Fabio Fognini,7-6(0); 6-2,R32,86,46,61,39,65
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Diego Hartfield,Fernando Gonzalez,6-3; 6-4,R16,67,41,64,26,47
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Carlos Berlocq,Luis Horna,Carlos Berlocq,7-6(3); 3-6; 7-6(3),R16,184,72,110,71,111
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Pablo Cuevas,Fernando Verdasco,Pablo Cuevas,7-5; 6-3,R16,87,52,75,41,63
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Jose Acasuso,Daniel Gimeno-Traver,Jose Acasuso,6-2; 6-2,R16,60,32,41,32,62
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Pablo Brzezicki,Marcel Granollers,Juan Pablo Brzezicki,6-2; 6-2,R16,88,35,49,34,67
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Martin Vassallo Arguello,Juan Monaco,6-3; 4-6; 7-5,R16,165,66,106,61,106
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Sergio Roitman,Santiago Ventura,4-6; 6-3; 7-6(4),R16,138,52,97,51,98
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fabio Fognini,David Marrero,Fabio Fognini,6-4; 6-7(5); 6-3,R16,132,72,104,64,103
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Carlos Berlocq,Fernando Gonzalez,7-5; 6-0,Q,83,40,57,34,64
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Pablo Cuevas,Jose Acasuso,Pablo Cuevas,6-3; 6-3,Q,91,44,71,37,73
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Juan Pablo Brzezicki,Juan Monaco,6-2; 6-3,Q,84,36,53,33,66
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Santiago Ventura,Fabio Fognini,Santiago Ventura,6-3; 6-3,Q,80,38,52,39,69
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Fernando Gonzalez,Pablo Cuevas,Fernando Gonzalez,6-7(4); 7-6(6); 6-2,S,168,70,107,67,115
+2008-01-28 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour,CLAY,2,Juan Monaco,Santiago Ventura,Juan Monaco,6-2; 6-4,S,75,35,52,31,57
 2008-02-11 00:00:00.000,Costa Do Sauipe Brazil ATP World Tour,CLAY,2,Carlos Moya,Santiago Ventura,Carlos Moya,6-4; 4-6; 6-4,R32,149,66,95,68,107
 2008-02-11 00:00:00.000,Costa Do Sauipe Brazil ATP World Tour,CLAY,2,Olivier Patience,Juan Pablo Brzezicki,Olivier Patience,6-3; 7-5,R32,84,36,58,27,58
 2008-02-11 00:00:00.000,Costa Do Sauipe Brazil ATP World Tour,CLAY,2,Oscar Hernandez,Pablo Cuevas,Oscar Hernandez,7-6(5); 6-4,R32,100,45,69,42,67
@@ -11577,33 +11577,33 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2009-02-02 00:00:00.000,Johannesburg South Africa ATP World Tour 250,HARD,2,Jo-Wilfried Tsonga,Frederico Gil,Jo-Wilfried Tsonga,6-3; 6-4,S,64,39,52,28,48
 2009-02-02 00:00:00.000,Johannesburg South Africa ATP World Tour 250,HARD,2,Jeremy Chardy,David Ferrer,Jeremy Chardy,1-6; 7-6(9); 7-6(4),S,154,74,114,80,117
 2009-02-02 00:00:00.000,Johannesburg South Africa ATP World Tour 250,HARD,2,Jo-Wilfried Tsonga,Jeremy Chardy,Jo-Wilfried Tsonga,6-4; 7-6(5),F,109,58,84,52,77
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Maximo Gonzalez,Boris Pashanski,Maximo Gonzalez,6-3; 6-2,R32,71,33,46,25,56
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Potito Starace,Marcos Daniel,Potito Starace,6-4; 6-4,R32,77,37,44,40,71
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Juan Monaco,Nicolas Devilder,Juan Monaco,6-2; 6-4,R32,83,39,57,34,64
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Pablo Cuevas,Nicolas Lapentti,Pablo Cuevas,6-3; 3-6; 7-5,R32,134,61,93,53,79
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Daniel Gimeno-Traver,Alberto Martin,Daniel Gimeno-Traver,6-3; 6-7(2); 6-6 RET,R32,157,76,114,66,94
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Paul Capdeville,Eduardo Schwank,Paul Capdeville,6-3; 6-4,R32,96,37,48,46,83
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Agustin Calleri,Nicolas Massu,Agustin Calleri,7-6(4); 6-1,R32,100,41,65,33,63
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Sebastian Decoud,Fabio Fognini,Sebastian Decoud,6-3; 7-5,R32,96,45,67,34,61
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Thomaz Bellucci,Juan Pablo Brzezicki,Thomaz Bellucci,6-2; 6-3,R32,90,41,60,36,68
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Martin Vassallo Arguello,Oscar Hernandez,Martin Vassallo Arguello,6-3; 7-6(1),R32,104,43,63,36,61
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Pablo Andujar,Juan Ignacio Chela,6-0; 3-6; 6-1,R32,130,53,92,33,74
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Brian Dabul,Diego Junqueira,Brian Dabul,6-2; 6-7(2); 6-1,R32,137,65,102,46,83
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Maximo Gonzalez,Fernando Gonzalez,7-5; 7-6(7),R16,127,53,78,64,112
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Juan Monaco,Potito Starace,Juan Monaco,6-3; 6-3,R16,74,33,48,29,52
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Pablo Cuevas,Albert Montanes,Pablo Cuevas,7-6(2); 6-4,R16,98,52,74,42,71
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Paul Capdeville,Daniel Gimeno-Traver,Paul Capdeville,6-4; 6-3,R16,84,43,58,37,57
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Sebastian Decoud,Agustin Calleri,Sebastian Decoud,7-6(3); 7-5,R16,102,51,76,46,78
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Jose Acasuso,Thomaz Bellucci,Jose Acasuso,7-6(3); 6-3,R16,119,53,83,50,84
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Martin Vassallo Arguello,Juan Ignacio Chela,6-4; 7-6(4),R16,114,47,63,43,70
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Tommy Robredo,Brian Dabul,Tommy Robredo,6-3; 7-6(5),R16,106,48,75,36,65
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Juan Monaco,Fernando Gonzalez,6-0; 6-2,Q,56,28,36,20,47
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Pablo Cuevas,Paul Capdeville,Pablo Cuevas,7-5; 7-5,Q,97,55,73,42,67
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Jose Acasuso,Sebastian Decoud,Jose Acasuso,6-4; 6-2,Q,88,37,52,28,53
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Tommy Robredo,Juan Ignacio Chela,Tommy Robredo,0-6; 6-3; 6-4,Q,129,55,96,48,78
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Pablo Cuevas,Fernando Gonzalez,6-3; 6-2,S,120,36,42,34,61
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Jose Acasuso,Tommy Robredo,Jose Acasuso,5-7; 6-2; 6-4,S,157,57,85,54,86
-2009-02-02 00:00:00.000,Vi±a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Jose Acasuso,Fernando Gonzalez,6-1; 6-3,F,56,32,41,23,49
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Maximo Gonzalez,Boris Pashanski,Maximo Gonzalez,6-3; 6-2,R32,71,33,46,25,56
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Potito Starace,Marcos Daniel,Potito Starace,6-4; 6-4,R32,77,37,44,40,71
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Juan Monaco,Nicolas Devilder,Juan Monaco,6-2; 6-4,R32,83,39,57,34,64
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Pablo Cuevas,Nicolas Lapentti,Pablo Cuevas,6-3; 3-6; 7-5,R32,134,61,93,53,79
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Daniel Gimeno-Traver,Alberto Martin,Daniel Gimeno-Traver,6-3; 6-7(2); 6-6 RET,R32,157,76,114,66,94
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Paul Capdeville,Eduardo Schwank,Paul Capdeville,6-3; 6-4,R32,96,37,48,46,83
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Agustin Calleri,Nicolas Massu,Agustin Calleri,7-6(4); 6-1,R32,100,41,65,33,63
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Sebastian Decoud,Fabio Fognini,Sebastian Decoud,6-3; 7-5,R32,96,45,67,34,61
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Thomaz Bellucci,Juan Pablo Brzezicki,Thomaz Bellucci,6-2; 6-3,R32,90,41,60,36,68
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Martin Vassallo Arguello,Oscar Hernandez,Martin Vassallo Arguello,6-3; 7-6(1),R32,104,43,63,36,61
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Pablo Andujar,Juan Ignacio Chela,6-0; 3-6; 6-1,R32,130,53,92,33,74
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Brian Dabul,Diego Junqueira,Brian Dabul,6-2; 6-7(2); 6-1,R32,137,65,102,46,83
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Maximo Gonzalez,Fernando Gonzalez,7-5; 7-6(7),R16,127,53,78,64,112
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Juan Monaco,Potito Starace,Juan Monaco,6-3; 6-3,R16,74,33,48,29,52
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Pablo Cuevas,Albert Montanes,Pablo Cuevas,7-6(2); 6-4,R16,98,52,74,42,71
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Paul Capdeville,Daniel Gimeno-Traver,Paul Capdeville,6-4; 6-3,R16,84,43,58,37,57
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Sebastian Decoud,Agustin Calleri,Sebastian Decoud,7-6(3); 7-5,R16,102,51,76,46,78
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Jose Acasuso,Thomaz Bellucci,Jose Acasuso,7-6(3); 6-3,R16,119,53,83,50,84
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Martin Vassallo Arguello,Juan Ignacio Chela,6-4; 7-6(4),R16,114,47,63,43,70
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Tommy Robredo,Brian Dabul,Tommy Robredo,6-3; 7-6(5),R16,106,48,75,36,65
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Juan Monaco,Fernando Gonzalez,6-0; 6-2,Q,56,28,36,20,47
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Pablo Cuevas,Paul Capdeville,Pablo Cuevas,7-5; 7-5,Q,97,55,73,42,67
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Jose Acasuso,Sebastian Decoud,Jose Acasuso,6-4; 6-2,Q,88,37,52,28,53
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Tommy Robredo,Juan Ignacio Chela,Tommy Robredo,0-6; 6-3; 6-4,Q,129,55,96,48,78
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Pablo Cuevas,Fernando Gonzalez,6-3; 6-2,S,120,36,42,34,61
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Jose Acasuso,Tommy Robredo,Jose Acasuso,5-7; 6-2; 6-4,S,157,57,85,54,86
+2009-02-02 00:00:00.000,Viï¿½a del Mar Chile ATP World Tour 250,CLAY,2,Fernando Gonzalez,Jose Acasuso,Fernando Gonzalez,6-1; 6-3,F,56,32,41,23,49
 2009-02-02 00:00:00.000,Zagreb Croatia ATP World Tour 250,HARD,2,Ivan Dodig,Igor Andreev,Ivan Dodig,6-1; 6-4,R32,75,39,52,31,56
 2009-02-02 00:00:00.000,Zagreb Croatia ATP World Tour 250,HARD,2,Ernests Gulbis,Dmitry Tursunov,Ernests Gulbis,4-6; 6-4; 6-4,R32,116,62,88,65,101
 2009-02-02 00:00:00.000,Zagreb Croatia ATP World Tour 250,HARD,2,Teymuraz Gabashvili,Mikhail Youzhny,Teymuraz Gabashvili,6-3; 6-4,R32,92,46,68,33,54
@@ -17909,32 +17909,32 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2011-05-15 00:00:00.000,Nice France ATP World Tour 250,CLAY,2,Victor Hanescu,Alexandr Dolgopolov,Victor Hanescu,6-3; 6-3,S,73,40,60,29,57
 2011-05-15 00:00:00.000,Nice France ATP World Tour 250,CLAY,2,Nicolas Almagro,Tomas Berdych,Nicolas Almagro,6-4; 6-4,S,88,39,55,36,60
 2011-05-15 00:00:00.000,Nice France ATP World Tour 250,CLAY,2,Nicolas Almagro,Victor Hanescu,Nicolas Almagro,6-7(5); 6-3; 6-3,F,139,54,88,57,106
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Janko Tipsarevic,Philipp Kohlschreiber,6-4; 7-6(5),RR,115,51,78,44,75
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Monaco,Andrey Golubev,Juan Monaco,6-4; 6-0,RR,66,32,48,19,43
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mikhail Youzhny,Marcel Granollers,Mikhail Youzhny,6-3; 6-4,RR,90,37,51,37,66
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Mikhail Kukushkin,Juan Ignacio Chela,6-1; 6-2,RR,80,40,67,16,45
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Igor Andreev,Daniel Gimeno-Traver,Igor Andreev,7-5; 4-6; 7-6(6),RR,167,82,130,69,100
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Florian Mayer,Viktor Troicki,Florian Mayer,6-2; 6-2,RR,54,32,40,24,48
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,John Isner,Christian Lindell,John Isner,6-4; 6-1,RR,71,37,53,28,53
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Robin Soderling,Sam Querrey,Robin Soderling,5-7; 7-5; 7-6(3),RR,155,80,131,70,121
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Christian Lindell,Juan Ignacio Chela,6-1; 6-1,RR,62,28,31,21,52
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Florian Mayer,Marcel Granollers,Florian Mayer,4-6; 6-4; 6-2,RR,140,61,100,52,89
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mardy Fish,Andrey Golubev,Mardy Fish,6-4; 6-2,RR,74,37,54,27,49
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Dusan Lajovic,Igor Andreev,Dusan Lajovic,1-6; 7-6(6); 6-4,RR,131,57,93,60,92
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Sam Querrey,Mikhail Kukushkin,3-6; 7-5; 7-5,RR,129,56,88,63,107
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Philipp Kohlschreiber,Daniel Gimeno-Traver,6-4; 2-6; 6-3,RR,111,43,62,54,97
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Viktor Troicki,Mikhail Youzhny,Viktor Troicki,6-3; 6-1,RR,74,32,51,23,58
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Robin Soderling,Maximo Gonzalez,Robin Soderling,6-1; 6-4,RR,71,33,45,26,52
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Monaco,Mardy Fish,Juan Monaco,7-6(4); 7-5,RR,135,52,89,42,74
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Christian Lindell,Mikhail Kukushkin,6-0; 6-1,RR,75,33,48,21,50
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Viktor Troicki,Marcel Granollers,Viktor Troicki,6-4; 6-4,RR,84,37,51,35,59
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Philipp Petzschner,Igor Andreev,Philipp Petzschner,6-2; 6-4,RR,88,48,72,34,59
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Janko Tipsarevic,Daniel Gimeno-Traver,Janko Tipsarevic,7-6(5); 6-1,RR,95,41,60,40,74
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Mikhail Youzhny,Philipp Kohlschreiber,2-6; 6-3; 6-2,RR,138,46,76,54,100
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,John Isner,Juan Ignacio Chela,6-1; 7-6(1),RR,92,50,73,34,62
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Robin Soderling,Andrey Golubev,Robin Soderling,6-7(4); 7-6(7); 6-3,RR,156,74,106,77,126
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Philipp Kohlschreiber,Juan Ignacio Chela,6-4; 7-6(4),F,117,49,70,49,81
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Florian Mayer,Juan Monaco,Florian Mayer,7-6(4); 6-0,F,93,38,59,32,62
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Janko Tipsarevic,Philipp Kohlschreiber,6-4; 7-6(5),RR,115,51,78,44,75
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Monaco,Andrey Golubev,Juan Monaco,6-4; 6-0,RR,66,32,48,19,43
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mikhail Youzhny,Marcel Granollers,Mikhail Youzhny,6-3; 6-4,RR,90,37,51,37,66
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Mikhail Kukushkin,Juan Ignacio Chela,6-1; 6-2,RR,80,40,67,16,45
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Igor Andreev,Daniel Gimeno-Traver,Igor Andreev,7-5; 4-6; 7-6(6),RR,167,82,130,69,100
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Florian Mayer,Viktor Troicki,Florian Mayer,6-2; 6-2,RR,54,32,40,24,48
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,John Isner,Christian Lindell,John Isner,6-4; 6-1,RR,71,37,53,28,53
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Robin Soderling,Sam Querrey,Robin Soderling,5-7; 7-5; 7-6(3),RR,155,80,131,70,121
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Christian Lindell,Juan Ignacio Chela,6-1; 6-1,RR,62,28,31,21,52
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Florian Mayer,Marcel Granollers,Florian Mayer,4-6; 6-4; 6-2,RR,140,61,100,52,89
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mardy Fish,Andrey Golubev,Mardy Fish,6-4; 6-2,RR,74,37,54,27,49
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Dusan Lajovic,Igor Andreev,Dusan Lajovic,1-6; 7-6(6); 6-4,RR,131,57,93,60,92
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Sam Querrey,Mikhail Kukushkin,3-6; 7-5; 7-5,RR,129,56,88,63,107
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Philipp Kohlschreiber,Daniel Gimeno-Traver,6-4; 2-6; 6-3,RR,111,43,62,54,97
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Viktor Troicki,Mikhail Youzhny,Viktor Troicki,6-3; 6-1,RR,74,32,51,23,58
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Robin Soderling,Maximo Gonzalez,Robin Soderling,6-1; 6-4,RR,71,33,45,26,52
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Monaco,Mardy Fish,Juan Monaco,7-6(4); 7-5,RR,135,52,89,42,74
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Christian Lindell,Mikhail Kukushkin,6-0; 6-1,RR,75,33,48,21,50
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Viktor Troicki,Marcel Granollers,Viktor Troicki,6-4; 6-4,RR,84,37,51,35,59
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Philipp Petzschner,Igor Andreev,Philipp Petzschner,6-2; 6-4,RR,88,48,72,34,59
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Janko Tipsarevic,Daniel Gimeno-Traver,Janko Tipsarevic,7-6(5); 6-1,RR,95,41,60,40,74
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Mikhail Youzhny,Philipp Kohlschreiber,2-6; 6-3; 6-2,RR,138,46,76,54,100
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,John Isner,Juan Ignacio Chela,6-1; 7-6(1),RR,92,50,73,34,62
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Robin Soderling,Andrey Golubev,Robin Soderling,6-7(4); 7-6(7); 6-3,RR,156,74,106,77,126
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Philipp Kohlschreiber,Juan Ignacio Chela,6-4; 7-6(4),F,117,49,70,49,81
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Florian Mayer,Juan Monaco,Florian Mayer,7-6(4); 6-0,F,93,38,59,32,62
 2011-05-22 00:00:00.000,Roland Garros France Grand Slams,CLAY,3,Rafael Nadal,John Isner,Rafael Nadal,6-4; 6-7(2); 6-7(2); 6-2; 6-4,R128,241,105,134,107,165
 2011-05-22 00:00:00.000,Roland Garros France Grand Slams,CLAY,3,Pablo Andujar,Santiago Giraldo,Pablo Andujar,7-6(5); 6-3; 6-3,R128,156,72,117,57,100
 2011-05-22 00:00:00.000,Roland Garros France Grand Slams,CLAY,3,Antonio Veic,Pablo Cuevas,Antonio Veic,4-6; 6-3; 6-2; 3-1 RET,R128,117,64,89,49,89
@@ -18366,32 +18366,32 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2011-07-04 00:00:00.000,Newport RI; U.S.A. ATP World Tour 250,GRASS,2,John Isner,Tobias Kamke,John Isner,7-5; 7-6(4),S,98,53,65,58,90
 2011-07-04 00:00:00.000,Newport RI; U.S.A. ATP World Tour 250,GRASS,2,Olivier Rochus,Michael Yani,Olivier Rochus,6-2; 6-4,S,73,37,48,38,64
 2011-07-04 00:00:00.000,Newport RI; U.S.A. ATP World Tour 250,GRASS,2,John Isner,Olivier Rochus,John Isner,6-3; 7-6(6),F,103,52,64,52,84
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Diego Junqueira,Igor Andreev,Diego Junqueira,7-6(3); 3-6; 6-4,R32,141,58,90,60,95
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Jonathan Dasnieres de Veigy,Andreas Vinciguerra,Jonathan Dasnieres de Veigy,6-1; 1-6; 6-3,R32,101,43,69,46,82
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Julian Reister,Potito Starace,7-6(6); 6-3,R32,88,46,67,38,61
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Teymuraz Gabashvili,Michael Yani,Teymuraz Gabashvili,6-3; 3-6; 6-3,R32,129,60,93,55,90
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Blaz Kavcic,Julien Benneteau,Blaz Kavcic,6-4; 4-6; 7-5,R32,174,60,110,53,103
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Juan Monaco,Carlos Berlocq,Juan Monaco,6-7(5); 7-6(7); 6-2,R32,212,90,145,70,116
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Ruben Ramirez Hidalgo,Andrey Golubev,Ruben Ramirez Hidalgo,6-7(4); 6-1; 6-2,R32,131,55,95,42,88
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Maximo Gonzalez,Michael Ryderstedt,6-4; 2-6; 6-2,R32,125,51,77,54,90
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Guillermo Olaso,Antonio Veic,Guillermo Olaso,6-4; 6-1,R32,76,38,61,28,55
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Filippo Volandri,Tommy Robredo,Filippo Volandri,7-5; 5-5 RET,R32,110,38,64,43,80
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Mikhail Kukushkin,Andreas Haider-Maurer,7-5; 6-2,R32,86,42,74,22,48
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Pere Riba,Christian Lindell,Pere Riba,6-4; 6-2,R32,89,36,54,27,57
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Diego Junqueira,Robin Soderling,6-0; 6-1,R16,47,26,35,7,32
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Jonathan Dasnieres de Veigy,Potito Starace,6-0; 6-7(5); 6-2,R16,134,56,87,51,100
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Teymuraz Gabashvili,Tomas Berdych,6-2; 6-2,R16,86,37,54,29,56
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Ruben Ramirez Hidalgo,Michael Ryderstedt,6-4; 6-2,R16,91,41,64,31,55
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Guillermo Olaso,Nicolas Almagro,6-2; 6-3,R16,56,37,55,29,52
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Filippo Volandri,Andreas Haider-Maurer,6-3; 7-6(7),R16,95,50,78,38,65
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Pere Riba,David Ferrer,6-2; 7-6(4),R16,125,51,72,52,91
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Potito Starace,Robin Soderling,6-3; 6-4,Q,72,40,50,35,61
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Blaz Kavcic,Tomas Berdych,6-1; 6-4,Q,79,37,54,28,49
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Michael Ryderstedt,Nicolas Almagro,6-4; 7-6(4),Q,83,44,67,44,72
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Andreas Haider-Maurer,David Ferrer,6-1; 6-1,Q,56,29,37,16,40
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Tomas Berdych,Robin Soderling,6-1; 6-0,S,71,31,47,24,56
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Nicolas Almagro,David Ferrer,6-1; 6-3,S,64,33,51,19,46
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,David Ferrer,Robin Soderling,6-2; 6-2,F,67,29,41,27,59
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Diego Junqueira,Igor Andreev,Diego Junqueira,7-6(3); 3-6; 6-4,R32,141,58,90,60,95
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Jonathan Dasnieres de Veigy,Andreas Vinciguerra,Jonathan Dasnieres de Veigy,6-1; 1-6; 6-3,R32,101,43,69,46,82
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Julian Reister,Potito Starace,7-6(6); 6-3,R32,88,46,67,38,61
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Teymuraz Gabashvili,Michael Yani,Teymuraz Gabashvili,6-3; 3-6; 6-3,R32,129,60,93,55,90
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Blaz Kavcic,Julien Benneteau,Blaz Kavcic,6-4; 4-6; 7-5,R32,174,60,110,53,103
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Juan Monaco,Carlos Berlocq,Juan Monaco,6-7(5); 7-6(7); 6-2,R32,212,90,145,70,116
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Ruben Ramirez Hidalgo,Andrey Golubev,Ruben Ramirez Hidalgo,6-7(4); 6-1; 6-2,R32,131,55,95,42,88
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Maximo Gonzalez,Michael Ryderstedt,6-4; 2-6; 6-2,R32,125,51,77,54,90
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Guillermo Olaso,Antonio Veic,Guillermo Olaso,6-4; 6-1,R32,76,38,61,28,55
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Filippo Volandri,Tommy Robredo,Filippo Volandri,7-5; 5-5 RET,R32,110,38,64,43,80
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Mikhail Kukushkin,Andreas Haider-Maurer,7-5; 6-2,R32,86,42,74,22,48
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Pere Riba,Christian Lindell,Pere Riba,6-4; 6-2,R32,89,36,54,27,57
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Diego Junqueira,Robin Soderling,6-0; 6-1,R16,47,26,35,7,32
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Jonathan Dasnieres de Veigy,Potito Starace,6-0; 6-7(5); 6-2,R16,134,56,87,51,100
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Teymuraz Gabashvili,Tomas Berdych,6-2; 6-2,R16,86,37,54,29,56
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Ruben Ramirez Hidalgo,Michael Ryderstedt,6-4; 6-2,R16,91,41,64,31,55
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Guillermo Olaso,Nicolas Almagro,6-2; 6-3,R16,56,37,55,29,52
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Filippo Volandri,Andreas Haider-Maurer,6-3; 7-6(7),R16,95,50,78,38,65
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Pere Riba,David Ferrer,6-2; 7-6(4),R16,125,51,72,52,91
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Potito Starace,Robin Soderling,6-3; 6-4,Q,72,40,50,35,61
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Blaz Kavcic,Tomas Berdych,6-1; 6-4,Q,79,37,54,28,49
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Michael Ryderstedt,Nicolas Almagro,6-4; 7-6(4),Q,83,44,67,44,72
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Andreas Haider-Maurer,David Ferrer,6-1; 6-1,Q,56,29,37,16,40
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Tomas Berdych,Robin Soderling,6-1; 6-0,S,71,31,47,24,56
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Nicolas Almagro,David Ferrer,6-1; 6-3,S,64,33,51,19,46
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,David Ferrer,Robin Soderling,6-2; 6-2,F,67,29,41,27,59
 2011-07-11 00:00:00.000,Stuttgart Germany ATP World Tour 250,CLAY,2,Victor Hanescu,Gael Monfils,Victor Hanescu,2-6; 7-6(7); 6-4,R32,137,60,99,64,102
 2011-07-11 00:00:00.000,Stuttgart Germany ATP World Tour 250,CLAY,2,Pavol Cervenak,Mischa Zverev,Pavol Cervenak,6-4; 4-6; 6-2,R32,121,53,85,43,74
 2011-07-11 00:00:00.000,Stuttgart Germany ATP World Tour 250,CLAY,2,Sergiy Stakhovsky,Jaroslav Pospisil,Sergiy Stakhovsky,4-6; 6-2; 7-6(5),R32,160,68,93,76,122
@@ -18577,33 +18577,33 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2011-07-25 00:00:00.000,Umag Croatia ATP World Tour 250,CLAY,2,Marin Cilic,Fabio Fognini,Marin Cilic,6-2; 6-2,S,74,33,50,25,57
 2011-07-25 00:00:00.000,Umag Croatia ATP World Tour 250,CLAY,2,Alexandr Dolgopolov,Juan Carlos Ferrero,Alexandr Dolgopolov,6-4; 6-4,S,86,43,67,38,65
 2011-07-25 00:00:00.000,Umag Croatia ATP World Tour 250,CLAY,2,Alexandr Dolgopolov,Marin Cilic,Alexandr Dolgopolov,6-4; 3-6; 6-3,F,134,52,74,62,106
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Daniel Gimeno-Traver,Dominic Thiem,Daniel Gimeno-Traver,6-4; 6-2,R32,66,33,43,27,53
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Antonio Veic,Andreas Haider-Maurer,Antonio Veic,6-7(3); 6-4; 6-2,R32,143,57,89,57,104
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Filippo Volandri,Marcel Granollers,6-4; 6-2,R32,87,37,53,29,54
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Daniel Brands,Santiago Giraldo,6-3; 6-3,R32,69,45,62,33,54
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Javier Marti,Albert Montanes,6-3; 6-2,R32,70,33,49,25,55
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Philipp Kohlschreiber,Thomas Muster,Philipp Kohlschreiber,6-3; 6-0,R32,66,34,52,23,57
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Lukas Rosol,Pablo Andujar,3-6; 6-3; 6-3,R32,122,58,96,52,90
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Ramos,Igor Andreev,Albert Ramos,6-0; 6-7(2); 6-4,R32,146,62,101,49,91
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Joao Souza,Jerzy Janowicz,Joao Souza,6-3; 4-6; 7-6(3),R32,142,65,87,71,106
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Denis Istomin,Andreas Seppi,6-2; 6-2,R32,61,35,48,26,53
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Pere Riba,Victor Hanescu,Pere Riba,7-6(3); 6-4,R32,100,48,75,42,68
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Potito Starace,Robin Haase,6-3; 2-0 RET,R32,43,24,31,16,29
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Daniel Gimeno-Traver,Juan Ignacio Chela,6-4; 3-6; 6-3,R16,135,52,84,52,91
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Antonio Veic,Marcel Granollers,6-0; 3-6; 6-4,R16,125,41,65,40,78
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Fabio Fognini,Santiago Giraldo,6-3; 6-4,R16,85,33,58,34,72
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Philipp Kohlschreiber,Albert Montanes,6-4; 7-5,R16,81,40,65,35,61
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Albert Ramos,Pablo Andujar,6-2; 6-1,R16,79,32,48,24,53
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Joao Souza,Diego Junqueira,Joao Souza,6-2; 6-2,R16,85,33,44,26,49
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Pere Riba,Andreas Seppi,7-5; 6-4,R16,91,40,69,32,61
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Feliciano Lopez,Robin Haase,1-6; 6-4; 6-3,R16,114,47,73,49,71
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Marcel Granollers,Juan Ignacio Chela,6-3; 6-4,Q,96,36,50,38,69
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Santiago Giraldo,Albert Montanes,6-1; 7-6(0),Q,80,43,65,30,58
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Joao Souza,Pablo Andujar,Joao Souza,6-3; 6-4,Q,83,38,55,28,52
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Andreas Seppi,Robin Haase,6-4; 6-2,Q,93,42,78,22,57
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Juan Ignacio Chela,Albert Montanes,6-2; 7-5,S,92,36,56,36,75
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Joao Souza,Robin Haase,6-1; 6-7(3); 6-4,S,130,57,74,59,99
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Albert Montanes,Robin Haase,6-4; 4-6; 6-1,F,121,56,93,42,73
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Daniel Gimeno-Traver,Dominic Thiem,Daniel Gimeno-Traver,6-4; 6-2,R32,66,33,43,27,53
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Antonio Veic,Andreas Haider-Maurer,Antonio Veic,6-7(3); 6-4; 6-2,R32,143,57,89,57,104
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Filippo Volandri,Marcel Granollers,6-4; 6-2,R32,87,37,53,29,54
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Daniel Brands,Santiago Giraldo,6-3; 6-3,R32,69,45,62,33,54
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Javier Marti,Albert Montanes,6-3; 6-2,R32,70,33,49,25,55
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Philipp Kohlschreiber,Thomas Muster,Philipp Kohlschreiber,6-3; 6-0,R32,66,34,52,23,57
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Lukas Rosol,Pablo Andujar,3-6; 6-3; 6-3,R32,122,58,96,52,90
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Ramos,Igor Andreev,Albert Ramos,6-0; 6-7(2); 6-4,R32,146,62,101,49,91
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Joao Souza,Jerzy Janowicz,Joao Souza,6-3; 4-6; 7-6(3),R32,142,65,87,71,106
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Denis Istomin,Andreas Seppi,6-2; 6-2,R32,61,35,48,26,53
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Pere Riba,Victor Hanescu,Pere Riba,7-6(3); 6-4,R32,100,48,75,42,68
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Potito Starace,Robin Haase,6-3; 2-0 RET,R32,43,24,31,16,29
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Daniel Gimeno-Traver,Juan Ignacio Chela,6-4; 3-6; 6-3,R16,135,52,84,52,91
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Antonio Veic,Marcel Granollers,6-0; 3-6; 6-4,R16,125,41,65,40,78
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Fabio Fognini,Santiago Giraldo,6-3; 6-4,R16,85,33,58,34,72
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Philipp Kohlschreiber,Albert Montanes,6-4; 7-5,R16,81,40,65,35,61
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Albert Ramos,Pablo Andujar,6-2; 6-1,R16,79,32,48,24,53
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Joao Souza,Diego Junqueira,Joao Souza,6-2; 6-2,R16,85,33,44,26,49
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Pere Riba,Andreas Seppi,7-5; 6-4,R16,91,40,69,32,61
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Feliciano Lopez,Robin Haase,1-6; 6-4; 6-3,R16,114,47,73,49,71
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Marcel Granollers,Juan Ignacio Chela,6-3; 6-4,Q,96,36,50,38,69
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Santiago Giraldo,Albert Montanes,6-1; 7-6(0),Q,80,43,65,30,58
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Joao Souza,Pablo Andujar,Joao Souza,6-3; 6-4,Q,83,38,55,28,52
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Andreas Seppi,Robin Haase,6-4; 6-2,Q,93,42,78,22,57
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Juan Ignacio Chela,Albert Montanes,6-2; 7-5,S,92,36,56,36,75
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Joao Souza,Robin Haase,6-1; 6-7(3); 6-4,S,130,57,74,59,99
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Albert Montanes,Robin Haase,6-4; 4-6; 6-1,F,121,56,93,42,73
 2011-07-31 00:00:00.000,Washington DC; USA ATP World Tour 500,HARD,2,Ryan Sweeting,Alex Bogomolov Jr.,Ryan Sweeting,6-2; 6-4,R64,81,36,57,27,57
 2011-07-31 00:00:00.000,Washington DC; USA ATP World Tour 500,HARD,2,Flavio Cipolla,Marsel Ilhan,Flavio Cipolla,7-5; 6-0,R64,89,34,54,27,58
 2011-07-31 00:00:00.000,Washington DC; USA ATP World Tour 500,HARD,2,Grigor Dimitrov,Tim Smyczek,Grigor Dimitrov,4-6; 7-6(3); 7-6(3),R64,159,73,111,84,140

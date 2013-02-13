@@ -67,7 +67,7 @@ object GenericGlicko2Rating {
     val deviationAfterEmptyPeriods =
       (1 to discountPeriods.toInt).foldLeft(ratingA.deviation)((latestDeviation, period) =>
         deviationGivenVolatility(latestDeviation, ratingA.volatility))
-    
+
     val g = GenericGlicko2Rating.g(ratingB.deviation)
     val E = GenericGlicko2Rating.E(ratingA.rating, ratingB.rating, ratingB.deviation)
     val variance = GenericGlicko2Rating.variance(g, E)
@@ -82,36 +82,37 @@ object GenericGlicko2Rating {
 
   def discountPeriod(previousTimestamp: Date, currentTimestamp: Date, discountDurationInDays: Int): Long =
     (currentTimestamp.getTime() - previousTimestamp.getTime()) / 1000 / 3600 / 24 / discountDurationInDays
-
+    
 }
 class GenericGlicko2Rating(initialRating: Double = 0, initialDeviation: Double = 350d / 173.7178, initialVolatility: Double = 0.06, tau: Double = 0.5, discountDurationInDays: Int) extends Glicko2Rating {
-  
+
   private var ratings = Map[String, PlayerRating]()
-  
-  /**Processes tennis match event and updates internal player ratings.
-   * 
+
+  /**
+   * Processes tennis match event and updates internal player ratings.
+   *
    */
-  def sendResult(result:Result) {
+  def sendResult(result: Result) {
     ratings = updateRatings(ratings, result)
   }
-  
+
   /**
    * @return Map [player name, player rating],
    */
-  def getRatings(): Map[String,PlayerRating] = {
-    ratings
-  }
-  
-  /**
-   * @return Map[playerName, playerRating]
-   */
-  def calcServeReturnRatings(results: List[Result]): Map[String, PlayerRating] = {
-    /**Map[player,Rating*/
-    val ratings = results.foldLeft(Map[String, PlayerRating]())((currentRatings, result) => updateRatings(currentRatings, result))
+  def getRatings(): Map[String, PlayerRating] = {
     ratings
   }
 
-  private def updateRatings(ratings: Map[String, PlayerRating], result: Result): Map[String, PlayerRating] = {
+  /**
+   * @return Map[playerName, playerRating]
+   */
+  def calcServeReturnRatings(results: List[Result], onRatings: Option[RatingsReport => Unit] = None): Map[String, PlayerRating] = {
+    /**Map[player,Rating*/
+    val ratings = results.foldLeft(Map[String, PlayerRating]())((currentRatings, result) => updateRatings(currentRatings, result, onRatings))
+    ratings
+  }
+
+  private def updateRatings(ratings: Map[String, PlayerRating], result: Result, onRatings: Option[RatingsReport => Unit] = None): Map[String, PlayerRating] = {
 
     val currRatingA = ratings.getOrElse(result.playerA, initRating(result.timestamp))
     val currRatingB = ratings.getOrElse(result.playerB, initRating(result.timestamp))
@@ -123,6 +124,10 @@ class GenericGlicko2Rating(initialRating: Double = 0, initialDeviation: Double =
     val newRatingB = currRatingB.copy(ratingOnReturn = newRatingBOnReturn)
 
     val newRatings = ratings + (result.playerA -> newRatingA, result.playerB -> newRatingB)
+
+    //Call onRatingsListener
+    onRatings.foreach(onRatings => onRatings(RatingsReport(currRatingA, currRatingB, newRatingA, newRatingB, result)))
+
     newRatings
   }
 

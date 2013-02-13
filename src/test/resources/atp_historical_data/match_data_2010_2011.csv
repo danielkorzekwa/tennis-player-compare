@@ -3892,32 +3892,32 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2011-05-15 00:00:00.000,Nice France ATP World Tour 250,CLAY,2,Victor Hanescu,Alexandr Dolgopolov,Victor Hanescu,6-3; 6-3,S,73,40,60,29,57
 2011-05-15 00:00:00.000,Nice France ATP World Tour 250,CLAY,2,Nicolas Almagro,Tomas Berdych,Nicolas Almagro,6-4; 6-4,S,88,39,55,36,60
 2011-05-15 00:00:00.000,Nice France ATP World Tour 250,CLAY,2,Nicolas Almagro,Victor Hanescu,Nicolas Almagro,6-7(5); 6-3; 6-3,F,139,54,88,57,106
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Janko Tipsarevic,Philipp Kohlschreiber,6-4; 7-6(5),RR,115,51,78,44,75
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Monaco,Andrey Golubev,Juan Monaco,6-4; 6-0,RR,66,32,48,19,43
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mikhail Youzhny,Marcel Granollers,Mikhail Youzhny,6-3; 6-4,RR,90,37,51,37,66
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Mikhail Kukushkin,Juan Ignacio Chela,6-1; 6-2,RR,80,40,67,16,45
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Igor Andreev,Daniel Gimeno-Traver,Igor Andreev,7-5; 4-6; 7-6(6),RR,167,82,130,69,100
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Florian Mayer,Viktor Troicki,Florian Mayer,6-2; 6-2,RR,54,32,40,24,48
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,John Isner,Christian Lindell,John Isner,6-4; 6-1,RR,71,37,53,28,53
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Robin Soderling,Sam Querrey,Robin Soderling,5-7; 7-5; 7-6(3),RR,155,80,131,70,121
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Christian Lindell,Juan Ignacio Chela,6-1; 6-1,RR,62,28,31,21,52
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Florian Mayer,Marcel Granollers,Florian Mayer,4-6; 6-4; 6-2,RR,140,61,100,52,89
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mardy Fish,Andrey Golubev,Mardy Fish,6-4; 6-2,RR,74,37,54,27,49
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Dusan Lajovic,Igor Andreev,Dusan Lajovic,1-6; 7-6(6); 6-4,RR,131,57,93,60,92
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Sam Querrey,Mikhail Kukushkin,3-6; 7-5; 7-5,RR,129,56,88,63,107
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Philipp Kohlschreiber,Daniel Gimeno-Traver,6-4; 2-6; 6-3,RR,111,43,62,54,97
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Viktor Troicki,Mikhail Youzhny,Viktor Troicki,6-3; 6-1,RR,74,32,51,23,58
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Robin Soderling,Maximo Gonzalez,Robin Soderling,6-1; 6-4,RR,71,33,45,26,52
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Monaco,Mardy Fish,Juan Monaco,7-6(4); 7-5,RR,135,52,89,42,74
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Christian Lindell,Mikhail Kukushkin,6-0; 6-1,RR,75,33,48,21,50
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Viktor Troicki,Marcel Granollers,Viktor Troicki,6-4; 6-4,RR,84,37,51,35,59
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Philipp Petzschner,Igor Andreev,Philipp Petzschner,6-2; 6-4,RR,88,48,72,34,59
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Janko Tipsarevic,Daniel Gimeno-Traver,Janko Tipsarevic,7-6(5); 6-1,RR,95,41,60,40,74
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Mikhail Youzhny,Philipp Kohlschreiber,2-6; 6-3; 6-2,RR,138,46,76,54,100
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,John Isner,Juan Ignacio Chela,6-1; 7-6(1),RR,92,50,73,34,62
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Robin Soderling,Andrey Golubev,Robin Soderling,6-7(4); 7-6(7); 6-3,RR,156,74,106,77,126
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Philipp Kohlschreiber,Juan Ignacio Chela,6-4; 7-6(4),F,117,49,70,49,81
-2011-05-15 00:00:00.000,World Team Championship Düsseldorf ATP World Tour,CLAY,2,Florian Mayer,Juan Monaco,Florian Mayer,7-6(4); 6-0,F,93,38,59,32,62
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Janko Tipsarevic,Philipp Kohlschreiber,6-4; 7-6(5),RR,115,51,78,44,75
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Monaco,Andrey Golubev,Juan Monaco,6-4; 6-0,RR,66,32,48,19,43
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mikhail Youzhny,Marcel Granollers,Mikhail Youzhny,6-3; 6-4,RR,90,37,51,37,66
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Mikhail Kukushkin,Juan Ignacio Chela,6-1; 6-2,RR,80,40,67,16,45
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Igor Andreev,Daniel Gimeno-Traver,Igor Andreev,7-5; 4-6; 7-6(6),RR,167,82,130,69,100
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Florian Mayer,Viktor Troicki,Florian Mayer,6-2; 6-2,RR,54,32,40,24,48
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,John Isner,Christian Lindell,John Isner,6-4; 6-1,RR,71,37,53,28,53
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Robin Soderling,Sam Querrey,Robin Soderling,5-7; 7-5; 7-6(3),RR,155,80,131,70,121
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Christian Lindell,Juan Ignacio Chela,6-1; 6-1,RR,62,28,31,21,52
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Florian Mayer,Marcel Granollers,Florian Mayer,4-6; 6-4; 6-2,RR,140,61,100,52,89
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mardy Fish,Andrey Golubev,Mardy Fish,6-4; 6-2,RR,74,37,54,27,49
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Dusan Lajovic,Igor Andreev,Dusan Lajovic,1-6; 7-6(6); 6-4,RR,131,57,93,60,92
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Sam Querrey,Mikhail Kukushkin,3-6; 7-5; 7-5,RR,129,56,88,63,107
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Daniel Gimeno-Traver,Philipp Kohlschreiber,Daniel Gimeno-Traver,6-4; 2-6; 6-3,RR,111,43,62,54,97
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Viktor Troicki,Mikhail Youzhny,Viktor Troicki,6-3; 6-1,RR,74,32,51,23,58
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Robin Soderling,Maximo Gonzalez,Robin Soderling,6-1; 6-4,RR,71,33,45,26,52
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Monaco,Mardy Fish,Juan Monaco,7-6(4); 7-5,RR,135,52,89,42,74
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Mikhail Kukushkin,Christian Lindell,Mikhail Kukushkin,6-0; 6-1,RR,75,33,48,21,50
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Viktor Troicki,Marcel Granollers,Viktor Troicki,6-4; 6-4,RR,84,37,51,35,59
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Philipp Petzschner,Igor Andreev,Philipp Petzschner,6-2; 6-4,RR,88,48,72,34,59
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Janko Tipsarevic,Daniel Gimeno-Traver,Janko Tipsarevic,7-6(5); 6-1,RR,95,41,60,40,74
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Philipp Kohlschreiber,Mikhail Youzhny,Philipp Kohlschreiber,2-6; 6-3; 6-2,RR,138,46,76,54,100
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,John Isner,Juan Ignacio Chela,6-1; 7-6(1),RR,92,50,73,34,62
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Robin Soderling,Andrey Golubev,Robin Soderling,6-7(4); 7-6(7); 6-3,RR,156,74,106,77,126
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Juan Ignacio Chela,Philipp Kohlschreiber,Juan Ignacio Chela,6-4; 7-6(4),F,117,49,70,49,81
+2011-05-15 00:00:00.000,World Team Championship Dï¿½sseldorf ATP World Tour,CLAY,2,Florian Mayer,Juan Monaco,Florian Mayer,7-6(4); 6-0,F,93,38,59,32,62
 2011-05-22 00:00:00.000,Roland Garros France Grand Slams,CLAY,3,Rafael Nadal,John Isner,Rafael Nadal,6-4; 6-7(2); 6-7(2); 6-2; 6-4,R128,241,105,134,107,165
 2011-05-22 00:00:00.000,Roland Garros France Grand Slams,CLAY,3,Pablo Andujar,Santiago Giraldo,Pablo Andujar,7-6(5); 6-3; 6-3,R128,156,72,117,57,100
 2011-05-22 00:00:00.000,Roland Garros France Grand Slams,CLAY,3,Antonio Veic,Pablo Cuevas,Antonio Veic,4-6; 6-3; 6-2; 3-1 RET,R128,117,64,89,49,89
@@ -4349,32 +4349,32 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2011-07-04 00:00:00.000,Newport RI; U.S.A. ATP World Tour 250,GRASS,2,John Isner,Tobias Kamke,John Isner,7-5; 7-6(4),S,98,53,65,58,90
 2011-07-04 00:00:00.000,Newport RI; U.S.A. ATP World Tour 250,GRASS,2,Olivier Rochus,Michael Yani,Olivier Rochus,6-2; 6-4,S,73,37,48,38,64
 2011-07-04 00:00:00.000,Newport RI; U.S.A. ATP World Tour 250,GRASS,2,John Isner,Olivier Rochus,John Isner,6-3; 7-6(6),F,103,52,64,52,84
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Diego Junqueira,Igor Andreev,Diego Junqueira,7-6(3); 3-6; 6-4,R32,141,58,90,60,95
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Jonathan Dasnieres de Veigy,Andreas Vinciguerra,Jonathan Dasnieres de Veigy,6-1; 1-6; 6-3,R32,101,43,69,46,82
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Julian Reister,Potito Starace,7-6(6); 6-3,R32,88,46,67,38,61
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Teymuraz Gabashvili,Michael Yani,Teymuraz Gabashvili,6-3; 3-6; 6-3,R32,129,60,93,55,90
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Blaz Kavcic,Julien Benneteau,Blaz Kavcic,6-4; 4-6; 7-5,R32,174,60,110,53,103
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Juan Monaco,Carlos Berlocq,Juan Monaco,6-7(5); 7-6(7); 6-2,R32,212,90,145,70,116
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Ruben Ramirez Hidalgo,Andrey Golubev,Ruben Ramirez Hidalgo,6-7(4); 6-1; 6-2,R32,131,55,95,42,88
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Maximo Gonzalez,Michael Ryderstedt,6-4; 2-6; 6-2,R32,125,51,77,54,90
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Guillermo Olaso,Antonio Veic,Guillermo Olaso,6-4; 6-1,R32,76,38,61,28,55
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Filippo Volandri,Tommy Robredo,Filippo Volandri,7-5; 5-5 RET,R32,110,38,64,43,80
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Mikhail Kukushkin,Andreas Haider-Maurer,7-5; 6-2,R32,86,42,74,22,48
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Pere Riba,Christian Lindell,Pere Riba,6-4; 6-2,R32,89,36,54,27,57
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Diego Junqueira,Robin Soderling,6-0; 6-1,R16,47,26,35,7,32
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Jonathan Dasnieres de Veigy,Potito Starace,6-0; 6-7(5); 6-2,R16,134,56,87,51,100
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Teymuraz Gabashvili,Tomas Berdych,6-2; 6-2,R16,86,37,54,29,56
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Ruben Ramirez Hidalgo,Michael Ryderstedt,6-4; 6-2,R16,91,41,64,31,55
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Guillermo Olaso,Nicolas Almagro,6-2; 6-3,R16,56,37,55,29,52
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Filippo Volandri,Andreas Haider-Maurer,6-3; 7-6(7),R16,95,50,78,38,65
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Pere Riba,David Ferrer,6-2; 7-6(4),R16,125,51,72,52,91
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Potito Starace,Robin Soderling,6-3; 6-4,Q,72,40,50,35,61
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Blaz Kavcic,Tomas Berdych,6-1; 6-4,Q,79,37,54,28,49
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Michael Ryderstedt,Nicolas Almagro,6-4; 7-6(4),Q,83,44,67,44,72
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Andreas Haider-Maurer,David Ferrer,6-1; 6-1,Q,56,29,37,16,40
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Tomas Berdych,Robin Soderling,6-1; 6-0,S,71,31,47,24,56
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Nicolas Almagro,David Ferrer,6-1; 6-3,S,64,33,51,19,46
-2011-07-11 00:00:00.000,Båstad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,David Ferrer,Robin Soderling,6-2; 6-2,F,67,29,41,27,59
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Diego Junqueira,Igor Andreev,Diego Junqueira,7-6(3); 3-6; 6-4,R32,141,58,90,60,95
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Jonathan Dasnieres de Veigy,Andreas Vinciguerra,Jonathan Dasnieres de Veigy,6-1; 1-6; 6-3,R32,101,43,69,46,82
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Julian Reister,Potito Starace,7-6(6); 6-3,R32,88,46,67,38,61
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Teymuraz Gabashvili,Michael Yani,Teymuraz Gabashvili,6-3; 3-6; 6-3,R32,129,60,93,55,90
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Blaz Kavcic,Julien Benneteau,Blaz Kavcic,6-4; 4-6; 7-5,R32,174,60,110,53,103
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Juan Monaco,Carlos Berlocq,Juan Monaco,6-7(5); 7-6(7); 6-2,R32,212,90,145,70,116
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Ruben Ramirez Hidalgo,Andrey Golubev,Ruben Ramirez Hidalgo,6-7(4); 6-1; 6-2,R32,131,55,95,42,88
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Maximo Gonzalez,Michael Ryderstedt,6-4; 2-6; 6-2,R32,125,51,77,54,90
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Guillermo Olaso,Antonio Veic,Guillermo Olaso,6-4; 6-1,R32,76,38,61,28,55
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Filippo Volandri,Tommy Robredo,Filippo Volandri,7-5; 5-5 RET,R32,110,38,64,43,80
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Mikhail Kukushkin,Andreas Haider-Maurer,7-5; 6-2,R32,86,42,74,22,48
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Pere Riba,Christian Lindell,Pere Riba,6-4; 6-2,R32,89,36,54,27,57
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Diego Junqueira,Robin Soderling,6-0; 6-1,R16,47,26,35,7,32
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Potito Starace,Jonathan Dasnieres de Veigy,Potito Starace,6-0; 6-7(5); 6-2,R16,134,56,87,51,100
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Teymuraz Gabashvili,Tomas Berdych,6-2; 6-2,R16,86,37,54,29,56
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Michael Ryderstedt,Ruben Ramirez Hidalgo,Michael Ryderstedt,6-4; 6-2,R16,91,41,64,31,55
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Guillermo Olaso,Nicolas Almagro,6-2; 6-3,R16,56,37,55,29,52
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Andreas Haider-Maurer,Filippo Volandri,Andreas Haider-Maurer,6-3; 7-6(7),R16,95,50,78,38,65
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Pere Riba,David Ferrer,6-2; 7-6(4),R16,125,51,72,52,91
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Potito Starace,Robin Soderling,6-3; 6-4,Q,72,40,50,35,61
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Tomas Berdych,Blaz Kavcic,Tomas Berdych,6-1; 6-4,Q,79,37,54,28,49
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Nicolas Almagro,Michael Ryderstedt,Nicolas Almagro,6-4; 7-6(4),Q,83,44,67,44,72
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Andreas Haider-Maurer,David Ferrer,6-1; 6-1,Q,56,29,37,16,40
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,Tomas Berdych,Robin Soderling,6-1; 6-0,S,71,31,47,24,56
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,David Ferrer,Nicolas Almagro,David Ferrer,6-1; 6-3,S,64,33,51,19,46
+2011-07-11 00:00:00.000,Bï¿½stad Sweden ATP World Tour 250,CLAY,2,Robin Soderling,David Ferrer,Robin Soderling,6-2; 6-2,F,67,29,41,27,59
 2011-07-11 00:00:00.000,Stuttgart Germany ATP World Tour 250,CLAY,2,Victor Hanescu,Gael Monfils,Victor Hanescu,2-6; 7-6(7); 6-4,R32,137,60,99,64,102
 2011-07-11 00:00:00.000,Stuttgart Germany ATP World Tour 250,CLAY,2,Pavol Cervenak,Mischa Zverev,Pavol Cervenak,6-4; 4-6; 6-2,R32,121,53,85,43,74
 2011-07-11 00:00:00.000,Stuttgart Germany ATP World Tour 250,CLAY,2,Sergiy Stakhovsky,Jaroslav Pospisil,Sergiy Stakhovsky,4-6; 6-2; 7-6(5),R32,160,68,93,76,122
@@ -4560,33 +4560,33 @@ event_time,event_name,surface,num_of_sets,playerA,playerB,winner,score,round,dur
 2011-07-25 00:00:00.000,Umag Croatia ATP World Tour 250,CLAY,2,Marin Cilic,Fabio Fognini,Marin Cilic,6-2; 6-2,S,74,33,50,25,57
 2011-07-25 00:00:00.000,Umag Croatia ATP World Tour 250,CLAY,2,Alexandr Dolgopolov,Juan Carlos Ferrero,Alexandr Dolgopolov,6-4; 6-4,S,86,43,67,38,65
 2011-07-25 00:00:00.000,Umag Croatia ATP World Tour 250,CLAY,2,Alexandr Dolgopolov,Marin Cilic,Alexandr Dolgopolov,6-4; 3-6; 6-3,F,134,52,74,62,106
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Daniel Gimeno-Traver,Dominic Thiem,Daniel Gimeno-Traver,6-4; 6-2,R32,66,33,43,27,53
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Antonio Veic,Andreas Haider-Maurer,Antonio Veic,6-7(3); 6-4; 6-2,R32,143,57,89,57,104
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Filippo Volandri,Marcel Granollers,6-4; 6-2,R32,87,37,53,29,54
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Daniel Brands,Santiago Giraldo,6-3; 6-3,R32,69,45,62,33,54
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Javier Marti,Albert Montanes,6-3; 6-2,R32,70,33,49,25,55
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Philipp Kohlschreiber,Thomas Muster,Philipp Kohlschreiber,6-3; 6-0,R32,66,34,52,23,57
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Lukas Rosol,Pablo Andujar,3-6; 6-3; 6-3,R32,122,58,96,52,90
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Ramos,Igor Andreev,Albert Ramos,6-0; 6-7(2); 6-4,R32,146,62,101,49,91
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Joao Souza,Jerzy Janowicz,Joao Souza,6-3; 4-6; 7-6(3),R32,142,65,87,71,106
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Denis Istomin,Andreas Seppi,6-2; 6-2,R32,61,35,48,26,53
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Pere Riba,Victor Hanescu,Pere Riba,7-6(3); 6-4,R32,100,48,75,42,68
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Potito Starace,Robin Haase,6-3; 2-0 RET,R32,43,24,31,16,29
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Daniel Gimeno-Traver,Juan Ignacio Chela,6-4; 3-6; 6-3,R16,135,52,84,52,91
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Antonio Veic,Marcel Granollers,6-0; 3-6; 6-4,R16,125,41,65,40,78
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Fabio Fognini,Santiago Giraldo,6-3; 6-4,R16,85,33,58,34,72
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Philipp Kohlschreiber,Albert Montanes,6-4; 7-5,R16,81,40,65,35,61
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Albert Ramos,Pablo Andujar,6-2; 6-1,R16,79,32,48,24,53
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Joao Souza,Diego Junqueira,Joao Souza,6-2; 6-2,R16,85,33,44,26,49
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Pere Riba,Andreas Seppi,7-5; 6-4,R16,91,40,69,32,61
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Feliciano Lopez,Robin Haase,1-6; 6-4; 6-3,R16,114,47,73,49,71
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Marcel Granollers,Juan Ignacio Chela,6-3; 6-4,Q,96,36,50,38,69
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Santiago Giraldo,Albert Montanes,6-1; 7-6(0),Q,80,43,65,30,58
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Joao Souza,Pablo Andujar,Joao Souza,6-3; 6-4,Q,83,38,55,28,52
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Andreas Seppi,Robin Haase,6-4; 6-2,Q,93,42,78,22,57
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Juan Ignacio Chela,Albert Montanes,6-2; 7-5,S,92,36,56,36,75
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Joao Souza,Robin Haase,6-1; 6-7(3); 6-4,S,130,57,74,59,99
-2011-07-31 00:00:00.000,Kitzbühel Austria ATP World Tour 250,CLAY,2,Robin Haase,Albert Montanes,Robin Haase,6-4; 4-6; 6-1,F,121,56,93,42,73
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Daniel Gimeno-Traver,Dominic Thiem,Daniel Gimeno-Traver,6-4; 6-2,R32,66,33,43,27,53
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Antonio Veic,Andreas Haider-Maurer,Antonio Veic,6-7(3); 6-4; 6-2,R32,143,57,89,57,104
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Filippo Volandri,Marcel Granollers,6-4; 6-2,R32,87,37,53,29,54
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Daniel Brands,Santiago Giraldo,6-3; 6-3,R32,69,45,62,33,54
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Javier Marti,Albert Montanes,6-3; 6-2,R32,70,33,49,25,55
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Philipp Kohlschreiber,Thomas Muster,Philipp Kohlschreiber,6-3; 6-0,R32,66,34,52,23,57
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Lukas Rosol,Pablo Andujar,3-6; 6-3; 6-3,R32,122,58,96,52,90
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Ramos,Igor Andreev,Albert Ramos,6-0; 6-7(2); 6-4,R32,146,62,101,49,91
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Joao Souza,Jerzy Janowicz,Joao Souza,6-3; 4-6; 7-6(3),R32,142,65,87,71,106
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Denis Istomin,Andreas Seppi,6-2; 6-2,R32,61,35,48,26,53
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Pere Riba,Victor Hanescu,Pere Riba,7-6(3); 6-4,R32,100,48,75,42,68
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Potito Starace,Robin Haase,6-3; 2-0 RET,R32,43,24,31,16,29
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Daniel Gimeno-Traver,Juan Ignacio Chela,6-4; 3-6; 6-3,R16,135,52,84,52,91
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Marcel Granollers,Antonio Veic,Marcel Granollers,6-0; 3-6; 6-4,R16,125,41,65,40,78
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Santiago Giraldo,Fabio Fognini,Santiago Giraldo,6-3; 6-4,R16,85,33,58,34,72
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Philipp Kohlschreiber,Albert Montanes,6-4; 7-5,R16,81,40,65,35,61
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Pablo Andujar,Albert Ramos,Pablo Andujar,6-2; 6-1,R16,79,32,48,24,53
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Joao Souza,Diego Junqueira,Joao Souza,6-2; 6-2,R16,85,33,44,26,49
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Andreas Seppi,Pere Riba,Andreas Seppi,7-5; 6-4,R16,91,40,69,32,61
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Feliciano Lopez,Robin Haase,1-6; 6-4; 6-3,R16,114,47,73,49,71
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Juan Ignacio Chela,Marcel Granollers,Juan Ignacio Chela,6-3; 6-4,Q,96,36,50,38,69
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Santiago Giraldo,Albert Montanes,6-1; 7-6(0),Q,80,43,65,30,58
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Joao Souza,Pablo Andujar,Joao Souza,6-3; 6-4,Q,83,38,55,28,52
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Andreas Seppi,Robin Haase,6-4; 6-2,Q,93,42,78,22,57
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Albert Montanes,Juan Ignacio Chela,Albert Montanes,6-2; 7-5,S,92,36,56,36,75
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Joao Souza,Robin Haase,6-1; 6-7(3); 6-4,S,130,57,74,59,99
+2011-07-31 00:00:00.000,Kitzbï¿½hel Austria ATP World Tour 250,CLAY,2,Robin Haase,Albert Montanes,Robin Haase,6-4; 4-6; 6-1,F,121,56,93,42,73
 2011-07-31 00:00:00.000,Washington DC; USA ATP World Tour 500,HARD,2,Ryan Sweeting,Alex Bogomolov Jr.,Ryan Sweeting,6-2; 6-4,R64,81,36,57,27,57
 2011-07-31 00:00:00.000,Washington DC; USA ATP World Tour 500,HARD,2,Flavio Cipolla,Marsel Ilhan,Flavio Cipolla,7-5; 6-0,R64,89,34,54,27,58
 2011-07-31 00:00:00.000,Washington DC; USA ATP World Tour 500,HARD,2,Grigor Dimitrov,Tim Smyczek,Grigor Dimitrov,4-6; 7-6(3); 7-6(3),R64,159,73,111,84,140

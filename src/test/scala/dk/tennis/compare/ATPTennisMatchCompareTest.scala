@@ -12,6 +12,7 @@ import dk.atp.api._
 import dk.atp.api.tournament._
 import ATPTennisMatchCompare._
 import java.util.Date
+import org.joda.time.format.ISODateTimeFormat
 
 object ATPTennisMatchCompareTest {
 
@@ -89,6 +90,12 @@ class ATPTennisMatchCompareTest {
   }
 
   /**Tests for avgDiscount.*/
+  private val dateTimeParser = ISODateTimeFormat.dateTimeParser().withZoneUTC()
+  
+  private def parseDate(date:String):DateTime = {
+    DateTime.parse(date,dateTimeParser)
+  }
+  
   @Test def discountAvgNoData {
     val compare = new ATPTennisMatchCompare(atpMatchesLoader, 1, 7)
     val values: List[TimestampedDouble] = Nil
@@ -97,29 +104,31 @@ class ATPTennisMatchCompareTest {
 
   @Test def discountAvgNoDiscount {
     val compare = new ATPTennisMatchCompare(atpMatchesLoader,12,1, 7)
-    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
-      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    val values: List[TimestampedDouble] = TimestampedDouble(parseDate("2012-02-12"), 6) :: TimestampedDouble(parseDate("2012-03-12"), 6) ::
+      TimestampedDouble(parseDate("2012-04-12"), 4) :: TimestampedDouble(parseDate("2012-05-12"), 4) :: Nil
     assertEquals(5, compare.avgDiscount(values), 0)
   }
 
   @Test def discountAvgDiscount0_9_week_period {
     val compare = new ATPTennisMatchCompare(atpMatchesLoader,12, 0.9, 7)
-    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
-      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    val values: List[TimestampedDouble] = TimestampedDouble(parseDate("2012-02-12"), 6) :: TimestampedDouble(parseDate("2012-03-12"), 6) ::
+      TimestampedDouble(parseDate("2012-04-12"), 4) :: TimestampedDouble(parseDate("2012-05-12"), 4) :: Nil
     assertEquals(4.601, compare.avgDiscount(values), 0.001)
   }
 
   @Test def discountAvgDiscount0_9_month_period {
+  
+    
     val compare = new ATPTennisMatchCompare(atpMatchesLoader, 12,0.9, 30)
-    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
-      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
-    assertEquals(4.920, compare.avgDiscount(values), 0.001)
+    val values: List[TimestampedDouble] = TimestampedDouble(parseDate("2012-02-12T-00:00"), 6) :: TimestampedDouble(parseDate("2012-03-12"), 6) ::
+      TimestampedDouble(parseDate("2012-04-12"), 4) :: TimestampedDouble(parseDate("2012-05-12"), 4) :: Nil
+    assertEquals(4.895, compare.avgDiscount(values), 0.001)
   }
 
   @Test def discountAvgDiscount0_9_year_period {
     val compare = new ATPTennisMatchCompare(atpMatchesLoader, 12,0.9, 365)
-    val values: List[TimestampedDouble] = TimestampedDouble(DateTime.parse("2012-02-12"), 6) :: TimestampedDouble(DateTime.parse("2012-03-12"), 6) ::
-      TimestampedDouble(DateTime.parse("2012-04-12"), 4) :: TimestampedDouble(DateTime.parse("2012-05-12"), 4) :: Nil
+    val values: List[TimestampedDouble] = TimestampedDouble(parseDate("2012-02-12"), 6) :: TimestampedDouble(parseDate("2012-03-12"), 6) ::
+      TimestampedDouble(parseDate("2012-04-12"), 4) :: TimestampedDouble(parseDate("2012-05-12"), 4) :: Nil
     assertEquals(5, compare.avgDiscount(values), 0.001)
   }
 
