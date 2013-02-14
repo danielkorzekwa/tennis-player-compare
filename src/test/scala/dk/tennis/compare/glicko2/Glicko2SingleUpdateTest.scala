@@ -4,12 +4,13 @@ import org.junit._
 import Assert._
 import java.text.SimpleDateFormat
 import Glicko2Rating._
+import java.util.Locale
 
 class Glicko2SingleUpdateTest {
 
   @Test def test {
 
-    val df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
+    val df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.UK)
 
     val ratingPlayerAOnServe = Rating(rating = 0.52, deviation = 0.27, volatility = 0.025,
       timestamp = df.parse("03-Mar-2012 13:30:00"))
