@@ -5,8 +5,8 @@ import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.atp.api.ATPMatchesLoader
 import org.joda.time._
 import dk.atp.api.domain.MatchComposite
-import elo.EloRating._
-import dk.tennis.compare.elo.GenericEloRating
+import dk.tennis.compare.rating.elo.EloRating._
+import dk.tennis.compare.rating.elo.GenericEloRating
 
 /**
  * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.

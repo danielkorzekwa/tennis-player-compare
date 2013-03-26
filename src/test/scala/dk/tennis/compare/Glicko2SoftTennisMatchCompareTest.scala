@@ -7,8 +7,8 @@ import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import org.joda.time.DateTime
 import dk.atp.api.CSVATPMatchesLoader
 import Glicko2SoftTennisMatchCompareTest._
-import dk.tennis.compare.glicko.GenericGlickoRating
-import glicko2._
+import dk.tennis.compare.rating.glicko.GenericGlickoRating
+import dk.tennis.compare.rating.glicko2.CachedGlicko2RatingsLoader
 
 object Glicko2SoftTennisMatchCompareTest {
 

@@ -1,14 +1,12 @@
 package dk.tennis.compare
+
 import java.util.Date
-import dk.atp.api.domain.SurfaceEnum._
-import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
-import dk.atp.api.ATPMatchesLoader
-import org.joda.time._
-import dk.atp.api.domain.MatchComposite
-import glicko.GlickoRating._
-import dk.tennis.compare.glicko.GenericGlickoRating
-import dk.tennisprob._
-import glicko._
+
+import dk.atp.api.domain.SurfaceEnum.SurfaceEnum
+import dk.tennis.compare.rating.glicko.GenericGlickoRating
+import dk.tennisprob.TennisProbCalc.MatchTypeEnum.MatchTypeEnum
+import dk.tennisprob.TennisProbFormulaCalc
+import rating.glicko.GlickoRatingsLoader
 
 class GlickoSoftTennisMatchCompare(glickoRatingLoader: GlickoRatingsLoader) extends TennisPlayerCompare {
 

@@ -3,11 +3,12 @@ package dk.tennis.compare
 import org.junit._
 import Assert._
 import dk.atp.api.CSVATPMatchesLoader
-import markov._
 import MarkovTennisMatchCompareTest._
 import org.joda.time.DateTime
 import dk.atp.api.domain.SurfaceEnum._
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import dk.tennis.compare.rating.markov.GenericMarkovRating
+import dk.tennis.compare.rating.markov.CachedMarkovRatingsLoader
 
 object MarkovTennisMatchCompareTest {
 

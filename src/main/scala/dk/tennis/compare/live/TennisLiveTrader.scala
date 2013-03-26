@@ -22,7 +22,7 @@ import java.util.Date
 import dk.atp.api.tournament.GenericTournamentAtpApi
 import dk.atp.api._
 import TennisLiveTrader._
-import dk.tennis.compare.glicko._
+import dk.tennis.compare.rating.glicko._
 
 object TennisLiveTrader {
 

@@ -1,13 +1,11 @@
 package dk.tennis.compare
 
-import markov._
 import java.util.Date
-import dk.atp.api.domain.SurfaceEnum._
-import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
-import dk.atp.api.ATPMatchesLoader
-import org.joda.time._
-import dk.atp.api.domain.MatchComposite
-import dk.tennisprob._
+
+import dk.atp.api.domain.SurfaceEnum.SurfaceEnum
+import dk.tennisprob.TennisProbCalc.MatchTypeEnum.MatchTypeEnum
+import dk.tennisprob.TennisProbFormulaCalc
+import rating.markov.MarkovRatingsLoader
 
 class MarkovTennisMatchCompare(markovRatingLoader: MarkovRatingsLoader) extends TennisPlayerCompare {
 

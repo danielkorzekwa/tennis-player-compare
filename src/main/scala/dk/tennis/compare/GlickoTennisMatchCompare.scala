@@ -5,8 +5,8 @@ import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.atp.api.ATPMatchesLoader
 import org.joda.time._
 import dk.atp.api.domain.MatchComposite
-import glicko.GlickoRating._
-import dk.tennis.compare.glicko.GenericGlickoRating
+import rating.glicko.GlickoRating._
+import dk.tennis.compare.rating.glicko.GenericGlickoRating
 
 /**
  * @param histDataInMonths For how many months historical tennis data should be used to calculate tennis probabilities.
