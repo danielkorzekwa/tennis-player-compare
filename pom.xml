@@ -23,7 +23,7 @@
 			<name>dk-maven2 maven repository (releases)</name>
 			<url>http://dk-maven2-repo.googlecode.com/svn/maven-repo/releases</url>
 		</repository>
-		
+
 		<repository>
 			<id>dk-maven2-repo-snapshots</id>
 			<name>dk-maven2 maven repository (releases)</name>
@@ -136,9 +136,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>dk.tennis.dbn</groupId>
-			<artifactId>tennis-rating-dbn</artifactId>
-			<version>0.2</version>
+			<groupId>dk.bayes</groupId>
+			<artifactId>bayes-scala</artifactId>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

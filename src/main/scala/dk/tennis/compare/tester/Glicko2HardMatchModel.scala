@@ -8,9 +8,9 @@ import scala.math._
 import java.util._
 import dk.atp.api.domain.MatchComposite
 
-case class Glicko2MatchModel extends MatchModel {
+case class Glicko2HardMatchModel extends MatchModel {
 
-  val glicko2 = new GenericGlicko2Rating(0, 100d / 173.7178, 0.06, 0.05, 3)
+  val glicko2 = new GenericGlicko2Rating(0, 100d / 173.7178, 0.03, 0.2, 3)
 
   def matchProb(m: MatchComposite): Option[Double] = {
 
@@ -26,11 +26,6 @@ case class Glicko2MatchModel extends MatchModel {
     val playerAOnServeProb = GenericGlicko2Rating.E(ratingA.ratingOnServe.rating, ratingB.ratingOnReturn.rating, ratingB.ratingOnReturn.deviation)
     val playerBOnServeProb = GenericGlicko2Rating.E(ratingB.ratingOnServe.rating, ratingA.ratingOnReturn.rating, ratingA.ratingOnReturn.deviation)
 
-    val matchProbAGivenB = if (m.tournament.numOfSet == 2) TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, THREE_SET_MATCH)
-    else TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, FIVE_SET_MATCH)
-    /**Theta and beta are learned with logistic regression. Prediction variable = matchProbAGivenB, predicted variable = match outcome.*/
-    //   val matchProbAGivenBTuned = 1 / (1 + exp(-(-1.5502 + 3.1003 * matchProbAGivenB)))
-
     if (!ratingA.ratingOnServe.rating.isNaN() &&
       !ratingB.ratingOnServe.rating.isNaN() &&
       !ratingA.ratingOnReturn.rating.isNaN() &&
@@ -39,19 +34,18 @@ case class Glicko2MatchModel extends MatchModel {
       ratingB.ratingOnServe.deviation < 0.6 &&
       ratingA.ratingOnReturn.deviation < 0.6 &&
       ratingB.ratingOnReturn.deviation < 0.6)
-      Some(matchProbAGivenB) else None
+      Some(playerAOnServeProb) else None
   }
 
   def addMatchResult(m: MatchComposite) {
     val playerAFacts = m.matchFacts.playerAFacts
     val playerBFacts = m.matchFacts.playerBFacts
 
-    val results =
-      Result(playerAFacts.playerName, playerBFacts.playerName,
-        playerAFacts.totalServicePointsWonPct, m.tournament.tournamentTime) ::
-        Result(playerBFacts.playerName, playerAFacts.playerName,
-          playerBFacts.totalServicePointsWonPct, m.tournament.tournamentTime) :: Nil
+    val playerAWinner: Int = if (m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)) 1 else 0
 
-    results.foreach(r => glicko2.sendResult(r))
+    val result =
+      Result(playerAFacts.playerName, playerBFacts.playerName, playerAWinner, m.tournament.tournamentTime)
+
+    glicko2.sendResult(result)
   }
 }

@@ -77,12 +77,13 @@ object GenericGlicko2Rating {
 
     val newDeviation = GenericGlicko2Rating.newDeviation(preRatingPeriodDeviation, variance)
     val newRatingValue = GenericGlicko2Rating.newRatingValue(ratingA.rating, newDeviation, g, score, E)
+
     Rating(newRatingValue, newDeviation, newVolatilityValue, timestamp)
   }
 
   def discountPeriod(previousTimestamp: Date, currentTimestamp: Date, discountDurationInDays: Int): Long =
     (currentTimestamp.getTime() - previousTimestamp.getTime()) / 1000 / 3600 / 24 / discountDurationInDays
-    
+
 }
 class GenericGlicko2Rating(initialRating: Double = 0, initialDeviation: Double = 350d / 173.7178, initialVolatility: Double = 0.06, tau: Double = 0.5, discountDurationInDays: Int) extends Glicko2Rating {
 

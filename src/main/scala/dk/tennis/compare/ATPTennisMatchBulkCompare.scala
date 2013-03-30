@@ -15,6 +15,7 @@ import scala.collection.immutable.TreeMap
 import org.joda.time.DateTime
 import scala.Math._
 import dk.atp.api.ATPMatchesLoader
+import dk.tennis.compare.matching.GenericMarketCompare
 
 /**
  * Calculates tennis market probabilities for a list of markets in a batch process.
@@ -65,7 +66,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
         case 2 => THREE_SET_MATCH
         case 3 => FIVE_SET_MATCH
       }
-      val probability = tennisMatchCompare.matchProb(m.runnerMap(runners(0)), m.runnerMap(runners(1)), tournament.get.surface, matchType, tournament.get.tournamentTime)
+      val probability = tennisMatchCompare.matchProb(m.runnerMap(runners(0)).name, m.runnerMap(runners(1)).name, tournament.get.surface, matchType, tournament.get.tournamentTime)
 
       Option(MarketProb(m, Map(runners(0) -> probability, runners(1) -> (1 - probability)), tournament.get.surface, matchType))
     } catch { case _ => None }
@@ -78,13 +79,9 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
 
     val matches = atpMatchLoader.loadMatches(year)
 
-    def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
+    val filteredMatches = matches.filter(m => GenericMarketCompare.compare(m, market) > 0.032248)
 
-    val filteredMatches = matches.filter(m => playerNames(m.matchFacts).sorted.equals(market.runnerMap.values.toList.sorted))
-    val timeDiffMatches = TreeMap[Long, Tournament]() ++ filteredMatches.map(m => (abs(market.scheduledOff.getTime() - m.tournament.tournamentTime.getTime()), m.tournament))
-    
-    /**Time difference between matched markets must be lower than 30 days.*/
-    if (!timeDiffMatches.isEmpty && timeDiffMatches.head._1/1000/3600/24<30) Option(timeDiffMatches.head._2) else None
+    if (!filteredMatches.isEmpty) Option(filteredMatches.head.tournament) else None
   }
 
 }

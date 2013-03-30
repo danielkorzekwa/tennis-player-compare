@@ -4,7 +4,10 @@ import dk.atp.api.domain.MatchComposite
 
 trait MatchModel {
 
-  def matchProb(playerA:String,playerB:String,timestamp:Long):Option[Double]
+  /**
+   * Returns the probability of winning the tennis game by player A.
+   */
+  def matchProb(m: MatchComposite):Option[Double]
   
-  def addMatchResult(matchComposite:MatchComposite)
+  def addMatchResult(m:MatchComposite)
 }

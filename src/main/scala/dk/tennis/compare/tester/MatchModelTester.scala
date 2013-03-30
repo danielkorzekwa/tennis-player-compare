@@ -27,13 +27,13 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
         val playerBFacts = m.matchFacts.playerBFacts
         val matchTime = m.tournament.tournamentTime.getTime
 
-        val playerAWinnerProb = matchModel.matchProb(playerAFacts.playerName, playerBFacts.playerName, matchTime)
+        val playerAWinnerProb = matchModel.matchProb(m)
         val playerAWinner: Byte = m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)
 
         playerAWinnerProb.foreach { playerAWinnerProb =>
           llhStats.add(playerAWinner * log(playerAWinnerProb) + (1 - playerAWinner) * log(1 - playerAWinnerProb))
 
-          val predictionRecord = PredictionRecord(
+          val predictionRecord = PredictionRecord(m.tournament.tournamentName,
             new Date(matchTime), playerAFacts.playerName,
             playerBFacts.playerName,
             playerAWinnerProb,
@@ -56,7 +56,7 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.tournament.numOfSet == 2)
+    val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.matchFacts.playerAFacts.totalServicePointsWon>10 && m.matchFacts.playerBFacts.totalServicePointsWon>10)
 
     val rand = new Random()
     val shuffledMatches = filteredMatches.map { m =>
@@ -76,7 +76,7 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
 
 object MatchModelTester {
 
-  case class PredictionRecord(matchTime: Date, playerA: String, playerB: String,
+  case class PredictionRecord(tournament:String,matchTime: Date, playerA: String, playerB: String,
     playerAWinnerProb: Double,
     playerAWinner: Byte)
 

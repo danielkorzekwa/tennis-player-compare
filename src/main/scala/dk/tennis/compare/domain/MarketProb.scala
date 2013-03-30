@@ -18,7 +18,7 @@ case class MarketProb(market: Market, runnerProbs: Map[Long, Double], surface: S
     val marketData = for {
       (selectionId, prob) <- runnerProbs
       val runnerRecord = market.eventId :: market.fullDescription :: df.format(market.scheduledOff) ::
-        selectionId :: market.runnerMap(selectionId) :: numberFormat.format(prob) :: surface.toString :: matchType :: Nil
+        selectionId :: market.runnerMap(selectionId).name :: numberFormat.format(prob) :: surface.toString :: matchType :: Nil
 
     } yield runnerRecord.mkString(",")
 

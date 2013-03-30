@@ -15,12 +15,15 @@ class MatchModelTesterTest {
 
   @Test def test {
 
-    val model = Glicko2MatchModel()
+    //    val model = ExPricesMatchModel("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
+    //    val model = Glicko2HardMatchModel()
+    val model = TrueSkillMatchModel()
+    //val model = TrueSkillGlicko2MatchModel()
 
-    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2008 }
+    val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
     //    val matchFilter = (m: MatchComposite) => {
     //      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
-    //        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Richard Gasquet")
+    //        m.matchFacts.containsPlayer("Roger Federer") && m.matchFacts.containsPlayer("Novak Djokovic")
     //    }
 
     val modelSummary = tester.run(model, matchFilter)
@@ -28,6 +31,8 @@ class MatchModelTesterTest {
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
-    log.info(modelSummary.predictedActualAvgCorrReport)
+    //  modelSummary.predictionRecords.foreach(println(_))
+
+    // log.info(modelSummary.predictedActualAvgCorrReport)
   }
 }
