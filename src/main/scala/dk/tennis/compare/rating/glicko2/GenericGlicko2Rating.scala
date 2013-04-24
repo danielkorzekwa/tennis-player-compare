@@ -3,7 +3,7 @@ package dk.tennis.compare.rating.glicko2
 import Glicko2Rating._
 import java.util.Date
 import GenericGlicko2Rating._
-import Math._
+import scala.math._
 import scala.annotation.tailrec
 object GenericGlicko2Rating {
 

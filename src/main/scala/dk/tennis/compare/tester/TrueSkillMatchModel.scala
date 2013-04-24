@@ -1,13 +1,17 @@
 package dk.tennis.compare.tester
 
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.rating.trueskill.GenericTrueSkill
-import dk.tennis.compare.rating.trueskill.GenericTrueSkill
-import dk.tennis.compare.rating.trueskill.TrueSkill.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
+import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
+import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
+import scala.math._
 
 case class TrueSkillMatchModel extends MatchModel {
 
-  private val trueSkillModel = GenericTrueSkill()
+  private val skillTransVariance = pow(25d / 300, 2)
+  private val performanceVariance = pow(25d / 16, 2)
+  private val trueSkillModel = GenericTrueSkill(skillTransVariance,performanceVariance)
 
   def matchProb(m: MatchComposite): Option[Double] = {
 
@@ -22,7 +26,8 @@ case class TrueSkillMatchModel extends MatchModel {
 
     if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val winProb = trueSkillModel.winnerProb(playerASkill.get, playerBSkill.get)
+      val winProb = GenericTrueSkillMatchProb(skillTransVariance,performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
+
       Some(winProb)
     } else None
   }

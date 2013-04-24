@@ -13,7 +13,7 @@ import org.apache.commons.math.util._
 import dk.atp.api.tournament.TournamentAtpApi._
 import scala.collection.immutable.TreeMap
 import org.joda.time.DateTime
-import scala.Math._
+import scala.math._
 import dk.atp.api.ATPMatchesLoader
 import dk.tennis.compare.matching.GenericMarketCompare
 

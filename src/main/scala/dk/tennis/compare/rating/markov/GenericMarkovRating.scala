@@ -4,7 +4,7 @@ import MarkovRating._
 
 import scala.annotation.tailrec
 import java.util.Date
-import scala.Math._
+import scala.math._
 /**
  * Calculates tennis player rating based on Markov localisation.
  *

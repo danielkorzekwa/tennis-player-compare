@@ -1,7 +1,7 @@
 package dk.tennis.compare.rating.glicko
 
 import GlickoRating._
-import Math._
+import scala.math._
 import java.util.Date
 import org.joda.time._
 import GenericGlickoRating._

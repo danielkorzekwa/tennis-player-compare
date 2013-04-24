@@ -15,8 +15,8 @@ class MatchModelTesterTest {
 
   @Test def test {
 
-    //    val model = ExPricesMatchModel("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
-    //    val model = Glicko2HardMatchModel()
+    //   val model = ExPricesMatchModel("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
+    //    val model = Glicko2MatchModel()
     val model = TrueSkillMatchModel()
     //val model = TrueSkillGlicko2MatchModel()
 

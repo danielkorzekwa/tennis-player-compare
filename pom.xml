@@ -13,7 +13,7 @@
 
 	<!-- Properties -->
 	<properties>
-		<scala.version>2.9.2</scala.version>
+		<scala.version>2.10.0</scala.version>
 		<junit.version>4.4</junit.version>
 	</properties>
 
@@ -126,13 +126,13 @@
 		<dependency>
 			<groupId>dk.atp</groupId>
 			<artifactId>atpworldtour-api</artifactId>
-			<version>0.1</version>
+			<version>0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>dk.tennisprob</groupId>
 			<artifactId>tennis-probability-calculator</artifactId>
-			<version>0.1-20111229.125748-2</version>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

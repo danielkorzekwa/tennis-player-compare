@@ -1,5 +1,5 @@
 package dk.tennis.compare.rating.elo
-import scala.Math._
+import scala.math._
 import EloRating._
 import scala.collection.immutable.Map
 
