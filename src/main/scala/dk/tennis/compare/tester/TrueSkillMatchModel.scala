@@ -6,6 +6,7 @@ import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 import scala.math._
+import dk.tennis.compare.rating.trueskill.model.Result
 
 case class TrueSkillMatchModel extends MatchModel {
 
@@ -39,6 +40,6 @@ case class TrueSkillMatchModel extends MatchModel {
 
     val playerAWinner: Boolean = m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)
 
-    trueSkillModel.addResult(playerAFacts.playerName, playerBFacts.playerName, playerAWinner)
+    trueSkillModel.addResult(Result(playerAFacts.playerName, playerBFacts.playerName, playerAWinner))
   }
 }

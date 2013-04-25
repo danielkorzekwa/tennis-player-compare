@@ -1,15 +1,14 @@
-package dk.tennis.compare.rating.trueskill.rating
+package dk.tennis.compare.rating.trueskill.ratingdbn
 
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.model.Result
 
-trait TrueSkill {
+trait TrueSkillDbn {
 
-  def addResult(result:Result)
+  def addResult(result: Result)
 
   /**
    * @return Map[playerName,playerSkill]
    */
-  def getRatings(): Map[String, TrueSkillRating]
-
+  def calcRatings(): Map[String, TrueSkillRating]
 }

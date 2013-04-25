@@ -18,6 +18,7 @@ class MatchModelTesterTest {
     //   val model = ExPricesMatchModel("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
     //    val model = Glicko2MatchModel()
     val model = TrueSkillMatchModel()
+    //val model = TrueSkillDBNMatchModel()
     //val model = TrueSkillGlicko2MatchModel()
 
     val matchFilter = (m: MatchComposite) => { new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }

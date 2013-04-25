@@ -11,6 +11,7 @@ import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.model.factor.GaussianFactor
+import dk.tennis.compare.rating.trueskill.model.Result
 
 case class GenericTrueSkill(skillTransVariance: Double, performanceVariance: Double) extends TrueSkill {
 
@@ -18,14 +19,14 @@ case class GenericTrueSkill(skillTransVariance: Double, performanceVariance: Dou
 
   private val defaultSkill = TrueSkillRating(0, 1)
 
-  def addResult(player1: String, player2: String, player1Win: Boolean) = {
+  def addResult(result:Result) = {
 
-    val player1Skill = skillsMap.getOrElse(player1, defaultSkill)
-    val player2Skill = skillsMap.getOrElse(player2, defaultSkill)
+    val player1Skill = skillsMap.getOrElse(result.player1, defaultSkill)
+    val player2Skill = skillsMap.getOrElse(result.player2, defaultSkill)
 
-    val (newPlayer1Skill, newPlayer2Skill) = computeMarginals(player1Skill, player2Skill, player1Win)
-    skillsMap += player1 -> newPlayer1Skill
-    skillsMap += player2 -> newPlayer2Skill
+    val (newPlayer1Skill, newPlayer2Skill) = computeMarginals(player1Skill, player2Skill, result.player1Win)
+    skillsMap += result.player1 -> newPlayer1Skill
+    skillsMap += result.player2 -> newPlayer2Skill
   }
 
   def getRatings(): immutable.Map[String, TrueSkillRating] = skillsMap.toMap

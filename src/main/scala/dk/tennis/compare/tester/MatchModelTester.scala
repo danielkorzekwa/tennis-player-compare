@@ -56,7 +56,7 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.matchFacts.playerAFacts.totalServicePointsWon>10 && m.matchFacts.playerBFacts.totalServicePointsWon>10)
+    val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
     val rand = new Random()
     val shuffledMatches = filteredMatches.map { m =>
@@ -76,7 +76,7 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
 
 object MatchModelTester {
 
-  case class PredictionRecord(tournament:String,matchTime: Date, playerA: String, playerB: String,
+  case class PredictionRecord(tournament: String, matchTime: Date, playerA: String, playerB: String,
     playerAWinnerProb: Double,
     playerAWinner: Byte)
 
