@@ -12,7 +12,7 @@ case class TrueSkillMatchModel extends MatchModel {
 
   private val skillTransVariance = pow(25d / 300, 2)
   private val performanceVariance = pow(25d / 16, 2)
-  private val trueSkillModel = GenericTrueSkill(skillTransVariance,performanceVariance)
+  private val trueSkillModel = GenericTrueSkill(skillTransVariance, performanceVariance)
 
   def matchProb(m: MatchComposite): Option[Double] = {
 
@@ -25,12 +25,14 @@ case class TrueSkillMatchModel extends MatchModel {
     val playerASkill = ratingsMap.get(playerAFacts.playerName)
     val playerBSkill = ratingsMap.get(playerBFacts.playerName)
 
-    if (playerASkill.isDefined && playerBSkill.isDefined) {
+    val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val winProb = GenericTrueSkillMatchProb(skillTransVariance,performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
+      val winProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
 
       Some(winProb)
     } else None
+
+    prob
   }
 
   def addMatchResult(m: MatchComposite) {

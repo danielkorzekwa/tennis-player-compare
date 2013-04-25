@@ -27,23 +27,32 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
 
   def addResult(result: Result) {
     val player1PrevSkillVarId = latestSkillVarIds.getOrElseUpdate(result.player1, {
-      val gaussianFactor = addSkillFactor(defaultSkill)
+      val gaussianFactor = addSkillPriorFactor(defaultSkill)
       gaussianFactor.varId
     })
 
     val player2PrevSkillVarId = latestSkillVarIds.getOrElseUpdate(result.player2, {
-      val gaussianFactor = addSkillFactor(defaultSkill)
+      val gaussianFactor = addSkillPriorFactor(defaultSkill)
       gaussianFactor.varId
     })
 
+    //  val skill1Factor = addSkillTransitionFactor(player1PrevSkillVarId)
+    //  val skill2Factor = addSkillTransitionFactor(player2PrevSkillVarId)
+
+    //  addTennisGameToFactorGraph(skill1Factor.varId, skill2Factor.varId, result.player1Win)
     addTennisGameToFactorGraph(player1PrevSkillVarId, player2PrevSkillVarId, result.player1Win)
   }
 
-  private def addSkillFactor(playerSkill: TrueSkillRating): GaussianFactor = {
+  private def addSkillPriorFactor(playerSkill: TrueSkillRating): GaussianFactor = {
     val gaussianFactor = GaussianFactor(lastVarId.getAndIncrement(), defaultSkill.mean, defaultSkill.variance)
     factorGraph.addFactor(gaussianFactor)
-
     gaussianFactor
+  }
+
+  private def addSkillTransitionFactor(playerPrevSkillVarId: Int): LinearGaussianFactor = {
+    val linearGaussianFactor = LinearGaussianFactor(playerPrevSkillVarId, lastVarId.getAndIncrement(), 1, 0, skillTransVariance)
+    factorGraph.addFactor(linearGaussianFactor)
+    linearGaussianFactor
   }
 
   private def addTennisGameToFactorGraph(player1VarId: Int, player2VarId: Int, player1Win: Boolean) {
@@ -56,16 +65,15 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
     factorGraph.addFactor(LinearGaussianFactor(player1VarId, perf1VarId, 1, 0, perfVariance))
     factorGraph.addFactor(LinearGaussianFactor(player2VarId, perf2VarId, 1, 0, perfVariance))
     factorGraph.addFactor(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
-    factorGraph.addFactor(TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0))
 
-    if (player1Win) GenericEP(factorGraph).setEvidence(outcomeVarId, 0)
-    else GenericEP(factorGraph).setEvidence(outcomeVarId, 1)
+    val outcomeFactor = TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0)
+    val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, 0)
+    else outcomeFactor.withEvidence(outcomeVarId, 1)
+    factorGraph.addFactor(outcomeFactorWithEvidence)
   }
 
   /**@return Map[playerName, variable id]*/
-  def getLatestSkillVarIds(): immutable.Map[String, Int] = throw new UnsupportedOperationException("Not implemented yet")
+  def getLatestSkillVarIds(): immutable.Map[String, Int] = latestSkillVarIds.toMap
 
-  def getFactorGraph(): FactorGraph = {
-    GenericFactorGraph()
-  }
+  def getFactorGraph(): FactorGraph = factorGraph
 }

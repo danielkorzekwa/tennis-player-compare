@@ -35,7 +35,6 @@ case class GenericTrueSkillDbn(skillTransVariance: Double, performanceVariance: 
       case (playerName, varId) =>
         val marginal = ep.marginal(varId).asInstanceOf[GaussianFactor]
         val skill = TrueSkillRating(marginal.m, marginal.v)
-
         (playerName, skill)
     }
 

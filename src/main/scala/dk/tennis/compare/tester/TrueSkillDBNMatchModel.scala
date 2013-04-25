@@ -26,14 +26,14 @@ case class TrueSkillDBNMatchModel extends MatchModel {
     val playerASkill = ratingsMap.get(playerAFacts.playerName)
     val playerBSkill = ratingsMap.get(playerBFacts.playerName)
 
-    if (playerASkill.isDefined && playerBSkill.isDefined) {
+    val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
       val winProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
 
       Some(winProb)
     } else None
 
-    None
+    prob
   }
 
   def addMatchResult(m: MatchComposite) {
