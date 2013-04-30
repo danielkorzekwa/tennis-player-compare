@@ -36,11 +36,13 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
       gaussianFactor.varId
     })
 
-    //  val skill1Factor = addSkillTransitionFactor(player1PrevSkillVarId)
-    //  val skill2Factor = addSkillTransitionFactor(player2PrevSkillVarId)
+    val skill1Factor = addSkillTransitionFactor(player1PrevSkillVarId)
+    val skill2Factor = addSkillTransitionFactor(player2PrevSkillVarId)
+    addTennisGameToFactorGraph(skill1Factor.varId, skill2Factor.varId, result.player1Win)
+    latestSkillVarIds += result.player1 -> skill1Factor.varId
+    latestSkillVarIds += result.player2 -> skill2Factor.varId
 
-    //  addTennisGameToFactorGraph(skill1Factor.varId, skill2Factor.varId, result.player1Win)
-    addTennisGameToFactorGraph(player1PrevSkillVarId, player2PrevSkillVarId, result.player1Win)
+    // addTennisGameToFactorGraph(player1PrevSkillVarId, player2PrevSkillVarId, result.player1Win)
   }
 
   private def addSkillPriorFactor(playerSkill: TrueSkillRating): GaussianFactor = {

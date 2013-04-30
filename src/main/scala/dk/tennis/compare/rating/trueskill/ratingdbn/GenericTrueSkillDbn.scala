@@ -11,16 +11,13 @@ import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 
 case class GenericTrueSkillDbn(skillTransVariance: Double, performanceVariance: Double) extends TrueSkillDbn {
 
-  private val results = new ListBuffer[Result]()
+  private val tennisFactorGraphBuilder = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
 
   def addResult(result: Result) = {
-    results += result
+    tennisFactorGraphBuilder.addResult(result)
   }
 
   def calcRatings(): Map[String, TrueSkillRating] = {
-
-    val tennisFactorGraphBuilder = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
-    results.foreach(r => tennisFactorGraphBuilder.addResult(r))
 
     val factorGraph = tennisFactorGraphBuilder.getFactorGraph()
 

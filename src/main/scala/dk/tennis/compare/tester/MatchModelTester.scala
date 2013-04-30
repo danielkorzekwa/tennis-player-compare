@@ -14,10 +14,12 @@ import java.text.SimpleDateFormat
 case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
 
   private val matches = getMatches()
+  
+  private val llhStats = LlhStats()
 
   def run(matchModel: MatchModel, matchFilter: MatchComposite => Boolean): ModelSummary = {
 
-    val llhStats = LlhStats()
+  
     val predictionRecords: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
 
     for (m <- matches) {
@@ -51,6 +53,8 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
     ModelSummary(predictionRecords.toList, llhStats)
 
   }
+  
+  def getLlhStats():LlhStats = llhStats
 
   private def getMatches(): Seq[MatchComposite] = {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
