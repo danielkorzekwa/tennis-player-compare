@@ -7,6 +7,10 @@ import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 import scala.math._
 import dk.tennis.compare.rating.trueskill.model.Result
+import dk.tennis.compare.rating.trueskill.rating.TrueSkill
+import dk.tennisprob.TennisProbFormulaCalc
+import dk.tennis.compare.pointprob.GenericPointProbCalc
+import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 
 case class TrueSkillMatchModel extends MatchModel {
 
@@ -29,7 +33,13 @@ case class TrueSkillMatchModel extends MatchModel {
 
       val winProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
 
-      Some(winProb)
+      /**Enhance prob for 5 sets match.*/
+      if (m.tournament.numOfSet == 3) {
+        val pointProb = GenericPointProbCalc.calcPointProb(winProb, THREE_SET_MATCH)
+        val matchProb = TennisProbFormulaCalc.matchProb(pointProb, pointProb, FIVE_SET_MATCH)
+        Some(matchProb)
+      } else Some(winProb)
+
     } else None
 
     prob
@@ -44,4 +54,6 @@ case class TrueSkillMatchModel extends MatchModel {
 
     trueSkillModel.addResult(Result(playerAFacts.playerName, playerBFacts.playerName, playerAWinner))
   }
+
+  def getTrueSkillModel(): TrueSkill = trueSkillModel
 }

@@ -34,11 +34,7 @@ case class Glicko2MatchModel extends MatchModel {
     if (!ratingA.ratingOnServe.rating.isNaN() &&
       !ratingB.ratingOnServe.rating.isNaN() &&
       !ratingA.ratingOnReturn.rating.isNaN() &&
-      !ratingB.ratingOnReturn.rating.isNaN() &&
-      ratingA.ratingOnServe.deviation < 0.6 &&
-      ratingB.ratingOnServe.deviation < 0.6 &&
-      ratingA.ratingOnReturn.deviation < 0.6 &&
-      ratingB.ratingOnReturn.deviation < 0.6)
+      !ratingB.ratingOnReturn.rating.isNaN())
       Some(matchProbAGivenB) else None
   }
 

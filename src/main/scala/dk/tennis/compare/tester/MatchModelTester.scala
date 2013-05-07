@@ -14,12 +14,11 @@ import java.text.SimpleDateFormat
 case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
 
   private val matches = getMatches()
-  
+
   private val llhStats = LlhStats()
 
   def run(matchModel: MatchModel, matchFilter: MatchComposite => Boolean): ModelSummary = {
 
-  
     val predictionRecords: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
 
     for (m <- matches) {
@@ -53,14 +52,14 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
     ModelSummary(predictionRecords.toList, llhStats)
 
   }
-  
-  def getLlhStats():LlhStats = llhStats
+
+  def getLlhStats(): LlhStats = llhStats
 
   private def getMatches(): Seq[MatchComposite] = {
-    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv");
+    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(matchesFile);
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatches = matches.filter(m => m.tournament.surface == HARD && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
+    val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
     val rand = new Random()
     val shuffledMatches = filteredMatches.map { m =>
@@ -129,7 +128,7 @@ object MatchModelTester {
       count += 1
     }
 
-    override def toString = "LlhStats [llhTotal=%.3f, count=%s,avgLlh=%.3f]".format(llhTotal, count, llhTotal / count)
+    override def toString = "LlhStats [llhTotal=%.3f, count=%s,avgLlh=%.4f]".format(llhTotal, count, llhTotal / count)
   }
 
   implicit def bool2int(b: Boolean): Byte = if (b) 1 else 0

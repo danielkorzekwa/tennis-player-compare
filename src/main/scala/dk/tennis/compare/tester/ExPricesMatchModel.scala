@@ -13,7 +13,7 @@ case class ExPricesMatchModel(betfairMatchesFile: String) extends MatchModel {
   def matchProb(m: MatchComposite): Option[Double] = {
 
     val matchedBfMarkets = bfMarkets.filter(bfMarket => GenericMarketCompare.compare(m, bfMarket) > 0.4)
-    require(matchedBfMarkets.size <= 1, "ATP market is matched with multiple betfair markets: " + matchedBfMarkets)
+    require(matchedBfMarkets.size <= 1, "ATP market is matched with multiple betfair markets. Market: %s is matched with markets: %s".format(m,matchedBfMarkets))
 
     matchedBfMarkets match {
       case Nil => None
