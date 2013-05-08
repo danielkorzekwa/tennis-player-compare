@@ -11,16 +11,29 @@ import scala.math._
  */
 object GenericPointProbCalc extends PointProbCalc {
 
-  def calcPointProb(matchProb: Double, matchType: MatchTypeEnum): Double = {
-    var currProb = 0.3d
-    var matched = false
-    while (!matched && currProb < 0.7) {
-      val matchProbGivenPointProb = TennisProbFormulaCalc.matchProb(currProb, currProb, matchType)
-      matched = abs(matchProbGivenPointProb - matchProb) < 0.001
-      if (!matched) currProb += 0.0001
+  private val precision = 0.001
 
+  def calcPointProb(matchProb: Double, matchType: MatchTypeEnum): Double = {
+    var currPointProb = 0d
+    var prevError = 1d
+    var step = 0.1
+    var directionUp = true
+    var matched = false
+
+    while (!matched && currPointProb < 1) {
+      if (directionUp) currPointProb += step else currPointProb -= step
+
+      val matchProbGivenPointProb = TennisProbFormulaCalc.matchProb(currPointProb, currPointProb, matchType)
+      val error = abs(matchProbGivenPointProb - matchProb)
+      matched = error < precision
+
+      if (error > prevError) {
+        directionUp = !directionUp
+        step = step / 2
+      }
+      prevError = error
     }
 
-    if (matched) currProb else throw new IllegalArgumentException("Point probability not found")
+    if (matched) currPointProb else throw new IllegalArgumentException("Point probability not found")
   }
 }

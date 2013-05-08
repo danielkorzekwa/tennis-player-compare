@@ -16,6 +16,7 @@ import scala.collection.immutable.TreeMap
 import org.joda.time.DateTime
 import scala.math._
 import dk.atp.api.ATPMatchesLoader
+import dk.tennis.compare.matching.event.EventsMatcher
 
 object GenericMarketCompare extends MarketCompare {
 

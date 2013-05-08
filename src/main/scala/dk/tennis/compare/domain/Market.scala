@@ -38,6 +38,11 @@ object Market {
 }
 
 /**@param runnerMap[selectionId, selection]*/
-case class Market(eventId: Long, fullDescription: String, scheduledOff: Date, runnerMap: Map[Long, Selection])
+case class Market(eventId: Long, fullDescription: String, scheduledOff: Date, runnerMap: Map[Long, Selection]) {
+  val eventName = {
+    val split = fullDescription.split("/")
+    split(0).concat(split(1))
+  }
+}
 
 

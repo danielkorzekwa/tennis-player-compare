@@ -11,9 +11,9 @@ import scala.collection._
 import scala.collection.mutable.StringBuilder
 import java.text.SimpleDateFormat
 
-case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
+case class MatchModelTester(atpMarkets: Seq[MatchComposite]) {
 
-  private val matches = getMatches()
+  private val matches = shuffleMatches(atpMarkets)
 
   private val llhStats = LlhStats()
 
@@ -55,14 +55,10 @@ case class MatchModelTester(matchesFile: String, yearFrom: Int, yearTo: Int) {
 
   def getLlhStats(): LlhStats = llhStats
 
-  private def getMatches(): Seq[MatchComposite] = {
-    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(matchesFile);
-
-    val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
+  private def shuffleMatches(atpMatches: Seq[MatchComposite]): Seq[MatchComposite] = {
 
     val rand = new Random()
-    val shuffledMatches = filteredMatches.map { m =>
+    val shuffledMatches = atpMatches.map { m =>
       rand.nextBoolean match {
         case true => {
           val newMatchFacts = m.matchFacts.copy(playerAFacts = m.matchFacts.playerBFacts, playerBFacts = m.matchFacts.playerAFacts)
