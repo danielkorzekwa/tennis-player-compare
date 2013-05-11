@@ -156,7 +156,6 @@ class TennisLiveTrader {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(atpMatchesFile)
     val glickoLoader = CachedGlickoRatingsLoader(atpMatchesLoader, 60, 1500, 100, 9.607, 7)
     val matchCompare = new GlickoSoftTennisMatchCompare(glickoLoader)
-    matchCompare
 
     val marketsWithProb = markets.map { m =>
       val playerA = m.marketRunners.getRunners().get(0).getSelectionName()
@@ -184,7 +183,7 @@ class TennisLiveTrader {
       m.copy(marketPrices = Some(marketPricesObject), tradedVolume = Some(marketTradedVolume))
     }
     log.info("Matching with traded volume and prices... - done")
-    matchedMarkets
+
     val filteredMarkets = matchedMarkets.filter(m => m.marketPrices.get.getInPlayDelay() == 0)
     log.info("Filtering not inplay markets = " + matchedMarkets.size)
     filteredMarkets

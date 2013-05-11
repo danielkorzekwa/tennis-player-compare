@@ -30,13 +30,13 @@ case class Glicko2MatchModel extends MatchModel {
     val matchProbAGivenB = if (m.tournament.numOfSet == 2) TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, THREE_SET_MATCH)
     else TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, FIVE_SET_MATCH)
     /**Theta and beta are learned with logistic regression. Prediction variable = matchProbAGivenB, predicted variable = match outcome.*/
-    //   val matchProbAGivenBTuned = 1 / (1 + exp(-(-1.5502 + 3.1003 * matchProbAGivenB)))
+       val matchProbAGivenBTuned = 1 / (1 + exp(-4*(matchProbAGivenB-0.5)))
 
     if (!ratingA.ratingOnServe.rating.isNaN() &&
       !ratingB.ratingOnServe.rating.isNaN() &&
       !ratingA.ratingOnReturn.rating.isNaN() &&
       !ratingB.ratingOnReturn.rating.isNaN())
-      Some(matchProbAGivenB) else None
+      Some(matchProbAGivenBTuned) else None
   }
 
   def addMatchResult(m: MatchComposite) {

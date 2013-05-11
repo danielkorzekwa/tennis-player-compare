@@ -12,6 +12,10 @@ import dk.tennis.compare.domain.Market
 import scala.io.Source
 import dk.atp.api.CSVATPMatchesLoader
 import dk.tennis.compare.tester.model.ExPricesMatchModel
+import dk.tennis.compare.tester.model.TrueSkillExPriceModel
+import dk.tennis.compare.tester.model.TrueSkillMatchModel
+import dk.tennis.compare.tester.model.PointStatsMatchModel
+import dk.tennis.compare.tester.model.Glicko2MatchModel
 
 class MatchModelTesterTest {
 
@@ -26,13 +30,17 @@ class MatchModelTesterTest {
 
     val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
     val bfMarkets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
-    val model = ExPricesMatchModel(atpMatches, bfMarkets)
+    val exModel = ExPricesMatchModel(atpMatches, bfMarkets)
 
-    //    val model = Glicko2MatchModel()
+    val glicko2Model = Glicko2MatchModel()
     //    val model = Glicko2HardMatchModel()
-    //val model = TrueSkillMatchModel()
+    val trueSkillModel = TrueSkillMatchModel()
     //  val model = TrueSkillDBNMatchModel()
     // val model = TrueSkillGlicko2MatchModel()
+
+    val trueSkillExModel = TrueSkillExPriceModel(trueSkillModel, exModel)
+
+    val pointStatModel = PointStatsMatchModel()
 
     val matchFilter = (m: MatchComposite) => { /** log.info(m.toString); log.info("Log likelihood stats = " + tester.getLlhStats()); */ new DateTime(m.tournament.tournamentTime.getTime()).getYear() >= 2010 }
     //    val matchFilter = (m: MatchComposite) => {
@@ -40,13 +48,13 @@ class MatchModelTesterTest {
     //      /**  m.matchFacts.containsPlayer("Roger Federer") && */m.matchFacts.containsPlayer("Novak Djokovic")
     //    }
 
-    val modelSummary = tester.run(model, matchFilter)
+    val modelSummary = tester.run(trueSkillExModel, matchFilter)
 
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
     // modelSummary.predictionRecords.foreach(println(_))
-    log.info(modelSummary.predictedActualAvgCorrReport)
+  //  log.info(modelSummary.predictedActualAvgCorrReport)
 
     // println(model.getTrueSkillModel.getRatings.toList.sortWith((a, b) => a._2.mean > b._2.mean).take(10).mkString("\n"))
 

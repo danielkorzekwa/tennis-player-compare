@@ -7,7 +7,7 @@
 #5           0.06 0.06099778        1353
 #6           0.07 0.07106265        1261
 
-data <- read.csv("exprices.csv",header=T)
+data <- read.csv("point_stats_logit.csv",header=T)
 data$predicted_prob <- (data$predicted_prob +1)*0.01
 data$true_prob <- (data$true_prob +1)*0.01
 #data <- subset(data,predicted_prob>0.2 & predicted_prob<0.8)

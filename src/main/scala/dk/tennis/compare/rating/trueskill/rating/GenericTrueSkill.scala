@@ -24,20 +24,21 @@ case class GenericTrueSkill(skillTransVariance: Double, performanceVariance: Dou
     val player1Skill = skillsMap.getOrElse(result.player1, defaultSkill)
     val player2Skill = skillsMap.getOrElse(result.player2, defaultSkill)
 
-    val (newPlayer1Skill, newPlayer2Skill) = computeMarginals(player1Skill, player2Skill, result.player1Win)
+    val (newPlayer1Skill, newPlayer2Skill) = computeMarginals(player1Skill, player2Skill, result)
     skillsMap += result.player1 -> newPlayer1Skill
     skillsMap += result.player2 -> newPlayer2Skill
   }
 
   def getRatings(): immutable.Map[String, TrueSkillRating] = skillsMap.toMap
 
-  private def computeMarginals(player1Skill: TrueSkillRating, player2Skill: TrueSkillRating, player1Win: Boolean): Tuple2[TrueSkillRating, TrueSkillRating] = {
+  private def computeMarginals(player1Skill: TrueSkillRating, player2Skill: TrueSkillRating, result:Result): Tuple2[TrueSkillRating, TrueSkillRating] = {
 
-    val factorGraph = SingleGameFactorGraph(player1Skill, player2Skill, skillTransVariance, performanceVariance)
+    val factorGraph = SingleGameFactorGraph(player1Skill, player2Skill, skillTransVariance, 
+        result.player1PerfVar.getOrElse(performanceVariance),result.player2PerfVar.getOrElse(performanceVariance))
 
     val ep = GenericEP(factorGraph.createTennisFactorGraph())
 
-    if (player1Win) ep.setEvidence(factorGraph.outcomeVarId, 0)
+    if (result.player1Win) ep.setEvidence(factorGraph.outcomeVarId, 0)
     else ep.setEvidence(factorGraph.outcomeVarId, 1)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
