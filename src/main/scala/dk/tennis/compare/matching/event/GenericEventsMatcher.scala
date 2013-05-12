@@ -1,7 +1,7 @@
 package dk.tennis.compare.matching.event
 
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.domain.Market
+import dk.tennis.compare.domain.BfMarket
 import org.joda.time.DateTime
 import dk.tennis.compare.simulation.game.TennisResult
 
@@ -11,7 +11,7 @@ import dk.tennis.compare.simulation.game.TennisResult
  * @author Daniel Korzekwa
  *
  */
-case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[Market]) extends EventsMatcher {
+case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[BfMarket]) extends EventsMatcher {
 
   /**Map[atpEventKey+bfEventKey,matchingProb]*/
   private val matchingProbs: Map[String, Double] = calcMatchingProbs()
@@ -54,7 +54,7 @@ case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: S
   /**
    * Returns the probability of atp and betfair markets coming from the same event.
    */
-  private def calcMatchingProb(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[Market]): Double = {
+  private def calcMatchingProb(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[BfMarket]): Double = {
 
     val atpPlayerPairs = atpMarkets.map(m => List(m.player1.toLowerCase, m.player2.toLowerCase).sorted.mkString(":"))
     val bfPlayerPairs = betfairMarkets.map(m => m.runnerMap.values.map(r => r.name.toLowerCase).toList.sorted.mkString(":"))

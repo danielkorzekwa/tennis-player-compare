@@ -13,8 +13,8 @@ import org.joda.time.DateTime
 import scala.math._
 import dk.atp.api.ATPMatchesLoader
 import dk.tennis.compare.matching.GenericMarketCompare
-import dk.tennis.compare.domain.Market
-import dk.tennis.compare.domain.MarketProb
+import dk.tennis.compare.domain.BfMarket
+import dk.tennis.compare.old.bulkcompare.domain.MarketProb
 
 /**
  * Calculates tennis market probabilities for a list of markets in a batch process.
@@ -39,7 +39,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
   def matchProb(marketDataFileIn: String, marketProbFileOut: String, progress: (Int) => Unit): Unit = {
     val marketDataSource = Source.fromFile(marketDataFileIn)
 
-    val markets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
+    val markets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
 
     val marketsSize = markets.size
     val marketProbabilities = for ((market, index) <- markets.zipWithIndex) yield {
@@ -57,7 +57,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
     writeLines(marketProbFile, header :: marketProbsData)
   }
 
-  private def toMarketProb(m: Market, tournament: Option[Tournament]): Option[MarketProb] = {
+  private def toMarketProb(m: BfMarket, tournament: Option[Tournament]): Option[MarketProb] = {
     val marketProb: Option[MarketProb] = try {
       val runners = m.runnerMap.keys.toList
 
@@ -73,7 +73,7 @@ class ATPTennisMatchBulkCompare(tennisMatchCompare: TennisPlayerCompare, atpMatc
   }
 
   /**Look for tournament matching given market.*/
-  private def lookup(market: Market): Option[Tournament] = {
+  private def lookup(market: BfMarket): Option[Tournament] = {
     val year = new DateTime(market.scheduledOff).getYear()
 
     val matches = atpMatchLoader.loadMatches(year)

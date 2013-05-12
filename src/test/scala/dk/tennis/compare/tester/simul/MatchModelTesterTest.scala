@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import dk.atp.api.domain.MatchComposite
 import org.joda.time.DateTime
 import dk.atp.api.domain.SurfaceEnum._
-import dk.tennis.compare.domain.Market
+import dk.tennis.compare.domain.BfMarket
 import scala.io.Source
 import dk.atp.api.CSVATPMatchesLoader
 import dk.tennis.compare.tester.model.ExPricesMatchModel
@@ -30,7 +30,7 @@ class MatchModelTesterTest {
   @Test def test {
 
     val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
-    val bfMarkets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
+    val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
     val exModel = ExPricesMatchModel(atpMatches, bfMarkets)
 
     val glicko2Model = Glicko2MatchModel()

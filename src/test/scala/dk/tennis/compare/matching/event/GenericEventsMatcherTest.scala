@@ -6,7 +6,7 @@ import dk.atp.api.domain.MatchComposite
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum._
 import scala.io.Source
-import dk.tennis.compare.domain.Market
+import dk.tennis.compare.domain.BfMarket
 import org.joda.time.DateTime
 import dk.tennis.compare.simulation.game.TennisResult
 
@@ -15,7 +15,7 @@ class GenericEventsMatcherTest {
   val atpMarkets = getAtpMatches("./src/test/resources/atp_historical_data/match_data_2006_2011.csv", 2006, 2011)
 
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
-  val bfMarkets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
+  val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
 
   val eventsMatcher = GenericEventsMatcher(atpMarkets, bfMarkets)
 

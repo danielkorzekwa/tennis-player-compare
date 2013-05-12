@@ -1,14 +1,15 @@
-package dk.tennis.compare.domain
+package dk.tennis.compare.old.bulkcompare.domain
 
 import java.text.SimpleDateFormat
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.atp.api.domain._
-import SurfaceEnum._
+import dk.atp.api.domain.SurfaceEnum._
 import java.text.DecimalFormatSymbols
 import java.util.Locale
+import dk.tennis.compare.domain.BfMarket
 
 /**@param runnerProbs[selectionId, probability]*/
-case class MarketProb(market: Market, runnerProbs: Map[Long, Double], surface: SurfaceEnum, matchType: MatchTypeEnum) {
+case class MarketProb(market: BfMarket, runnerProbs: Map[Long, Double], surface: SurfaceEnum, matchType: MatchTypeEnum) {
 
   private val DATA_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
 

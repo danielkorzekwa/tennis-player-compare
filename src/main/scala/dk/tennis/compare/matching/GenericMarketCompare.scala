@@ -1,7 +1,7 @@
 package dk.tennis.compare.matching
 
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.domain.Market
+import dk.tennis.compare.domain.BfMarket
 import scala.io.Source
 import org.apache.commons.io.FileUtils._
 import java.io.File
@@ -20,7 +20,7 @@ import dk.tennis.compare.matching.event.EventsMatcher
 
 object GenericMarketCompare extends MarketCompare {
 
-  def compare(atpMarket: MatchComposite, betfairMarket: Market): Double = {
+  def compare(atpMarket: MatchComposite, betfairMarket: BfMarket): Double = {
 
     def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
 

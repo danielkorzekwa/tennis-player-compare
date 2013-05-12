@@ -1,7 +1,7 @@
 package dk.tennis.compare.tester.model
 
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.domain.Market
+import dk.tennis.compare.domain.BfMarket
 import dk.tennis.compare.matching.GenericMarketCompare
 import dk.tennis.compare.matching.GenericMarketCompare
 import dk.tennis.compare.matching.event.GenericEventsMatcher
@@ -12,7 +12,7 @@ import dk.tennis.compare.tester.GameModel
 import dk.tennis.compare.simulation.game.GameResult
 import dk.tennis.compare.simulation.game.TennisResult
 
-case class ExPricesMatchModel(atpMarkets: Seq[TennisResult], bfMarkets: Seq[Market]) extends GameModel {
+case class ExPricesMatchModel(atpMarkets: Seq[TennisResult], bfMarkets: Seq[BfMarket]) extends GameModel {
 
   private val log = LoggerFactory.getLogger(getClass)
   val eventsMatcher = GenericEventsMatcher(atpMarkets, bfMarkets)
