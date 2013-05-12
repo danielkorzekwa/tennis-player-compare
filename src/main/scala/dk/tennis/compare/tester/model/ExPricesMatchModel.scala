@@ -5,21 +5,23 @@ import dk.tennis.compare.domain.Market
 import dk.tennis.compare.matching.GenericMarketCompare
 import dk.tennis.compare.matching.GenericMarketCompare
 import dk.tennis.compare.matching.event.GenericEventsMatcher
-import dk.tennis.compare.tester.MatchModel
 import org.joda.time.DateTime
 import dk.tennis.compare.matching.playerspair.GenericPlayersPairMatcher
 import org.slf4j.LoggerFactory
+import dk.tennis.compare.tester.GameModel
+import dk.tennis.compare.simulation.game.GameResult
+import dk.tennis.compare.simulation.game.TennisResult
 
-case class ExPricesMatchModel(atpMarkets: Seq[MatchComposite], bfMarkets: Seq[Market]) extends MatchModel {
+case class ExPricesMatchModel(atpMarkets: Seq[TennisResult], bfMarkets: Seq[Market]) extends GameModel {
 
   private val log = LoggerFactory.getLogger(getClass)
   val eventsMatcher = GenericEventsMatcher(atpMarkets, bfMarkets)
 
-  def matchProb(m: MatchComposite): Option[Double] = {
+   def gameProb(r: GameResult):Option[Double] = {
 
-    val playersPairAtp = Tuple2(m.matchFacts.playerAFacts.playerName, m.matchFacts.playerBFacts.playerName)
-    val atpEventName = m.tournament.tournamentName
-    val atpEventYear = new DateTime(m.tournament.tournamentTime).getYear
+    val playersPairAtp = Tuple2(r.player1,r.player2)
+    val atpEventName = r.eventName
+    val atpEventYear = new DateTime(r.timestamp.get).getYear
 
     val matchedBfMarkets = bfMarkets.filter { bfMarket =>
 
@@ -28,7 +30,7 @@ case class ExPricesMatchModel(atpMarkets: Seq[MatchComposite], bfMarkets: Seq[Ma
       val bfEventYear = new DateTime(bfMarket.scheduledOff).getYear()
 
       val matched = atpEventYear == bfEventYear &&
-        eventsMatcher.matchEvents(atpEventName, bfMarket.eventName, atpEventYear) > 0.5 &&
+        eventsMatcher.matchEvents(atpEventName.get, bfMarket.eventName, atpEventYear) > 0.5 &&
         GenericPlayersPairMatcher.matchPlayersPair(playersPairAtp, playersPairBf)
 
       matched
@@ -37,16 +39,16 @@ case class ExPricesMatchModel(atpMarkets: Seq[MatchComposite], bfMarkets: Seq[Ma
     matchedBfMarkets match {
 
       case List(bfMarket) => {
-        val price = bfMarket.runnerMap.values.find(r => r.name.toLowerCase() == m.matchFacts.playerAFacts.playerName.toLowerCase()).get.price
+        val price = bfMarket.runnerMap.values.find(runner => runner.name.toLowerCase() == r.player1.toLowerCase()).get.price
         Some(1d / price)
       }
       case Nil => None
       case _ => {
-        log.warn("ATP market is matched with multiple betfair markets. Market: %s is matched with markets: %s".format(m, matchedBfMarkets))
+        log.warn("ATP market is matched with multiple betfair markets. Market: %s is matched with markets: %s".format(r, matchedBfMarkets))
         None
       }
     }
 
   }
-  def addMatchResult(matchComposite: MatchComposite) {}
+  def addGameResult(r:GameResult) {}
 }

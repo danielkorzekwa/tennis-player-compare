@@ -3,6 +3,7 @@ package dk.tennis.compare.matching.event
 import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.domain.Market
 import org.joda.time.DateTime
+import dk.tennis.compare.simulation.game.TennisResult
 
 /**
  * Default implementation for the EventsMatcher.
@@ -10,7 +11,7 @@ import org.joda.time.DateTime
  * @author Daniel Korzekwa
  *
  */
-case class GenericEventsMatcher(atpMarkets: Seq[MatchComposite], betfairMarkets: Seq[Market]) extends EventsMatcher {
+case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[Market]) extends EventsMatcher {
 
   /**Map[atpEventKey+bfEventKey,matchingProb]*/
   private val matchingProbs: Map[String, Double] = calcMatchingProbs()
@@ -30,7 +31,7 @@ case class GenericEventsMatcher(atpMarkets: Seq[MatchComposite], betfairMarkets:
   private def calcMatchingProbs(): Map[String, Double] = {
 
     /**Map[atpEventKey,event markets]*/
-    val atpMarketsByEvent = atpMarkets.groupBy(m => getEventKey(m.tournament.tournamentName, new DateTime(m.tournament.tournamentTime).getYear))
+    val atpMarketsByEvent = atpMarkets.groupBy(m => getEventKey(m.eventName.get, new DateTime(m.timestamp.get).getYear))
 
     /**Map[bfEventKey,event markets]*/
     val bfMarketsByEvent = betfairMarkets.groupBy(m => getEventKey(m.eventName, new DateTime(m.scheduledOff).getYear))
@@ -53,9 +54,9 @@ case class GenericEventsMatcher(atpMarkets: Seq[MatchComposite], betfairMarkets:
   /**
    * Returns the probability of atp and betfair markets coming from the same event.
    */
-  private def calcMatchingProb(atpMarkets: Seq[MatchComposite], betfairMarkets: Seq[Market]): Double = {
+  private def calcMatchingProb(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[Market]): Double = {
 
-    val atpPlayerPairs = atpMarkets.map(m => List(m.matchFacts.playerAFacts.playerName.toLowerCase, m.matchFacts.playerBFacts.playerName.toLowerCase()).sorted.mkString(":"))
+    val atpPlayerPairs = atpMarkets.map(m => List(m.player1.toLowerCase, m.player2.toLowerCase).sorted.mkString(":"))
     val bfPlayerPairs = betfairMarkets.map(m => m.runnerMap.values.map(r => r.name.toLowerCase).toList.sorted.mkString(":"))
     val pairIntersection = atpPlayerPairs.intersect(bfPlayerPairs)
     val matchedPairsRatio = pairIntersection.size.toDouble / atpPlayerPairs.size

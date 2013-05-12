@@ -8,10 +8,11 @@ import dk.atp.api.domain.SurfaceEnum._
 import scala.io.Source
 import dk.tennis.compare.domain.Market
 import org.joda.time.DateTime
+import dk.tennis.compare.simulation.game.TennisResult
 
 class GenericEventsMatcherTest {
 
-  val atpMarkets = loadAtpMatches()
+  val atpMarkets = getAtpMatches("./src/test/resources/atp_historical_data/match_data_2006_2011.csv", 2006, 2011)
 
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
   val bfMarkets = Market.fromCSV(marketDataSource.getLines().drop(1).toList)
@@ -34,12 +35,24 @@ class GenericEventsMatcherTest {
     assertEquals(21, matchingProbs.size, 0.0001)
   }
 
-  private def loadAtpMatches(): Seq[MatchComposite] = {
-    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv")
+  private def getAtpMatches(matchesFile: String, yearFrom: Int, yearTo: Int): Seq[TennisResult] = {
+    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(matchesFile)
 
-    val matches = (2006 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
+    val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-    filteredMatches
+    val gameResults = filteredMatches.map(m =>
+      new TennisResult(
+        eventName = Some(m.tournament.tournamentName),
+        player1 = m.matchFacts.playerAFacts.playerName,
+        player2 = m.matchFacts.playerBFacts.playerName,
+        player1Win = Some(m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)),
+        trueWinProb = None,
+        timestamp = Some(m.tournament.tournamentTime.getTime()),
+        numOfSets = m.tournament.numOfSet,
+        player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
+        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct)))
+
+    gameResults
   }
 }

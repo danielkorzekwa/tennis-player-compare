@@ -4,6 +4,8 @@ import org.junit._
 import Assert._
 import scala.math._
 import dk.tennis.compare.rating.trueskill.model.Result
+import dk.tennis.compare.rating.trueskill.util.TrueSkillUtil._
+import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 
 class GenericTrueSkillTest {
 
@@ -11,18 +13,18 @@ class GenericTrueSkillTest {
   private val performanceVariance = pow(25d / 16, 2)
   private val trueSkillModel = GenericTrueSkill(skillTransVariance, performanceVariance)
 
-  @Test def test {
+  @Test def test_player1_cares_less_about_point_2 {
 
     val result1 = Result("player1", "player2", true)
     trueSkillModel.addResult(result1)
 
-    println(trueSkillModel.getRatings()("player1"))
-    println(trueSkillModel.getRatings()("player2"))
+    assertRating(TrueSkillRating(0.305, 0.9133), trueSkillModel.getRatings()("player1"), 0.001)
+    assertRating(TrueSkillRating(-0.305, 0.9133), trueSkillModel.getRatings()("player2"), 0.001)
 
-    val result2 = Result("player1", "player2", true, Some(pow(25d / 160, 2)), Some(pow(25d / 16, 2)))
+    val result2 = Result("player1", "player2", true, Some(pow(250d / 16, 2)), Some(pow(25d / 16, 2)))
     trueSkillModel.addResult(result2)
 
-    println(trueSkillModel.getRatings()("player1"))
-    println(trueSkillModel.getRatings()("player2"))
+    assertRating(TrueSkillRating(0.351, 0.918), trueSkillModel.getRatings()("player1"), 0.001)
+    assertRating(TrueSkillRating(-0.351, 0.918), trueSkillModel.getRatings()("player2"), 0.001)
   }
 }

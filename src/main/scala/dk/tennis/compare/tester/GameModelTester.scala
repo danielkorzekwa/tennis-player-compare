@@ -5,38 +5,34 @@ import dk.atp.api.domain.SurfaceEnum._
 import scala.util.Random
 import dk.atp.api.domain.MatchComposite
 import scala.math._
-import MatchModelTester._
+import GameModelTester._
 import java.util.Date
 import scala.collection._
 import scala.collection.mutable.StringBuilder
 import java.text.SimpleDateFormat
+import dk.tennis.compare.simulation.game.GameResult
 
-case class MatchModelTester(atpMarkets: Seq[MatchComposite]) {
-
-  private val matches = shuffleMatches(atpMarkets)
+case class GameModelTester(results: Seq[GameResult]) {
 
   private val llhStats = LlhStats()
 
-  def run(matchModel: MatchModel, matchFilter: MatchComposite => Boolean): ModelSummary = {
+  def run(gameModel: GameModel, resultFilter: GameResult => Boolean): ModelSummary = {
 
     val predictionRecords: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
 
-    for (m <- matches) {
+    for (r <- results) {
 
-      if (matchFilter(m)) {
-        val playerAFacts = m.matchFacts.playerAFacts
-        val playerBFacts = m.matchFacts.playerBFacts
-        val matchTime = m.tournament.tournamentTime.getTime
+      if (resultFilter(r)) {
 
-        val playerAWinnerProb = matchModel.matchProb(m)
-        val playerAWinner: Byte = m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)
+        val playerAWinnerProb = gameModel.gameProb(r)
+        val playerAWinner: Byte = r.player1Win.get
 
         playerAWinnerProb.foreach { playerAWinnerProb =>
           llhStats.add(playerAWinner * log(playerAWinnerProb) + (1 - playerAWinner) * log(1 - playerAWinnerProb))
 
-          val predictionRecord = PredictionRecord(m.tournament.tournamentName,
-            new Date(matchTime), playerAFacts.playerName,
-            playerBFacts.playerName,
+          val predictionRecord = PredictionRecord(r.eventName.get,
+            new Date(r.timestamp.get), r.player1,
+            r.player2,
             playerAWinnerProb,
             playerAWinner)
 
@@ -46,7 +42,7 @@ case class MatchModelTester(atpMarkets: Seq[MatchComposite]) {
 
       }
 
-      matchModel.addMatchResult(m)
+      gameModel.addGameResult(r)
     }
 
     ModelSummary(predictionRecords.toList, llhStats)
@@ -55,25 +51,9 @@ case class MatchModelTester(atpMarkets: Seq[MatchComposite]) {
 
   def getLlhStats(): LlhStats = llhStats
 
-  private def shuffleMatches(atpMatches: Seq[MatchComposite]): Seq[MatchComposite] = {
-
-    val rand = new Random()
-    val shuffledMatches = atpMatches.map { m =>
-      rand.nextBoolean match {
-        case true => {
-          val newMatchFacts = m.matchFacts.copy(playerAFacts = m.matchFacts.playerBFacts, playerBFacts = m.matchFacts.playerAFacts)
-          m.copy(matchFacts = newMatchFacts)
-        }
-        case false => m
-      }
-    }
-
-    shuffledMatches
-  }
-
 }
 
-object MatchModelTester {
+object GameModelTester {
 
   case class PredictionRecord(tournament: String, matchTime: Date, playerA: String, playerB: String,
     playerAWinnerProb: Double,
