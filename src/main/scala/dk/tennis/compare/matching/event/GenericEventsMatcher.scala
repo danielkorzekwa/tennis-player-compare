@@ -3,7 +3,7 @@ package dk.tennis.compare.matching.event
 import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.domain.BfMarket
 import org.joda.time.DateTime
-import dk.tennis.compare.simulation.game.TennisResult
+import dk.tennis.compare.domain.TennisResult
 
 /**
  * Default implementation for the EventsMatcher.

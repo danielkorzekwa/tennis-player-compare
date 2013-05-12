@@ -1,4 +1,4 @@
-package dk.tennis.compare.simulation.game
+package dk.tennis.compare.domain
 
 /**
  * @param points Single point is true if player1 wins, otherwise it's false.

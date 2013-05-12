@@ -1,7 +1,7 @@
 package dk.tennis.compare.tester
 
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.simulation.game.GameResult
+import dk.tennis.compare.domain.GameResult
 
 trait GameModel {
 

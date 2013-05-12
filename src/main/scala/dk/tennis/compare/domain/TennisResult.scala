@@ -1,4 +1,6 @@
-package dk.tennis.compare.simulation.game
+package dk.tennis.compare.domain
+
+import dk.tennis.compare.domain.GameResult
 
 case class TennisResult(
 

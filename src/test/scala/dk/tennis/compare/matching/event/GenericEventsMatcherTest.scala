@@ -8,7 +8,7 @@ import dk.atp.api.domain.SurfaceEnum._
 import scala.io.Source
 import dk.tennis.compare.domain.BfMarket
 import org.joda.time.DateTime
-import dk.tennis.compare.simulation.game.TennisResult
+import dk.tennis.compare.domain.TennisResult
 
 class GenericEventsMatcherTest {
 

@@ -14,9 +14,9 @@ import dk.tennis.compare.tester.model.TrueSkillExPriceModel
 import dk.tennis.compare.tester.model.TrueSkillMatchModel
 import dk.tennis.compare.tester.model.PointStatsMatchModel
 import dk.tennis.compare.tester.model.Glicko2MatchModel
-import dk.tennis.compare.simulation.game.TennisResult
+import dk.tennis.compare.domain.GameResult
+import dk.tennis.compare.domain.TennisResult
 import dk.tennis.compare.tester.GameModelTester
-import dk.tennis.compare.simulation.game.GameResult
 
 class MatchModelTesterTest {
 
@@ -54,14 +54,7 @@ class MatchModelTesterTest {
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
-    // modelSummary.predictionRecords.foreach(println(_))
     //  log.info(modelSummary.predictedActualAvgCorrReport)
-
-    // println(model.getTrueSkillModel.getRatings.toList.sortWith((a, b) => a._2.mean > b._2.mean).take(10).mkString("\n"))
-
-    // import scala.math._
-    //  println(GenericTrueSkillMatchProb(pow(25d / 300, 2), pow(25d / 16, 2)).matchProb(TrueSkillRating(4.815584542809833, 0.31059598899951835), TrueSkillRating(4.445835178664356, 0.2986223987719031)))
-    //  println(GenericTrueSkillMatchProb(pow(25d / 300, 2), pow(25d / 16, 2)).matchProb(TrueSkillRating(3.432843804299895, 0.3325118664743764), TrueSkillRating(2.4440549265896365, 0.28951337456281023)))
   }
 
   private def getAtpMatches(matchesFile: String, yearFrom: Int, yearTo: Int): Seq[TennisResult] = {
@@ -71,7 +64,7 @@ class MatchModelTesterTest {
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
     val gameResults = filteredMatches.map(m =>
-     new TennisResult(
+      new TennisResult(
         eventName = Some(m.tournament.tournamentName),
         player1 = m.matchFacts.playerAFacts.playerName,
         player2 = m.matchFacts.playerBFacts.playerName,

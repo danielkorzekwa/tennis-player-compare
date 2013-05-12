@@ -10,7 +10,7 @@ import java.util.Date
 import scala.collection._
 import scala.collection.mutable.StringBuilder
 import java.text.SimpleDateFormat
-import dk.tennis.compare.simulation.game.GameResult
+import dk.tennis.compare.domain.GameResult
 
 case class GameModelTester(results: Seq[GameResult]) {
 

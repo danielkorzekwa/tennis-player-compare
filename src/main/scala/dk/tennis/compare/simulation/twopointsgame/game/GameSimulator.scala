@@ -1,6 +1,7 @@
-package dk.tennis.compare.simulation.game
+package dk.tennis.compare.simulation.twopointsgame.game
 
-import dk.tennis.compare.simulation.player.Player
+import dk.tennis.compare.simulation.twopointsgame.player.Player
+import dk.tennis.compare.domain.GameResult
 
 trait MatchSimulator {
 

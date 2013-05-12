@@ -5,9 +5,8 @@ import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import scala.math._
 import dk.tennis.compare.tester.GameModel
-import dk.tennis.compare.simulation.game.GameResult
-import dk.tennis.compare.simulation.game.TennisResult
-import dk.tennis.compare.simulation.game.TennisResult
+import dk.tennis.compare.domain.GameResult
+import dk.tennis.compare.domain.TennisResult
 
 /**
  * Uses point stats from tennis match m to predict the outcome for the same match m.

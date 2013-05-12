@@ -1,4 +1,4 @@
-package dk.tennis.compare.simulation.game
+package dk.tennis.compare.domain
 
 class TwoPointsGameResult(
   eventName: Option[String] = None,

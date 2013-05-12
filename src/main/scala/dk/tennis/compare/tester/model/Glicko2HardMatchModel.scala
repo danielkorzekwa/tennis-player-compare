@@ -7,7 +7,7 @@ import scala.math._
 import java.util._
 import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.tester.GameModel
-import dk.tennis.compare.simulation.game.GameResult
+import dk.tennis.compare.domain.GameResult
 
 case class Glicko2HardMatchModel extends GameModel {
 

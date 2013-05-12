@@ -11,10 +11,10 @@ import dk.tennis.compare.rating.trueskill.rating.TrueSkill
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennis.compare.pointprob.GenericPointProbCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
-import dk.tennis.compare.simulation.game.GameResult
-import dk.tennis.compare.tester.GameModel
-import dk.tennis.compare.simulation.game.TennisResult
 import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
+import dk.tennis.compare.domain.GameResult
+import dk.tennis.compare.tester.GameModel
+import dk.tennis.compare.domain.TennisResult
 
 case class TrueSkillMatchModel extends GameModel {
 
