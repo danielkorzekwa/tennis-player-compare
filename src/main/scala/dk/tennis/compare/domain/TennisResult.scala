@@ -1,7 +1,5 @@
 package dk.tennis.compare.domain
 
-import dk.tennis.compare.domain.GameResult
-
 case class TennisResult(
 
   override val eventName: Option[String] = None,

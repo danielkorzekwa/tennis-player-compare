@@ -32,7 +32,7 @@ case class TrueSkillMatchModel extends GameModel {
 
     val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val winProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
+      val winProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance,performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
 
       /**Enhance prob for 5 sets match.*/
       if (r.asInstanceOf[TennisResult].numOfSets == 3) {

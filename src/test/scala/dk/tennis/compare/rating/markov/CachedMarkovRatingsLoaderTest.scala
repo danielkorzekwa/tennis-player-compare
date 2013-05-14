@@ -1,12 +1,13 @@
 package dk.tennis.compare.rating.markov
 
-import org.junit._
-import Assert._
-import dk.atp.api.CSVATPMatchesLoader
 import org.joda.time.DateTime
-import dk.atp.api.domain.SurfaceEnum._
-import dk.tennis.compare.rating.markov.CachedMarkovRatingsLoader;
-import dk.tennis.compare.rating.markov.GenericMarkovRating;
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+import dk.atp.api.CSVATPMatchesLoader
+import dk.atp.api.domain.SurfaceEnum.GRASS
+import dk.atp.api.domain.SurfaceEnum.HARD
 
 class CachedMarkovRatingsLoaderTest {
 

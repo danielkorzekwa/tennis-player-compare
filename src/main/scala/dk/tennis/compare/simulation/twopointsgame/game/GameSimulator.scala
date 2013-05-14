@@ -12,17 +12,13 @@ import dk.tennis.compare.domain.TwoPointsGameResult
 trait GameSimulator {
 
   /**
-   * @param player1
-   * @param player2
-   * @param perfVariance Function that returns player performance variance given the current game state
-   */
-  def simulateGame(player1: Player, player2: Player, perfVariance: (Game) => Double): TwoPointsGameResult
-
-  /**
    * @param players
    * @param yearFrom
    * @param yearTo
-   * @param perfVariance  Function that returns player performance variance given the current game state
+   * @param gamesPerYear
+   * @param perfVariance This function returns the performance variance given the current state of the game for both players.
+   * Tuple2[player1 performance variance, player2 performance variance]
    */
-  def simulateGames(players: Seq[Player], yearFrom: Int, yearTo: Int, gamesPerYear: Int, perfVariance: (Game) => Double): Seq[TwoPointsGameResult]
+  def simulateGames(players: IndexedSeq[Player], yearFrom: Int, yearTo: Int, gamesPerYear: Int,
+    perfVariance: (TwoPointsGame) => Tuple2[Double, Double]): Seq[TwoPointsGameResult]
 }

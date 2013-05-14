@@ -10,10 +10,10 @@ import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 
-case class GenericTrueSkillMatchProb(skillTransVariance: Double, performanceVariance: Double) extends TrueSkillMatchProb {
+case class GenericTrueSkillMatchProb(skillTransVariance: Double, player1PerfVariance: Double, player2PerfVariance: Double) extends TrueSkillMatchProb {
 
   def matchProb(player1Skill: TrueSkillRating, player2Skill: TrueSkillRating): Double = {
-    val factorGraph = SingleGameFactorGraph(player1Skill, player2Skill, skillTransVariance, performanceVariance,performanceVariance)
+    val factorGraph = SingleGameFactorGraph(player1Skill, player2Skill, skillTransVariance, player1PerfVariance,player2PerfVariance)
     val ep = GenericEP(factorGraph.createTennisFactorGraph)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)

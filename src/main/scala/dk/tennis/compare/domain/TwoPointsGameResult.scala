@@ -7,6 +7,7 @@ case class TwoPointsGameResult(
   override val player1Win: Option[Boolean] = None,
   override val trueWinProb: Option[Double] = None,
   override val timestamp: Option[Long] = None,
+  player1ExpectedPointProb: Double,
   points: Seq[Boolean])
 
   extends GameResult(

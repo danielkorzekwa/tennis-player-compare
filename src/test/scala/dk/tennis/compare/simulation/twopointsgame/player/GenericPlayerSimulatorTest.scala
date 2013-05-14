@@ -6,9 +6,9 @@ import Assert._
 class GenericPlayerSimulatorTest {
 
   @Test def test {
-    val players = GenericPlayerSimulator.simulate(100000, 2, 4)
+    val players = GenericPlayerSimulator(Some(1)).simulate(1000, 2, 4)
 
-    assertEquals(100000, players.size)
-    assertEquals(2, players.map(_.skillMean).sum / players.size, 0.1)
+    assertEquals(1000, players.size)
+    assertEquals(1.9965, players.map(_.skillMean).sum / players.size, 0.0001)
   }
 }
