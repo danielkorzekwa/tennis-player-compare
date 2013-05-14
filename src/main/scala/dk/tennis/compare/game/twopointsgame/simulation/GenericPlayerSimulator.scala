@@ -1,4 +1,4 @@
-package dk.tennis.compare.simulation.twopointsgame.player
+package dk.tennis.compare.game.twopointsgame.simulation
 
 import org.apache.commons.math3.distribution.NormalDistribution
 import scala.math._

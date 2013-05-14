@@ -1,4 +1,4 @@
-package dk.tennis.compare.simulation.twopointsgame.player
+package dk.tennis.compare.game.twopointsgame.simulation
 
 trait PlayerSimulator {
 

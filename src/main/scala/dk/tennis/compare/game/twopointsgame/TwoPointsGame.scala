@@ -1,8 +1,5 @@
-package dk.tennis.compare.simulation.twopointsgame.game
-
-import dk.tennis.compare.simulation.twopointsgame.player.Player
+package dk.tennis.compare.game.twopointsgame
 import scala.util.Random
-import scala.annotation.tailrec
 
 /**
  * Two points game. Who wins two points first, is the winner.

@@ -1,7 +1,7 @@
-package dk.tennis.compare.simulation.twopointsgame.player
+package dk.tennis.compare.game.twopointsgame.simulation
 
 import org.junit._
-import Assert._
+import org.junit.Assert._
 
 class GenericPlayerSimulatorTest {
 

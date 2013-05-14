@@ -1,12 +1,10 @@
-package dk.tennis.compare.simulation.twopointsgame.game
+package dk.tennis.compare.game.twopointsgame.simulation
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import dk.tennis.compare.simulation.twopointsgame.player.Player
-import dk.tennis.compare.simulation.twopointsgame.player.GenericPlayerSimulator
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import org.joda.time.DateTimeZone
+import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 
 class GenericGameSimulatorTest {
 

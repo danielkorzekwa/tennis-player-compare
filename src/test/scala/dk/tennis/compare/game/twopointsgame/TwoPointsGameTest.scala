@@ -1,8 +1,7 @@
-package dk.tennis.compare.simulation.twopointsgame.game
+package dk.tennis.compare.game.twopointsgame
 
 import org.junit._
-import Assert._
-import dk.tennis.compare.simulation.twopointsgame.player.Player
+import org.junit.Assert._
 import scala.util.Random
 
 class TwoPointsGameTest {

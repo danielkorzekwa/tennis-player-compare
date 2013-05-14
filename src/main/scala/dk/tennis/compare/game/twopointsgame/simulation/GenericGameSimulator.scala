@@ -1,16 +1,10 @@
-package dk.tennis.compare.simulation.twopointsgame.game
-
-import dk.tennis.compare.simulation.twopointsgame.player.Player
+package dk.tennis.compare.game.twopointsgame.simulation
 import dk.tennis.compare.domain.TwoPointsGameResult
-import scala.annotation.tailrec
-import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.domain.TwoPointsGameResult
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import scala.util.Random
+import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 
 /**
  * Default implementation of GameSimulator.
