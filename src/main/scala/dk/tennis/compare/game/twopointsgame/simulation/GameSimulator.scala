@@ -1,6 +1,7 @@
 package dk.tennis.compare.game.twopointsgame.simulation
-import dk.tennis.compare.domain.TwoPointsGameResult
+
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
+import dk.tennis.compare.game.twopointsgame.TwoPointsGameResult
 
 /**
  * Random simulator of two points games. Single game is simulated point by point using MCMC techniques.

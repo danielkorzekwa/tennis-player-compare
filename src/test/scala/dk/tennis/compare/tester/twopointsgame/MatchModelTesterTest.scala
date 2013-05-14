@@ -6,16 +6,11 @@ import org.slf4j.LoggerFactory
 import dk.atp.api.domain.MatchComposite
 import org.joda.time.DateTime
 import dk.atp.api.domain.SurfaceEnum._
-import dk.tennis.compare.domain.BfMarket
 import scala.io.Source
 import dk.atp.api.CSVATPMatchesLoader
-import dk.tennis.compare.tester.model.ExPricesMatchModel
-import dk.tennis.compare.tester.model.TrueSkillExPriceModel
-import dk.tennis.compare.tester.model.TrueSkillMatchModel
-import dk.tennis.compare.tester.model.PointStatsMatchModel
-import dk.tennis.compare.tester.model.Glicko2MatchModel
-import dk.tennis.compare.domain.GameResult
+import dk.tennis.compare.tester.GameResult
 import dk.tennis.compare.tester.GameModelTester
+import dk.tennis.compare.game.tennis.model.TrueSkillMatchModel
 
 class MatchModelTesterTest {
 

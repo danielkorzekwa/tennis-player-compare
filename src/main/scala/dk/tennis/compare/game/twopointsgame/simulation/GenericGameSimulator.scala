@@ -1,10 +1,10 @@
 package dk.tennis.compare.game.twopointsgame.simulation
-import dk.tennis.compare.domain.TwoPointsGameResult
-import dk.tennis.compare.domain.TwoPointsGameResult
+
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import scala.util.Random
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
+import dk.tennis.compare.game.twopointsgame.TwoPointsGameResult
 
 /**
  * Default implementation of GameSimulator.
