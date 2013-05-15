@@ -1,22 +1,22 @@
 package dk.tennis.compare.tester.atp
 
-import org.junit._
-import org.junit.Assert._
-import org.slf4j.LoggerFactory
-import dk.atp.api.domain.MatchComposite
-import org.joda.time.DateTime
-import dk.atp.api.domain.SurfaceEnum._
 import scala.io.Source
+
+import org.joda.time.DateTime
+import org.junit.Test
+import org.slf4j.LoggerFactory
+
 import dk.atp.api.CSVATPMatchesLoader
-import dk.tennis.compare.tester.GameResult
-import dk.tennis.compare.tester.GameModelTester
+import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.game.tennis.domain.BfMarket
 import dk.tennis.compare.game.tennis.domain.TennisResult
-import dk.tennis.compare.game.tennis.model.TrueSkillExPriceModel
 import dk.tennis.compare.game.tennis.model.ExPricesMatchModel
-import dk.tennis.compare.game.tennis.model.TrueSkillMatchModel
-import dk.tennis.compare.game.tennis.model.PointStatsMatchModel
 import dk.tennis.compare.game.tennis.model.Glicko2MatchModel
+import dk.tennis.compare.game.tennis.model.PointStatsMatchModel
+import dk.tennis.compare.game.tennis.model.TrueSkillExPriceModel
+import dk.tennis.compare.game.tennis.model.TrueSkillMatchModel
+import dk.tennis.compare.tester.GameModelTester
+import dk.tennis.compare.tester.GameResult
 
 class MatchModelTesterTest {
 

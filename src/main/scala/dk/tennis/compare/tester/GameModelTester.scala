@@ -29,7 +29,7 @@ case class GameModelTester(results: Seq[GameResult]) {
         playerAWinnerProb.foreach { playerAWinnerProb =>
           llhStats.add(playerAWinner * log(playerAWinnerProb) + (1 - playerAWinner) * log(1 - playerAWinnerProb))
 
-          val predictionRecord = PredictionRecord(r.eventName.get,
+          val predictionRecord = PredictionRecord(r.eventName.getOrElse("n/a"),
             new Date(r.timestamp.get), r.player1,
             r.player2,
             playerAWinnerProb,
