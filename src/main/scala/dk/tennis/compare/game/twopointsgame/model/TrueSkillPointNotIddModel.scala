@@ -12,11 +12,18 @@ import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 
-case class TrueSkillPointModel extends GameModel {
+case class TrueSkillPointNotIddModel extends GameModel {
 
   private val skillTransVariance = pow(25d / 300, 2)
   private val performanceVariance = pow(25d / 16, 2)
   private val trueSkillModel = GenericTrueSkill(skillTransVariance, performanceVariance)
+
+  private val perfVariance = (game: TwoPointsGame) => game match {
+    case TwoPointsGame(0, 0) => (5d, 5d)
+    case TwoPointsGame(1, 0) => (3d, 0.5d)
+    case TwoPointsGame(0, 1) => (0.5d, 3d)
+    case TwoPointsGame(1, 1) => (0.1d, 0.1d)
+  }
 
   def gameProb(r: GameResult): Option[Double] = {
     /**key - playerName*/
@@ -27,10 +34,11 @@ case class TrueSkillPointModel extends GameModel {
 
     val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val pointProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance, performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
-
-      val matchProb = TwoPointsGame(0, 0).gameProb(gameState => pointProb)
-
+      val matchProb = TwoPointsGame(0, 0).gameProb { gameState =>
+        val (p1PerfVar, p2PerfVar) = perfVariance(gameState)
+        val pointProb = GenericTrueSkillMatchProb(skillTransVariance, p1PerfVar, p2PerfVar).matchProb(playerASkill.get, playerBSkill.get)
+        pointProb
+      }
       Some(matchProb)
 
     } else None

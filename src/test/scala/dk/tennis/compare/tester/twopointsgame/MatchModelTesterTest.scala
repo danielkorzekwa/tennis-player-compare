@@ -3,7 +3,6 @@ package dk.tennis.compare.tester.twopointsgame
 import org.joda.time.DateTime
 import org.junit.Test
 import org.slf4j.LoggerFactory
-
 import dk.tennis.compare.game.tennis.model.TrueSkillGameModel
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 import dk.tennis.compare.game.twopointsgame.model.TrueSkillPointModel
@@ -12,6 +11,7 @@ import dk.tennis.compare.game.twopointsgame.simulation.GenericGameSimulator
 import dk.tennis.compare.game.twopointsgame.simulation.GenericPlayerSimulator
 import dk.tennis.compare.tester.GameModelTester
 import dk.tennis.compare.tester.GameResult
+import dk.tennis.compare.game.twopointsgame.model.TrueSkillPointNotIddModel
 
 class MatchModelTesterTest {
 
@@ -42,12 +42,13 @@ class MatchModelTesterTest {
       val truthModel = TruthGameModel()
       val trueSkillModel = TrueSkillGameModel()
       val trueSkillPointModel = TrueSkillPointModel()
+      val trueSkillPointNotIddModel = TrueSkillPointNotIddModel()
 
-      val modelSummary = tester.run(trueSkillPointModel, matchFilter)
+      val modelSummary = tester.run(trueSkillPointNotIddModel, matchFilter)
       log.info("Log likelihood stats = " + modelSummary.llhStats)
       log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
-      
-      log.info(modelSummary.predictedActualAvgCorrReport)
+
+        log.info(modelSummary.predictedActualAvgCorrReport)
     }
   }
 
