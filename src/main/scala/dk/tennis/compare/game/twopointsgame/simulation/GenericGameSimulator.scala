@@ -60,11 +60,11 @@ case class GenericGameSimulator(seed: Long = System.currentTimeMillis()) extends
   private def pointWinProb(player1: Player, player2: Player, playerPerfVariance: Tuple2[Double, Double]): Double = {
 
     val skillVariance = 0.0000001
-    val trueSkill = GenericTrueSkillMatchProb(skillVariance, playerPerfVariance._1, playerPerfVariance._2)
+    val trueSkill = GenericTrueSkillMatchProb(skillVariance)
 
     val player1WinProb = trueSkill.matchProb(
       TrueSkillRating(player1.skillMean, skillVariance),
-      TrueSkillRating(player2.skillMean, skillVariance))
+      TrueSkillRating(player2.skillMean, skillVariance), playerPerfVariance)
 
     player1WinProb
   }

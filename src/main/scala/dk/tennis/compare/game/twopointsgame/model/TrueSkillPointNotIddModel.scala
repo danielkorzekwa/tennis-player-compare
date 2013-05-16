@@ -11,12 +11,12 @@ import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
+import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 
 case class TrueSkillPointNotIddModel extends GameModel {
 
   private val skillTransVariance = pow(25d / 300, 2)
-  private val performanceVariance = pow(25d / 16, 2)
-  private val trueSkillModel = GenericTrueSkill(skillTransVariance, performanceVariance)
+  private val trueSkillModel = GenericTrueSkill(skillTransVariance)
 
   private val perfVariance = (game: TwoPointsGame) => game match {
     case TwoPointsGame(0, 0) => (5d, 5d)
@@ -36,7 +36,7 @@ case class TrueSkillPointNotIddModel extends GameModel {
 
       val matchProb = TwoPointsGame(0, 0).gameProb { gameState =>
         val (p1PerfVar, p2PerfVar) = perfVariance(gameState)
-        val pointProb = GenericTrueSkillMatchProb(skillTransVariance, p1PerfVar, p2PerfVar).matchProb(playerASkill.get, playerBSkill.get)
+        val pointProb = GenericTrueSkillMatchProb(skillTransVariance).matchProb(playerASkill.get, playerBSkill.get, (p1PerfVar, p2PerfVar))
         pointProb
       }
       Some(matchProb)
@@ -47,11 +47,16 @@ case class TrueSkillPointNotIddModel extends GameModel {
   }
 
   def addGameResult(r: GameResult) = {
+
+    val game = TwoPointsGame(0, 0)
     r match {
       case r: TwoPointsGameResult => {
 
-        r.points.foreach(pointWon => trueSkillModel.addResult(Result(r.player1, r.player2, pointWon)))
+        r.points.foreach { pointWon =>
 
+          trueSkillModel.addResult(Result(r.player1, r.player2, pointWon), perfVariance(game))
+          game.score(pointWon)
+        }
       }
       case _ => new IllegalArgumentException("Result type not supported:" + r)
     }

@@ -16,8 +16,8 @@ import dk.tennis.compare.game.tennis.domain.TennisResult
 case class TrueSkillDBNMatchModel extends GameModel {
 
   private val skillTransVariance = pow(25d / 300, 2)
-  private val performanceVariance = pow(25d / 16, 2)
-  private val trueSkillModel = GenericTrueSkillDbn(skillTransVariance, performanceVariance)
+  private val performanceVariance = (pow(25d / 16, 2), pow(25d / 16, 2))
+  private val trueSkillModel = GenericTrueSkillDbn(skillTransVariance, performanceVariance._1) //only a single performance is supported for this model
 
   def gameProb(r: GameResult): Option[Double] = {
 
@@ -29,7 +29,7 @@ case class TrueSkillDBNMatchModel extends GameModel {
 
     val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val winProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance,performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
+      val winProb = GenericTrueSkillMatchProb(skillTransVariance).matchProb(playerASkill.get, playerBSkill.get, performanceVariance)
 
       /**Enhance prob for 5 sets match.*/
       if (r.asInstanceOf[TennisResult].numOfSets == 3) {

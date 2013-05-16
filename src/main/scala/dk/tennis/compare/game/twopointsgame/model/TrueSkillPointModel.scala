@@ -15,8 +15,8 @@ import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 case class TrueSkillPointModel extends GameModel {
 
   private val skillTransVariance = pow(25d / 300, 2)
-  private val performanceVariance = pow(25d / 16, 2)
-  private val trueSkillModel = GenericTrueSkill(skillTransVariance, performanceVariance)
+  private val performanceVariance = (pow(25d / 16, 2), pow(25d / 16, 2))
+  private val trueSkillModel = GenericTrueSkill(skillTransVariance)
 
   def gameProb(r: GameResult): Option[Double] = {
     /**key - playerName*/
@@ -27,7 +27,7 @@ case class TrueSkillPointModel extends GameModel {
 
     val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val pointProb = GenericTrueSkillMatchProb(skillTransVariance, performanceVariance, performanceVariance).matchProb(playerASkill.get, playerBSkill.get)
+      val pointProb = GenericTrueSkillMatchProb(skillTransVariance).matchProb(playerASkill.get, playerBSkill.get, performanceVariance)
 
       val matchProb = TwoPointsGame(0, 0).gameProb(gameState => pointProb)
 
@@ -42,7 +42,7 @@ case class TrueSkillPointModel extends GameModel {
     r match {
       case r: TwoPointsGameResult => {
 
-        r.points.foreach(pointWon => trueSkillModel.addResult(Result(r.player1, r.player2, pointWon)))
+        r.points.foreach(pointWon => trueSkillModel.addResult(Result(r.player1, r.player2, pointWon), performanceVariance))
 
       }
       case _ => new IllegalArgumentException("Result type not supported:" + r)

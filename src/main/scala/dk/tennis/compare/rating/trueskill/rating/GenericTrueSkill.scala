@@ -13,28 +13,28 @@ import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.Result
 
-case class GenericTrueSkill(skillTransVariance: Double, performanceVariance: Double) extends TrueSkill {
+case class GenericTrueSkill(skillTransVariance: Double) extends TrueSkill {
 
   private val skillsMap: mutable.Map[String, TrueSkillRating] = mutable.Map()
 
   private val defaultSkill = TrueSkillRating(0, 1)
 
-  def addResult(result:Result) = {
+  def addResult(result: Result, perfVariance: Tuple2[Double, Double]) = {
 
     val player1Skill = skillsMap.getOrElse(result.player1, defaultSkill)
     val player2Skill = skillsMap.getOrElse(result.player2, defaultSkill)
 
-    val (newPlayer1Skill, newPlayer2Skill) = computeMarginals(player1Skill, player2Skill, result)
+    val (newPlayer1Skill, newPlayer2Skill) = computeMarginals(player1Skill, player2Skill, result, perfVariance)
     skillsMap += result.player1 -> newPlayer1Skill
     skillsMap += result.player2 -> newPlayer2Skill
   }
 
   def getRatings(): immutable.Map[String, TrueSkillRating] = skillsMap.toMap
 
-  private def computeMarginals(player1Skill: TrueSkillRating, player2Skill: TrueSkillRating, result:Result): Tuple2[TrueSkillRating, TrueSkillRating] = {
+  private def computeMarginals(player1Skill: TrueSkillRating, player2Skill: TrueSkillRating, result: Result, perfVariance: Tuple2[Double, Double]): Tuple2[TrueSkillRating, TrueSkillRating] = {
 
-    val factorGraph = SingleGameFactorGraph(player1Skill, player2Skill, skillTransVariance, 
-        result.player1PerfVar.getOrElse(performanceVariance),result.player2PerfVar.getOrElse(performanceVariance))
+    val factorGraph = SingleGameFactorGraph(player1Skill, player2Skill, skillTransVariance,
+      result.player1PerfVar.getOrElse(perfVariance._1), result.player2PerfVar.getOrElse(perfVariance._2))
 
     val ep = GenericEP(factorGraph.createTennisFactorGraph())
 
