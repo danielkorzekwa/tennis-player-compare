@@ -18,10 +18,10 @@ import dk.tennis.compare.game.tennis.domain.TennisResult
 
 case class TrueSkillGameModel extends GameModel {
 
-  private val skillTransVariance = pow(25d / 300, 2)
+  private val skillTransVariance = pow(25d / 30000000, 2)
   /**Tuple2[player1,player2]*/
   private val performanceVariance = (pow(25d / 16, 2), pow(25d / 16, 2))
-  private val trueSkillModel = GenericTrueSkill(skillTransVariance)
+   val trueSkillModel = GenericTrueSkill(skillTransVariance)
 
   def gameProb(r: GameResult): Option[Double] = {
 
