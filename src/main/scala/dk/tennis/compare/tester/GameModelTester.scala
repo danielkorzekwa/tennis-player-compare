@@ -24,16 +24,19 @@ case class GameModelTester(results: Seq[GameResult]) {
       if (resultFilter(r)) {
 
         val playerAWinnerProb = gameModel.gameProb(r)
-        val playerAWinner: Byte = r.player1Win.get
 
         playerAWinnerProb.foreach { playerAWinnerProb =>
-          llhStats.add(playerAWinner * log(playerAWinnerProb) + (1 - playerAWinner) * log(1 - playerAWinnerProb))
+          val llhValue = if (r.player1Win.get) log(playerAWinnerProb).max(-100) else log1p(-playerAWinnerProb).max(-100)
+          if (llhValue.isNaN()) {
+            println(llhValue)
+          }
+          llhStats.add(llhValue)
 
           val predictionRecord = PredictionRecord(r.eventName.getOrElse("n/a"),
-            new Date(r.timestamp.get), r.player1,
+            r.timestamp.get, r.player1,
             r.player2,
             playerAWinnerProb,
-            playerAWinner)
+            r.player1Win.get)
 
           predictionRecords += predictionRecord
 

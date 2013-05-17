@@ -44,7 +44,7 @@ case class GenericGameSimulator(seed: Long = System.currentTimeMillis()) extends
           player2 = player2.name,
           player1Win = Option(player1Win),
           trueWinProb = Some(player1WinProb),
-          timestamp = Option(new DateTime(year, 1, 1, 1, 1, DateTimeZone.UTC).getMillis()),
+          timestamp = Option(new DateTime(year, 1, 1, 1, 1, DateTimeZone.UTC).toDate()),
           player1ExpectedPointProb = p1ExpectedPointsWon / (p1ExpectedPointsWon + p2ExpectedPointsWon),
           points = gamePoints)
       }

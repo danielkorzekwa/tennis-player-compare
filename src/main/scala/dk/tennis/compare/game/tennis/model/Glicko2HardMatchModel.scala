@@ -16,7 +16,7 @@ case class Glicko2HardMatchModel extends GameModel {
   def gameProb(r: GameResult): Option[Double] = {
 
     val ratings = glicko2.getRatings()
-    val defaultRating = PlayerRating(Rating(0.5, Double.MaxValue, Double.MaxValue, new Date(r.timestamp.get)), Rating(0.5, Double.MaxValue, Double.MaxValue, new Date(r.timestamp.get)))
+    val defaultRating = PlayerRating(Rating(0.5, Double.MaxValue, Double.MaxValue, r.timestamp.get), Rating(0.5, Double.MaxValue, Double.MaxValue, r.timestamp.get))
     val ratingA = ratings.getOrElse(r.player1, defaultRating)
     val ratingB = ratings.getOrElse(r.player2, defaultRating)
 
@@ -39,7 +39,7 @@ case class Glicko2HardMatchModel extends GameModel {
     val playerAWinner: Int = if (r.player1Win.get) 1 else 0
 
     val result =
-      Result(r.player1, r.player2, playerAWinner, new Date(r.timestamp.get))
+      Result(r.player1, r.player2, playerAWinner, r.timestamp.get)
 
     glicko2.sendResult(result)
   }

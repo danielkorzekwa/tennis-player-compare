@@ -9,6 +9,7 @@ import scala.io.Source
 import org.joda.time.DateTime
 import dk.tennis.compare.game.tennis.domain.BfMarket
 import dk.tennis.compare.game.tennis.domain.TennisResult
+import java.util.Date
 
 class GenericEventsMatcherTest {
 
@@ -48,7 +49,7 @@ class GenericEventsMatcherTest {
         player2 = m.matchFacts.playerBFacts.playerName,
         player1Win = Some(m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)),
         trueWinProb = None,
-        timestamp = Some(m.tournament.tournamentTime.getTime()),
+        timestamp = Some(new Date(m.tournament.tournamentTime.getTime())),
         numOfSets = m.tournament.numOfSet,
         player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
         player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),

@@ -13,8 +13,8 @@ import dk.tennis.compare.rating.trueskill.model.Result
 
 case class TrueSkillPointModel extends GameModel {
 
-  private val skillTransVariance = pow(25d / 300, 2)
-  private val performanceVariance = (pow(25d / 16, 2), pow(25d / 16, 2))
+  private val skillTransVariance = pow(25d / 3000, 2)
+  private val performanceVariance = (pow(250d / 16, 2), pow(250d / 16, 2))
   val trueSkillModel = GenericTrueSkill(skillTransVariance)
 
   def gameProb(r: GameResult): Option[Double] = {
@@ -30,19 +30,20 @@ case class TrueSkillPointModel extends GameModel {
 
       val matchProb = if (r.asInstanceOf[TennisResult].numOfSets == 2) TennisProbFormulaCalc.matchProb(playerPointProb, playerPointProb, THREE_SET_MATCH)
       else TennisProbFormulaCalc.matchProb(playerPointProb, playerPointProb, FIVE_SET_MATCH)
-
+ 
       Some(matchProb)
-
     } else None
 
     prob
   }
 
   def addGameResult(r: GameResult) = {
+
     r match {
       case r: TennisResult => {
 
         r.points.get.foreach { pointWon =>
+
           trueSkillModel.addResult(Result(r.player1, r.player2, pointWon), performanceVariance)
         }
 

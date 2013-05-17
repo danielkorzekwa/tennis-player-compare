@@ -1,5 +1,7 @@
 package dk.tennis.compare.tester
 
+import java.util.Date
+
 /**
  * @param points Single point is true if player1 wins, otherwise it's false.
  */
@@ -9,6 +11,6 @@ abstract class GameResult(
   val player2: String,
   val player1Win: Option[Boolean] = None,
   val trueWinProb: Option[Double]= None,
-  val timestamp: Option[Long] = None) {
+  val timestamp: Option[Date] = None) {
   def containsPlayer(playerName: String): Boolean = player1.equals(playerName) || player2.equals(playerName)
 }

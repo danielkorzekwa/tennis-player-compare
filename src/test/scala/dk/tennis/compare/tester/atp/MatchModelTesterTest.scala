@@ -1,11 +1,9 @@
 package dk.tennis.compare.tester.atp
 
 import scala.io.Source
-
 import org.joda.time.DateTime
 import org.junit.Test
 import org.slf4j.LoggerFactory
-
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.game.tennis.domain.BfMarket
@@ -17,6 +15,7 @@ import dk.tennis.compare.game.tennis.model.TrueSkillExPriceModel
 import dk.tennis.compare.game.tennis.model.TrueSkillMatchModel
 import dk.tennis.compare.tester.GameModelTester
 import dk.tennis.compare.tester.GameResult
+import java.util.Date
 
 class MatchModelTesterTest {
 
@@ -43,10 +42,10 @@ class MatchModelTesterTest {
 
     val pointStatModel = PointStatsMatchModel()
 
-    val matchFilter = (m: GameResult) => { /**log.info("Log likelihood stats = " + tester.getLlhStats()); */ new DateTime(m.timestamp.get).getYear() >= 2011 }
-    //    val matchFilter = (m: MatchComposite) => {
-    //      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
-    //      /**  m.matchFacts.containsPlayer("Roger Federer") && */m.matchFacts.containsPlayer("Novak Djokovic")
+    val matchFilter = (m: GameResult) => { log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats()); new DateTime(m.timestamp.get).getYear() >= 2010 }
+    //    val matchFilter = (m: GameResult) => {
+    //      new DateTime(m.timestamp.get).getYear() >= 2010 &&
+    //        (m.containsPlayer("Roger Federer"))
     //    }
 
     val modelSummary = tester.run(trueSkillExModel, matchFilter)
@@ -54,7 +53,7 @@ class MatchModelTesterTest {
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
-    //  log.info(modelSummary.predictedActualAvgCorrReport)
+    log.info(modelSummary.predictedActualAvgCorrReport)
   }
 
   private def getAtpMatches(matchesFile: String, yearFrom: Int, yearTo: Int): Seq[TennisResult] = {
@@ -75,7 +74,7 @@ class MatchModelTesterTest {
         player2 = m.matchFacts.playerBFacts.playerName,
         player1Win = Some(m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)),
         trueWinProb = None,
-        timestamp = Some(m.tournament.tournamentTime.getTime()),
+        timestamp = Some(new Date(m.tournament.tournamentTime.getTime())),
         numOfSets = m.tournament.numOfSet,
         player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
         player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),

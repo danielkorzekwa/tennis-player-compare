@@ -18,7 +18,7 @@ case class Glicko2MatchModel extends GameModel {
   def gameProb(r: GameResult): Option[Double] = {
 
     val ratings = glicko2.getRatings()
-    val defaultRating = PlayerRating(Rating(0.5, Double.MaxValue, Double.MaxValue, new Date(r.timestamp.get)), Rating(0.5, Double.MaxValue, Double.MaxValue, new Date(r.timestamp.get)))
+    val defaultRating = PlayerRating(Rating(0.5, Double.MaxValue, Double.MaxValue, r.timestamp.get), Rating(0.5, Double.MaxValue, Double.MaxValue, r.timestamp.get))
     val ratingA = ratings.getOrElse(r.player1, defaultRating)
     val ratingB = ratings.getOrElse(r.player2, defaultRating)
 
@@ -43,9 +43,9 @@ case class Glicko2MatchModel extends GameModel {
 
     val results =
       Result(tennisResult.player1, tennisResult.player2,
-        tennisResult.player1ServicePointsWonPct.get, new Date(tennisResult.timestamp.get)) ::
+        tennisResult.player1ServicePointsWonPct.get, tennisResult.timestamp.get) ::
         Result(tennisResult.player2, tennisResult.player1,
-          tennisResult.player2ServicePointsWonPct.get, new Date(tennisResult.timestamp.get)) :: Nil
+          tennisResult.player2ServicePointsWonPct.get, tennisResult.timestamp.get) :: Nil
 
     results.foreach(r => glicko2.sendResult(r))
   }

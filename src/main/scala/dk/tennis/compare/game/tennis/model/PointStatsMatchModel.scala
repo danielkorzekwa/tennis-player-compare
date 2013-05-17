@@ -29,7 +29,7 @@ case class PointStatsMatchModel extends GameModel {
     else TennisProbFormulaCalc.matchProb(playerAOnServeProb, 1 - playerBOnServeProb, FIVE_SET_MATCH)
 
     val tuned = 1 / (1 + exp(-10 * (matchProbAGivenB - 0.5)))
-    Some(tuned)
+    Some(matchProbAGivenB)
   }
 
   def addGameResult(r: GameResult) {}
