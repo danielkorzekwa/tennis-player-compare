@@ -2,6 +2,9 @@ package dk.tennis.compare.game.tennis.domain
 
 import dk.tennis.compare.tester.GameResult
 
+/**
+ * @param points Point is true if player 1 wins, otherwise it is false.
+ */
 case class TennisResult(
 
   override val eventName: Option[String] = None,
@@ -13,7 +16,8 @@ case class TennisResult(
 
   val numOfSets: Int,
   val player1ServicePointsWonPct: Option[Double] = None,
-  val player2ServicePointsWonPct: Option[Double] = None)
+  val player2ServicePointsWonPct: Option[Double] = None,
+  val points:Option[Seq[Boolean]])
 
   extends GameResult(
     eventName,

@@ -23,7 +23,7 @@ class MatchModelTesterTest {
   val log = LoggerFactory.getLogger(getClass)
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val atpMatches = getAtpMatches(matchesFile, 2006, 2011)
+  val atpMatches = getAtpMatches(matchesFile, 2011, 2011)
 
   val tester = GameModelTester(atpMatches)
 
@@ -43,7 +43,7 @@ class MatchModelTesterTest {
 
     val pointStatModel = PointStatsMatchModel()
 
-    val matchFilter = (m: GameResult) => { /** log.info(m.toString); log.info("Log likelihood stats = " + tester.getLlhStats()); */ new DateTime(m.timestamp.get).getYear() >= 2010 }
+    val matchFilter = (m: GameResult) => { /**log.info("Log likelihood stats = " + tester.getLlhStats()); */ new DateTime(m.timestamp.get).getYear() >= 2011 }
     //    val matchFilter = (m: MatchComposite) => {
     //      new DateTime(m.tournament.tournamentTime.getTime()).getYear() == 2011 &&
     //      /**  m.matchFacts.containsPlayer("Roger Federer") && */m.matchFacts.containsPlayer("Novak Djokovic")
@@ -63,7 +63,12 @@ class MatchModelTesterTest {
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-    val gameResults = filteredMatches.map(m =>
+    val gameResults = filteredMatches.map { m =>
+
+      val points = List.fill(m.matchFacts.playerAFacts.totalServicePointsWon)(true) :::
+        List.fill(m.matchFacts.playerAFacts.totalServicePoints - m.matchFacts.playerAFacts.totalServicePointsWon)(false) :::
+        List.fill(m.matchFacts.playerBFacts.totalServicePoints - m.matchFacts.playerBFacts.totalServicePointsWon)(true) :::
+        List.fill(m.matchFacts.playerBFacts.totalServicePointsWon)(false)
       new TennisResult(
         eventName = Some(m.tournament.tournamentName),
         player1 = m.matchFacts.playerAFacts.playerName,
@@ -73,7 +78,9 @@ class MatchModelTesterTest {
         timestamp = Some(m.tournament.tournamentTime.getTime()),
         numOfSets = m.tournament.numOfSet,
         player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
-        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct)))
+        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),
+        points = Some(points))
+    }
 
     gameResults
   }

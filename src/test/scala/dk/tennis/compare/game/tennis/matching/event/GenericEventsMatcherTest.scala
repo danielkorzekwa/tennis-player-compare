@@ -51,7 +51,8 @@ class GenericEventsMatcherTest {
         timestamp = Some(m.tournament.tournamentTime.getTime()),
         numOfSets = m.tournament.numOfSet,
         player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
-        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct)))
+        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),
+        points = None))
 
     gameResults
   }
