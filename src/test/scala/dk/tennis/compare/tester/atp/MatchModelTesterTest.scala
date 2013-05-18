@@ -23,7 +23,7 @@ class MatchModelTesterTest {
   val log = LoggerFactory.getLogger(getClass)
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val atpMatches = getAtpMatches(matchesFile, 2006, 2011)
+  val atpMatches = getAtpMatches(matchesFile, 2010, 2011)
 
   val tester = GameModelTester(atpMatches)
 
@@ -53,12 +53,12 @@ class MatchModelTesterTest {
 
     val probs = modelSummary.predictionRecords.filter(r => r.playerAWinnerProb > 0.5).map(r => if (r.playerAWinner == 1) r.playerAWinnerProb else (1 - r.playerAWinnerProb))
 
-    println("win avg prob= " + probs.sum / probs.size)
+    //println("win avg prob= " + probs.sum / probs.size)
 
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
-    log.info(modelSummary.predictedActualAvgCorrReport)
+   // log.info(modelSummary.predictedActualAvgCorrReport)
   }
 
   private def getAtpMatches(matchesFile: String, yearFrom: Int, yearTo: Int): Seq[TennisResult] = {
