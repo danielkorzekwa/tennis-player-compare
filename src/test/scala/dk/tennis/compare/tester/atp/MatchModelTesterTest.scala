@@ -16,19 +16,20 @@ import dk.tennis.compare.game.tennis.model.TrueSkillMatchModel
 import dk.tennis.compare.tester.GameModelTester
 import dk.tennis.compare.tester.GameResult
 import java.util.Date
+import scala.util.Random
 
 class MatchModelTesterTest {
 
   val log = LoggerFactory.getLogger(getClass)
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val atpMatches = getAtpMatches(matchesFile, 2011, 2011)
+  val atpMatches = getAtpMatches(matchesFile, 2006, 2011)
 
   val tester = GameModelTester(atpMatches)
 
   @Test def test {
 
-    val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
+    val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011_less_than_30m_before_kick_off.csv")
     val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
     val exModel = ExPricesMatchModel(atpMatches, bfMarkets)
 
@@ -42,13 +43,17 @@ class MatchModelTesterTest {
 
     val pointStatModel = PointStatsMatchModel()
 
-    val matchFilter = (m: GameResult) => { log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats()); new DateTime(m.timestamp.get).getYear() >= 2010 }
+    val matchFilter = (m: GameResult) => { /**log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats()); */ new DateTime(m.timestamp.get).getYear() >= 2010 }
     //    val matchFilter = (m: GameResult) => {
     //      new DateTime(m.timestamp.get).getYear() >= 2010 &&
     //        (m.containsPlayer("Roger Federer"))
     //    }
 
     val modelSummary = tester.run(trueSkillExModel, matchFilter)
+
+    val probs = modelSummary.predictionRecords.filter(r => r.playerAWinnerProb > 0.5).map(r => if (r.playerAWinner == 1) r.playerAWinnerProb else (1 - r.playerAWinnerProb))
+
+    println("win avg prob= " + probs.sum / probs.size)
 
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
@@ -64,10 +69,15 @@ class MatchModelTesterTest {
 
     val gameResults = filteredMatches.map { m =>
 
-      val points = List.fill(m.matchFacts.playerAFacts.totalServicePointsWon)(true) :::
+      var points = List.fill(m.matchFacts.playerAFacts.totalServicePointsWon)(true) :::
         List.fill(m.matchFacts.playerAFacts.totalServicePoints - m.matchFacts.playerAFacts.totalServicePointsWon)(false) :::
         List.fill(m.matchFacts.playerBFacts.totalServicePoints - m.matchFacts.playerBFacts.totalServicePointsWon)(true) :::
         List.fill(m.matchFacts.playerBFacts.totalServicePointsWon)(false)
+
+      points = Random.shuffle(points)
+
+      while (!points.last) points = Random.shuffle(points)
+
       new TennisResult(
         eventName = Some(m.tournament.tournamentName),
         player1 = m.matchFacts.playerAFacts.playerName,

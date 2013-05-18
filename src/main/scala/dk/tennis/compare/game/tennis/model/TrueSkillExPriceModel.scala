@@ -24,8 +24,8 @@ case class TrueSkillExPriceModel(trueSkillModel: TrueSkillMatchModel, exPricesMo
 
     if (r.containsPlayer("Roger Federer")) {
       //
-      val federerTrueSkill = trueSkillPointModel.trueSkillModel.getRatings().get("Roger Federer")
-      val djokovicTrueSkill = trueSkillPointModel.trueSkillModel.getRatings().get("Novak Djokovic")
+      // val federerTrueSkill = trueSkillPointModel.trueSkillModel.getRatings().get("Roger Federer")
+      //  val djokovicTrueSkill = trueSkillPointModel.trueSkillModel.getRatings().get("Novak Djokovic")
       //
       //      val federerGlicko = glicko2Model.glicko2.getRatings()("Roger Federer")
       //      val djokovicGlicko = glicko2Model.glicko2.getRatings()("Novak Djokovic")
@@ -36,17 +36,20 @@ case class TrueSkillExPriceModel(trueSkillModel: TrueSkillMatchModel, exPricesMo
       //      } else None
 
       //federer djokovic
-      //  println("ts rating: %s/%s ts_point: %.2f ts: %.2f gl: %.2f ex: %.2f %s".format(federerTrueSkill.toString(),djokovicTrueSkill.toString(),trueSkillPointProb.getOrElse(-1d), trueSkillProb.getOrElse(-1d), glicko2Prob.getOrElse(-1d), exProb.getOrElse(-1d), r))
+      println("ts_point: %.2f ts: %.2f gl: %.2f ex: %.2f %s".format(trueSkillPointProb.getOrElse(-1d), trueSkillProb.getOrElse(-1d), glicko2Prob.getOrElse(-1d), exProb.getOrElse(-1d), r))
 
     }
 
+    if (trueSkillProb.isDefined && exProb.isDefined) {
+      // println("%.2f,%.2f".format(trueSkillPointProb.get, exProb.get))
+      exProb
+    } else None
     //  val probDiff = abs(1 - trueSkillProb.get / glicko2Prob.get)
-    trueSkillPointProb
   }
 
   def addGameResult(r: GameResult) {
     //   glicko2Model.addGameResult(r)
-    //  trueSkillModel.addGameResult(r)
+    trueSkillModel.addGameResult(r)
     //  trueSkillPointModel.addGameResult(r)
     //  exPricesModel.addGameResult(r)
     //   pointStatsModel.addGameResult(r)
