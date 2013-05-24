@@ -15,6 +15,7 @@ case class TrueSkillExPriceModel(trueSkillModel: TrueSkillMatchModel, exPricesMo
   private val glicko2Model = Glicko2MatchModel()
   private val pointStatsModel = PointStatsMatchModel()
   private val trueSkillPointModel = TrueSkillPointModel()
+  private val trueSkillDbnModel = TrueSkillDBNMatchModel()
 
   private val random = new Random()
   private var profit = 0d
@@ -22,6 +23,7 @@ case class TrueSkillExPriceModel(trueSkillModel: TrueSkillMatchModel, exPricesMo
 
   def gameProb(r: GameResult): Option[Double] = {
     val trueSkillProb = trueSkillModel.gameProb(r)
+    val trueSkillDbnProb = trueSkillDbnModel.gameProb(r)
     val trueSkillPointProb = trueSkillPointModel.gameProb(r)
     val glicko2Prob = glicko2Model.gameProb(r)
     val pointStatsProb = pointStatsModel.gameProb(r)
@@ -56,6 +58,7 @@ case class TrueSkillExPriceModel(trueSkillModel: TrueSkillMatchModel, exPricesMo
   def addGameResult(r: GameResult) {
     // glicko2Model.addGameResult(r)
     trueSkillModel.addGameResult(r)
+    // trueSkillDbnModel.addGameResult(r)
     // trueSkillPointModel.addGameResult(r)
     //  exPricesModel.addGameResult(r)
     //   pointStatsModel.addGameResult(r)
