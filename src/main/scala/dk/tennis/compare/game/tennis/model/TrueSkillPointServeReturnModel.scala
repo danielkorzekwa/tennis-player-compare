@@ -10,26 +10,28 @@ import dk.tennis.compare.game.tennis.domain.TennisResult
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.tennis.compare.rating.trueskill.model.Result
+import dk.tennis.compare.rating.trueskill.rating.servereturn.GenericTrueSkillServeReturn
 
-case class TrueSkillPointModel extends GameModel {
+case class TrueSkillPointServeReturnModel extends GameModel {
 
   private val skillTransVariance = pow(25d / 3000, 2)
   private val performanceVariance = (pow(250d / 16, 2), pow(250d / 16, 2))
-  val trueSkillModel = GenericTrueSkill(skillTransVariance)
+  val trueSkillModel = GenericTrueSkillServeReturn(skillTransVariance)
 
   def gameProb(r: GameResult): Option[Double] = {
-    /**key - playerName*/
-    val ratingsMap: Map[String, TrueSkillRating] = trueSkillModel.getRatings()
+    /**key - playerName, value - Tuple2[playerSkillServe,playerSkillReturn]*/
+    val ratingsMap: Map[String, Tuple2[TrueSkillRating, TrueSkillRating]] = trueSkillModel.getRatings()
 
     val playerASkill = ratingsMap.get(r.player1)
     val playerBSkill = ratingsMap.get(r.player2)
 
     val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
 
-      val playerPointProb = GenericTrueSkillMatchProb(skillTransVariance).matchProb(playerASkill.get, playerBSkill.get, performanceVariance)
+      val p1PointProb = GenericTrueSkillMatchProb(skillTransVariance).matchProb(playerASkill.get._1, playerBSkill.get._2, performanceVariance)
+      val p2PointProb = GenericTrueSkillMatchProb(skillTransVariance).matchProb(playerBSkill.get._1, playerASkill.get._2, performanceVariance)
 
-      val matchProb = if (r.asInstanceOf[TennisResult].numOfSets == 2) TennisProbFormulaCalc.matchProb(playerPointProb, playerPointProb, THREE_SET_MATCH)
-      else TennisProbFormulaCalc.matchProb(playerPointProb, playerPointProb, FIVE_SET_MATCH)
+      val matchProb = if (r.asInstanceOf[TennisResult].numOfSets == 2) TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, THREE_SET_MATCH)
+      else TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, FIVE_SET_MATCH)
 
       Some(matchProb)
     } else None
