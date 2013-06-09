@@ -18,7 +18,9 @@ import dk.tennis.compare.game.tennis.domain.TennisResult
 
 case class TrueSkillMatchModel extends GameModel {
 
-  private val skillTransVariance = pow(25d / 150, 2)
+  //private val skillTransVariance = pow(25d / 150, 2)
+ // private val skillTransVariance = 0.057298
+  private val skillTransVariance = 0.034233
   private val performanceVariance = (pow(25d / 16, 2), pow(25d / 16, 2))
   val trueSkillModel = GenericTrueSkill(skillTransVariance)
 

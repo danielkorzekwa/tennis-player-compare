@@ -12,8 +12,12 @@ import dk.bayes.infer.ep.GenericEP
 import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.Result
+import com.typesafe.scalalogging.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 case class GenericTrueSkill(skillTransVariance: Double) extends TrueSkill {
+
+  private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
   private val skillsMap: mutable.Map[String, TrueSkillRating] = mutable.Map()
 
@@ -42,7 +46,8 @@ case class GenericTrueSkill(skillTransVariance: Double) extends TrueSkill {
     else ep.setEvidence(factorGraph.outcomeVarId, 1)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-    ep.calibrate(100, progress)
+    val iterNum = ep.calibrate(100, progress)
+    //logger.debug("Iter total: " + iterNum)
 
     val s1Marginal = ep.marginal(factorGraph.skill1VarId).asInstanceOf[GaussianFactor]
     val s2Marginal = ep.marginal(factorGraph.skill2VarId).asInstanceOf[GaussianFactor]

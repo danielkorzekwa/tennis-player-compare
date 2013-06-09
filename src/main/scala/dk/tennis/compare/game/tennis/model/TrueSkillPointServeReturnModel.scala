@@ -15,7 +15,8 @@ import dk.tennis.compare.rating.trueskill.rating.servereturn.GenericTrueSkillSer
 case class TrueSkillPointServeReturnModel extends GameModel {
 
   private val skillTransVariance = pow(25d / 3000, 2)
-  private val performanceVariance = (pow(250d / 16, 2), pow(250d / 16, 2))
+  private val performanceVariance = (pow(100d / 16, 2), pow(100d / 16, 2))
+  //  private val performanceVariance = (pow(250d / 16, 2), pow(250d / 16, 2))
   val trueSkillModel = GenericTrueSkillServeReturn(skillTransVariance)
 
   def gameProb(r: GameResult): Option[Double] = {

@@ -22,11 +22,11 @@ case class GenericTrueSkillDbn(skillTransVariance: Double, performanceVariance: 
     val factorGraph = tennisFactorGraphBuilder.getFactorGraph()
 
     val ep = GenericEP(factorGraph)
-    def progress(currIter: Int) = {}//println("EP iteration: " + currIter)
+    def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
     ep.calibrate(100, progress)
 
     /**Map[playerName, variable id]*/
-    val latestSkillsVarIds: Map[String, Int] = tennisFactorGraphBuilder.getLatestSkillVarIds()
+    val latestSkillsVarIds: Map[String, Int] = tennisFactorGraphBuilder.getSkillVarIds().mapValues(varIds => varIds.last)
 
     val skillsMap = latestSkillsVarIds.map {
       case (playerName, varId) =>

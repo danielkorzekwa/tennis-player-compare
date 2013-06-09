@@ -42,18 +42,7 @@ class GenericEventsMatcherTest {
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-    val gameResults = filteredMatches.map(m =>
-      new TennisResult(
-        eventName = Some(m.tournament.tournamentName),
-        player1 = m.matchFacts.playerAFacts.playerName,
-        player2 = m.matchFacts.playerBFacts.playerName,
-        player1Win = Some(m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)),
-        trueWinProb = None,
-        timestamp = Some(new Date(m.tournament.tournamentTime.getTime())),
-        numOfSets = m.tournament.numOfSet,
-        player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
-        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),
-        points = None))
+    val gameResults = TennisResult.fromMatches(filteredMatches)
 
     gameResults
   }

@@ -17,6 +17,7 @@ import dk.tennis.compare.tester.GameModelTester
 import dk.tennis.compare.tester.GameResult
 import java.util.Date
 import scala.util.Random
+import dk.tennis.compare.game.tennis.domain.TennisPoint
 
 class MatchModelTesterTest {
 
@@ -43,9 +44,9 @@ class MatchModelTesterTest {
 
     val pointStatModel = PointStatsMatchModel()
 
-    val matchFilter = (m: GameResult) => { /**log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats()); */ new DateTime(m.timestamp.get).getYear() >= 2010 }
+    val matchFilter = (m: GameResult) => { log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats()); new DateTime(m.timestamp.get).getYear() >= 2011 }
     //    val matchFilter = (m: GameResult) => {
-    //      new DateTime(m.timestamp.get).getYear() >= 2010 &&
+    //      new DateTime(m.timestamp.get).getYear() <=2007 &&
     //        (m.containsPlayer("Roger Federer"))
     //    }
 
@@ -58,7 +59,7 @@ class MatchModelTesterTest {
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
-   // log.info(modelSummary.predictedActualAvgCorrReport)
+    //  log.info(modelSummary.predictedActualAvgCorrReport)
   }
 
   private def getAtpMatches(matchesFile: String, yearFrom: Int, yearTo: Int): Seq[TennisResult] = {
@@ -67,30 +68,7 @@ class MatchModelTesterTest {
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-    val gameResults = filteredMatches.map { m =>
-
-      var points = List.fill(m.matchFacts.playerAFacts.totalServicePointsWon)(true) :::
-        List.fill(m.matchFacts.playerAFacts.totalServicePoints - m.matchFacts.playerAFacts.totalServicePointsWon)(false) :::
-        List.fill(m.matchFacts.playerBFacts.totalServicePoints - m.matchFacts.playerBFacts.totalServicePointsWon)(true) :::
-        List.fill(m.matchFacts.playerBFacts.totalServicePointsWon)(false)
-
-      points = Random.shuffle(points)
-
-      while (!points.last) points = Random.shuffle(points)
-
-      new TennisResult(
-        eventName = Some(m.tournament.tournamentName),
-        player1 = m.matchFacts.playerAFacts.playerName,
-        player2 = m.matchFacts.playerBFacts.playerName,
-        player1Win = Some(m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)),
-        trueWinProb = None,
-        timestamp = Some(new Date(m.tournament.tournamentTime.getTime())),
-        numOfSets = m.tournament.numOfSet,
-        player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
-        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),
-        points = Some(points))
-    }
-
+    val gameResults = TennisResult.fromMatches(filteredMatches)
     gameResults
   }
 }

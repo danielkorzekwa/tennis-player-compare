@@ -2,6 +2,8 @@ package dk.tennis.compare.game.tennis.domain
 
 import dk.tennis.compare.tester.GameResult
 import java.util.Date
+import dk.atp.api.domain.MatchComposite
+import scala.util.Random
 
 case class TennisResult(
 
@@ -15,7 +17,7 @@ case class TennisResult(
   val numOfSets: Int,
   val player1ServicePointsWonPct: Option[Double] = None,
   val player2ServicePointsWonPct: Option[Double] = None,
-  val points:Option[Seq[TennisPoint]])
+  val points: Option[Seq[TennisPoint]])
 
   extends GameResult(
     eventName,
@@ -25,4 +27,38 @@ case class TennisResult(
     trueWinProb,
     timestamp) {
 
+}
+
+object TennisResult {
+
+  def fromMatches(matches: Seq[MatchComposite]): Seq[TennisResult] = {
+    val gameResults = matches.map { m =>
+
+      val player1 = m.matchFacts.playerAFacts.playerName
+      val player2 = m.matchFacts.playerBFacts.playerName
+
+      var points = List.fill(m.matchFacts.playerAFacts.totalServicePointsWon)(TennisPoint(player1, true)) :::
+        List.fill(m.matchFacts.playerAFacts.totalServicePoints - m.matchFacts.playerAFacts.totalServicePointsWon)(TennisPoint(player1, false)) :::
+        List.fill(m.matchFacts.playerBFacts.totalServicePointsWon)(TennisPoint(player2, true)) :::
+        List.fill(m.matchFacts.playerBFacts.totalServicePoints - m.matchFacts.playerBFacts.totalServicePointsWon)(TennisPoint(player2, false))
+
+      points = Random.shuffle(points)
+
+      while (!points.last.playerOnServe.equals(m.matchFacts.winner) || !points.last.won) points = Random.shuffle(points)
+
+      new TennisResult(
+        eventName = Some(m.tournament.tournamentName),
+        player1 = m.matchFacts.playerAFacts.playerName,
+        player2 = m.matchFacts.playerBFacts.playerName,
+        player1Win = Some(m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName)),
+        trueWinProb = None,
+        timestamp = Some(new Date(m.tournament.tournamentTime.getTime())),
+        numOfSets = m.tournament.numOfSet,
+        player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
+        player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),
+        points = Some(points))
+    }
+
+    gameResults
+  }
 }

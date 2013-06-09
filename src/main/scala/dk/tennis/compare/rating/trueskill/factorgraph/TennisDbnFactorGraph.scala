@@ -15,34 +15,48 @@ import dk.bayes.model.factor.DiffGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import dk.bayes.infer.ep.GenericEP
+import scala.collection.mutable.ListBuffer
 
+/**
+ * Creates Dynamic Bayesian Network for tennis results.
+ *
+ * This is mutable class.
+ *
+ * @author Daniel Korzekwa
+ *
+ */
 case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double) {
 
   private val factorGraph = GenericFactorGraph()
-  private val latestSkillVarIds: mutable.Map[String, Int] = mutable.Map[String, Int]()
+
+  /**key - playerName,value - temporal sequence of player skill variables*/
+  private val skillVarIds: mutable.Map[String, ListBuffer[Int]] = mutable.Map[String, ListBuffer[Int]]()
 
   private val lastVarId = new AtomicInteger()
 
   private val defaultSkill = TrueSkillRating(0, 1)
 
   def addResult(result: Result) {
-    val player1PrevSkillVarId = latestSkillVarIds.getOrElseUpdate(result.player1, {
+    val player1PrevSkillVars = skillVarIds.getOrElseUpdate(result.player1, {
       val gaussianFactor = addSkillPriorFactor(defaultSkill)
-      gaussianFactor.varId
+
+      ListBuffer(gaussianFactor.varId)
     })
 
-    val player2PrevSkillVarId = latestSkillVarIds.getOrElseUpdate(result.player2, {
+    val player2PrevSkillVars = skillVarIds.getOrElseUpdate(result.player2, {
       val gaussianFactor = addSkillPriorFactor(defaultSkill)
-      gaussianFactor.varId
+
+      ListBuffer(gaussianFactor.varId)
     })
 
-    val skill1Factor = addSkillTransitionFactor(player1PrevSkillVarId)
-    val skill2Factor = addSkillTransitionFactor(player2PrevSkillVarId)
+    val skill1Factor = addSkillTransitionFactor(player1PrevSkillVars.last)
+    val skill2Factor = addSkillTransitionFactor(player2PrevSkillVars.last)
+
     addTennisGameToFactorGraph(skill1Factor.varId, skill2Factor.varId, result.player1Win)
-    latestSkillVarIds += result.player1 -> skill1Factor.varId
-    latestSkillVarIds += result.player2 -> skill2Factor.varId
 
-    // addTennisGameToFactorGraph(player1PrevSkillVarId, player2PrevSkillVarId, result.player1Win)
+    player1PrevSkillVars += skill1Factor.varId
+    player2PrevSkillVars += skill2Factor.varId
+
   }
 
   private def addSkillPriorFactor(playerSkill: TrueSkillRating): GaussianFactor = {
@@ -75,7 +89,7 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
   }
 
   /**@return Map[playerName, variable id]*/
-  def getLatestSkillVarIds(): immutable.Map[String, Int] = latestSkillVarIds.toMap
+  def getSkillVarIds(): immutable.Map[String, Seq[Int]] = skillVarIds.mapValues(varIds => varIds.toList).toMap
 
   def getFactorGraph(): FactorGraph = factorGraph
 }
