@@ -24,7 +24,7 @@ class MatchModelTesterTest {
   val log = LoggerFactory.getLogger(getClass)
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val atpMatches = getAtpMatches(matchesFile, 2010, 2011)
+  val atpMatches = getAtpMatches(matchesFile, 2011, 2011)
 
   val tester = GameModelTester(atpMatches)
 
@@ -44,11 +44,18 @@ class MatchModelTesterTest {
 
     val pointStatModel = PointStatsMatchModel()
 
-    val matchFilter = (m: GameResult) => { log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats()); new DateTime(m.timestamp.get).getYear() >= 2011 }
-    //    val matchFilter = (m: GameResult) => {
-    //      new DateTime(m.timestamp.get).getYear() <=2007 &&
-    //        (m.containsPlayer("Roger Federer"))
-    //    }
+    val matchFilter = (m: GameResult) => {
+      m match {
+        case m: TennisResult => {
+          log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats());
+          new DateTime(m.timestamp.get).getYear() >= 2007
+        }
+      }
+    }
+//        val matchFilter = (m: GameResult) => {
+//          new DateTime(m.timestamp.get).getYear() >=2007 &&
+//            (m.containsPlayer("Roger Federer"))
+//        }
 
     val modelSummary = tester.run(trueSkillExModel, matchFilter)
 
@@ -57,6 +64,8 @@ class MatchModelTesterTest {
     //println("win avg prob= " + probs.sum / probs.size)
 
     log.info("Log likelihood stats = " + modelSummary.llhStats)
+    log.info("Prediction error = " + modelSummary.predictionError())
+    log.info("players number = " + modelSummary.playersNum)
     log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
     //  log.info(modelSummary.predictedActualAvgCorrReport)

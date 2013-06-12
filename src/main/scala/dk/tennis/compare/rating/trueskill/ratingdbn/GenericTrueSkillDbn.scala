@@ -8,8 +8,12 @@ import dk.bayes.infer.ep.GenericEP
 import dk.tennis.compare.rating.trueskill.factorgraph.TennisDbnFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import com.typesafe.scalalogging.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 case class GenericTrueSkillDbn(skillTransVariance: Double, performanceVariance: Double) extends TrueSkillDbn {
+
+  private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
   private val tennisFactorGraphBuilder = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
 
@@ -23,7 +27,8 @@ case class GenericTrueSkillDbn(skillTransVariance: Double, performanceVariance: 
 
     val ep = GenericEP(factorGraph)
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-    ep.calibrate(100, progress)
+    val iterNum = ep.calibrate(100, progress)
+    logger.debug("Iter total: " + iterNum)
 
     /**Map[playerName, variable id]*/
     val latestSkillsVarIds: Map[String, Int] = tennisFactorGraphBuilder.getSkillVarIds().mapValues(varIds => varIds.last)

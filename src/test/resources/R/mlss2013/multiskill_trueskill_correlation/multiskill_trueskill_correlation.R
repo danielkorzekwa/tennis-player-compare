@@ -22,6 +22,6 @@ grid(,NA)
 title(xlab="Predicted win probability of tennis match (100 bins)")
 title(ylab="Percentagate of tennis matches won")
 
-legend("topleft",c("MultiSkill","TrueSkill"),inset=0.03, cex=1,
+legend("topleft",c("MultiSkill, cor = 0.993, p-value < 2.2e-16","TrueSkill, cor = 0.991,p-value < 2.2e-16"),inset=0.03, cex=1,
 col=c(rgb(0, 1, 0, alpha=0.5),rgb(0, 0, 1, alpha=0.5)),pch=c(20,20), lty=c(0,0))
 

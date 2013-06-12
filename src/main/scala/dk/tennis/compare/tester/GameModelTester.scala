@@ -66,6 +66,17 @@ object GameModelTester {
     def playerAExpectedWins(): Double = predictionRecords.map(r => r.playerAWinnerProb).sum
     def playerActualWins(): Double = predictionRecords.map(r => r.playerAWinner.toInt).sum
 
+    /**
+     * Fraction of players, which were predicted incorrectly as the winner
+     */
+    def predictionError(): Double = {
+      val correctPredictionNum = predictionRecords.map(r =>
+        if ((r.playerAWinner == 1) == (r.playerAWinnerProb > 0.5)) 1 else 0).sum
+      1 - correctPredictionNum.toDouble / predictionRecords.size
+    }
+
+    def playersNum(): Int = predictionRecords.flatMap(r => List(r.playerA, r.playerB)).distinct.size
+
     def predictedActualAvgCorrReport(): String = {
 
       val predictionsGroupedByProb = predictionRecords.flatMap(r => List((r.playerAWinnerProb, r.playerAWinner.toInt), (1 - r.playerAWinnerProb, 1 - r.playerAWinner))).groupBy(r => (r._1 * 100).toInt)

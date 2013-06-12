@@ -28,7 +28,7 @@ object ServeReturnTrueSkillEMLearn extends TrueSkillEMLearn {
 
       logger.debug("TrueSkillEM iter=%d, skillTransVariance=%.6f".format(currIter, currSkillTransVariance))
 
-      val tennisFactorGraph = TennisDbnFactorGraph(skillTransVariance, perfVariance)
+      val tennisFactorGraph = TennisDbnFactorGraph(currSkillTransVariance, perfVariance)
       results.foreach(r => { tennisFactorGraph.addResult(r) })
 
       val ep = GenericEP(tennisFactorGraph.getFactorGraph())

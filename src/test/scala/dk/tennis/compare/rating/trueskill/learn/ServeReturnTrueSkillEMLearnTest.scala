@@ -20,7 +20,7 @@ class ServeReturnTrueSkillEMLearnTest {
   val pointResults = toPointResults(gameResults)
 
   val performanceVariance = pow(250d / 16, 2)
-  @Test def test_atp_results_2010_to_2011 {
+  @Ignore @Test def test_atp_results_2010_to_2011 {
 
     //  val skillTransVariance = pow(25d / 3000, 2)
     val skillTransVariance = 0.25

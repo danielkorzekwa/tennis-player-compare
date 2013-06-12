@@ -17,7 +17,8 @@ case class TennisResult(
   val numOfSets: Int,
   val player1ServicePointsWonPct: Option[Double] = None,
   val player2ServicePointsWonPct: Option[Double] = None,
-  val points: Option[Seq[TennisPoint]])
+  val points: Option[Seq[TennisPoint]],
+  val round:Option[String])
 
   extends GameResult(
     eventName,
@@ -56,7 +57,8 @@ object TennisResult {
         numOfSets = m.tournament.numOfSet,
         player1ServicePointsWonPct = Some(m.matchFacts.playerAFacts.totalServicePointsWonPct),
         player2ServicePointsWonPct = Some(m.matchFacts.playerBFacts.totalServicePointsWonPct),
-        points = Some(points))
+        points = Some(points),
+        round =Some(m.matchFacts.round))
     }
 
     gameResults

@@ -29,7 +29,7 @@ class MatchTrueSkillEMLearnTest {
     assertEquals(Double.NaN, learnedVariance, 0.0001)
   }
 
-  @Test def test_three {
+  @Ignore @Test def test_three {
 
     val skillTransVariance = pow(25d / 150, 2)
 
