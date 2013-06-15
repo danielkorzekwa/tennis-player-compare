@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph
+package dk.tennis.compare.rating.trueskill.factorgraph.deepdbn
 
 import org.junit._
 import Assert._
@@ -11,7 +11,7 @@ import dk.bayes.infer.ep.GenericEP
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class TennisDbnFactorGraphCalibrateTest {
+class TennisDeepDbnFactorGraphCalibrateTest {
 
   val logger = Logger(LoggerFactory.getLogger(getClass()))
 
@@ -27,14 +27,14 @@ class TennisDbnFactorGraphCalibrateTest {
 
   @Test def calibrate {
 
-    val tennisFactorGraph = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
+    val tennisFactorGraph = TennisDeepDbnFactorGraph(skillTransVariance, performanceVariance)
     val results = gameResults.map(r => Result(r.player1, r.player2, r.player1Win.get))
     results.foreach(r => tennisFactorGraph.addResult(r))
 
     val ep = GenericEP(tennisFactorGraph.getFactorGraph())
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
 
-    val iterTotal = ep.calibrate(1000, progress)
+    val iterTotal = ep.calibrate(100, progress)
     logger.debug("Iter total: " + iterTotal)
 
     assertEquals(13, iterTotal)

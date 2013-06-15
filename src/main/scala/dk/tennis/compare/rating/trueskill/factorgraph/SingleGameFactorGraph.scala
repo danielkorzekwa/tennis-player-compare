@@ -44,4 +44,5 @@ case class SingleGameFactorGraph(skill1: TrueSkillRating, skill2: TrueSkillRatin
 
     factorGraph
   }
+  
 }

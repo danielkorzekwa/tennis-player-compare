@@ -32,7 +32,7 @@ case class TennisResult(
 
 object TennisResult {
 
-  def fromMatches(matches: Seq[MatchComposite]): Seq[TennisResult] = {
+  def fromMatches(matches: Seq[MatchComposite], random:Random = new Random(System.currentTimeMillis())): Seq[TennisResult] = {
     val gameResults = matches.map { m =>
 
       val player1 = m.matchFacts.playerAFacts.playerName
@@ -43,7 +43,7 @@ object TennisResult {
         List.fill(m.matchFacts.playerBFacts.totalServicePointsWon)(TennisPoint(player2, true)) :::
         List.fill(m.matchFacts.playerBFacts.totalServicePoints - m.matchFacts.playerBFacts.totalServicePointsWon)(TennisPoint(player2, false))
 
-      points = Random.shuffle(points)
+      points = random.shuffle(points)
 
       while (!points.last.playerOnServe.equals(m.matchFacts.winner) || !points.last.won) points = Random.shuffle(points)
 
