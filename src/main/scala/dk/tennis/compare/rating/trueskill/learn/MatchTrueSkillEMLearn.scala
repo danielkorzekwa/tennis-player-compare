@@ -3,7 +3,7 @@ package dk.tennis.compare.rating.trueskill.learn
 import dk.tennis.compare.rating.trueskill.model.Result
 import scala.annotation.tailrec
 import dk.tennis.compare.rating.trueskill.ratingdbn.GenericTrueSkillDbn
-import dk.tennis.compare.rating.trueskill.factorgraph.TennisDbnFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.TennisDbnFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.learn.lds.LatentVariable

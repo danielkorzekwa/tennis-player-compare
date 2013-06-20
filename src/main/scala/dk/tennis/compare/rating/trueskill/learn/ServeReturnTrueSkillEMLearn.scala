@@ -1,7 +1,7 @@
 package dk.tennis.compare.rating.trueskill.learn
 
 import dk.tennis.compare.rating.trueskill.model.Result
-import dk.tennis.compare.rating.trueskill.factorgraph.TennisDbnFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.TennisDbnFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.BivariateGaussianFactor

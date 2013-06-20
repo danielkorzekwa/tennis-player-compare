@@ -5,7 +5,7 @@ import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import scala.collection.mutable.ListBuffer
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.infer.ep.GenericEP
-import dk.tennis.compare.rating.trueskill.factorgraph.TennisDbnFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.TennisDbnFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import com.typesafe.scalalogging.slf4j.Logger

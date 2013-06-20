@@ -1,7 +1,7 @@
-package dk.tennis.compare.rating.trueskill.factorgraph
+package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch
 
 import org.junit._
-import Assert._
+import org.junit.Assert._
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.game.tennis.domain.TennisResult

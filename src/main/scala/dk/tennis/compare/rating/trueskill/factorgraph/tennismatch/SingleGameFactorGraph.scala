@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph
+package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch
 
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.LinearGaussianFactor

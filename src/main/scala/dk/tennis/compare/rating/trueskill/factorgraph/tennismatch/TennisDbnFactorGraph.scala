@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.deepdbn
+package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch
 
 import dk.bayes.model.factorgraph.FactorGraph
 import dk.bayes.model.factorgraph.GenericFactorGraph
@@ -14,10 +14,17 @@ import scala.math._
 import dk.bayes.model.factor.DiffGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
-import dk.bayes.infer.ep.GenericEP
 import scala.collection.mutable.ListBuffer
 
-case class TennisDeepDbnFactorGraph (skillTransVariance: Double, perfVariance: Double) {
+/**
+ * Creates Dynamic Bayesian Network for tennis results.
+ *
+ * This is mutable class.
+ *
+ * @author Daniel Korzekwa
+ *
+ */
+case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double) {
 
   private val factorGraph = GenericFactorGraph()
 
@@ -65,9 +72,19 @@ case class TennisDeepDbnFactorGraph (skillTransVariance: Double, perfVariance: D
 
   private def addTennisGameToFactorGraph(player1VarId: Int, player2VarId: Int, player1Win: Boolean) {
 
-    val outcomeVarId = lastVarId.getAndIncrement() 
-    val tennisMatchFactor = TennisMatchFactor(player1VarId,player2VarId,outcomeVarId,perfVariance,Some(player1Win))
-    factorGraph.addFactor(tennisMatchFactor)
+    val perf1VarId = lastVarId.getAndIncrement()
+    val perf2VarId = lastVarId.getAndIncrement()
+    val perfDiffVarId = lastVarId.getAndIncrement()
+    val outcomeVarId = lastVarId.getAndIncrement()
+
+    factorGraph.addFactor(LinearGaussianFactor(player1VarId, perf1VarId, 1, 0, perfVariance))
+    factorGraph.addFactor(LinearGaussianFactor(player2VarId, perf2VarId, 1, 0, perfVariance))
+    factorGraph.addFactor(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
+
+    val outcomeFactor = TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0)
+    val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, 0)
+    else outcomeFactor.withEvidence(outcomeVarId, 1)
+    factorGraph.addFactor(outcomeFactorWithEvidence)
   }
 
   /**@return Map[playerName, variable id]*/

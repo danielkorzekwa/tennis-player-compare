@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.deepdbn
+package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.deepdbn
 
 import org.junit._
 import Assert._

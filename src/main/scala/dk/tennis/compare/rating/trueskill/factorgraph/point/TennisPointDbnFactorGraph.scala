@@ -43,13 +43,8 @@ case class TennisPointDbnFactorGraph(skillTransVariance: Double, perfVariance: D
     player1PrevSkillVars += skill1Factor.varId
     player2PrevSkillVars += skill2Factor.varId
 
-    pointResults.foreach { r =>
-
-      if (r.player1.equals(firstPointResult.player1))
-        addTennisGameToFactorGraph(skill1Factor.varId, skill2Factor.varId, r.player1Win)
-      else addTennisGameToFactorGraph(skill2Factor.varId, skill1Factor.varId, r.player1Win)
-    }
-
+    // addTennisMatchToFactorGraph(firstPointResult.player1,skill1Factor.varId,skill2Factor.varId,pointResults)
+    addDeepTennisMatchToFactorGraph(firstPointResult.player1, firstPointResult.player2, skill1Factor.varId, skill2Factor.varId, pointResults)
   }
 
   private def addSkillPriorFactor(playerSkill: TrueSkillRating): GaussianFactor = {
@@ -64,7 +59,22 @@ case class TennisPointDbnFactorGraph(skillTransVariance: Double, perfVariance: D
     linearGaussianFactor
   }
 
-  private def addTennisGameToFactorGraph(player1VarId: Int, player2VarId: Int, player1Win: Boolean) {
+  private def addDeepTennisMatchToFactorGraph(player1: String, player2: String, skill1VarId: Int, skill2VarId: Int, pointResults: Seq[Result]) {
+
+    val outcomeVarId = lastVarId.getAndIncrement()
+    val matchFactor = TennisMatchByPointFactor(skill1VarId, skill2VarId, outcomeVarId, perfVariance, player1, player2, pointResults)
+    factorGraph.addFactor(matchFactor)
+  }
+
+  private def addTennisMatchToFactorGraph(player1: String, skill1VarId: Int, skill2VarId: Int, pointResults: Seq[Result]) {
+    pointResults.foreach { r =>
+      if (r.player1.equals(player1))
+        addTennisPointToFactorGraph(skill1VarId, skill2VarId, r.player1Win)
+      else addTennisPointToFactorGraph(skill2VarId, skill1VarId, r.player1Win)
+    }
+  }
+
+  private def addTennisPointToFactorGraph(player1VarId: Int, player2VarId: Int, player1Win: Boolean) {
 
     val perf1VarId = lastVarId.getAndIncrement()
     val perf2VarId = lastVarId.getAndIncrement()

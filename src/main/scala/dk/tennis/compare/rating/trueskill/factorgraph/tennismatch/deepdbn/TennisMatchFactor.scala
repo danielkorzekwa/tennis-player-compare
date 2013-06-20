@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.deepdbn
+package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.deepdbn
 
 import dk.bayes.model.factor.Factor
 import dk.bayes.model.factor.GaussianFactor
@@ -8,7 +8,7 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.TableFactor
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
-import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.SingleGameFactorGraph
 import dk.bayes.infer.LoopyBP
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.GaussianFactor
