@@ -6,6 +6,7 @@ import scala.collection._
 import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.SingleGameFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.infer.ep.GenericEP
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 case class GenericTrueSkillServeReturn(skillTransVariance: Double) extends TrueSkillServeReturn {
 
@@ -37,7 +38,8 @@ case class GenericTrueSkillServeReturn(skillTransVariance: Double) extends TrueS
     else ep.setEvidence(factorGraph.outcomeVarId, 1)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-    ep.calibrate(100, progress)
+    val epCalibrate = ForwardBackwardEPCalibrate(ep.factorGraph)
+    epCalibrate.calibrate(100, progress)
 
     val s1Marginal = ep.marginal(factorGraph.skill1VarId).asInstanceOf[GaussianFactor]
     val s2Marginal = ep.marginal(factorGraph.skill2VarId).asInstanceOf[GaussianFactor]

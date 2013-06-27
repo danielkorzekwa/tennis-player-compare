@@ -39,7 +39,7 @@ class MatchTrueSkillEMLearnTest {
     assertEquals(0.0267, learnedVariance, 0.0001)
   }
 
-  @Test def test_atp_results_2010_to_2011 {
+  @Ignore @Test def test_atp_results_2010_to_2011 {
 
     val skillTransVariance = 0.25
     val results = gameResults.map(r => Result(r.player1, r.player2, r.player1Win.get))

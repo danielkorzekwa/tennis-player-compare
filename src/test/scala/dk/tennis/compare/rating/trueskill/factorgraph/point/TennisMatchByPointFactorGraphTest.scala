@@ -11,6 +11,7 @@ import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.game.tennis.domain.TennisResult
 import scala.util.Random
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 class TennisMatchByPointFactorGraphTest {
 
@@ -31,8 +32,9 @@ class TennisMatchByPointFactorGraphTest {
     val factorGraph = TennisMatchByPointFactorGraph.create("p1", p1Skill, "p2", p2Skill, perfVariance, List(Result("p1", "p2", true)))
 
     val ep = GenericEP(factorGraph)
+    val epCalibrate = ForwardBackwardEPCalibrate(factorGraph)
 
-    assertEquals(2, ep.calibrate(100, progress))
+    assertEquals(2, epCalibrate.calibrate(100, progress).iterNum)
 
     val skill1Marginal = ep.marginal(p1Skill.varId).asInstanceOf[GaussianFactor]
     assertEquals(27.1744, skill1Marginal.m, 0.0001)
@@ -48,8 +50,8 @@ class TennisMatchByPointFactorGraphTest {
     val factorGraph = TennisMatchByPointFactorGraph.create("p1", p1Skill, "p2", p2Skill, perfVariance, List(Result("p1", "p2", false)))
 
     val ep = GenericEP(factorGraph)
-
-    assertEquals(2, ep.calibrate(100, progress))
+    val epCalibrate = ForwardBackwardEPCalibrate(factorGraph)
+    assertEquals(2, epCalibrate.calibrate(100, progress).iterNum)
 
     val skill1Marginal = ep.marginal(p1Skill.varId).asInstanceOf[GaussianFactor]
     assertEquals(3.9789, skill1Marginal.m, 0.0001)
@@ -71,8 +73,9 @@ class TennisMatchByPointFactorGraphTest {
     val factorGraph = TennisMatchByPointFactorGraph.create(tennisMatch.player1, p1Skill, tennisMatch.player2, p2Skill, perfVariance, pointResults)
 
     val ep = GenericEP(factorGraph, threshold = 0.1)
-
-    assertEquals(14, ep.calibrate(1000, progress))
+    val epCalibrate = ForwardBackwardEPCalibrate(factorGraph,threshold = 0.1)
+    
+    assertEquals(14, epCalibrate.calibrate(1000, progress).iterNum)
 
     val skill1Marginal = ep.marginal(p1Skill.varId).asInstanceOf[GaussianFactor]
     assertEquals(30.1627, skill1Marginal.m, 0.0001)

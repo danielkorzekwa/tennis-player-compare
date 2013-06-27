@@ -10,6 +10,10 @@ import dk.tennis.compare.rating.trueskill.model.Result
 import dk.bayes.infer.ep.GenericEP
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
+import dk.bayes.model.factorgraph.GenericFactorGraph
+import scala.util.Random
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
+import dk.bayes.infer.ep.calibrate.lrug.LRUGateEPCalibrate
 
 class TennisDbnFactorGraphCalibrateTest {
 
@@ -20,7 +24,7 @@ class TennisDbnFactorGraphCalibrateTest {
   val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
   val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-  val gameResults = TennisResult.fromMatches(filteredMatches).take(300)
+  val gameResults = TennisResult.fromMatches(filteredMatches).take(500)
 
   val performanceVariance = pow(25d / 16, 2)
   val skillTransVariance = pow(25d / 150, 2)
@@ -30,14 +34,19 @@ class TennisDbnFactorGraphCalibrateTest {
     val tennisFactorGraph = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
     val results = gameResults.map(r => Result(r.player1, r.player2, r.player1Win.get))
     results.foreach(r => tennisFactorGraph.addResult(r))
+    println("Num of factor graphs: " + tennisFactorGraph.getFactorGraphs.size)
 
-    val ep = GenericEP(tennisFactorGraph.getFactorGraph())
-    def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-
-    val iterTotal = ep.calibrate(1000, progress)
+    val g = GenericFactorGraph()
+    Random.shuffle(tennisFactorGraph.getFactorGraph().getFactorNodes).foreach(f => g.addFactor(f.factor))
+    val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph())
+    val iterTotal = epCalibrate.calibrate(1000, progress)
     logger.debug("Iter total: " + iterTotal)
 
-    assertEquals(13, iterTotal)
+    //    val epCalibrate = LRUGateEPCalibrate(tennisFactorGraph.getFactorGraph())
+    //    val msgNum = epCalibrate.calibrate
+    //    logger.debug("Msg total: " + msgNum)
 
   }
+
+  private def progress(currIter: Int) = {} //println("EP iteration: " + currIter)  
 }

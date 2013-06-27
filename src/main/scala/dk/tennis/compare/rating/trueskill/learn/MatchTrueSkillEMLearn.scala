@@ -12,6 +12,7 @@ import dk.bayes.learn.lds.GenericLDSLearn
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
 import dk.bayes.model.factorgraph.FactorGraph
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 /**
  * Learns skill transition variance based on match outcomes and single skill for every player.
@@ -34,7 +35,8 @@ object MatchTrueSkillEMLearn extends TrueSkillEMLearn {
 
       val ep = GenericEP(tennisFactorGraph.getFactorGraph())
       def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-      logger.debug("Iter total: " + ep.calibrate(1000, progress))
+      val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph())
+      logger.debug("Iter total: " + epCalibrate.calibrate(1000, progress))
 
       val newVariance = mStep(tennisFactorGraph)
 

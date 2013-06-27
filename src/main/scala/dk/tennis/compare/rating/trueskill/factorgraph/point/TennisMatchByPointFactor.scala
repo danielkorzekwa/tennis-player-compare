@@ -18,8 +18,8 @@ case class TennisMatchByPointFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcom
   def marginal(varId: Int): Factor = {
     val marginalFactor = varId match {
 
-      case `p1SkillVarId` => GaussianFactor(varId, Double.NaN, Double.PositiveInfinity)
-      case `p2SkillVarId` => GaussianFactor(varId, Double.NaN, Double.PositiveInfinity)
+      case `p1SkillVarId` => GaussianFactor(varId, 0, Double.PositiveInfinity)
+      case `p2SkillVarId` => GaussianFactor(varId, 0, Double.PositiveInfinity)
       case `outcomeVarId` => TableFactor(Vector(varId), Vector(2), Array(1d, 1d))
       case _ => throw new IllegalArgumentException("Unknown variable id: " + varId)
     }
@@ -38,36 +38,39 @@ case class TennisMatchByPointFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcom
     marginal
   }
 
-  private var prevP1Skill: Option[GaussianFactor] = None
-  private var prevP2Skill: Option[GaussianFactor] = None
+  private var prevP1Skill = GaussianFactor(p1SkillVarId, 0, 1)
+  private var prevP2Skill = GaussianFactor(p2SkillVarId, 0, 1)
   private var prevProductMarginalP1Skill: Option[GaussianFactor] = None
   private var prevProductMarginalP2Skill: Option[GaussianFactor] = None
 
+  private val matchFactorGraph = TennisMatchByPointFactorGraph.create(player1Name, prevP1Skill, player2Name, prevP2Skill, perfVariance, pointResults)
+  private val ep = GenericEP(matchFactorGraph, threshold = 0.001)
+  def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
+
   private def productMarginal(varId: Int, p1Skill: GaussianFactor, p2Skill: GaussianFactor, outcomeFactor: TableFactor): Factor = {
-
-    if (!prevP1Skill.isDefined || !p1Skill.equals(prevP1Skill.get, 0.00001)
-      || !p2Skill.equals(prevP2Skill.get, 0.00001)) {
-
-      val matchFactorGraph = TennisMatchByPointFactorGraph.create(player1Name, p1Skill, player2Name, p2Skill, perfVariance, pointResults)
-      val ep = GenericEP(matchFactorGraph,threshold=0.001)
-
-      def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-      val iterTotal = ep.calibrate(1000, progress)
-
-      prevP1Skill = Some(p1Skill)
-      prevP2Skill = Some(p2Skill)
-      prevProductMarginalP1Skill = Some(ep.marginal(p1Skill.varId).asInstanceOf[GaussianFactor])
-      prevProductMarginalP2Skill = Some(ep.marginal(p2Skill.varId).asInstanceOf[GaussianFactor])
-
-    }
-
-    val marginal = varId match {
-      case `p1SkillVarId` => prevProductMarginalP1Skill.get
-      case `p2SkillVarId` => prevProductMarginalP2Skill.get
-      case `outcomeVarId` => TableFactor(Vector(varId), Vector(2), Array(1d, 1d))
-      case _ => throw new IllegalArgumentException("Incorrect marginal variable id")
-    }
-    marginal
+     throw new UnsupportedOperationException("Not implemented yet")
+//    if (!p1Skill.equals(prevP1Skill, 0.00001) || !p2Skill.equals(prevP2Skill, 0.00001)) {
+//
+//      prevP1Skill.m = p1Skill.m
+//      prevP1Skill.v = p1Skill.v
+//
+//      prevP2Skill.m = p2Skill.m
+//      prevP2Skill.v = p2Skill.v
+//
+//      val iterTotal = ep.calibrate(1, progress)
+//     // println(iterTotal)
+//      prevProductMarginalP1Skill = Some(ep.marginal(p1SkillVarId).asInstanceOf[GaussianFactor])
+//      prevProductMarginalP2Skill = Some(ep.marginal(p2SkillVarId).asInstanceOf[GaussianFactor])
+//
+//    }
+//
+//    val marginal = varId match {
+//      case `p1SkillVarId` => prevProductMarginalP1Skill.get
+//      case `p2SkillVarId` => prevProductMarginalP2Skill.get
+//      case `outcomeVarId` => TableFactor(Vector(varId), Vector(2), Array(1d, 1d))
+//      case _ => throw new IllegalArgumentException("Incorrect marginal variable id")
+//    }
+//    marginal
   }
 
   def withEvidence(varId: Int, varValue: AnyVal): Factor = throw new UnsupportedOperationException("Not implemented yet")

@@ -9,6 +9,7 @@ import dk.bayes.model.factorgraph.FactorGraph
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.SingleGameFactorGraph
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 case class GenericTrueSkillMatchProb(skillTransVariance: Double) extends TrueSkillMatchProb {
 
@@ -17,7 +18,8 @@ case class GenericTrueSkillMatchProb(skillTransVariance: Double) extends TrueSki
     val ep = GenericEP(factorGraph.createTennisFactorGraph)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-    ep.calibrate(100, progress)
+    val epCalibrate = ForwardBackwardEPCalibrate(ep.factorGraph)
+    epCalibrate.calibrate(100, progress)
 
     val outcomeMarginal = ep.marginal(factorGraph.outcomeVarId).getValue((factorGraph.outcomeVarId, 0))
     outcomeMarginal

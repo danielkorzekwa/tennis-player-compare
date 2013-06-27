@@ -11,6 +11,7 @@ import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
 import scala.annotation.tailrec
 import dk.bayes.model.factor.GaussianFactor
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 /**
  * Learns skill transition variance based on tennis point outcomes and skills on serve and return for both players.
@@ -33,7 +34,8 @@ object ServeReturnTrueSkillEMLearn extends TrueSkillEMLearn {
 
       val ep = GenericEP(tennisFactorGraph.getFactorGraph())
       def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-      logger.debug("Iter total: " + ep.calibrate(1000, progress))
+      val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph())
+      logger.debug("Iter total: " + epCalibrate.calibrate(1000, progress))
 
       val newVariance = mStep(tennisFactorGraph)
 

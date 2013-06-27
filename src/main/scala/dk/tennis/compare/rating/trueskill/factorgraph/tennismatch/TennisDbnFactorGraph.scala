@@ -15,6 +15,7 @@ import dk.bayes.model.factor.DiffGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import scala.collection.mutable.ListBuffer
+import dk.bayes.model.factor.Factor
 
 /**
  * Creates Dynamic Bayesian Network for tennis results.
@@ -27,6 +28,8 @@ import scala.collection.mutable.ListBuffer
 case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double) {
 
   private val factorGraph = GenericFactorGraph()
+
+  private var factorGraphs: Seq[FactorGraph] = Nil
 
   /**key - playerName,value - temporal sequence of player skill variables*/
   private val skillVarIds: mutable.Map[String, ListBuffer[Int]] = mutable.Map[String, ListBuffer[Int]]()
@@ -60,13 +63,13 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
 
   private def addSkillPriorFactor(playerSkill: TrueSkillRating): GaussianFactor = {
     val gaussianFactor = GaussianFactor(lastVarId.getAndIncrement(), defaultSkill.mean, defaultSkill.variance)
-    factorGraph.addFactor(gaussianFactor)
+    addFactorToFactorGraph(gaussianFactor)
     gaussianFactor
   }
 
   private def addSkillTransitionFactor(playerPrevSkillVarId: Int): LinearGaussianFactor = {
     val linearGaussianFactor = LinearGaussianFactor(playerPrevSkillVarId, lastVarId.getAndIncrement(), 1, 0, skillTransVariance)
-    factorGraph.addFactor(linearGaussianFactor)
+    addFactorToFactorGraph(linearGaussianFactor)
     linearGaussianFactor
   }
 
@@ -77,18 +80,25 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
     val perfDiffVarId = lastVarId.getAndIncrement()
     val outcomeVarId = lastVarId.getAndIncrement()
 
-    factorGraph.addFactor(LinearGaussianFactor(player1VarId, perf1VarId, 1, 0, perfVariance))
-    factorGraph.addFactor(LinearGaussianFactor(player2VarId, perf2VarId, 1, 0, perfVariance))
-    factorGraph.addFactor(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
+    addFactorToFactorGraph(LinearGaussianFactor(player1VarId, perf1VarId, 1, 0, perfVariance))
+    addFactorToFactorGraph(LinearGaussianFactor(player2VarId, perf2VarId, 1, 0, perfVariance))
+    addFactorToFactorGraph(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
 
     val outcomeFactor = TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0)
     val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, 0)
     else outcomeFactor.withEvidence(outcomeVarId, 1)
-    factorGraph.addFactor(outcomeFactorWithEvidence)
+    addFactorToFactorGraph(outcomeFactorWithEvidence)
+  }
+
+  private def addFactorToFactorGraph(factor: Factor) {
+    factorGraph.addFactor(factor)
+
+    factorGraphs = GenericFactorGraph.addFactor(factor, factorGraphs)
   }
 
   /**@return Map[playerName, variable id]*/
   def getSkillVarIds(): immutable.Map[String, Seq[Int]] = skillVarIds.mapValues(varIds => varIds.toList).toMap
 
   def getFactorGraph(): FactorGraph = factorGraph
+  def getFactorGraphs(): Seq[FactorGraph] = factorGraphs
 }

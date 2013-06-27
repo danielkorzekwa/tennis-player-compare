@@ -43,8 +43,8 @@ case class TennisPointDbnFactorGraph(skillTransVariance: Double, perfVariance: D
     player1PrevSkillVars += skill1Factor.varId
     player2PrevSkillVars += skill2Factor.varId
 
-    // addTennisMatchToFactorGraph(firstPointResult.player1,skill1Factor.varId,skill2Factor.varId,pointResults)
-    addDeepTennisMatchToFactorGraph(firstPointResult.player1, firstPointResult.player2, skill1Factor.varId, skill2Factor.varId, pointResults)
+    addTennisMatchToFactorGraph(firstPointResult.player1, skill1Factor.varId, skill2Factor.varId, pointResults)
+    // addDeepTennisMatchToFactorGraph(firstPointResult.player1, firstPointResult.player2, skill1Factor.varId, skill2Factor.varId, pointResults)
   }
 
   private def addSkillPriorFactor(playerSkill: TrueSkillRating): GaussianFactor = {

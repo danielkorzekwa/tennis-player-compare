@@ -2,18 +2,17 @@ package dk.tennis.compare.rating.trueskill.factorgraph.point
 
 import scala.math.pow
 import scala.util.Random
-
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.slf4j.LoggerFactory
-
 import com.typesafe.scalalogging.slf4j.Logger
-
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.bayes.infer.ep.GenericEP
 import dk.tennis.compare.game.tennis.domain.TennisResult
 import dk.tennis.compare.rating.trueskill.model.Result
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
+import dk.bayes.infer.ep.calibrate.fb.EPSummary
 
 class TennisPointDbnFactorGraphTest {
 
@@ -24,7 +23,7 @@ class TennisPointDbnFactorGraphTest {
   val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
   val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0)).take(10)
+  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0)).take(2)
 
   val performanceVariance = pow(250d / 16, 2)
   val skillTransVariance = pow(25d / 150, 2)
@@ -41,10 +40,11 @@ class TennisPointDbnFactorGraphTest {
     val ep = GenericEP(tennisFactorGraph.getFactorGraph(), threshold = 0.001)
     def progress(currIter: Int) = println("EP iteration: " + currIter)
 
-    val iterTotal = ep.calibrate(1000, progress)
+       val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph(),threshold = 0.001)
+    val iterTotal = epCalibrate.calibrate(1000, progress)
     logger.debug("Iter total: " + iterTotal)
 
-    assertEquals(2, iterTotal)
+    assertEquals(EPSummary(8,87936), iterTotal)
 
   }
 

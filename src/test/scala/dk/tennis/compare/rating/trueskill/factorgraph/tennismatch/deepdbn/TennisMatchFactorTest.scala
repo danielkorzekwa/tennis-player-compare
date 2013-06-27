@@ -6,6 +6,7 @@ import scala.math._
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.infer.ep.GenericEP
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 class TennisMatchFactorTest {
 
@@ -27,8 +28,9 @@ class TennisMatchFactorTest {
     factorGraph.addFactor(tennisMatchFactor)
 
     val ep = GenericEP(factorGraph)
+    val epCalibrate = ForwardBackwardEPCalibrate(factorGraph)
 
-    assertEquals(1, ep.calibrate(100, progress))
+    assertEquals(1, epCalibrate.calibrate(100, progress).iterNum)
 
     val outcomeMarginal = ep.marginal(outcomeVarId)
     assertEquals(0.24463, outcomeMarginal.getValue((outcomeVarId, 0)), 0.00001)
@@ -54,8 +56,9 @@ class TennisMatchFactorTest {
     factorGraph.addFactor(tennisMatchFactor)
 
     val ep = GenericEP(factorGraph)
+    val epCalibrate = ForwardBackwardEPCalibrate(factorGraph)
 
-    assertEquals(2, ep.calibrate(100, progress))
+    assertEquals(2, epCalibrate.calibrate(100, progress).iterNum)
 
     val outcomeMarginal = ep.marginal(outcomeVarId)
     assertEquals(1, outcomeMarginal.getValue((outcomeVarId, 0)), 0.00001)

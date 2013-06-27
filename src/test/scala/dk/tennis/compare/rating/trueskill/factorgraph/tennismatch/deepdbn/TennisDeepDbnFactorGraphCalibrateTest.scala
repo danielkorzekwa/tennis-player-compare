@@ -10,6 +10,7 @@ import dk.tennis.compare.rating.trueskill.model.Result
 import dk.bayes.infer.ep.GenericEP
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 class TennisDeepDbnFactorGraphCalibrateTest {
 
@@ -34,10 +35,11 @@ class TennisDeepDbnFactorGraphCalibrateTest {
     val ep = GenericEP(tennisFactorGraph.getFactorGraph())
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
 
-    val iterTotal = ep.calibrate(100, progress)
-    logger.debug("Iter total: " + iterTotal)
+    val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph())
+    val epSummary = epCalibrate.calibrate(100, progress)
+    logger.debug("EP Summary: " + epSummary)
 
-    assertEquals(13, iterTotal)
+    assertEquals(13, epSummary.iterNum)
 
   }
 }

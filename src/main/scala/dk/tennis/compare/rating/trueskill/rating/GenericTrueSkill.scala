@@ -14,6 +14,7 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.Result
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 case class GenericTrueSkill(skillTransVariance: Double) extends TrueSkill {
 
@@ -46,7 +47,8 @@ case class GenericTrueSkill(skillTransVariance: Double) extends TrueSkill {
     else ep.setEvidence(factorGraph.outcomeVarId, 1)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-    val iterNum = ep.calibrate(100, progress)
+    val epCalibrate = ForwardBackwardEPCalibrate(ep.factorGraph)
+    val iterNum = epCalibrate.calibrate(100, progress)
     //logger.debug("Iter total: " + iterNum)
 
     val s1Marginal = ep.marginal(factorGraph.skill1VarId).asInstanceOf[GaussianFactor]

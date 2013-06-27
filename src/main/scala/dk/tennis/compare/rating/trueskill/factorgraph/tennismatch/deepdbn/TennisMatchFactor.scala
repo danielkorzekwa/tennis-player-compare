@@ -17,6 +17,7 @@ import dk.bayes.model.factor.DiffGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.model.factorgraph.FactorGraph
+import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 
 case class TennisMatchFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcomeVarId: Int,
   perfVariance: Double, p1Wins: Option[Boolean] = None) extends Factor {
@@ -33,8 +34,8 @@ case class TennisMatchFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcomeVarId:
   def marginal(varId: Int): Factor = {
     val marginalFactor = varId match {
 
-      case `p1SkillVarId` => GaussianFactor(varId, Double.NaN, Double.PositiveInfinity)
-      case `p2SkillVarId` => GaussianFactor(varId, Double.NaN, Double.PositiveInfinity)
+      case `p1SkillVarId` => GaussianFactor(varId, 0, Double.PositiveInfinity)
+      case `p2SkillVarId` => GaussianFactor(varId, 0, Double.PositiveInfinity)
       case `outcomeVarId` => p1Wins match {
         case None => TableFactor(Vector(varId), Vector(2), Array(1d, 1d))
         case Some(true) => TableFactor(Vector(varId), Vector(2), Array(1d, 0d))
@@ -71,7 +72,8 @@ case class TennisMatchFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcomeVarId:
     }
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-    val iterTotal = ep.calibrate(100, progress)
+    val epCalibrate = ForwardBackwardEPCalibrate(ep.factorGraph)
+    val iterTotal = epCalibrate.calibrate(100, progress)
 
     val skill1Marginal = ep.marginal(_skill1VarId).asInstanceOf[GaussianFactor]
     val skill2Marginal = ep.marginal(_skill2VarId).asInstanceOf[GaussianFactor]
