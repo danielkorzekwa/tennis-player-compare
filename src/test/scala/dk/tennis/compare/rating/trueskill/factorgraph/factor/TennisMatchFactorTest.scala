@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.factor
+package dk.tennis.compare.rating.trueskill.factorgraph.factor
 
 import org.junit._
 import org.junit.Assert._
@@ -7,6 +7,7 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
+import dk.tennis.compare.rating.trueskill.factorgraph.factor.TennisMatchFactor
 
 class TennisMatchFactorTest {
 

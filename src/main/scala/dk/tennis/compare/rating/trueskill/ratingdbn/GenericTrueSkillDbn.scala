@@ -5,7 +5,7 @@ import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import scala.collection.mutable.ListBuffer
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.infer.ep.GenericEP
-import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.TennisDbnFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.TennisDeepDbnFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import com.typesafe.scalalogging.slf4j.Logger
@@ -16,7 +16,7 @@ case class GenericTrueSkillDbn(skillTransVariance: Double, performanceVariance: 
 
   private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  private val tennisFactorGraphBuilder = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
+  private val tennisFactorGraphBuilder = TennisDeepDbnFactorGraph(skillTransVariance, performanceVariance)
 
   def addResult(result: Result) = {
     tennisFactorGraphBuilder.addResult(result)

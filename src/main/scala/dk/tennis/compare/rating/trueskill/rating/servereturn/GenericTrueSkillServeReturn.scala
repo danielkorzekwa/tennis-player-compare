@@ -3,7 +3,7 @@ package dk.tennis.compare.rating.trueskill.rating.servereturn
 import dk.tennis.compare.rating.trueskill.model.Result
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import scala.collection._
-import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.SingleGameFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate

@@ -45,7 +45,7 @@ class MatchModelTesterTest {
     val matchFilter = (m: GameResult) => {
       m match {
         case m: TennisResult => {
-          log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats());
+         // log.info(new DateTime(m.timestamp.get).toString() + ". Log likelihood stats = " + tester.getLlhStats());
           new DateTime(m.timestamp.get).getYear() >= 2007
         }
       }

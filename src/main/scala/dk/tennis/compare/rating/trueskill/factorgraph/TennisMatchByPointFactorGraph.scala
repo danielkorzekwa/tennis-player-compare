@@ -1,9 +1,8 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.point
+package dk.tennis.compare.rating.trueskill.factorgraph
 
 import dk.bayes.model.factorgraph.FactorGraph
 import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.tennis.compare.rating.trueskill.model.Result
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.bayes.model.factor.GaussianFactor
 import java.util.concurrent.atomic.AtomicInteger
 import dk.bayes.model.factor.LinearGaussianFactor

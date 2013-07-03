@@ -3,7 +3,7 @@ package dk.tennis.compare.rating.trueskill.learn
 import dk.tennis.compare.rating.trueskill.model.Result
 import scala.annotation.tailrec
 import dk.tennis.compare.rating.trueskill.ratingdbn.GenericTrueSkillDbn
-import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.TennisDbnFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.TennisDeepDbnFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.learn.lds.LatentVariable
@@ -30,7 +30,7 @@ object MatchTrueSkillEMLearn extends TrueSkillEMLearn {
 
       logger.debug("TrueSkillEM iter=%d, skillTransVariance=%.6f".format(currIter, currSkillTransVariance))
 
-      val tennisFactorGraph = TennisDbnFactorGraph(currSkillTransVariance, perfVariance)
+      val tennisFactorGraph = TennisDeepDbnFactorGraph(currSkillTransVariance, perfVariance)
       results.foreach(r => tennisFactorGraph.addResult(r))
 
       val ep = GenericEP(tennisFactorGraph.getFactorGraph())
@@ -53,7 +53,7 @@ object MatchTrueSkillEMLearn extends TrueSkillEMLearn {
    *
    * @param em Calibrated factor graph
    */
-  private def mStep(tennisFactorGraph: TennisDbnFactorGraph): Double = {
+  private def mStep(tennisFactorGraph: TennisDeepDbnFactorGraph): Double = {
     val ep = GenericEP(tennisFactorGraph.getFactorGraph())
 
     val sequences = tennisFactorGraph.getSkillVarIds().values.filter(varIds => varIds.size >= 2).map { varIds =>

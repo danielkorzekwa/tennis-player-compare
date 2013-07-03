@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.point
+package dk.tennis.compare.rating.trueskill.factorgraph
 
 import dk.tennis.compare.rating.trueskill.model.Result
 import dk.bayes.model.factorgraph.GenericFactorGraph
@@ -9,9 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.LinearGaussianFactor
-import dk.bayes.model.factor.DiffGaussianFactor
-import dk.bayes.model.factor.TruncGaussianFactor
-import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.factor.TennisMatchFactor
+import dk.tennis.compare.rating.trueskill.factorgraph.factor.TennisMatchFactor
+import dk.tennis.compare.rating.trueskill.factorgraph.factor.TennisMatchByPointFactor
 
 case class TennisPointDbnFactorGraph(skillTransVariance: Double, perfVariance: Double) {
 

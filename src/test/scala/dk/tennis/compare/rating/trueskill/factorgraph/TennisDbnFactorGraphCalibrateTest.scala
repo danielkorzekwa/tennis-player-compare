@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch
+package dk.tennis.compare.rating.trueskill.factorgraph
 
 import org.junit._
 import org.junit.Assert._
@@ -7,14 +7,11 @@ import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.game.tennis.domain.TennisResult
 import scala.math._
 import dk.tennis.compare.rating.trueskill.model.Result
-import dk.bayes.infer.ep.GenericEP
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
-import dk.bayes.model.factorgraph.GenericFactorGraph
-import scala.util.Random
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
-import dk.bayes.infer.ep.calibrate.lrug.LRUGateEPCalibrate
 import org.apache.commons.lang.time.StopWatch
+import dk.tennis.compare.rating.trueskill.factorgraph.TennisDeepDbnFactorGraph
 
 class TennisDbnFactorGraphCalibrateTest {
 
@@ -22,7 +19,7 @@ class TennisDbnFactorGraphCalibrateTest {
 
   val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv")
 
-  val matches = (2006 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
+  val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
   val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
   val gameResults = TennisResult.fromMatches(filteredMatches)

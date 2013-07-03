@@ -7,9 +7,9 @@ import scala.math._
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.bayes.gaussian.MultivariateGaussian.toGaussian
 import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
-import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.SingleGameFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.infer.ep.GenericEP
-import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.SingleGameFactorGraph
+import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.model.factor.GaussianFactor
 import dk.tennis.compare.rating.trueskill.model.Result
 import com.typesafe.scalalogging.slf4j.Logger

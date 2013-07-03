@@ -33,7 +33,7 @@ class MatchModelTesterTest {
 
       val gamesSimulator = GenericGameSimulator(1)
 
-      val gameResults = gamesSimulator.simulateGames(players, 2006, 2011, 1000, perfVariance)
+      val gameResults = gamesSimulator.simulateGames(players, 2006, 2011, 100, perfVariance)
 
       val tester = GameModelTester(gameResults)
 

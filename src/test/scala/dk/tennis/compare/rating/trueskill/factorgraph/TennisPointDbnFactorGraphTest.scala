@@ -1,8 +1,7 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.point
+package dk.tennis.compare.rating.trueskill.factorgraph
 
 import scala.math.pow
 import scala.util.Random
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.slf4j.LoggerFactory
 import com.typesafe.scalalogging.slf4j.Logger
@@ -12,7 +11,6 @@ import dk.bayes.infer.ep.GenericEP
 import dk.tennis.compare.game.tennis.domain.TennisResult
 import dk.tennis.compare.rating.trueskill.model.Result
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
-import dk.bayes.infer.ep.calibrate.fb.EPSummary
 import org.apache.commons.lang.time.StopWatch
 
 class TennisPointDbnFactorGraphTest {
@@ -24,7 +22,7 @@ class TennisPointDbnFactorGraphTest {
   val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
   val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0)).take(500)
+  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0)).take(50)
 
   val performanceVariance = pow(250d / 16, 2)
   val skillTransVariance = pow(25d / 150, 2)
@@ -52,13 +50,13 @@ class TennisPointDbnFactorGraphTest {
   }
 
   private def toPointResults(gameResult: TennisResult): Seq[Result] = {
-    val pointResults = gameResult.points.get.map { point =>
+    val pointResults = gameResult.points.get.map { (point =>
 
       if (point.playerOnServe.equals(gameResult.player1))
         Result(gameResult.player1, gameResult.player2, point.won)
       else if (point.playerOnServe.equals(gameResult.player2))
         Result(gameResult.player2, gameResult.player1, point.won)
-      else throw new IllegalArgumentException("Player on serve not found")
+      else throw new IllegalArgumentException("Player on serve not found"))
 
     }
     pointResults

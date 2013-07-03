@@ -1,8 +1,7 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.point
+package dk.tennis.compare.rating.trueskill.factorgraph.factor
 
 import scala.math._
 import dk.bayes.model.factor.GaussianFactor
-import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.Factor
 import dk.tennis.compare.rating.trueskill.model.Result
@@ -10,6 +9,7 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.SingleTableFactor
 import dk.bayes.model.factor.SingleFactor
+import dk.tennis.compare.rating.trueskill.factorgraph.TennisMatchByPointFactorGraph
 
 case class TennisMatchByPointFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcomeVarId: Int,
   perfVariance: Double, player1Name: String, player2Name: String, pointResults: Seq[Result]) extends Factor {

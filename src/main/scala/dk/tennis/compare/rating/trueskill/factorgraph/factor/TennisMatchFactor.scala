@@ -1,22 +1,15 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.factor
+package dk.tennis.compare.rating.trueskill.factorgraph.factor
 
 import dk.bayes.model.factor.Factor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.SingleTableFactor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.GaussianFactor
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.bayes.model.factor.GaussianFactor
-import dk.bayes.model.factor.LinearGaussianFactor
-import dk.bayes.model.factor.DiffGaussianFactor
-import dk.bayes.model.factor.TruncGaussianFactor
-import dk.bayes.model.factorgraph.GenericFactorGraph
-import dk.bayes.model.factorgraph.FactorGraph
 import dk.bayes.gaussian.Gaussian
 import dk.bayes.gaussian.LinearGaussian
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.GaussianFactor
-import dk.bayes.gaussian.MultivariateGaussian.toGaussian
 import dk.bayes.model.factor.SingleTableFactor
 import dk.bayes.model.factor.SingleFactor
 
@@ -24,13 +17,6 @@ case class TennisMatchFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcomeVarId:
   perfVariance: Double, p1Wins: Option[Boolean] = None) extends Factor {
 
   private val ZERO_PROBABILITY = 1.0E-20
-
-  private val _skill1VarId = 1
-  private val _skill2VarId = 2
-  private val _perf1VarId = 3
-  private val _perf2VarId = 4
-  private val _perfDiffVarId = 5
-  private val _outcomeVarId = 6
 
   /**caching*/
   val skillCachingDelta = 0.000000001
