@@ -11,6 +11,7 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.LinearGaussianFactor
 import dk.bayes.model.factor.DiffGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
+import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.factor.TennisMatchFactor
 
 case class TennisPointDbnFactorGraph(skillTransVariance: Double, perfVariance: Double) {
 
@@ -76,19 +77,10 @@ case class TennisPointDbnFactorGraph(skillTransVariance: Double, perfVariance: D
 
   private def addTennisPointToFactorGraph(player1VarId: Int, player2VarId: Int, player1Win: Boolean) {
 
-    val perf1VarId = lastVarId.getAndIncrement()
-    val perf2VarId = lastVarId.getAndIncrement()
-    val perfDiffVarId = lastVarId.getAndIncrement()
-    val outcomeVarId = lastVarId.getAndIncrement()
-
-    factorGraph.addFactor(LinearGaussianFactor(player1VarId, perf1VarId, 1, 0, perfVariance))
-    factorGraph.addFactor(LinearGaussianFactor(player2VarId, perf2VarId, 1, 0, perfVariance))
-    factorGraph.addFactor(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
-
-    val outcomeFactor = TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0)
-    val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, true)
-    else outcomeFactor.withEvidence(outcomeVarId, false)
-    factorGraph.addFactor(outcomeFactorWithEvidence)
+     val outcomeVarId = lastVarId.getAndIncrement() 
+    val tennisMatchFactor = TennisMatchFactor(player1VarId,player2VarId,outcomeVarId,perfVariance,Some(player1Win))
+    factorGraph.addFactor(tennisMatchFactor)
+    
   }
 
   def getFactorGraph(): FactorGraph = factorGraph

@@ -24,7 +24,7 @@ class TennisPointDbnFactorGraphTest {
   val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
   val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
 
-  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0)).take(50)
+  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0)).take(500)
 
   val performanceVariance = pow(250d / 16, 2)
   val skillTransVariance = pow(25d / 150, 2)

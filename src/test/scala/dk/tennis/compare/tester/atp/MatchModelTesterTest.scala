@@ -9,7 +9,6 @@ import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.game.tennis.domain.BfMarket
 import dk.tennis.compare.game.tennis.domain.TennisResult
 import dk.tennis.compare.game.tennis.model.ExPricesMatchModel
-import dk.tennis.compare.game.tennis.model.Glicko2MatchModel
 import dk.tennis.compare.game.tennis.model.PointStatsMatchModel
 import dk.tennis.compare.game.tennis.model.TrueSkillExPriceModel
 import dk.tennis.compare.game.tennis.model.TrueSkillMatchModel
@@ -34,7 +33,6 @@ class MatchModelTesterTest {
     val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
     val exModel = ExPricesMatchModel(atpMatches, bfMarkets)
 
-    val glicko2Model = Glicko2MatchModel()
     //    val model = Glicko2HardMatchModel()
     val trueSkillModel = TrueSkillMatchModel()
     //  val model = TrueSkillDBNMatchModel()

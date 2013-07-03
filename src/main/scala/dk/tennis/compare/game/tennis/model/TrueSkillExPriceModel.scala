@@ -12,7 +12,6 @@ import scala.util.Random
 case class TrueSkillExPriceModel(trueSkillModel: TrueSkillMatchModel, exPricesModel: ExPricesMatchModel) extends GameModel {
 
   private val log = LoggerFactory.getLogger(getClass)
-  private val glicko2Model = Glicko2MatchModel()
   private val pointStatsModel = PointStatsMatchModel()
   private val trueSkillPointModel = TrueSkillPointModel()
   private val trueSkillPointServeReturnModel = TrueSkillPointServeReturnModel()
