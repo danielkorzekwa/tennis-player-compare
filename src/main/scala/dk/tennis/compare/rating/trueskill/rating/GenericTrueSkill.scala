@@ -43,8 +43,8 @@ case class GenericTrueSkill(skillTransVariance: Double) extends TrueSkill {
 
     val ep = GenericEP(factorGraph.createTennisFactorGraph())
 
-    if (result.player1Win) ep.setEvidence(factorGraph.outcomeVarId, 0)
-    else ep.setEvidence(factorGraph.outcomeVarId, 1)
+    if (result.player1Win) ep.setEvidence(factorGraph.outcomeVarId, true)
+    else ep.setEvidence(factorGraph.outcomeVarId, false)
 
     def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
     val epCalibrate = ForwardBackwardEPCalibrate(ep.factorGraph)

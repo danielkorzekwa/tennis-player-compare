@@ -29,8 +29,6 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
 
   private val factorGraph = GenericFactorGraph()
 
-  private var factorGraphs: Seq[FactorGraph] = Nil
-
   /**key - playerName,value - temporal sequence of player skill variables*/
   private val skillVarIds: mutable.Map[String, ListBuffer[Int]] = mutable.Map[String, ListBuffer[Int]]()
 
@@ -85,20 +83,17 @@ case class TennisDbnFactorGraph(skillTransVariance: Double, perfVariance: Double
     addFactorToFactorGraph(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
 
     val outcomeFactor = TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0)
-    val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, 0)
-    else outcomeFactor.withEvidence(outcomeVarId, 1)
+    val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, true)
+    else outcomeFactor.withEvidence(outcomeVarId, false)
     addFactorToFactorGraph(outcomeFactorWithEvidence)
   }
 
   private def addFactorToFactorGraph(factor: Factor) {
     factorGraph.addFactor(factor)
-
-    factorGraphs = GenericFactorGraph.addFactor(factor, factorGraphs)
   }
 
   /**@return Map[playerName, variable id]*/
   def getSkillVarIds(): immutable.Map[String, Seq[Int]] = skillVarIds.mapValues(varIds => varIds.toList).toMap
 
   def getFactorGraph(): FactorGraph = factorGraph
-  def getFactorGraphs(): Seq[FactorGraph] = factorGraphs
 }

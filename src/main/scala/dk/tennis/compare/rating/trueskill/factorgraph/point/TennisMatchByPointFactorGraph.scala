@@ -32,8 +32,8 @@ object TennisMatchByPointFactorGraph {
       factorGraph.addFactor(DiffGaussianFactor(perf1VarId, perf2VarId, perfDiffVarId))
 
       val outcomeFactor = TruncGaussianFactor(perfDiffVarId, outcomeVarId, 0)
-      val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, 0)
-      else outcomeFactor.withEvidence(outcomeVarId, 1)
+      val outcomeFactorWithEvidence = if (player1Win) outcomeFactor.withEvidence(outcomeVarId, true)
+      else outcomeFactor.withEvidence(outcomeVarId, false)
       factorGraph.addFactor(outcomeFactorWithEvidence)
     }
 

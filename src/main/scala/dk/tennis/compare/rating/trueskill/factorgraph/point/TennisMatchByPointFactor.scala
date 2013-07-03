@@ -6,30 +6,31 @@ import dk.bayes.model.factorgraph.GenericFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.Factor
 import dk.tennis.compare.rating.trueskill.model.Result
-import dk.bayes.model.factor.TableFactor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.GaussianFactor
+import dk.bayes.model.factor.SingleTableFactor
+import dk.bayes.model.factor.SingleFactor
 
 case class TennisMatchByPointFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcomeVarId: Int,
   perfVariance: Double, player1Name: String, player2Name: String, pointResults: Seq[Result]) extends Factor {
 
   def getVariableIds(): Seq[Int] = Vector(p1SkillVarId, p2SkillVarId, outcomeVarId)
 
-  def marginal(varId: Int): Factor = {
+  def marginal(varId: Int): SingleFactor = {
     val marginalFactor = varId match {
 
       case `p1SkillVarId` => GaussianFactor(varId, 0, Double.PositiveInfinity)
       case `p2SkillVarId` => GaussianFactor(varId, 0, Double.PositiveInfinity)
-      case `outcomeVarId` => TableFactor(Vector(varId), Vector(2), Array(1d, 1d))
+      case `outcomeVarId` => SingleTableFactor(varId, 2, Array(1d, 1d))
       case _ => throw new IllegalArgumentException("Unknown variable id: " + varId)
     }
 
     marginalFactor
   }
 
-  def productMarginal(varId: Int, factors: Seq[Factor]): Factor = {
-    val marginal: Factor = factors match {
-      case Seq(p1Skill: GaussianFactor, p2Skill: GaussianFactor, matchOutcome: TableFactor) if p1Skill.varId == p1SkillVarId && p2Skill.varId == p2SkillVarId && matchOutcome.variableIds.equals(List(outcomeVarId)) => {
+  def productMarginal(varId: Int, factors: Seq[Factor]): SingleFactor = {
+    val marginal: SingleFactor = factors match {
+      case Seq(p1Skill: GaussianFactor, p2Skill: GaussianFactor, matchOutcome: SingleTableFactor) if p1Skill.varId == p1SkillVarId && p2Skill.varId == p2SkillVarId && matchOutcome.varId==outcomeVarId => {
         productMarginal(varId, p1Skill, p2Skill, matchOutcome)
       }
       case _ =>
@@ -47,7 +48,7 @@ case class TennisMatchByPointFactor(p1SkillVarId: Int, p2SkillVarId: Int, outcom
   private val ep = GenericEP(matchFactorGraph, threshold = 0.001)
   def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
 
-  private def productMarginal(varId: Int, p1Skill: GaussianFactor, p2Skill: GaussianFactor, outcomeFactor: TableFactor): Factor = {
+  private def productMarginal(varId: Int, p1Skill: GaussianFactor, p2Skill: GaussianFactor, outcomeFactor: SingleTableFactor): SingleFactor = {
      throw new UnsupportedOperationException("Not implemented yet")
 //    if (!p1Skill.equals(prevP1Skill, 0.00001) || !p2Skill.equals(prevP2Skill, 0.00001)) {
 //

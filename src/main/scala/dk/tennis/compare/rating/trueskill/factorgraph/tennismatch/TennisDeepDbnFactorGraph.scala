@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.deepdbn
+package dk.tennis.compare.rating.trueskill.factorgraph.tennismatch
 
 import dk.bayes.model.factorgraph.FactorGraph
 import dk.bayes.model.factorgraph.GenericFactorGraph
@@ -11,11 +11,8 @@ import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.bayes.model.factor.LinearGaussianFactor
 import scala.math._
-import dk.bayes.model.factor.DiffGaussianFactor
-import dk.bayes.model.factor.TruncGaussianFactor
-import dk.bayes.model.factor.TruncGaussianFactor
-import dk.bayes.infer.ep.GenericEP
 import scala.collection.mutable.ListBuffer
+import dk.tennis.compare.rating.trueskill.factorgraph.tennismatch.factor.TennisMatchFactor
 
 case class TennisDeepDbnFactorGraph (skillTransVariance: Double, perfVariance: Double) {
 
