@@ -22,8 +22,8 @@ case class SingleGameFactorGraph(skill1: TrueSkillRating, skill2: TrueSkillRatin
 
   def createTennisFactorGraph(): FactorGraph = {
 
-    val skill1Factor_time0 = GaussianFactor(skill1VarId_t0, skill1.mean, skill1.variance)
-    val skill2Factor_time0 = GaussianFactor(skill2VarId_t0, skill2.mean, skill2.variance)
+    val skill1Factor_time0 = new GaussianFactor(skill1VarId_t0, skill1.mean, skill1.variance)
+    val skill2Factor_time0 = new GaussianFactor(skill2VarId_t0, skill2.mean, skill2.variance)
     val skill1Factor = LinearGaussianFactor(skill1VarId_t0, skill1VarId, 1, 0, skillTransVariance)
     val skill2Factor = LinearGaussianFactor(skill2VarId_t0, skill2VarId, 1, 0, skillTransVariance)
     val perf1Factor = LinearGaussianFactor(skill1VarId, perf1VarId, 1, 0, player1PerfVar)

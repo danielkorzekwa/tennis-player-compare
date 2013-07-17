@@ -1,6 +1,6 @@
-package dk.tennis.compare.rating.trueskill.learn
+package dk.tennis.compare.rating.multiskill.learn
 
-import dk.tennis.compare.rating.trueskill.model.Result
+import dk.tennis.compare.rating.multiskill.domain.PointResult
 
 /**
  * Learns skill transition variance parameter with Expectation Maximisation.
@@ -8,17 +8,17 @@ import dk.tennis.compare.rating.trueskill.model.Result
  * @author Daniel Korzekwa
  *
  */
-trait TrueSkillEMLearn {
+trait MultiSkillEMLearn {
 
   /**
    * Learns skill transition variance parameter with Expectation Maximisation.
    *
    * @param skillTransVariance Initial variance for skill transition parameter
-   * @param perfVariance Performance variance for both players 
+   * @param perfVariance Performance variance for both players
    * @param results Results of tennis matches
    * @param maxIter The number of iterations that EM learning is executed for
    *
    * @return Learned skill transition variance
    */
-  def learn(skillTransVariance: Double, perfVariance: Double, results: Seq[Result], maxIter: Int): Double
+  def learn(skillTransVariance: Double, perfVariance: Double, results: Seq[PointResult], maxIter: Int): Double
 }

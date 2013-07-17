@@ -2,15 +2,15 @@ package dk.tennis.compare.game.twopointsgame.model
 
 import dk.tennis.compare.tester.GameModel
 import dk.tennis.compare.tester.GameResult
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
 import scala.math._
-import dk.tennis.compare.rating.trueskill.model.Result
 import dk.tennis.compare.game.twopointsgame.TwoPointsGameResult
 import dk.tennis.compare.game.twopointsgame.TwoPointsGameResult
+import dk.tennis.compare.game.twopointsgame.TwoPointsGame
+import dk.tennis.compare.game.twopointsgame.TwoPointsGame
+import dk.tennis.compare.rating.trueskill.GenericTrueSkill
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.model.Result
 import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
-import dk.tennis.compare.game.twopointsgame.TwoPointsGame
-import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 
 case class TrueSkillPointModel extends GameModel {
 

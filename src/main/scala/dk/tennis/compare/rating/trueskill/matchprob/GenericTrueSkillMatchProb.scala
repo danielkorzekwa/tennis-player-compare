@@ -7,9 +7,9 @@ import dk.bayes.model.factor.LinearGaussianFactor
 import dk.bayes.model.factor.TruncGaussianFactor
 import dk.bayes.model.factorgraph.FactorGraph
 import dk.bayes.model.factorgraph.GenericFactorGraph
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
-import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
+import dk.tennis.compare.rating.trueskill.factorgraph.SingleGameFactorGraph
+import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 
 case class GenericTrueSkillMatchProb(skillTransVariance: Double) extends TrueSkillMatchProb {
 

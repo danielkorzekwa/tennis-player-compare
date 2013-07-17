@@ -2,6 +2,7 @@ package dk.tennis.compare.rating.trueskill.matchprob
 
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 
+
 trait TrueSkillMatchProb {
 
   /**

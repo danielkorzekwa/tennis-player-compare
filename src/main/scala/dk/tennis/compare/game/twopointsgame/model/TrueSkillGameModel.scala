@@ -1,20 +1,13 @@
 package dk.tennis.compare.game.tennis.model
 
-import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
-import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
-import scala.math._
+import scala.math.pow
 import dk.tennis.compare.rating.trueskill.model.Result
-import dk.tennis.compare.rating.trueskill.rating.TrueSkill
-import dk.tennisprob.TennisProbFormulaCalc
-import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
-import dk.tennis.compare.tester.GameResult
+import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.GenericTrueSkill
+import dk.tennis.compare.rating.trueskill.TrueSkill
 import dk.tennis.compare.tester.GameModel
-import dk.tennis.compare.game.tennis.pointprob.GenericPointProbCalc
-import dk.tennis.compare.game.tennis.domain.TennisResult
+import dk.tennis.compare.tester.GameResult
+import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 
 case class TrueSkillGameModel extends GameModel {
 

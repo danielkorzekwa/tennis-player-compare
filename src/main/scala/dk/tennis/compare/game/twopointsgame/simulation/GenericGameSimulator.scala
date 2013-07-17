@@ -5,9 +5,9 @@ import org.joda.time.DateTimeZone
 import scala.util.Random
 import dk.tennis.compare.game.twopointsgame.TwoPointsGame
 import dk.tennis.compare.game.twopointsgame.TwoPointsGameResult
-import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import scala.math._
+import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 
 /**
  * Default implementation of GameSimulator.

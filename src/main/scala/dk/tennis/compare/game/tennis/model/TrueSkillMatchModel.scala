@@ -1,25 +1,21 @@
 package dk.tennis.compare.game.tennis.model
 
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
-import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
-import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 import scala.math._
-import dk.tennis.compare.rating.trueskill.model.Result
-import dk.tennis.compare.rating.trueskill.rating.TrueSkill
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
-import dk.tennis.compare.rating.trueskill.rating.GenericTrueSkill
 import dk.tennis.compare.tester.GameResult
 import dk.tennis.compare.tester.GameModel
 import dk.tennis.compare.game.tennis.pointprob.GenericPointProbCalc
 import dk.tennis.compare.game.tennis.domain.TennisResult
+import dk.tennis.compare.rating.trueskill.GenericTrueSkill
+import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.model.Result
+import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
+import dk.tennis.compare.rating.trueskill.GenericTrueSkill
 
 case class TrueSkillMatchModel extends GameModel {
 
-  //private val skillTransVariance = pow(25d / 150, 2)
- // private val skillTransVariance = 0.057298
   private val skillTransVariance = 0.034233
   private val performanceVariance = (pow(25d / 16, 2), pow(25d / 16, 2))
   val trueSkillModel = GenericTrueSkill(skillTransVariance)

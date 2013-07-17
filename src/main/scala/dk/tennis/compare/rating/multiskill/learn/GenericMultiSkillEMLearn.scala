@@ -1,7 +1,5 @@
-package dk.tennis.compare.rating.trueskill.learn
+package dk.tennis.compare.rating.multiskill.learn
 
-import dk.tennis.compare.rating.trueskill.model.Result
-import dk.tennis.compare.rating.trueskill.factorgraph.TennisDeepDbnFactorGraph
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.BivariateGaussianFactor
@@ -12,39 +10,43 @@ import org.slf4j.LoggerFactory
 import scala.annotation.tailrec
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
+import dk.tennis.compare.rating.multiskill.factorgraph.TennisDbnFactorGraph
+import dk.tennis.compare.rating.multiskill.domain.PointResult
 
 /**
  * Learns skill transition variance based on tennis point outcomes and skills on serve and return for both players.
  *
  * @author Daniel Korzekwa
  */
-object ServeReturnTrueSkillEMLearn extends TrueSkillEMLearn {
+object GenericMultiSkillEMLearn extends MultiSkillEMLearn {
 
   private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  def learn(skillTransVariance: Double, perfVariance: Double, results: Seq[Result], maxIter: Int): Double = {
-
-    @tailrec
-    def learnRecursion(currSkillTransVariance: Double, currIter: Int): Double = {
-
-      logger.debug("TrueSkillEM iter=%d, skillTransVariance=%.6f".format(currIter, currSkillTransVariance))
-
-      val tennisFactorGraph = TennisDeepDbnFactorGraph(currSkillTransVariance, perfVariance)
-      results.foreach(r => { tennisFactorGraph.addResult(r) })
-
-      val ep = GenericEP(tennisFactorGraph.getFactorGraph())
-      def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
-      val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph())
-      logger.debug("Iter total: " + epCalibrate.calibrate(1000, progress))
-
-      val newVariance = mStep(tennisFactorGraph)
-
-      if (currIter < maxIter) learnRecursion(newVariance, currIter + 1)
-      else newVariance
-    }
-
-    val learnedVariance = learnRecursion(skillTransVariance, 0)
-    learnedVariance
+  def learn(skillTransVariance: Double, perfVariance: Double,  results: Seq[PointResult], maxIter: Int): Double = {
+//
+//    @tailrec
+//    def learnRecursion(currSkillTransVariance: Double, currIter: Int): Double = {
+//
+//      logger.debug("TrueSkillEM iter=%d, skillTransVariance=%.6f".format(currIter, currSkillTransVariance))
+//
+//      val tennisFactorGraph = TennisDbnFactorGraph(currSkillTransVariance, perfVariance)
+//      results.foreach(r => { tennisFactorGraph.addPointResults(Vector(r)) })
+//
+//      val ep = GenericEP(tennisFactorGraph.getFactorGraph())
+//      def progress(currIter: Int) = {} //println("EP iteration: " + currIter)
+//      val epCalibrate = ForwardBackwardEPCalibrate(tennisFactorGraph.getFactorGraph())
+//      logger.debug("Iter total: " + epCalibrate.calibrate(1000, progress))
+//
+//      val newVariance = mStep(tennisFactorGraph)
+//
+//      if (currIter < maxIter) learnRecursion(newVariance, currIter + 1)
+//      else newVariance
+//    }
+//
+//    val learnedVariance = learnRecursion(skillTransVariance, 0)
+//    learnedVariance
+    
+    0d
   }
 
   /**
@@ -52,7 +54,7 @@ object ServeReturnTrueSkillEMLearn extends TrueSkillEMLearn {
    *
    * @param em Calibrated factor graph
    */
-  private def mStep(tennisFactorGraph: TennisDeepDbnFactorGraph): Double = {
+  private def mStep(tennisFactorGraph: TennisDbnFactorGraph): Double = {
     val ep = GenericEP(tennisFactorGraph.getFactorGraph())
 
     val sequences = tennisFactorGraph.getSkillVarIds().values.filter(varIds => varIds.size >= 2).map { varIds =>

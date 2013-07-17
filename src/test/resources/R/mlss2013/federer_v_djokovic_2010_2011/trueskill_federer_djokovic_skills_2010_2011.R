@@ -12,7 +12,7 @@ par(mar=c(4.2, 3.8, 0.2, 0.2))
 abline(h = seq(0,10,by=1),  col = "lightgray", lty = 3)
 grid()
 
-title(xlab="Tennis matches in a time order")
+title(xlab="Tennis matches in time order")
 title(ylab="Skills on serve and return")
 
 legend("topright",c("Federer on serve","Federer on return",

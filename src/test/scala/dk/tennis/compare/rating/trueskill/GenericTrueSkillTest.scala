@@ -1,11 +1,11 @@
-package dk.tennis.compare.rating.trueskill.rating
+package dk.tennis.compare.rating.trueskill
 
 import org.junit._
-import Assert._
+import org.junit.Assert._
 import scala.math._
-import dk.tennis.compare.rating.trueskill.model.Result
-import dk.tennis.compare.rating.trueskill.util.TrueSkillUtil._
+import dk.tennis.compare.rating.testutil.TestUtil._
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
+import dk.tennis.compare.rating.trueskill.model.Result
 
 class GenericTrueSkillTest {
 
