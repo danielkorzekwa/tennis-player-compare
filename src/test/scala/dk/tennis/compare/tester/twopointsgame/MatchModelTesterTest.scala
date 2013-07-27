@@ -47,7 +47,6 @@ class MatchModelTesterTest {
       val modelSummary = tester.run(trueSkillPointNotIddModel, matchFilter)
 
       log.info("Log likelihood stats = " + modelSummary.llhStats)
-      log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
 
       //  log.info(modelSummary.predictedActualAvgCorrReport)
     }

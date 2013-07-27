@@ -23,29 +23,22 @@ case class PlayerFactor(skillOnServeVarId: Int, skillOnReturnVarId: Int, playerV
     marginalFactor
   }
 
-  def productMarginal(varId: Int, factor1: Factor, factor2: Factor, factor3: Factor): SingleFactor = {
-
-    productMarginalInternal(varId, factor1.asInstanceOf[GaussianFactor], factor2.asInstanceOf[GaussianFactor], factor3.asInstanceOf[SkillsFactor])
+  def outgoingMessages(factor1: Factor, factor2: Factor, factor3: Factor): Tuple3[GaussianFactor, GaussianFactor, SkillsFactor] = {
+    outgoingMessagesInternal(factor1.asInstanceOf[GaussianFactor], factor2.asInstanceOf[GaussianFactor], factor3.asInstanceOf[SkillsFactor])
   }
-  private def productMarginalInternal(varId: Int, skillOnServe: GaussianFactor, skillOnReturn: GaussianFactor, playerSkills: SkillsFactor): SingleFactor = {
 
-    val marginal = varId match {
-      case `skillOnServeVarId` => {
-        val skillOnServeGaussian = playerSkills.skillOnServe
-        GaussianFactor(skillOnServeVarId, skillOnServeGaussian.m, skillOnServeGaussian.v) * skillOnServe
-      }
-      case `skillOnReturnVarId` => {
-        val skillOnReturnGaussian = playerSkills.skillOnReturn
-        GaussianFactor(skillOnReturnVarId, skillOnReturnGaussian.m, skillOnReturnGaussian.v) * skillOnReturn
-      }
-      case `playerVarId` => {
-        val skillOnServeGaussian = Gaussian(skillOnServe.m,skillOnServe.v)
-        val skillOnReturnGaussian =  Gaussian(skillOnReturn.m,skillOnReturn.v)
-        SkillsFactor(playerSkills.varId, skillOnServeGaussian, skillOnReturnGaussian)
-      }
-      case _ => throw new IllegalArgumentException("Incorrect marginal variable id")
-    }
-    marginal
+  private def outgoingMessagesInternal(skillOnServe: GaussianFactor, skillOnReturn: GaussianFactor, playerSkills: SkillsFactor): Tuple3[GaussianFactor, GaussianFactor, SkillsFactor] = {
+
+    val skillOnServeGaussian = playerSkills.skillOnServe
+    val skillOnServeMsg = GaussianFactor(skillOnServeVarId, skillOnServeGaussian.m, skillOnServeGaussian.v)
+
+    val skillOnReturnGaussian = playerSkills.skillOnReturn
+    val skillOnReturnMsg = GaussianFactor(skillOnReturnVarId, skillOnReturnGaussian.m, skillOnReturnGaussian.v)
+
+    val playerSkillsMsg = SkillsFactor(playerVarId, Gaussian(skillOnServe.m, skillOnServe.v), Gaussian(skillOnReturn.m, skillOnReturn.v))
+
+    Tuple3(skillOnServeMsg, skillOnReturnMsg, playerSkillsMsg)
+
   }
 
 }

@@ -23,7 +23,7 @@ class MatchModelTesterTest {
   val log = LoggerFactory.getLogger(getClass)
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val atpMatches = getAtpMatches(matchesFile, 2009, 2011)
+  val atpMatches = getAtpMatches(matchesFile, 2011, 2011)
 
   val tester = GameModelTester(atpMatches)
 
@@ -57,7 +57,9 @@ class MatchModelTesterTest {
     log.info("Log likelihood stats = " + modelSummary.llhStats)
     log.info("Prediction error = " + modelSummary.predictionError())
     log.info("players number = " + modelSummary.playersNum)
-    log.info("Expected/actual wins: %.3f/%s".format(modelSummary.playerAExpectedWins, modelSummary.playerActualWins))
+     log.info("matches number = " + modelSummary.predictionRecords.size)
+     val (expectedWins,actualWins) = modelSummary.expectedVsActualWins()
+    log.info("Expected/actual wins: %.3f/%s".format(expectedWins, actualWins))
 
     //  log.info(modelSummary.predictedActualAvgCorrReport)
   }

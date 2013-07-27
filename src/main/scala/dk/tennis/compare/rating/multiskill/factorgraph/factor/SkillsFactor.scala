@@ -6,11 +6,11 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.api.Factor
 import scala.math._
 
-case class SkillsFactor(varId: Int, skillOnServe: Gaussian, skillOnReturn: Gaussian) extends SingleFactor {
+case class SkillsFactor(skillsVarId: Int, skillOnServe: Gaussian, skillOnReturn: Gaussian) extends SingleFactor {
 
-  def getVariableId(): Int = varId
+  def getVariableId(): Int = skillsVarId
 
-  def getVariableIds(): Seq[Int] = Vector(varId)
+  def getVariableIds(): Seq[Int] = Vector(skillsVarId)
 
   def marginal(varId: Int): SingleFactor = throw new UnsupportedOperationException("Not implemented yet")
 
@@ -20,7 +20,7 @@ case class SkillsFactor(varId: Int, skillOnServe: Gaussian, skillOnReturn: Gauss
     case factor: SkillsFactor => {
       val newSkillOnServe = skillOnServe / factor.skillOnServe
       val newSkillOnReturn = skillOnReturn / factor.skillOnReturn
-      SkillsFactor(varId, newSkillOnServe, newSkillOnReturn)
+      SkillsFactor(skillsVarId, newSkillOnServe, newSkillOnReturn)
     }
     case _ => throw new IllegalArgumentException("SkillsFactor factor cannot be divided by a factor that is non SkillsFactor")
   }
@@ -29,7 +29,7 @@ case class SkillsFactor(varId: Int, skillOnServe: Gaussian, skillOnReturn: Gauss
     case factor: SkillsFactor => {
       val newSkillOnServe = skillOnServe * factor.skillOnServe
       val newSkillOnReturn = skillOnReturn * factor.skillOnReturn
-      SkillsFactor(varId, newSkillOnServe, newSkillOnReturn)
+      SkillsFactor(skillsVarId, newSkillOnServe, newSkillOnReturn)
     }
     case _ => throw new IllegalArgumentException("SkillsFactor factor cannot be multiplied by a factor that is non SkillsFactor")
   }
@@ -37,7 +37,7 @@ case class SkillsFactor(varId: Int, skillOnServe: Gaussian, skillOnReturn: Gauss
   override def equals(that: Factor, threshold: Double): Boolean = {
 
     that match {
-      case that: SkillsFactor => varId == that.varId && compareGaussians(skillOnServe, that.skillOnServe, threshold) && compareGaussians(skillOnReturn, that.skillOnReturn, threshold)
+      case that: SkillsFactor => skillsVarId == that.skillsVarId && compareGaussians(skillOnServe, that.skillOnServe, threshold) && compareGaussians(skillOnReturn, that.skillOnReturn, threshold)
       case _ => false
     }
   }

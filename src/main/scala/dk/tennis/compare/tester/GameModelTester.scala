@@ -63,9 +63,20 @@ object GameModelTester {
 
   case class ModelSummary(predictionRecords: Seq[PredictionRecord], llhStats: LlhStats) {
 
-    def playerAExpectedWins(): Double = predictionRecords.map(r => r.playerAWinnerProb).sum
-    def playerActualWins(): Double = predictionRecords.map(r => r.playerAWinner.toInt).sum
+    /**Tuple[expected wins, actual wins]*/
+    def expectedVsActualWins(): Tuple2[Double, Int] = {
 
+      val actualVsExpected = predictionRecords.map { r =>
+        Random.nextBoolean match {
+          case true => (r.playerAWinnerProb, r.playerAWinner.toInt)
+          case false => ((1 - r.playerAWinnerProb), if (r.playerAWinner == 1) 0 else 1)
+        }
+      }
+
+      val actualVsExpectedSummary = actualVsExpected.reduceLeft((sum, a) => (sum._1 + a._1, sum._2 + a._2))
+      actualVsExpectedSummary
+    }
+   
     /**
      * Fraction of players, which were predicted incorrectly as the winner
      */

@@ -9,34 +9,40 @@ import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.factorgraph.TennisDbnFactorGraph
 import dk.tennis.compare.rating.multiskill.matchmodel.GenericMatchModel
+import dk.tennis.compare.rating.multiskill.factorgraph.TennisDbnFactorGraph
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 
-case class GenericMultiSkill(skillTransVariance: Double, perfVariance: Double) extends MultiSkill {
+case class GenericMultiSkill(multiSkillParams: MultiSkillParams) extends MultiSkill {
 
   /** Map[playerName,player skills]*/
   private val skillsMap: mutable.Map[String, PlayerSkills] = mutable.Map()
 
-  private val defaultSkill = PlayerSkill(0, 1)
+  def processTennisMatch(matchResult: MatchResult) {
 
-  def processTennisMatch(player1: String, player2: String, pointResults: Seq[PointResult]) {
+    val player1Skills = getSkill(matchResult.player1)
+    val player2Skills = getSkill(matchResult.player2)
 
-    val player1Skills = skillsMap.getOrElseUpdate(player1, PlayerSkills(player1, defaultSkill, defaultSkill))
-    val player2Skills = skillsMap.getOrElseUpdate(player2, PlayerSkills(player2, defaultSkill, defaultSkill))
+    val player1SkillsTrans = PlayerSkills(player1Skills.player,
+      skillTransition(player1Skills.skillOnServe, multiSkillParams.skillOnServeTransVariance),
+      skillTransition(player1Skills.skillOnReturn, multiSkillParams.skillOnReturnTransVariance))
 
-    val player1SkillsTrans = PlayerSkills(player1Skills.player, skillTransition(player1Skills.skillOnServe), skillTransition(player1Skills.skillOnReturn))
-    val player2SkillsTrans = PlayerSkills(player2Skills.player, skillTransition(player2Skills.skillOnServe), skillTransition(player2Skills.skillOnReturn))
+    val player2SkillsTrans = PlayerSkills(player2Skills.player,
+      skillTransition(player2Skills.skillOnServe, multiSkillParams.skillOnServeTransVariance),
+      skillTransition(player2Skills.skillOnReturn, multiSkillParams.skillOnReturnTransVariance))
 
-    val (newP1SkillOnServe, newP2SkillOnReturn) = computeMarginals(player1SkillsTrans, player2SkillsTrans, pointResults)
+    val (newP1Skills, newP2Skills) = computeMarginals(player1SkillsTrans, player2SkillsTrans, matchResult.pointResults)
 
-    skillsMap += player1 -> newP1SkillOnServe
-    skillsMap += player2 -> newP2SkillOnReturn
+    skillsMap += matchResult.player1 -> newP1Skills
+    skillsMap += matchResult.player2 -> newP2Skills
 
   }
 
-  private def skillTransition(skill: PlayerSkill): PlayerSkill = PlayerSkill(skill.mean, skill.variance + skillTransVariance)
+  private def skillTransition(skill: PlayerSkill, skillTransVariance: Double): PlayerSkill = PlayerSkill(skill.mean, skill.variance + skillTransVariance)
 
   private def computeMarginals(player1Skills: PlayerSkills, player2Skill2: PlayerSkills, pointResults: Seq[PointResult]): Tuple2[PlayerSkills, PlayerSkills] = {
 
-    val inPlayModel = GenericMatchModel(player1Skills, player2Skill2, perfVariance)
+    val inPlayModel = GenericMatchModel(player1Skills, player2Skill2, multiSkillParams.perfVariance)
 
     pointResults.foreach(p => inPlayModel.onPoint(p))
 
@@ -48,4 +54,7 @@ case class GenericMultiSkill(skillTransVariance: Double, perfVariance: Double) e
   }
 
   def getSkills(): immutable.Map[String, PlayerSkills] = skillsMap.toMap
+
+  def getSkill(player: String): PlayerSkills = skillsMap.getOrElseUpdate(player,
+    PlayerSkills(player, multiSkillParams.priorSkillOnServe, multiSkillParams.priorSkillOnReturn))
 }

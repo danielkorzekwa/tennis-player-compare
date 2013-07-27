@@ -1,65 +1,46 @@
 package dk.tennis.compare.rating.multiskill.learn
 
 import org.junit._
-import Assert._
-import dk.atp.api.CSVATPMatchesLoader
+import org.slf4j.LoggerFactory
+import com.typesafe.scalalogging.slf4j.Logger
 import dk.atp.api.domain.SurfaceEnum.HARD
-import dk.tennis.compare.game.tennis.domain.TennisResult
-import scala.math._
-import dk.tennis.compare.rating.multiskill.domain.PointResult
+import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
+import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
+import dk.tennis.compare.rating.testutil.TestUtil._
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 
 class GenericMultiSkillEMLearnTest {
 
-  val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv")
+  private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
-  val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
+  @Test def test_empty_matches {
 
-  val gameResults = TennisResult.fromMatches(filteredMatches)
-
-  val pointResults = toPointResults(gameResults)
-
-  val performanceVariance = pow(25d / 16, 2)
-
-  @Ignore @Test def test_empty_results {
-
-    val skillTransVariance = pow(25d / 150, 2)
+    val multiSkillParams = MultiSkillParams(
+      skillOnServeTransVariance = 1,
+      skillOnReturnTransVariance = 2,
+      priorSkillOnServe = PlayerSkill(0, 1), priorSkillOnReturn = PlayerSkill(0, 1),
+      perfVariance = 3)
 
     val results = Nil
 
-    val learnedVariance = GenericMultiSkillEMLearn.learn(skillTransVariance, performanceVariance, results, maxIter = 5)
-    assertEquals(Double.NaN, learnedVariance, 0.0001)
+    val learnedParams = GenericMultiSkillEMLearn.learn(multiSkillParams, results, maxIter = 5)
+    assertMultiSkillParams(learnedParams, multiSkillParams, 0.0001)
   }
 
-  @Ignore @Test def test_three {
+  @Test def test_atp_results_2011 {
 
-    val skillTransVariance = pow(25d / 150, 2)
+    val multiSkillParams = MultiSkillParams(
+      skillOnServeTransVariance = 0.02,
+      skillOnReturnTransVariance = 0.02,
+      priorSkillOnServe = PlayerSkill(0, 1), priorSkillOnReturn = PlayerSkill(0, 1),
+      perfVariance = 200)
 
-    val results = List(PointResult("p1", true), PointResult("p1", true), PointResult("p1", false), PointResult("p1", false), PointResult("p2", true))
+    val matchResults = loadTennisMatches(2011, 2011)
+    println("Tennis matches=" + matchResults.size)
 
-    val learnedVariance = GenericMultiSkillEMLearn.learn(skillTransVariance, performanceVariance, results, maxIter = 10)
-    assertEquals(0.0267, learnedVariance, 0.0001)
+    val learnedParams = GenericMultiSkillEMLearn.learn(multiSkillParams, matchResults, maxIter = 5000, emProgress)
+
   }
 
-  @Ignore @Test def test_atp_results_2010_to_2011 {
-
-    val skillTransVariance = 0.25
-
-    val learnedVariance = GenericMultiSkillEMLearn.learn(skillTransVariance, performanceVariance, pointResults, maxIter = 10)
-  }
-
-  private def toPointResults(gameResults: Seq[TennisResult]): Seq[PointResult] = {
-    val pointResults = gameResults.flatMap { r =>
-
-      r.points.get.takeRight(1).map { point =>
-
-        if (point.playerOnServe.equals(r.player1))
-          PointResult(r.player1, point.won)
-        else if (point.playerOnServe.equals(r.player2))
-          PointResult(r.player2, point.won)
-        else throw new IllegalArgumentException("Player on serve not found")
-      }
-    }
-    pointResults
-  }
+  private def emProgress(emStatus: EMStatus) = logger.info(emStatus.toString)
 }

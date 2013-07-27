@@ -5,6 +5,7 @@ import Assert._
 import dk.tennis.compare.rating.trueskill.model.TrueSkillRating
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 
 object TestUtil {
 
@@ -25,5 +26,11 @@ object TestUtil {
 
     assertEquals(expected.skillOnReturn.mean, actual.skillOnReturn.mean, delta)
     assertEquals(expected.skillOnReturn.variance, actual.skillOnReturn.variance, delta)
+  }
+
+  def assertMultiSkillParams(expected: MultiSkillParams, actual: MultiSkillParams, delta: Double) = {
+    assertEquals(expected.skillOnServeTransVariance, actual.skillOnServeTransVariance, delta)
+    assertEquals(expected.skillOnReturnTransVariance, actual.skillOnReturnTransVariance, delta)
+    assertEquals(expected.perfVariance, actual.perfVariance, delta)
   }
 }

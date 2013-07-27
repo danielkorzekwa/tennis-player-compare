@@ -12,31 +12,30 @@ import dk.tennis.compare.game.tennis.domain.TennisResult
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 import org.apache.commons.lang.time.StopWatch
 import dk.tennis.compare.rating.multiskill.domain.PointResult
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
+import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 
 class TennisDbnFactorGraphTest {
 
   val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv")
+  val matchResults = loadTennisMatches(2011, 2011)
 
-  val matches = (2011 to 2011).flatMap(year => atpMatchesLoader.loadMatches(year))
-  val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
-
-  val gameResults = TennisResult.fromMatches(filteredMatches, new Random(0))
-
-  val performanceVariance = pow(250d / 16, 2)
-  val skillTransVariance = pow(25d / 150, 2)
+  val multiSkillParams = MultiSkillParams(
+    skillOnServeTransVariance = 0.02,
+    skillOnReturnTransVariance = 0.02,
+    priorSkillOnServe = PlayerSkill(0, 1), priorSkillOnReturn = PlayerSkill(0, 1),
+    perfVariance = 200)
 
   @Test def calibrate {
 
-    println("Results num:" + gameResults.size)
+    println("Results num:" + matchResults.size)
 
-    val tennisFactorGraph = TennisDbnFactorGraph(skillTransVariance, performanceVariance)
+    val tennisFactorGraph = TennisDbnFactorGraph(multiSkillParams)
 
-    gameResults.foreach { r =>
-      val pointResults = toPointResults(r)
-      tennisFactorGraph.addTennisMatch(r.player1, r.player2, pointResults)
-    }
+    matchResults.foreach(r => tennisFactorGraph.addTennisMatch(r))
 
     println("Factors num: " + tennisFactorGraph.getFactorGraph.getFactorNodes.size)
     println("Variables num: " + tennisFactorGraph.getFactorGraph.getVariables.size)
@@ -51,23 +50,12 @@ class TennisDbnFactorGraphTest {
     //  assertEquals(EPSummary(8, 87936), iterTotal)
 
     val ep = GenericEP(tennisFactorGraph.getFactorGraph())
-    val varIds = tennisFactorGraph.getSkillVarIds()("Roger Federer")
-    varIds.takeRight(1).foreach(vId => println("Roger Federer:" + ep.marginal(vId)))
+    val varIdsOnServe = tennisFactorGraph.getSkillVarIdsOnServe()("Roger Federer")
+    varIdsOnServe.takeRight(1).foreach(vId => println("Roger Federer on serve:" + ep.marginal(vId)))
 
-  }
+    val varIdsOnReturn = tennisFactorGraph.getSkillVarIdsOnReturn()("Roger Federer")
+    varIdsOnReturn.takeRight(1).foreach(vId => println("Roger Federer on return:" + ep.marginal(vId)))
 
-  private def toPointResults(gameResult: TennisResult): Seq[PointResult] = {
-    val pointResults = gameResult.points.get.map {
-      (point =>
-
-        if (point.playerOnServe.equals(gameResult.player1))
-          PointResult(gameResult.player1, point.won)
-        else if (point.playerOnServe.equals(gameResult.player2))
-          PointResult(gameResult.player2, point.won)
-        else throw new IllegalArgumentException("Player on serve not found"))
-
-    }
-    pointResults
   }
 
   private def progress(currIter: Int) = println("EP iteration: " + currIter)

@@ -23,6 +23,11 @@ case class ExPriceCompareModel(exPricesModel: ExPricesMatchModel) extends GameMo
     val gameProb = multiSkillModel.gameProb(r)
     val exProb = exPricesModel.gameProb(r)
 
+    if (r.containsPlayer("Roger Federer")) {
+     val skills = multiSkillModel.getMultiSkillModel.getSkills().get("Roger Federer")
+   //  println(skills)
+    }
+    
     if (gameProb.isDefined) gameProb
     else None
 

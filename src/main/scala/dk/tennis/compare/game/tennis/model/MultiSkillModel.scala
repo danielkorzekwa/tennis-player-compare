@@ -12,33 +12,33 @@ import dk.tennis.compare.rating.trueskill.matchprob.GenericTrueSkillMatchProb
 import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.pointmodel.GenericPointModel
+import dk.tennis.compare.rating.multiskill.MultiSkill
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 
 case class MultiSkillModel extends GameModel {
 
-  private val skillTransVariance = pow(25d / 150, 2)
-  private val performanceVariance = (pow(250d / 16, 2))
+  val multiSkillParams = MultiSkillParams(
+    skillOnServeTransVariance = 0.02,
+    skillOnReturnTransVariance = 0.02,
+    priorSkillOnServe = PlayerSkill(0,1), priorSkillOnReturn = PlayerSkill(0,1),
+    perfVariance = 200)
 
-  val multiSkillModel = GenericMultiSkill(skillTransVariance, performanceVariance)
+  private val multiSkillModel = GenericMultiSkill(multiSkillParams)
 
   def gameProb(r: GameResult): Option[Double] = {
-    /**key - playerName, value - player skills*/
-    val playerSkills: Map[String, PlayerSkills] = multiSkillModel.getSkills()
+    val player1Skill = multiSkillModel.getSkill(r.player1)
+    val player2Skill = multiSkillModel.getSkill(r.player2)
 
-    val playerASkill = playerSkills.get(r.player1)
-    val playerBSkill = playerSkills.get(r.player2)
+    val p1PointProb = GenericPointModel(multiSkillParams.perfVariance).pointProb(player1Skill.skillOnServe, player2Skill.skillOnReturn)
+    val p2PointProb = GenericPointModel(multiSkillParams.perfVariance).pointProb(player2Skill.skillOnServe, player1Skill.skillOnReturn)
 
-    val prob = if (playerASkill.isDefined && playerBSkill.isDefined) {
+    val matchProb = if (r.asInstanceOf[TennisResult].numOfSets == 2) TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, THREE_SET_MATCH)
+    else TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, FIVE_SET_MATCH)
 
-      val p1PointProb = GenericPointModel(performanceVariance).pointProb(playerASkill.get.skillOnServe, playerBSkill.get.skillOnReturn)
-      val p2PointProb = GenericPointModel(performanceVariance).pointProb(playerBSkill.get.skillOnServe, playerASkill.get.skillOnReturn)
-
-      val matchProb = if (r.asInstanceOf[TennisResult].numOfSets == 2) TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, THREE_SET_MATCH)
-      else TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, FIVE_SET_MATCH)
-
-      Some(matchProb)
-    } else None
-
-    prob
+    Some(matchProb)
 
   }
 
@@ -55,10 +55,13 @@ case class MultiSkillModel extends GameModel {
           else throw new IllegalArgumentException("Player on serve not found")
         }
 
-        multiSkillModel.processTennisMatch(r.player1, r.player2, pointResults)
+        val matchResult = MatchResult(r.player1, r.player2, pointResults, r.player1Win.get, r.numOfSets)
+        multiSkillModel.processTennisMatch(matchResult)
 
       }
       case _ => new IllegalArgumentException("Result type not supported:" + r)
     }
   }
+
+  def getMultiSkillModel(): MultiSkill = multiSkillModel
 }
