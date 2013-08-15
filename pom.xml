@@ -7,6 +7,7 @@
 	<groupId>dk.tennis</groupId>
 	<artifactId>tennis-player-compare</artifactId>
 	<name>tennis-player-compare</name>
+	<packaging>pom</packaging>
 	<version>0.1-SNAPSHOT</version>
 	<inceptionYear>2011</inceptionYear>
 	<url>https://github.com/danielkorzekwa/tennis-player-compare</url>
@@ -200,4 +201,9 @@
 
 	</dependencies>
 
+	<modules>
+		<module>multiskill</module>
+		<module>trueskill</module>
+		<module>model-tester</module>
+	</modules>
 </project>
