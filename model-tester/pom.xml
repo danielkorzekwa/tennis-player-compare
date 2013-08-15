@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<!-- Project information -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>dk.tennis</groupId>
+	<artifactId>model-tester</artifactId>
+	<name>model-tester</name>
+	<version>0.1-SNAPSHOT</version>
+	<inceptionYear>2011</inceptionYear>
+	<url>https://github.com/danielkorzekwa/tennis-player-compare</url>
+
+	<!-- Properties -->
+	<properties>
+		<scala.version>2.10.0</scala.version>
+		<junit.version>4.4</junit.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>dk-maven2-repo-releases</id>
+			<name>dk-maven2 maven repository (releases)</name>
+			<url>http://dk-maven2-repo.googlecode.com/svn/maven-repo/releases</url>
+		</repository>
+
+		<repository>
+			<id>dk-maven2-repo-snapshots</id>
+			<name>dk-maven2 maven repository (releases)</name>
+			<url>http://dk-maven2-repo.googlecode.com/svn/maven-repo/snapshots</url>
+		</repository>
+
+		<repository>
+			<id>dk-maven-repo</id>
+			<url>https://raw.github.com/danielkorzekwa/dk-maven-repo/master</url>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<sourceDirectory>src/main/scala</sourceDirectory>
+		<testSourceDirectory>src/test/scala</testSourceDirectory>
+
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/scala</directory>
+				<includes>
+					<include>**/*.scala</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<filtering>false</filtering>
+				<directory>src/test/scala</directory>
+				<includes>
+					<include>**/*.scala</include>
+				</includes>
+			</testResource>
+			<testResource>
+				<filtering>false</filtering>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<buildcommands>
+						<buildcommand>ch.epfl.lamp.sdt.core.scalabuilder</buildcommand>
+					</buildcommands>
+					<additionalProjectnatures>
+						<projectnature>ch.epfl.lamp.sdt.core.scalanature</projectnature>
+					</additionalProjectnatures>
+					<classpathContainers>
+						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+						<classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+					</classpathContainers>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<version>2.13.1</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<!-- Dependency management -->
+	<dependencies>
+
+		<!-- Internal dependencies -->
+		<dependency>
+			<groupId>dk.tennis</groupId>
+			<artifactId>multiskill</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>dk.tennis</groupId>
+			<artifactId>trueskill</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- External dependencies -->
+		<dependency>
+			<groupId>dk.atp</groupId>
+			<artifactId>atpworldtour-api</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>dk.tennisprob</groupId>
+			<artifactId>tennis-probability-calculator</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>dk.bayes</groupId>
+			<artifactId>bayes-scala</artifactId>
+			<version>0.4-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${scala.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-math</groupId>
+			<artifactId>commons-math</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>joda-convert</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>scalalogging-slf4j_2.10</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>dk.flexibet</groupId>
+			<artifactId>flexibet-betfair</artifactId>
+			<version>0.7</version>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
+
+	</dependencies>
+
+</project>
