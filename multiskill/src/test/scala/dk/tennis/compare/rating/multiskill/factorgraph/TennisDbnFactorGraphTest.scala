@@ -10,17 +10,18 @@ import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 import org.apache.commons.lang.time.StopWatch
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.MatchResult
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 
 class TennisDbnFactorGraphTest {
 
   val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  val matchResults = loadTennisMatches(2011, 2011)
+  val atpFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
+  val tournaments = MatchesLoader.loadTournaments(atpFile,2010, 2011)
 
   val multiSkillParams = MultiSkillParams(
     skillOnServeTransVariance = 0.02,
@@ -30,11 +31,11 @@ class TennisDbnFactorGraphTest {
 
   @Test def calibrate {
 
-    println("Results num:" + matchResults.size)
 
     val tennisFactorGraph = TennisDbnFactorGraph(multiSkillParams)
 
-    matchResults.foreach(r => tennisFactorGraph.addTennisMatch(r))
+  //  matchResults.foreach(r => tennisFactorGraph.addTennisMatch(r))
+     tournaments.foreach(t => tennisFactorGraph.addTournament(t))
 
     println("Factors num: " + tennisFactorGraph.getFactorGraph.getFactorNodes.size)
     println("Variables num: " + tennisFactorGraph.getFactorGraph.getVariables.size)
@@ -53,7 +54,7 @@ class TennisDbnFactorGraphTest {
     varIdsOnServe.takeRight(1000).foreach(vId => println("Roger Federer on serve:" + ep.marginal(vId)))
 
     println("----------------------------------------------")
-    
+
     val varIdsOnReturn = tennisFactorGraph.getSkillVarIdsOnReturn()("Roger Federer")
     varIdsOnReturn.takeRight(1000).foreach(vId => println("Roger Federer on return:" + ep.marginal(vId)))
 

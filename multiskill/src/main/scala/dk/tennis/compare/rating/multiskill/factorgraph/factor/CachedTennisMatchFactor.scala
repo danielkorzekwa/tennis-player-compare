@@ -3,7 +3,6 @@ package dk.tennis.compare.rating.multiskill.factorgraph.factor
 import dk.bayes.model.factor.api.Factor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.SingleTableFactor
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.MatchResult
 
 class CachedTennisMatchFactor(p1Factor: PlayerFactor, p2Factor: PlayerFactor, outcomeVarId: Int,

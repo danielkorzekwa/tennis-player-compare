@@ -7,7 +7,6 @@ import scala.collection.mutable.ListBuffer
 import java.util.concurrent.atomic.AtomicInteger
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.LinearGaussianFactor
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import scala.collection.mutable.ArrayBuffer
 import dk.tennis.compare.rating.multiskill.factorgraph.factor.PlayerFactor
 import dk.tennis.compare.rating.multiskill.factorgraph.factor.TennisMatchFactor
@@ -17,6 +16,7 @@ import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.factorgraph.factor.TennisMatchFactor
 import dk.tennis.compare.rating.multiskill.factorgraph.factor.TennisMatchFactor
+import dk.tennis.compare.rating.multiskill.domain.TournamentResult
 
 case class TennisDbnFactorGraph(multiSkillParams: MultiSkillParams) {
 
@@ -26,20 +26,27 @@ case class TennisDbnFactorGraph(multiSkillParams: MultiSkillParams) {
   private val skillOnServeVarIds: mutable.Map[String, ArrayBuffer[Int]] = mutable.Map[String, ArrayBuffer[Int]]()
   private val skillOnReturnVarIds: mutable.Map[String, ArrayBuffer[Int]] = mutable.Map[String, ArrayBuffer[Int]]()
 
-  private val tennisMatchFactors:ArrayBuffer[TennisMatchFactor] = ArrayBuffer[TennisMatchFactor]()
-  
+  private val tennisMatchFactors: ArrayBuffer[TennisMatchFactor] = ArrayBuffer[TennisMatchFactor]()
+
   private val lastVarId = new AtomicInteger()
 
-  def addTennisMatch(matchResult: MatchResult) {
+  def addTournament(tournament: TournamentResult) {
 
-    val player1OnServeVarId = getSkillTransitionVarId(matchResult.player1, skillOnServeVarIds, multiSkillParams.priorSkillOnServe, multiSkillParams.skillOnServeTransVariance)
-    val player1OnReturnVarId = getSkillTransitionVarId(matchResult.player1, skillOnReturnVarIds, multiSkillParams.priorSkillOnReturn, multiSkillParams.skillOnReturnTransVariance)
+    tournament.players.foreach { p =>
+      getSkillTransitionVarId(p, skillOnServeVarIds, multiSkillParams.priorSkillOnServe, multiSkillParams.skillOnServeTransVariance)
+      getSkillTransitionVarId(p, skillOnReturnVarIds, multiSkillParams.priorSkillOnReturn, multiSkillParams.skillOnReturnTransVariance)
+    }
 
-    val player2OnServeVarId = getSkillTransitionVarId(matchResult.player2, skillOnServeVarIds, multiSkillParams.priorSkillOnServe, multiSkillParams.skillOnServeTransVariance)
-    val player2OnReturnVarId = getSkillTransitionVarId(matchResult.player2, skillOnReturnVarIds, multiSkillParams.priorSkillOnReturn, multiSkillParams.skillOnReturnTransVariance)
+    tournament.matchResults.foreach { matchResult =>
+      val player1OnServeVarId = skillOnServeVarIds(matchResult.player1).last
+      val player1OnReturnVarId = skillOnReturnVarIds(matchResult.player1).last
 
-    addTennisMatchToFactorGraph(player1OnServeVarId, player1OnReturnVarId,
-      player2OnServeVarId, player2OnReturnVarId, matchResult)
+      val player2OnServeVarId = skillOnServeVarIds(matchResult.player2).last
+      val player2OnReturnVarId = skillOnReturnVarIds(matchResult.player2).last
+
+      addTennisMatchToFactorGraph(player1OnServeVarId, player1OnReturnVarId,
+        player2OnServeVarId, player2OnReturnVarId, matchResult)
+    }
 
   }
 
@@ -73,7 +80,7 @@ case class TennisDbnFactorGraph(multiSkillParams: MultiSkillParams) {
     factorGraph.addFactor(player1Factor)
     factorGraph.addFactor(player2Factor)
     factorGraph.addFactor(matchFactor)
-    
+
     tennisMatchFactors += matchFactor
   }
 
@@ -81,6 +88,6 @@ case class TennisDbnFactorGraph(multiSkillParams: MultiSkillParams) {
   def getSkillVarIdsOnReturn(): mutable.Map[String, ArrayBuffer[Int]] = skillOnReturnVarIds
 
   def getFactorGraph(): FactorGraph = factorGraph
-  
-  def getTennisMatchFactors():ArrayBuffer[TennisMatchFactor] = tennisMatchFactors
+
+  def getTennisMatchFactors(): ArrayBuffer[TennisMatchFactor] = tennisMatchFactors
 }

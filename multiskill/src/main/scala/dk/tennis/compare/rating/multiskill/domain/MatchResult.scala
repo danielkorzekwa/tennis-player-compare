@@ -1,7 +1,6 @@
 package dk.tennis.compare.rating.multiskill.domain
 
-case class MatchResult(player1: String, player2: String, pointResults: Seq[PointResult],
-  player1Won: Boolean, numOfSets: Int) {
+case class MatchResult(player1: String, player2: String, player1Won: Boolean, numOfSets: Int, p1Stats: PlayerStats, p2Stats: PlayerStats) {
 
   require(numOfSets == 2 || numOfSets == 3, "The number of sets can be 2 or 3, but is " + numOfSets)
 

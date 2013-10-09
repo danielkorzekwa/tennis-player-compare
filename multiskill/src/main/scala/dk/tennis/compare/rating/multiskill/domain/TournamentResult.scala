@@ -1,3 +1,5 @@
 package dk.tennis.compare.rating.multiskill.domain
 
-case class TournamentResult(players:Seq[String],matchResults:Seq[MatchResult])
+import java.util.Date
+
+case class TournamentResult(tournamentTime: Date, tournamentName: String,players:Seq[String],matchResults:Seq[MatchResult])

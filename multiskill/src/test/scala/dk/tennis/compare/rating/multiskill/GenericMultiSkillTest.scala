@@ -2,23 +2,20 @@ package dk.tennis.compare.rating.multiskill
 
 import org.junit._
 import Assert._
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.MatchResult
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.pointmodel.GenericPointModel
-import dk.tennis.compare.rating.multiskill.sim.GenericMatchSim
-import dk.tennis.compare.rating.multiskill.sim.GenericMatchSim
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import scala.util.Random
+import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
+import dk.tennis.compare.rating.multiskill.domain.PlayerStats
+import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import java.util.Date
 
 class GenericMultiSkillTest {
 
   private val p1Skills = PlayerSkills("player1", PlayerSkill(2.0, 1), PlayerSkill(-2, 1))
   private val p2Skills = PlayerSkills("player2", PlayerSkill(5, 1), PlayerSkill(-3, 1))
-
-  private val matchSim = GenericMatchSim(p1Skills, p2Skills, perfVarianceOnServe = 100, perfVarianceOnReturn = 100,
-    random = new Random(), pointsNum = 100)
 
   val multiSkillParams = MultiSkillParams(
     skillOnServeTransVariance = 0.026103154972190633,
@@ -31,18 +28,21 @@ class GenericMultiSkillTest {
 
   @Test def converge_two_players {
 
-    for (i <- 1 to 100) multiSkill.processTennisMatch(matchSim.sample())
+    val matchResult = MatchResult("player1", "player2", player1Won = true, numOfSets = 2, PlayerStats(7,70, 100), PlayerStats(5,64, 100))
+    val tournamentResult = TournamentResult(new Date(0), "name", players = List(), List(matchResult))
+
+    for (i <- 1 to 100) multiSkill.processTennisMatch(tournamentResult, matchResult)
 
     printReport()
 
-    multiSkill.processTennisMatch(matchSim.sample())
+    multiSkill.processTennisMatch(tournamentResult, matchResult)
 
     printReport()
   }
 
   private def printReport() {
-    val p1Skills = multiSkill.getSkill("player1")
-    val p2Skills = multiSkill.getSkill("player2")
+    val p1Skills = multiSkill.getSkills("player1").pointSkills
+    val p2Skills = multiSkill.getSkills("player2").pointSkills
 
     val p1PointProb = pointModel.pointProb(p1Skills.skillOnServe, p2Skills.skillOnReturn)
     val p2PointProb = pointModel.pointProb(p2Skills.skillOnServe, p1Skills.skillOnReturn)

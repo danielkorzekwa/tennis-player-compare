@@ -13,19 +13,4 @@ object MatchLogLik {
      matchLogLik
   }
 
-  /**
-   * Returns match point-by-point log likelihood given the sequence of point results for a tennis match.
-   */
-  def logLikByPoint(p1OnServePointProb: Double, p2OnServePointProb: Double, result: MatchResult): Double = {
-      val loglik = result.pointResults.foldLeft(0d) { (totalLogLik, point) =>
-
-      val pointProbOnServe = if (result.player1.equals(point.playerOnServe)) p1OnServePointProb else p2OnServePointProb
-      val pointLoglik = if (point.playerOnServeWin) log(pointProbOnServe) else log1p(-pointProbOnServe)
-      totalLogLik + pointLoglik
-    }
-      
-      loglik
-  }
-  
-
 }

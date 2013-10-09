@@ -2,8 +2,9 @@ package dk.tennis.compare.game.tennis.matching.event
 
 import dk.atp.api.domain.MatchComposite
 import org.joda.time.DateTime
-import dk.tennis.compare.game.tennis.domain.TennisResult
 import dk.tennis.compare.game.tennis.domain.BfMarket
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.TournamentResult
 
 /**
  * Default implementation for the EventsMatcher.
@@ -11,7 +12,7 @@ import dk.tennis.compare.game.tennis.domain.BfMarket
  * @author Daniel Korzekwa
  *
  */
-case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[BfMarket]) extends EventsMatcher {
+case class GenericEventsMatcher(atpTournaments: Seq[TournamentResult], betfairMarkets: Seq[BfMarket]) extends EventsMatcher {
 
   /**Map[atpEventKey+bfEventKey,matchingProb]*/
   private val matchingProbs: Map[String, Double] = calcMatchingProbs()
@@ -30,18 +31,16 @@ case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: S
    */
   private def calcMatchingProbs(): Map[String, Double] = {
 
-    /**Map[atpEventKey,event markets]*/
-    val atpMarketsByEvent = atpMarkets.groupBy(m => getEventKey(m.eventName.get, new DateTime(m.timestamp.get).getYear))
-
     /**Map[bfEventKey,event markets]*/
     val bfMarketsByEvent = betfairMarkets.groupBy(m => getEventKey(m.eventName, new DateTime(m.scheduledOff).getYear))
 
     val matchingProbsList = for {
-      atpEvent <- atpMarketsByEvent.keys
+      atpTournament <- atpTournaments
       bfEvent <- bfMarketsByEvent.keys
 
+      val atpEvent = getEventKey(atpTournament.tournamentName, new DateTime(atpTournament.tournamentTime.getTime).getYear)
       val eventPairKey = atpEvent.concat(bfEvent)
-      val matchingProb = calcMatchingProb(atpMarketsByEvent(atpEvent), bfMarketsByEvent(bfEvent))
+      val matchingProb = calcMatchingProb(atpTournament.matchResults, bfMarketsByEvent(bfEvent))
 
     } yield (eventPairKey, matchingProb)
 
@@ -54,7 +53,7 @@ case class GenericEventsMatcher(atpMarkets: Seq[TennisResult], betfairMarkets: S
   /**
    * Returns the probability of atp and betfair markets coming from the same event.
    */
-  private def calcMatchingProb(atpMarkets: Seq[TennisResult], betfairMarkets: Seq[BfMarket]): Double = {
+  private def calcMatchingProb(atpMarkets: Seq[MatchResult], betfairMarkets: Seq[BfMarket]): Double = {
 
     val atpPlayerPairs = atpMarkets.map(m => List(m.player1.toLowerCase, m.player2.toLowerCase).sorted.mkString(":"))
     val bfPlayerPairs = betfairMarkets.map(m => m.runnerMap.values.map(r => r.name.toLowerCase).toList.sorted.mkString(":"))

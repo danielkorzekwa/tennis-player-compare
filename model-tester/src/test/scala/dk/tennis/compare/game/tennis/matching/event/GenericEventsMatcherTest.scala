@@ -8,17 +8,20 @@ import dk.atp.api.domain.SurfaceEnum._
 import scala.io.Source
 import org.joda.time.DateTime
 import dk.tennis.compare.game.tennis.domain.BfMarket
-import dk.tennis.compare.game.tennis.domain.TennisResult
 import java.util.Date
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 
 class GenericEventsMatcherTest {
 
-  val atpMarkets = getAtpMatches("./src/test/resources/atp_historical_data/match_data_2006_2011.csv", 2006, 2011)
+  val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
+  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2006, 2011)
 
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
   val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
 
-  val eventsMatcher = GenericEventsMatcher(atpMarkets, bfMarkets)
+  val eventsMatcher = GenericEventsMatcher(tournaments, bfMarkets)
 
   @Test def test_high_matching_prob {
 
@@ -36,14 +39,4 @@ class GenericEventsMatcherTest {
     assertEquals(21, matchingProbs.size, 0.0001)
   }
 
-  private def getAtpMatches(matchesFile: String, yearFrom: Int, yearTo: Int): Seq[TennisResult] = {
-    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(matchesFile)
-
-    val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.totalServicePointsWon > 10 && m.matchFacts.playerBFacts.totalServicePointsWon > 10)
-
-    val gameResults = TennisResult.fromMatches(filteredMatches)
-
-    gameResults
-  }
 }

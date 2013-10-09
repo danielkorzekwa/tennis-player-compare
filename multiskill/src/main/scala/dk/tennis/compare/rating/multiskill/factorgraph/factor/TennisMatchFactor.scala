@@ -7,14 +7,14 @@ import dk.bayes.model.factor.SingleTableFactor
 import dk.bayes.model.factor.api.Factor
 import dk.bayes.model.factor.api.SingleFactor
 import dk.bayes.model.factor.api.TripleFactor
-import dk.tennis.compare.rating.multiskill.matchmodel.online.GenericOnlineMatchModel
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.domain.MatchResult
 import dk.bayes.model.factor.BivariateGaussianFactor
 import dk.bayes.model.factor.BivariateGaussianFactor
-import dk.tennis.compare.rating.multiskill.matchmodel.dbn.GenericDbnMatchModel
+import dk.tennis.compare.rating.multiskill.model.multipoint.GenericMultiPointModel
+import dk.tennis.compare.rating.multiskill.model.multipoint.GenericMultiPointModel
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 
 case class TennisMatchFactor(p1Factor: PlayerFactor, p2Factor: PlayerFactor, outcomeVarId: Int,
   perfVarianceOnServe: Double, perfVarianceOnReturn: Double, matchResult: MatchResult) extends TripleFactor {
@@ -46,11 +46,13 @@ case class TennisMatchFactor(p1Factor: PlayerFactor, p2Factor: PlayerFactor, out
     val initialP1Skills = toPlayerSkills(matchResult.player1, p1Skills)
     val initialP2SKills = toPlayerSkills(matchResult.player2, p2Skills)
 
-    val matchModel = GenericOnlineMatchModel(initialP1Skills, initialP2SKills, perfVarianceOnServe, perfVarianceOnReturn)
-    matchResult.pointResults.foreach(p => matchModel.onPoint(p))
+    val model = GenericMultiPointModel(perfVarianceOnServe, perfVarianceOnReturn)
+    val (newP1SkillOnServe, newP2SkillOnReturn) = model.skillMarginals(initialP1Skills.skillOnServe, initialP2SKills.skillOnReturn, matchResult.p1Stats.servicePointsWon, matchResult.p1Stats.servicePointsTotal)
+    val (newP2SkillOnServe, newP1SkillOnReturn) = model.skillMarginals(initialP2SKills.skillOnServe, initialP1Skills.skillOnReturn, matchResult.p2Stats.servicePointsWon, matchResult.p2Stats.servicePointsTotal)
 
-    val newP1Skills = matchModel.getP1Skills()
-    val newP2Skills = matchModel.getP2Skills()
+    val newP1Skills = PlayerSkills(initialP1Skills.player, newP1SkillOnServe, newP1SkillOnReturn)
+    val newP2Skills = PlayerSkills(initialP2SKills.player, newP2SkillOnServe, newP2SkillOnReturn)
+
     val outcomeMsg = SingleTableFactor(outcomeVarId, 2, Array(1, 1))
 
     val p1SkillsMsg = toFactor(p1VarId, newP1Skills) / p1Skills

@@ -11,8 +11,6 @@ import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.infer.ep.EP
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.factorgraph.factor.TennisMatchFactor
-import dk.tennis.compare.rating.multiskill.matchmodel.dbn.DbnMatchModel
-import dk.tennis.compare.rating.multiskill.matchmodel.dbn.GenericDbnMatchModel
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 
@@ -60,23 +58,23 @@ object Mstep {
       currMultiSkillParams.perfVarianceOnServe, currMultiSkillParams.perfVarianceOnReturn)
   }
 
-  private def toDbnMatchModel(f: TennisMatchFactor, currMultiSkillParams: MultiSkillParams, ep: EP): DbnMatchModel = {
-    val p1SkillOnServeMarginal = ep.marginal(f.p1Factor.skillOnServeVarId).asInstanceOf[GaussianFactor]
-    val p1SkillOnReturnMarginal = ep.marginal(f.p1Factor.skillOnReturnVarId).asInstanceOf[GaussianFactor]
-    val p1SkillOnServe = PlayerSkill(p1SkillOnServeMarginal.m, p1SkillOnServeMarginal.v)
-    val p1SkillOnReturn = PlayerSkill(p1SkillOnReturnMarginal.m, p1SkillOnReturnMarginal.v)
-    val initialP1Skills = PlayerSkills(f.matchResult.player1, p1SkillOnServe, p1SkillOnReturn)
-
-    val p2SkillOnServeMarginal = ep.marginal(f.p2Factor.skillOnServeVarId).asInstanceOf[GaussianFactor]
-    val p2SkillOnReturnMarginal = ep.marginal(f.p2Factor.skillOnReturnVarId).asInstanceOf[GaussianFactor]
-    val p2SkillOnServe = PlayerSkill(p2SkillOnServeMarginal.m, p2SkillOnServeMarginal.v)
-    val p2SkillOnReturn = PlayerSkill(p2SkillOnReturnMarginal.m, p2SkillOnReturnMarginal.v)
-    val initialP2Skills = PlayerSkills(f.matchResult.player2, p2SkillOnServe, p2SkillOnReturn)
-
-    val matchModel = GenericDbnMatchModel(initialP1Skills, initialP2Skills, currMultiSkillParams.perfVarianceOnServe, currMultiSkillParams.perfVarianceOnReturn, f.matchResult)
-
-    matchModel
-  }
+//  private def toDbnMatchModel(f: TennisMatchFactor, currMultiSkillParams: MultiSkillParams, ep: EP): DbnMatchModel = {
+//    val p1SkillOnServeMarginal = ep.marginal(f.p1Factor.skillOnServeVarId).asInstanceOf[GaussianFactor]
+//    val p1SkillOnReturnMarginal = ep.marginal(f.p1Factor.skillOnReturnVarId).asInstanceOf[GaussianFactor]
+//    val p1SkillOnServe = PlayerSkill(p1SkillOnServeMarginal.m, p1SkillOnServeMarginal.v)
+//    val p1SkillOnReturn = PlayerSkill(p1SkillOnReturnMarginal.m, p1SkillOnReturnMarginal.v)
+//    val initialP1Skills = PlayerSkills(f.matchResult.player1, p1SkillOnServe, p1SkillOnReturn)
+//
+//    val p2SkillOnServeMarginal = ep.marginal(f.p2Factor.skillOnServeVarId).asInstanceOf[GaussianFactor]
+//    val p2SkillOnReturnMarginal = ep.marginal(f.p2Factor.skillOnReturnVarId).asInstanceOf[GaussianFactor]
+//    val p2SkillOnServe = PlayerSkill(p2SkillOnServeMarginal.m, p2SkillOnServeMarginal.v)
+//    val p2SkillOnReturn = PlayerSkill(p2SkillOnReturnMarginal.m, p2SkillOnReturnMarginal.v)
+//    val initialP2Skills = PlayerSkills(f.matchResult.player2, p2SkillOnServe, p2SkillOnReturn)
+//
+//    val matchModel = GenericDbnMatchModel(initialP1Skills, initialP2Skills, currMultiSkillParams.perfVarianceOnServe, currMultiSkillParams.perfVarianceOnReturn, f.matchResult)
+//
+//    matchModel
+//  }
 
   private def toTransitionStats(skillVarIds: IndexedSeq[Int], ep: EP): IndexedSeq[TransitionStat] = {
     require(skillVarIds.size >= 2, "Sequence of skill varIds must have at least two elements")

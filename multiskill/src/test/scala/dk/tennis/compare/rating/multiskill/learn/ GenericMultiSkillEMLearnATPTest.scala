@@ -7,11 +7,10 @@ import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.MatchResult
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
-import dk.tennis.compare.rating.multiskill.sim.GenericMatchSim
 import scala.util.Random
+import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 
 class GenericMultiSkillEMLearnATPTest {
 
@@ -19,16 +18,16 @@ class GenericMultiSkillEMLearnATPTest {
 
   @Test def test_atp_results_2011 {
 
-    val multiSkillParams = MultiSkillParams(
-      skillOnServeTransVariance = 0.00026103154972190633,
-      skillOnReturnTransVariance = 0.0006103154972158028,
-      priorSkillOnServe = PlayerSkill(2.7100608379747073, 0.499569787325858), priorSkillOnReturn = PlayerSkill(-2.7100608379751296, 0.49956978732869395),
-      perfVarianceOnServe = 100, perfVarianceOnReturn = 100)
+     val multiSkillParams = MultiSkillParams(
+      skillOnServeTransVariance = 0.03,
+      skillOnReturnTransVariance = 0.03,
+      priorSkillOnServe = PlayerSkill(0,1), priorSkillOnReturn = PlayerSkill(0,1),
+      perfVarianceOnServe = 200, perfVarianceOnReturn = 200)
 
-    val matchResults = loadTennisMatches(2011, 2011)
-    println("Tennis matches=" + matchResults.size)
+    val atpFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
+    val tournaments = MatchesLoader.loadTournaments(atpFile, 2011, 2011)
 
-    val learnedParams = GenericMultiSkillEMLearn.learn(multiSkillParams, matchResults, maxIter = 3, emProgress)
+    val learnedParams = GenericMultiSkillEMLearn.learn(multiSkillParams, tournaments, maxIter = 3, emProgress)
 
   }
 

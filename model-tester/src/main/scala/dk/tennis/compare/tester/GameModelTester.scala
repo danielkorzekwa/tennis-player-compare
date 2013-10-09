@@ -10,41 +10,48 @@ import java.util.Date
 import scala.collection._
 import scala.collection.mutable.StringBuilder
 import java.text.SimpleDateFormat
+import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.TournamentResult
 
-case class GameModelTester(results: Seq[GameResult]) {
+case class GameModelTester(tournaments: Seq[TournamentResult]) {
 
   private val llhStats = LlhStats()
 
-  def run(gameModel: GameModel, resultFilter: GameResult => Boolean): ModelSummary = {
+  def run(gameModel: GameModel, resultFilter: (TournamentResult, MatchResult) => Boolean): ModelSummary = {
 
     val predictionRecords: mutable.ListBuffer[PredictionRecord] = mutable.ListBuffer()
 
-    for (r <- results) {
+    for (tournament <- tournaments) {
 
-      if (resultFilter(r)) {
+      for (tennisMatch <- tournament.matchResults) {
 
-        val playerAWinnerProb = gameModel.gameProb(r)
+        if (resultFilter(tournament, tennisMatch)) {
 
-        playerAWinnerProb.foreach { playerAWinnerProb =>
-          val llhValue = if (r.player1Win.get) log(playerAWinnerProb).max(-100) else log1p(-playerAWinnerProb).max(-100)
-          if (llhValue.isNaN()) {
-            println(llhValue)
+          val playerAWinnerProb = gameModel.gameProb(tournament, tennisMatch)
+
+          playerAWinnerProb.foreach { playerAWinnerProb =>
+            val llhValue = if (tennisMatch.player1Won) log(playerAWinnerProb).max(-100) else log1p(-playerAWinnerProb).max(-100)
+            if (llhValue.isNaN()) {
+              println(llhValue)
+            }
+            llhStats.add(llhValue)
+
+            val predictionRecord = PredictionRecord(tournament.tournamentName,
+              tournament.tournamentTime, tennisMatch.player1,
+              tennisMatch.player2,
+              playerAWinnerProb,
+              tennisMatch.player1Won)
+
+            predictionRecords += predictionRecord
+
           }
-          llhStats.add(llhValue)
-
-          val predictionRecord = PredictionRecord(r.eventName.getOrElse("n/a"),
-            r.timestamp.get, r.player1,
-            r.player2,
-            playerAWinnerProb,
-            r.player1Win.get)
-
-          predictionRecords += predictionRecord
 
         }
 
+        gameModel.addGameResult(tournament, tennisMatch)
       }
 
-      gameModel.addGameResult(r)
     }
 
     ModelSummary(predictionRecords.toList, llhStats)
@@ -76,7 +83,7 @@ object GameModelTester {
       val actualVsExpectedSummary = actualVsExpected.reduceLeft((sum, a) => (sum._1 + a._1, sum._2 + a._2))
       actualVsExpectedSummary
     }
-   
+
     /**
      * Fraction of players, which were predicted incorrectly as the winner
      */

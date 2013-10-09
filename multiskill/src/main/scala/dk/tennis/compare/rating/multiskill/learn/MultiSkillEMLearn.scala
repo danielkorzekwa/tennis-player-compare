@@ -1,8 +1,8 @@
 package dk.tennis.compare.rating.multiskill.learn
 
-import dk.tennis.compare.rating.multiskill.domain.PointResult
 import dk.tennis.compare.rating.multiskill.domain.MatchResult
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
+import dk.tennis.compare.rating.multiskill.domain.TournamentResult
 
 /**
  * Learns multiskill parameters with Expectation Maximisation.
@@ -17,5 +17,5 @@ trait MultiSkillEMLearn {
    *
    * @return Learned MultiSkill parameters
    */
-  def learn(multiSkillParams: MultiSkillParams, results: Seq[MatchResult], maxIter: Int, iterStatus: EMStatus => Unit): MultiSkillParams
+  def learn(multiSkillParams: MultiSkillParams, tournaments: Seq[TournamentResult], maxIter: Int, iterStatus: EMStatus => Unit): MultiSkillParams
 }
