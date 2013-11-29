@@ -10,7 +10,7 @@ import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.bayes.infer.ep.GenericEP
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 import org.apache.commons.lang.time.StopWatch
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill

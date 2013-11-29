@@ -10,12 +10,10 @@ import scala.annotation.tailrec
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 import dk.tennis.compare.rating.multiskill.factorgraph.TennisDbnFactorGraph
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.factorgraph.TennisDbnFactorGraph
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
-import dk.tennis.compare.rating.multiskill.GenericMultiSkill
 import scala.math._
-import dk.tennis.compare.rating.multiskill.MultiSkill
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
@@ -23,9 +21,13 @@ import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.bayes.infer.ep.EP
 import dk.bayes.learn.lds.TransitionStat
 import dk.bayes.learn.lds.PriorStat
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
+import dk.tennis.compare.rating.multiskill.model.od.Game
+import dk.tennis.compare.rating.multiskill.model.od.GenericOffenceDefenceModel
+import dk.tennis.compare.rating.multiskill.model.od.utils.Predict
+import dk.tennis.compare.rating.multiskill.model.od.utils.LogLik
 
 /**
  * Learns skill transition variance based on tennis point outcomes and skills on serve and return for both players.
@@ -69,49 +71,25 @@ object GenericMultiSkillEMLearn extends MultiSkillEMLearn {
 
   }
 
-  private def calcLoglikMatch(multiSkillParams: MultiSkillParams, tournaments: Seq[TournamentResult]): Double = {
-    val multiSkill = GenericMultiSkill(multiSkillParams)
+  /**Returns [total,avg] log likelihood*/
+  private def calcLoglikMatch(multiSkillParams: MultiSkillParams, tournaments: Seq[TournamentResult]): Tuple2[Double, Double] = {
 
-    val totalLoglik = tournaments.foldLeft(0d) { (totalLogLik, t) =>
+    val games = tournaments.flatMap { t =>
+      t.matchResults.map { r =>
 
-      val loglik = t.matchResults.foldLeft(0d) { (loglik, r) =>
+        val p1Points = Tuple2(r.p1Stats.servicePointsWon, r.p1Stats.servicePointsTotal)
+        val p2Points = Tuple2(r.p2Stats.servicePointsWon, r.p2Stats.servicePointsTotal)
+        val game = Game(t.tournamentTime, r.player1, r.player2, p1Points, p2Points)
+        game
 
-        val player1WinProb = calcPlayer1WinMatchProb(r, multiSkill)
-        val matchLogLik = MatchLogLik.logLik(player1WinProb, r.player1Won)
-
-        multiSkill.processTennisMatch(t, r)
-
-        loglik + matchLogLik
       }
-      totalLogLik + loglik
     }
+    val model = GenericOffenceDefenceModel(multiSkillParams)
+    val predictions = Predict.predict(model, games)
+    val (totalLogLik, avgLogLik) = LogLik.logLik(predictions.map(p => Tuple3(p.pointProb,p.points._1,p.points._2)))
 
-    totalLoglik
-  }
+    (totalLogLik, avgLogLik)
 
-  /**Returns [p1PointOnServeProb,p2PointOnServeProb]*/
-  private def calcPointProbs(matchResult: MatchResult, multiSkill: GenericMultiSkill): Tuple2[Double, Double] = {
-
-    val player1Skill = multiSkill.getSkills(matchResult.player1).pointSkills
-    val player2Skill = multiSkill.getSkills(matchResult.player2).pointSkills
-
-    val pointModel = GenericPointModel(multiSkill.multiSkillParams.perfVarianceOnServe, multiSkill.multiSkillParams.perfVarianceOnReturn)
-
-    val p1PointProb = pointModel.pointProb(player1Skill.skillOnServe, player2Skill.skillOnReturn)
-    val p2PointProb = pointModel.pointProb(player2Skill.skillOnServe, player1Skill.skillOnReturn)
-
-    (p1PointProb, p2PointProb)
-  }
-
-  /**Returns player 1 match win probability*/
-  private def calcPlayer1WinMatchProb(matchResult: MatchResult, multiSkill: GenericMultiSkill): Double = {
-
-    val (p1PointProb, p2PointProb) = calcPointProbs(matchResult, multiSkill)
-
-    val matchProb = if (matchResult.numOfSets == 2) TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, THREE_SET_MATCH)
-    else TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, FIVE_SET_MATCH)
-
-    matchProb
   }
 
 }

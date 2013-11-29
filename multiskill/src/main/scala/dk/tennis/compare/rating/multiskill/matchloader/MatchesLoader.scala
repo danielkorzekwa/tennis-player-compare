@@ -1,6 +1,6 @@
 package dk.tennis.compare.rating.multiskill.matchloader
 
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum._
 import scala.util.Random
@@ -8,16 +8,16 @@ import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.atp.api.tournament.TournamentAtpApi._
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
-import dk.tennis.compare.rating.multiskill.domain.PlayerStats
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.PlayerStats
 
 object MatchesLoader {
 
   def loadTournaments(atpFile: String, yearFrom: Int, yearTo: Int): Seq[TournamentResult] = {
-    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile("./src/test/resources/atp_historical_data/match_data_2006_2011.csv")
+    val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(atpFile)
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.servicePointsTotal > 10 && m.matchFacts.playerBFacts.servicePointsTotal > 10)

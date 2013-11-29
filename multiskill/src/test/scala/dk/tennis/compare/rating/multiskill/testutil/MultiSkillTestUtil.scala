@@ -1,6 +1,6 @@
 package dk.tennis.compare.rating.multiskill.testutil
 
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum._
 import scala.util.Random
@@ -10,11 +10,11 @@ import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.atp.api.tournament.TournamentAtpApi._
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
-import dk.tennis.compare.rating.multiskill.domain.PlayerStats
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.PlayerStats
 
 object MultiSkillTestUtil {
 

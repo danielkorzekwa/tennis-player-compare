@@ -2,10 +2,10 @@ package dk.tennis.compare.rating.multiskill.learn
 
 import org.junit._
 import Assert._
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.domain.PlayerStats
+import dk.tennis.compare.rating.multiskill.matchloader.PlayerStats
 
 class MatchLogLikTest {
 

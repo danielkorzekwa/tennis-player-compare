@@ -7,10 +7,10 @@ import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import scala.util.Random
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import java.util.Date
 
 class GenericMultiSkillEMLearnTest {

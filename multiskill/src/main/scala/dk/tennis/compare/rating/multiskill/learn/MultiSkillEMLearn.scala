@@ -1,8 +1,8 @@
 package dk.tennis.compare.rating.multiskill.learn
 
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
-import dk.tennis.compare.rating.multiskill.domain.TournamentResult
+import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 
 /**
  * Learns multiskill parameters with Expectation Maximisation.

@@ -5,14 +5,18 @@ import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 
 trait OffenceDefenceModel {
 
-  /**
-   * @param timestamp The time of the game
-   * @param player1
-   * @param player2
-   * @param p1PointsOnOffence [pointsWon,pointsTotal]
-   * @param p2PointsOnOffence [pointsWon,pointsTotal]
-   */
-  def processGame(gameTime: Date, player1: String, player2: String, p1PointsOnOffence: Tuple2[Int, Int], p2PointsOnOffence: Tuple2[Int, Int])
+  def processGame(game: Game)
 
-  def getSkill(player: String): PlayerSkills
+  /**
+   * Returns the probability of winning a point. [player1ProbOnOffence,player2ProbOnOffence]
+   */
+  def pointProb(player1: String, player2: String): Tuple2[Double, Double]
+
+  def getSkill(player: String,opponent:String): PlayerSkills
+
+  /**
+   * @returns Map[playerName,playerSkills]
+   */
+  def getSkills(): Map[String, PlayerSkills]
+
 }

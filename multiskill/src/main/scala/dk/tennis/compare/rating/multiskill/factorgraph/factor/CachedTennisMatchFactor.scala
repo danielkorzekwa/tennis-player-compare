@@ -3,11 +3,12 @@ package dk.tennis.compare.rating.multiskill.factorgraph.factor
 import dk.bayes.model.factor.api.Factor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.SingleTableFactor
-import dk.tennis.compare.rating.multiskill.domain.MatchResult
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
+import dk.tennis.compare.rating.multiskill.model.od.Game
 
 class CachedTennisMatchFactor(p1Factor: PlayerFactor, p2Factor: PlayerFactor, outcomeVarId: Int,
-  perfVarianceOnServe: Double, perfVarianceOnReturn: Double, matchResult: MatchResult)
-  extends TennisMatchFactor(p1Factor, p2Factor, outcomeVarId, perfVarianceOnServe, perfVarianceOnReturn, matchResult) {
+  perfVarianceOnServe: Double, perfVarianceOnReturn: Double, game: Game)
+  extends TennisMatchFactor(p1Factor, p2Factor, outcomeVarId, perfVarianceOnServe, perfVarianceOnReturn, game) {
 
   /**caching*/
   val skillCachingDelta = 0.000000001
