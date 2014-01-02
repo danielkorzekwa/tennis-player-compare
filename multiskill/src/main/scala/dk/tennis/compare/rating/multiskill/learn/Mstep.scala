@@ -13,68 +13,60 @@ import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.factorgraph.factor.TennisMatchFactor
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
+import org.slf4j.LoggerFactory
+import com.typesafe.scalalogging.slf4j.Logger
 
 object Mstep {
+
+  private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
   def maximise(tennisFactorGraph: TennisDbnFactorGraph, currMultiSkillParams: MultiSkillParams): MultiSkillParams = {
     val ep = GenericEP(tennisFactorGraph.getFactorGraph())
 
     //learn skill transition variance on serve
-    val skillOnServeVarIds: Iterable[IndexedSeq[Int]] = tennisFactorGraph.getSkillVarIdsOnServe().values.filter(varIds => varIds.size >= 2)
+    val skillOnServeVarIds: Iterable[IndexedSeq[Int]] = tennisFactorGraph.getSkillVarIdsOnServe().values.filter(varIds => varIds.size >= 50)
     val skillsOnServeStats: IndexedSeq[TransitionStat] = skillOnServeVarIds.flatMap(varIds => toTransitionStats(varIds, ep)).toIndexedSeq
     val newSkillOnServeTransVariance = GenericLDSLearn.newQ(skillsOnServeStats.toIndexedSeq)
 
     //learn skill transition variance on return
-    val skillOnReturnVarIds: Iterable[IndexedSeq[Int]] = tennisFactorGraph.getSkillVarIdsOnReturn().values.filter(varIds => varIds.size >= 2)
+    val skillOnReturnVarIds: Iterable[IndexedSeq[Int]] = tennisFactorGraph.getSkillVarIdsOnReturn().values.filter(varIds => varIds.size >= 50)
     val skillsOnReturnStats: IndexedSeq[TransitionStat] = skillOnReturnVarIds.flatMap(varIds => toTransitionStats(varIds, ep)).toIndexedSeq
     val newSkillOnReturnTransVariance = GenericLDSLearn.newQ(skillsOnReturnStats.toIndexedSeq)
 
     //learn prior skill on serve
-    val priorSkillsOnServeVarIds: Iterable[Int] = tennisFactorGraph.getSkillVarIdsOnServe().values.map(varIds => varIds.head)
+    val priorSkillsOnServeVarIds: Iterable[Int] = tennisFactorGraph.getSkillVarIdsOnServe().values.filter(varIds => varIds.size >= 50).map(varIds => varIds.head)
     val priorSkillsOnServeStats: IndexedSeq[PriorStat] = priorSkillsOnServeVarIds.map(varId => toPriorStat(varId, ep)).toIndexedSeq
     val newPriorMeanOnServe = GenericLDSLearn.newPi(priorSkillsOnServeStats)
     val newPriorVarianceOnServe = GenericLDSLearn.newV(priorSkillsOnServeStats)
     val newPriorSkillOnServe = PlayerSkill(newPriorMeanOnServe, newPriorVarianceOnServe)
 
     //learn prior skill on return
-    val priorSkillsOnReturnVarIds: Iterable[Int] = tennisFactorGraph.getSkillVarIdsOnReturn().values.map(varIds => varIds.head)
+    val priorSkillsOnReturnVarIds: Iterable[Int] = tennisFactorGraph.getSkillVarIdsOnReturn().values.filter(varIds => varIds.size >= 50).map(varIds => varIds.head)
     val priorSkillsOnReturnStats: IndexedSeq[PriorStat] = priorSkillsOnReturnVarIds.map(varId => toPriorStat(varId, ep)).toIndexedSeq
     val newPriorMeanOnReturn = GenericLDSLearn.newPi(priorSkillsOnReturnStats)
     val newPriorVarianceOnReturn = GenericLDSLearn.newV(priorSkillsOnReturnStats)
     val newPriorSkillOnReturn = PlayerSkill(newPriorMeanOnReturn, newPriorVarianceOnReturn)
 
     //learn performance variance on serve/return. Tuple2[perf stat on serve, perf stat on return]
-    //    val tennisMatchModels: Seq[DbnMatchModel] = tennisFactorGraph.getTennisMatchFactors().map(f => toDbnMatchModel(f, currMultiSkillParams, ep))
-    //    tennisMatchModels.foreach(m => m.calibrate(1000))
-    //
-    //    val perfOnServeStats: IndexedSeq[TransitionStat] = tennisMatchModels.flatMap(m => m.getPerfVarOnServe.map(f => toTransitionStat(f))).toIndexedSeq
-    //    val newPerfVarOnServe = GenericLDSLearn.newQ(perfOnServeStats)
-    //
-    //    val perfOnReturnStats: IndexedSeq[TransitionStat] = tennisMatchModels.flatMap(m => m.getPerfVarOnReturn.map(f => toTransitionStat(f))).toIndexedSeq
-    //    val newPerfVarOnReturn = GenericLDSLearn.newQ(perfOnReturnStats)
+    logger.info("Learning performance variance")
+    val perfOnServeStats = tennisFactorGraph.getTennisMatchFactors.flatMap { tennisMatch =>
+
+      val (perfMarginalsOnServe, perfMarginalsOnReturn) = tennisMatch.getPerfMarginals()
+      perfMarginalsOnServe.map(perfMarginal => toTransitionStat(perfMarginal))
+    }
+    val newPerfVarOnServe = GenericLDSLearn.newQ(perfOnServeStats)
+
+    val perfOnReturnStats = tennisFactorGraph.getTennisMatchFactors.flatMap { tennisMatch =>
+
+      val (perfMarginalsOnServe, perfMarginalsOnReturn) = tennisMatch.getPerfMarginals()
+      perfMarginalsOnReturn.map(perfMarginal => toTransitionStat(perfMarginal))
+    }
+    val newPerfVarOnReturn = GenericLDSLearn.newQ(perfOnReturnStats)
 
     MultiSkillParams(newSkillOnServeTransVariance, newSkillOnReturnTransVariance,
       newPriorSkillOnServe, newPriorSkillOnReturn,
-      currMultiSkillParams.perfVarianceOnServe, currMultiSkillParams.perfVarianceOnReturn)
+      newPerfVarOnServe, newPerfVarOnReturn)
   }
-
-//  private def toDbnMatchModel(f: TennisMatchFactor, currMultiSkillParams: MultiSkillParams, ep: EP): DbnMatchModel = {
-//    val p1SkillOnServeMarginal = ep.marginal(f.p1Factor.skillOnServeVarId).asInstanceOf[GaussianFactor]
-//    val p1SkillOnReturnMarginal = ep.marginal(f.p1Factor.skillOnReturnVarId).asInstanceOf[GaussianFactor]
-//    val p1SkillOnServe = PlayerSkill(p1SkillOnServeMarginal.m, p1SkillOnServeMarginal.v)
-//    val p1SkillOnReturn = PlayerSkill(p1SkillOnReturnMarginal.m, p1SkillOnReturnMarginal.v)
-//    val initialP1Skills = PlayerSkills(f.matchResult.player1, p1SkillOnServe, p1SkillOnReturn)
-//
-//    val p2SkillOnServeMarginal = ep.marginal(f.p2Factor.skillOnServeVarId).asInstanceOf[GaussianFactor]
-//    val p2SkillOnReturnMarginal = ep.marginal(f.p2Factor.skillOnReturnVarId).asInstanceOf[GaussianFactor]
-//    val p2SkillOnServe = PlayerSkill(p2SkillOnServeMarginal.m, p2SkillOnServeMarginal.v)
-//    val p2SkillOnReturn = PlayerSkill(p2SkillOnReturnMarginal.m, p2SkillOnReturnMarginal.v)
-//    val initialP2Skills = PlayerSkills(f.matchResult.player2, p2SkillOnServe, p2SkillOnReturn)
-//
-//    val matchModel = GenericDbnMatchModel(initialP1Skills, initialP2Skills, currMultiSkillParams.perfVarianceOnServe, currMultiSkillParams.perfVarianceOnReturn, f.matchResult)
-//
-//    matchModel
-//  }
 
   private def toTransitionStats(skillVarIds: IndexedSeq[Int], ep: EP): IndexedSeq[TransitionStat] = {
     require(skillVarIds.size >= 2, "Sequence of skill varIds must have at least two elements")

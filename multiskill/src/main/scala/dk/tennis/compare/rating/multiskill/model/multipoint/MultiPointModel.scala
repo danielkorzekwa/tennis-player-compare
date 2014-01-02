@@ -12,5 +12,5 @@ trait MultiPointModel {
    *
    * @return Posterior for [P1Marginal,P2Marginal]
    */
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int): Tuple2[PlayerSkill, PlayerSkill]
+  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int): Tuple3[PlayerSkill,PlayerSkill,PointsFactorGraph]
 }

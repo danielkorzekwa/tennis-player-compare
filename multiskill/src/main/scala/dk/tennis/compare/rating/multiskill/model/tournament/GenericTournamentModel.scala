@@ -1,66 +1,48 @@
 package dk.tennis.compare.rating.multiskill.model.tournament
 
-import java.util.concurrent.atomic.AtomicInteger
-import dk.bayes.model.clustergraph.factor.SingleFactor
-import dk.bayes.model.clustergraph.factor.Factor
-import dk.bayes.model.clustergraph.factor.Var
-import dk.bayes.model.clustergraph.factor.MultiFactor
-import scala.annotation.tailrec
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
+import scala.collection._
+import dk.tennis.compare.rating.multiskill.model.multipoint.GenericMultiPointModel
 
-object GenericTournamentModel extends TournamentModel {
+case class GenericTournamentModel(config: TournamentModelConfig) extends TournamentModel {
 
-  def winningProbs(draw: Seq[Tuple2[String, String]], winProb: (String, String) => Double): Map[String, Double] = {
+  def calcMatchSkills(initialPlayerSkills: immutable.Map[String, PlayerSkills], tennisMatches: Seq[MatchResult]): Seq[MatchSkills] = {
+    /** Map[playerName,player skills]*/
+    val skillsMap: mutable.Map[String, PlayerSkills] = mutable.Map() ++ initialPlayerSkills
 
-    require(draw.size > 0, "Tournament draw is empty")
-    val lastVarId = new AtomicInteger(0)
+    val matchSkills = tennisMatches.map { m =>
 
-    @tailrec
-    def infer(round: Seq[RoundFactor]): RoundFactor = {
+      val beforeGameP1Skills = skillsMap(m.player1)
+      val beforeGameP2Skills = skillsMap(m.player2)
 
-      val nextRound = round.grouped(2).map { g =>
-        val pair1 = g(0)
-        val pair2 = g(1)
+      //update player skills at the beginning of the next game
+      val (afterGamePlayer1Skills, afterGamePlayer2Skills) = afterGameSkills(beforeGameP1Skills, beforeGameP2Skills, m)
+      
+      val beforeNextGameP1Skills = afterGamePlayer1Skills.transition(config.skillOnServeTransVariance, config.skillOnReturnTransVariance)
+      val beforeNextGameP2Skills = afterGamePlayer2Skills.transition(config.skillOnServeTransVariance, config.skillOnReturnTransVariance)
+      skillsMap += m.player1 -> beforeNextGameP1Skills
+      skillsMap += m.player2 -> beforeNextGameP2Skills
 
-        val nextRoundFactor = createNextRoundFactor(pair1, pair2, lastVarId.getAndIncrement, winProb)
-        val factorMarginal = nextRoundFactor.product(pair1.matchFactor).product(pair2.matchFactor).marginal(nextRoundFactor.getVariables.last.id).normalise
+      MatchSkills(m, beforeGameP1Skills, beforeGameP2Skills)
 
-        RoundFactor(pair1.players ++ pair2.players, factorMarginal)
-      }.toSeq
-
-      if (nextRound.size == 1) nextRound.head else infer(nextRound.toSeq)
     }
-
-    if (draw.size == 1) {
-      val p1Prob = winProb(draw.head._1, draw.head._2)
-      Map(draw.head._1 -> p1Prob, draw.head._2 -> (1 - p1Prob))
-    } else {
-
-      val firstRoundFactors = draw.map { m =>
-        val p1Prob = winProb(m._1, m._2)
-        val matchFactor = Factor(Var(lastVarId.getAndIncrement, 2), Array(p1Prob, 1 - p1Prob))
-        RoundFactor(List(m._1, m._2), matchFactor)
-      }
-
-      val finalRoundFactor = infer(firstRoundFactors)
-      Map(finalRoundFactor.players.zip(finalRoundFactor.matchFactor.getValues): _*)
-    }
-
+    matchSkills
   }
 
-  def createNextRoundFactor(pair1: RoundFactor, pair2: RoundFactor, factorVarId: Int, winProb: (String, String) => Double): MultiFactor = {
-    val nextRoundPlayers = pair1.players ++ pair2.players
-    val nextRoundVarId = Var(factorVarId, nextRoundPlayers.size)
-    val nextRoundProbs = for (pair1Player <- pair1.players; pair2Player <- pair2.players; nextRoundPlayer <- nextRoundPlayers) yield {
+  /**Returns (player1 skills, player2 skills) after observing the outcome of the game*/
+  private def afterGameSkills(player1Skills: PlayerSkills, player2Skills: PlayerSkills, m: MatchResult): Tuple2[PlayerSkills, PlayerSkills] = {
+    val multiPointModel = GenericMultiPointModel(config.pointPerfVarianceOnServe, config.pointPerfVarianceOnReturn)
 
-      val p1MatchProb = winProb(pair1Player, pair2Player)
-      val nextRoundPlayerProb = if (nextRoundPlayer.equals(pair1Player)) p1MatchProb
-      else if (nextRoundPlayer.equals(pair2Player)) 1 - p1MatchProb
-      else 0d
-      nextRoundPlayerProb
-    }
-    val nextRoundFactor = Factor(pair1.matchFactor.getVariables.last, pair2.matchFactor.getVariables.last, nextRoundVarId, nextRoundProbs.toArray)
-    nextRoundFactor
+    val (newP1SkillOnServe, newP2SkillOnReturn, _) =
+      multiPointModel.skillMarginals(player1Skills.skillOnServe, player2Skills.skillOnReturn, m.p1Stats.servicePointsWon, m.p1Stats.servicePointsTotal)
+
+    val (newP2SkillOnServe, newP1SkillOnReturn, _) =
+      multiPointModel.skillMarginals(player2Skills.skillOnServe, player1Skills.skillOnReturn, m.p2Stats.servicePointsWon, m.p2Stats.servicePointsTotal)
+
+    val newPlayer1Skills = PlayerSkills(player1Skills.player, player1Skills.timestamp, newP1SkillOnServe, newP1SkillOnReturn)
+    val newPlayer2Skills = PlayerSkills(player2Skills.player, player2Skills.timestamp, newP2SkillOnServe, newP2SkillOnReturn)
+
+    (newPlayer1Skills, newPlayer2Skills)
   }
-
-  case class RoundFactor(players: Seq[String], matchFactor: SingleFactor)
 }

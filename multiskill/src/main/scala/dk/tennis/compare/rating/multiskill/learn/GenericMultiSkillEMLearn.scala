@@ -27,7 +27,7 @@ import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
 import dk.tennis.compare.rating.multiskill.model.od.Game
 import dk.tennis.compare.rating.multiskill.model.od.GenericOffenceDefenceModel
 import dk.tennis.compare.rating.multiskill.model.od.utils.Predict
-import dk.tennis.compare.rating.multiskill.model.od.utils.LogLik
+import dk.tennis.compare.rating.multiskill.analysis.LogLik
 
 /**
  * Learns skill transition variance based on tennis point outcomes and skills on serve and return for both players.

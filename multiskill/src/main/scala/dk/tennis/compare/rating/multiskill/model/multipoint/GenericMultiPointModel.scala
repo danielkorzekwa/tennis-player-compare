@@ -4,10 +4,11 @@ import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import scala.annotation.tailrec
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
+import dk.bayes.model.factor.BivariateGaussianFactor
 
 case class GenericMultiPointModel(p1PerfVariance: Double,p2PerfVariance: Double) extends MultiPointModel {
 
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int): Tuple2[PlayerSkill, PlayerSkill] = {
+  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int): Tuple3[PlayerSkill,PlayerSkill,PointsFactorGraph] = {
 
     val p1SkillFactor = Gaussian(player1Skill.mean, player1Skill.variance)
     val p2SkillFactor = Gaussian(player2Skill.mean, player2Skill.variance)
@@ -29,10 +30,10 @@ case class GenericMultiPointModel(p1PerfVariance: Double,p2PerfVariance: Double)
     }
 
     val (p1Marginal, p2Marginal) = calibrate(p1SkillFactor, p2SkillFactor)
-    (PlayerSkill(p1Marginal.m, p1Marginal.v), PlayerSkill(p2Marginal.m, p2Marginal.v))
+  (PlayerSkill(p1Marginal.m, p1Marginal.v), PlayerSkill(p2Marginal.m, p2Marginal.v),factorGraph)
 
   }
-
+  
   private def equals(gaussian1: Gaussian, gaussian2: Gaussian, threshold: Double): Boolean =
     abs(gaussian1.m - gaussian1.m) < threshold && (abs(gaussian1.v - gaussian2.v) < threshold)
 }

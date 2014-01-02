@@ -11,7 +11,7 @@ object Predict {
 
       val player1Skills = model.getSkill(g.player1,g.player2)
       val player2Skills = model.getSkill(g.player2,g.player1)
-      val (player1ProbOnServe, player2ProbOnServe) = model.pointProb(g.player1, g.player2)
+      val (player1ProbOnServe, player2ProbOnServe) = model.pointProb(g)
 
       model.processGame(g)
 

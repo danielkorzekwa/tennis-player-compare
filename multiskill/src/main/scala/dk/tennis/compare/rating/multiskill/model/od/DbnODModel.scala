@@ -17,6 +17,7 @@ import dk.bayes.infer.ep.calibrate.fb.ForwardBackwardEPCalibrate
 import dk.bayes.infer.ep.GenericEP
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
+import java.util.Date
 
 case class DbnODModel(priorSkillOnServe: PlayerSkill, priorSkillOnReturn: PlayerSkill, perfVariance: Double) extends OffenceDefenceModel {
 
@@ -85,11 +86,11 @@ case class DbnODModel(priorSkillOnServe: PlayerSkill, priorSkillOnReturn: Player
   /**
    * Returns the probability of winning a point. [player1ProbOnOffence,player2ProbOnOffence]
    */
-  def pointProb(player1: String, player2: String): Tuple2[Double, Double] = {
+ def pointProb(game:Game):Tuple2[Double, Double] = {
     val pointModel = GenericPointModel(perfVariance, perfVariance)
 
-    val player1Skill = getSkill(player1, player2)
-    val player2Skill = getSkill(player2, player1)
+    val player1Skill = getSkill(game.player1, game.player2)
+    val player2Skill = getSkill(game.player2, game.player1)
 
     var p1PointProb = pointModel.pointProb(player1Skill.skillOnServe, player2Skill.skillOnReturn)
     var p2PointProb = pointModel.pointProb(player2Skill.skillOnServe, player1Skill.skillOnReturn)
@@ -111,7 +112,7 @@ case class DbnODModel(priorSkillOnServe: PlayerSkill, priorSkillOnReturn: Player
     val marginalOnReturn = ep.marginal(varIdOnReturn).asInstanceOf[GaussianFactor]
     val skillOnReturn = PlayerSkill(marginalOnReturn.m, marginalOnReturn.v)
 
-    PlayerSkills(player, skillOnServe, skillOnReturn)
+    PlayerSkills(player, new Date(0),skillOnServe, skillOnReturn)
   }
 
   def calibrate() {

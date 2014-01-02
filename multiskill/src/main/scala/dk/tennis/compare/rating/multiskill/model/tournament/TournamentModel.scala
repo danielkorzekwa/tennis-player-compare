@@ -1,13 +1,14 @@
 package dk.tennis.compare.rating.multiskill.model.tournament
 
+import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
+
 trait TournamentModel {
 
   /**
-   *
-   * @param draw First round pairs
-   * @param winProb(player1,player2) Probability of winning a tennis match by player 1 against player 2
-   *
-   * @returns Map[player,winning probabilities]
+   * @param initialplayerSkills Player skills at the beginning of a tournament
+   * @param tennisMatches Tournament tennis matches (in a time order)
    */
-  def winningProbs(draw: Seq[Tuple2[String, String]], winProb: (String, String) => Double): Map[String, Double]
+  def calcMatchSkills(initialPlayerSkills:Map[String,PlayerSkills],tennisMatches:Seq[MatchResult]):Seq[MatchSkills]
+  
 }

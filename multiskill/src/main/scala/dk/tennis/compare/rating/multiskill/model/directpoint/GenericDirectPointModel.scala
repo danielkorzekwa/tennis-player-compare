@@ -21,9 +21,9 @@ case class GenericDirectPointModel(player: String, multiSkillParams: MultiSkillP
     pointModel.processGame(game)
   }
 
-  def pointProb(opponent: String): Tuple2[Double, Double] = {
-    val pointModel = pointModels.getOrElseUpdate(opponent, GenericOffenceDefenceModel(multiSkillParams))
+   def pointProb(game:Game):Tuple2[Double, Double] = {
+    val pointModel = pointModels.getOrElseUpdate(game.player2, GenericOffenceDefenceModel(multiSkillParams))
 
-    pointModel.pointProb(player, opponent)
+    pointModel.pointProb(game)
   }
 }
