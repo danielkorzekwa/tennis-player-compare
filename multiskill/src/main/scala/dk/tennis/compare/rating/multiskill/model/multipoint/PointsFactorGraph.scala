@@ -68,12 +68,6 @@ case class PointsFactorGraph(p1SkillFactor: Gaussian, p2SkillFactor: Gaussian, p
    */
   private def calcPerfToSkillMsgs(p1SkillToPerfMsg: Gaussian, p2SkillToPerfMsg: Gaussian, p1Wins: Boolean): Tuple2[Gaussian, Gaussian] = {
 
-    val p1_perf_to_diff = Gaussian(p1SkillToPerfMsg.m, p1SkillToPerfMsg.v + p1PerfVariance)
-    val p2_perf_to_diff = Gaussian(p2SkillToPerfMsg.m, p2SkillToPerfMsg.v + p2PerfVariance)
-
-    val diff_to_outcome = p1_perf_to_diff - p2_perf_to_diff
-    val outcome_to_diff = (diff_to_outcome.truncate(0, p1Wins)) / diff_to_outcome
-
     val (diff_to_p1_perf, diff_to_p2_perf) = calcDiffToPerfMsgs(p1SkillToPerfMsg, p2SkillToPerfMsg, p1Wins)
 
     val p1_perf_to_skill = Gaussian(diff_to_p1_perf.m, diff_to_p1_perf.v + p1PerfVariance)

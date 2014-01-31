@@ -10,8 +10,6 @@ case class SkillsFactor(skillsVarId: Int, skillOnServe: Gaussian, skillOnReturn:
 
   def getVariableId(): Int = skillsVarId
 
-  def getVariableIds(): Seq[Int] = Vector(skillsVarId)
-
   def marginal(varId: Int): SingleFactor = throw new UnsupportedOperationException("Not implemented yet")
 
   def productMarginal(varId: Int, factor1: Factor, factor2: Factor, factor3: Factor): SingleFactor = throw new UnsupportedOperationException("Not implemented yet")

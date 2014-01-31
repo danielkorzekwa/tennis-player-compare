@@ -53,6 +53,7 @@ case class TennisMatchFactor(p1Factor: PlayerFactor, p2Factor: PlayerFactor, out
   }
 
   def outgoingMessagesInternal(p1Skills: SkillsFactor, p2Skills: SkillsFactor, outcomeFactor: SingleTableFactor): Tuple3[SkillsFactor, SkillsFactor, SingleTableFactor] = {
+
     val initialP1Skills = toPlayerSkills(game.player1, p1Skills)
     val initialP2SKills = toPlayerSkills(game.player2, p2Skills)
 
@@ -62,8 +63,8 @@ case class TennisMatchFactor(p1Factor: PlayerFactor, p2Factor: PlayerFactor, out
     this.p1OnServefactorGraph = p1OnServefactorGraph
     this.p2OnServefactorGraph = p2OnServefactorGraph
 
-    val newP1Skills = PlayerSkills(initialP1Skills.player,  new Date(0),newP1SkillOnServe, newP1SkillOnReturn)
-    val newP2Skills = PlayerSkills(initialP2SKills.player,  new Date(0),newP2SkillOnServe, newP2SkillOnReturn)
+    val newP1Skills = PlayerSkills(initialP1Skills.player, new Date(0), newP1SkillOnServe, newP1SkillOnReturn)
+    val newP2Skills = PlayerSkills(initialP2SKills.player, new Date(0), newP2SkillOnServe, newP2SkillOnReturn)
 
     val outcomeMsg = SingleTableFactor(outcomeVarId, 2, Array(1, 1))
 

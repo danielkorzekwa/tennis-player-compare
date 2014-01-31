@@ -23,7 +23,7 @@ class TournamentTest2 {
 
   private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  val matchesFile = "./resources/tennis/match_data_2006_2013.csv"
+  val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
   val tournaments = MatchesLoader.loadTournaments(matchesFile, 2006, 2013)
 
   val careerModelConfig = CareerModelConfig(
@@ -32,21 +32,24 @@ class TournamentTest2 {
     pointPerfVarianceOnServe = 102.61914136268837, pointPerfVarianceOnReturn = 102.61914136268837)
 
   @Test def test {
-println("new")
-    val tournamentSkills: Seq[TournamentSkills] = GenericCareerModel(careerModelConfig).calcTournamentSkills(tournaments)
+    //direct match winner
+    //    val tournamentSkills: Seq[TournamentSkills] = GenericCareerModel(careerModelConfig).calcTournamentSkills(tournaments)
+    //    val prob = winProb(tournamentSkills.last.latestAllSkills, "Florian Mayer", "Marinko Matosevic",2)
+    //    println(prob + ":" + 1d/prob + ":" + ":" + 1d/(1-prob))
 
-    val playerRankings: Map[String, Double] = tournamentSkills.last.latestAllSkills.map {
-      case (playerName, skills) =>
-
-        (playerName, skills.skillOnServe.mean + skills.skillOnReturn.mean)
-    }
-
-    val topPlayers = playerRankings.toList.sortWith((r1, r2) => r1._2 > r2._2).take(128).map(r => r._1)
-    val draw = calcDraw(topPlayers)
-
-    println(winProb(tournamentSkills.last.latestAllSkills, "Novak Djokovic", "Rafael Nadal"))
-    val tournamentProbs = GenericTournamentProbCalc.winningProbs(draw, winProb(tournamentSkills.last.latestAllSkills, _, _)).toList.sortWith((p1, p2) => p1._2 > p2._2)
-    println(tournamentProbs)
+    //tournament winner
+    //    val playerRankings: Map[String, Double] = tournamentSkills.last.latestAllSkills.map {
+    //      case (playerName, skills) =>
+    //
+    //        (playerName, skills.skillOnServe.mean + skills.skillOnReturn.mean)
+    //    }
+    //
+    //    val topPlayers = playerRankings.toList.sortWith((r1, r2) => r1._2 > r2._2).take(128).map(r => r._1)
+    //    val draw = calcDraw(topPlayers)
+    //
+    //    println(winProb(tournamentSkills.last.latestAllSkills, "Novak Djokovic", "Rafael Nadal"))
+    //    val tournamentProbs = GenericTournamentProbCalc.winningProbs(draw, winProb(tournamentSkills.last.latestAllSkills, _, _)).toList.sortWith((p1, p2) => p1._2 > p2._2)
+    //    println(tournamentProbs)
 
   }
 
@@ -81,7 +84,7 @@ println("new")
     p1MatchProb
   }
 
-  def winProb(latestSkills: Map[String, PlayerSkills], player1: String, player2: String): Double = {
+  def winProb(latestSkills: Map[String, PlayerSkills], player1: String, player2: String, numOfSets: Int): Double = {
 
     val genericPointModel = GenericPointModel(195.61914136268837, 155)
 
@@ -89,7 +92,7 @@ println("new")
     val player2Skills = latestSkills(player2)
     val p1PointProb = genericPointModel.pointProb(player1Skills.skillOnServe, player2Skills.skillOnReturn)
     val p2PointProb = genericPointModel.pointProb(player2Skills.skillOnServe, player1Skills.skillOnReturn)
-    val matchProb = calcMatchProb(p1PointProb, p2PointProb, 3)
+    val matchProb = calcMatchProb(p1PointProb, p2PointProb, numOfSets)
     matchProb
 
   }

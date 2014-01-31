@@ -12,14 +12,17 @@ case class GenericCareerModel(config: CareerModelConfig) extends CareerModel wit
 
   def calcTournamentSkills(tournaments: Seq[TournamentResult]): Seq[TournamentSkills] = {
 
+    val allMatches = tournaments.flatMap(t => t.matchResults)
+    val allPlayers = allMatches.flatMap(m => List(m.player1, m.player2)).distinct
+
     val latestSkills: mutable.Map[String, PlayerSkills] = mutable.Map()
-    val tSkills = tournaments.map(t => toTournamentSkills(t, latestSkills))
+    val tSkills = tournaments.map(t => toTournamentSkills(allPlayers, t, latestSkills))
     tSkills
   }
 
-  private def toTournamentSkills(t: TournamentResult, latestSkills: mutable.Map[String, PlayerSkills]): TournamentSkills = {
+  private def toTournamentSkills(allPlayers: Seq[String], t: TournamentResult, latestSkills: mutable.Map[String, PlayerSkills]): TournamentSkills = {
 
-    val beforeTSkills: immutable.Map[String, PlayerSkills] = t.players.map { player =>
+    val beforeTSkills: immutable.Map[String, PlayerSkills] = allPlayers.map { player =>
       val latestPlayerSkills = latestSkills.get(player)
 
       val beforeTPlayerSkills = latestPlayerSkills match {
@@ -37,7 +40,7 @@ case class GenericCareerModel(config: CareerModelConfig) extends CareerModel wit
     val afterTSkills = tournamentDBNModel.getAfterTSkills()
     afterTSkills.foreach { case (player, playerSkills) => latestSkills += Tuple2(player, playerSkills) }
 
-    TournamentSkills(t, beforeTSkills,latestSkills.toMap)
+    TournamentSkills(t, beforeTSkills)
   }
 
   private def transition(playerSkills: PlayerSkills, tournamentTime: Date): PlayerSkills = {

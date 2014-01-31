@@ -15,7 +15,6 @@ import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.model.multipoint.GenericMultiPointModel
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
-import dk.tennis.compare.rating.multiskill.model.od.Game
 
 case class GenericOffenceDefenceModel(multiSkillParams: MultiSkillParams) extends OffenceDefenceModel {
 

@@ -18,27 +18,22 @@ import dk.tennis.compare.rating.multiskill.model.tournament.TournamentModelConfi
 import dk.tennis.compare.rating.multiskill.model.career.CareerModelConfig
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import dk.tennis.compare.rating.multiskill.model.career.GPCareerModel
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import java.util.Date
 
 class CareerModelTest {
 
-  //point llh best params
-  //  val careerModelConfig = CareerModelConfig(
-  //    initialSkillsOnServe = PlayerSkill(4002.542974700307, 0.8806472793221474), initialSkillsOnReturn = PlayerSkill(3997.9909513252546, 0.7527376376092434),
-  //    skillOnServeTransVariance = 0.0005, skillOnReturnTransVariance = 0.0004,
-  //    pointPerfVarianceOnServe = 102.61914136268837, pointPerfVarianceOnReturn = 102.61914136268837)
-  //  val tournamentModelConfig = TournamentModelConfig(
-  //        skillOnServeTransVariance = 0.1000000001, skillOnReturnTransVariance = 0.050000000100000004,
-  //        pointPerfVarianceOnServe = 102.61914136268837, pointPerfVarianceOnReturn = 102.61913572928106)
-
-  val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2006, 2011)
+  val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
+  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2010, 2011).take(5)
 
   @Test def test {
 
     for (i <- 0 to 0) {
 
       val careerModelConfig = CareerModelConfig(
-        initialSkillsOnServe = PlayerSkill(4002.542974700307, 0.8806472793221474), initialSkillsOnReturn = PlayerSkill(3997.9909513252546, 0.7527376376092434),
+        initialSkillsOnServe = PlayerSkill(0, 0.8806472793221474), initialSkillsOnReturn = PlayerSkill(3997.9909513252546 - 4002.542974700307, 0.7527376376092434),
         skillOnServeTransVariance = 0.0005, skillOnReturnTransVariance = 0.0004,
         pointPerfVarianceOnServe = 102.61914136268837, pointPerfVarianceOnReturn = 102.61914136268837)
 
@@ -46,18 +41,17 @@ class CareerModelTest {
         skillOnServeTransVariance = 0.1000000001, skillOnReturnTransVariance = 0.050000000100000004,
         pointPerfVarianceOnServe = 102.61914136268837, pointPerfVarianceOnReturn = 102.61913572928106)
 
-      val (pointPerfVarianceOnServe, pointPerfVarianceOnReturn) = (195.61914136268837 , 155)
+      val (pointPerfVarianceOnServe, pointPerfVarianceOnReturn) = (195.61914136268837, 155)
 
-      println(pointPerfVarianceOnServe, pointPerfVarianceOnReturn)
       singleTest(careerModelConfig, tournamentModelConfig, (pointPerfVarianceOnServe, pointPerfVarianceOnReturn))
     }
   }
 
   private def singleTest(careerModelConfig: CareerModelConfig, tournamentModelConfig: TournamentModelConfig, matchModelConfig: Tuple2[Double, Double]) {
-    val tournamentSkills: Seq[TournamentSkills] = GenericCareerModel(careerModelConfig).calcTournamentSkills(tournaments)
+
+    val tournamentSkills: Seq[TournamentSkills] = GPCareerModel(careerModelConfig).calcTournamentSkills(tournaments)
 
     val matchSkills = tournamentSkills.flatMap { t =>
-
       val initialPlayerSkills = t.initialPlayerSkills
       val tennisMatches = t.tournament.matchResults
       val matchSkills = GenericTournamentModel(tournamentModelConfig).calcMatchSkills(initialPlayerSkills, tennisMatches)
@@ -68,12 +62,24 @@ class CareerModelTest {
     val predictions: Seq[Tuple3[Double, Int, Int]] = calcPredictions(matchSkills, matchModelConfig)
 
     val calibration = Calibrate.calibrate(predictions, 100)
-
-       calibration.sortBy(v => v._1).foreach(v =>
-         println("%f,%f,%d".format(v._1, v._2, v._3)))
+    //  calibration.sortBy(v => v._1).foreach(v =>
+    //    println("%f,%f,%d".format(v._1, v._2, v._3)))
 
     //   println("Matches num: " + predictions.size / 2)
     println("Log lik: " + LogLik.logLik(predictions))
+
+    val playerSkillsOnServe = tournamentSkills.map { t =>
+      val defaultSkills = PlayerSkills("RogerFederer", new Date(0), PlayerSkill(0, 1), PlayerSkill(0, 1))
+      t.initialPlayerSkills.getOrElse("Roger Federer", defaultSkills).skillOnServe
+    }
+    val playerSkillsOnReturn = tournamentSkills.map { t =>
+      val defaultSkills = PlayerSkills("RogerFederer", new Date(0), PlayerSkill(0, 1), PlayerSkill(0, 1))
+      t.initialPlayerSkills.getOrElse("Roger Federer", defaultSkills).skillOnReturn
+    }
+    println("player skills on serve: ")
+    playerSkillsOnServe.foreach(s => println(s.mean))
+    println("player skills on return: ")
+    playerSkillsOnReturn.foreach(s => println(s.mean))
   }
 
   private def calcPredictions(matchSkills: Seq[MatchSkills], matchModelConfig: Tuple2[Double, Double]): Seq[Tuple3[Double, Int, Int]] = {
@@ -87,11 +93,11 @@ class CareerModelTest {
 
       List(
         // match prob
-        Tuple3(p1MatchProb, if (m.result.player1Won) 1 else 0, 1),
-        Tuple3(1 - p1MatchProb, if (!m.result.player1Won) 1 else 0, 1))
-      //point probm.
-      //Tuple3(p1PointProb, m.result.p1Stats.servicePointsWon, m.result.p1Stats.servicePointsTotal),
-      //Tuple3(p2PointProb, m.result.p2Stats.servicePointsWon, m.result.p2Stats.servicePointsTotal))
+        //   Tuple3(p1MatchProb, if (m.result.player1Won) 1 else 0, 1),
+        //   Tuple3(1 - p1MatchProb, if (!m.result.player1Won) 1 else 0, 1))
+        //point probm.
+        Tuple3(p1PointProb, m.result.p1Stats.servicePointsWon, m.result.p1Stats.servicePointsTotal),
+        Tuple3(p2PointProb, m.result.p2Stats.servicePointsWon, m.result.p2Stats.servicePointsTotal))
     }
     predictions
   }
@@ -101,17 +107,17 @@ class CareerModelTest {
     else TennisProbFormulaCalc.matchProb(p1PointProb, 1 - p2PointProb, FIVE_SET_MATCH)
     p1MatchProb
   }
-  
-//   private def trade(r: MatchResult, p1MatchProb: Double, exMatchProb: Option[Double]) {
-//    val outcome = if (r.player1Won) 1 else 0
-//
-//    val bankroll = (payout - stakes) + 1000
-//    val price = 1 / exMatchProb.get
-//    val stakePct = ((price - 1) * (p1MatchProb) - (1 - p1MatchProb)) / (price - 1)
-//    val stake = stakePct * bankroll * 0.2
-//    payout += (stake * (1d / exMatchProb.get) * outcome)
-//    stakes += stake
-//
-//    println("payout/stake/profit=%.2f/%.2f/%.2f".format(payout, stakes, payout - stakes))
-//  }
+
+  //   private def trade(r: MatchResult, p1MatchProb: Double, exMatchProb: Option[Double]) {
+  //    val outcome = if (r.player1Won) 1 else 0
+  //
+  //    val bankroll = (payout - stakes) + 1000
+  //    val price = 1 / exMatchProb.get
+  //    val stakePct = ((price - 1) * (p1MatchProb) - (1 - p1MatchProb)) / (price - 1)
+  //    val stake = stakePct * bankroll * 0.2
+  //    payout += (stake * (1d / exMatchProb.get) * outcome)
+  //    stakes += stake
+  //
+  //    println("payout/stake/profit=%.2f/%.2f/%.2f".format(payout, stakes, payout - stakes))
+  //  }
 }

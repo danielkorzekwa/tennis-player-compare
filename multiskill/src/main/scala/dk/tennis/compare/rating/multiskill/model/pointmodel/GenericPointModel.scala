@@ -49,11 +49,11 @@ case class GenericPointModel(perfVarianceOnServe: Double, perfVarianceOnReturn: 
     val diff_to_perf_on_return = perf_on_serve_to_diff - outcome_to_diff
 
     val perf_on_serve_marginal = LinearGaussianFactor(parentVarId = 1, varId = 2, 1, 0, perfVarianceOnServe) *
-      GaussianFactor(varId = 1, playerSkillOnServe.mean, playerSkillOnServe.variance)
+      GaussianFactor(varId = 1, playerSkillOnServe.mean, playerSkillOnServe.variance) *
     GaussianFactor(varId = 2, diff_to_perf_on_serve.m, diff_to_perf_on_serve.v)
 
     val perf_on_return_marginal = LinearGaussianFactor(parentVarId = 1, varId = 2, 1, 0, perfVarianceOnReturn) *
-      GaussianFactor(varId = 1, playerSkillOnReturn.mean, playerSkillOnReturn.variance)
+      GaussianFactor(varId = 1, playerSkillOnReturn.mean, playerSkillOnReturn.variance) *
     GaussianFactor(varId = 2, diff_to_perf_on_return.m, diff_to_perf_on_return.v)
 
     (perf_on_serve_marginal, perf_on_return_marginal)
