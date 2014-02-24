@@ -1,19 +1,16 @@
 package dk.tennis.compare.rating.multiskill.model.multipointcor
 
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.model.multipoint.PointsFactorGraph
+import dk.bayes.math.gaussian.CanonicalGaussian
 
 trait MultiPointCorModel {
 
   /**
    * Returns posterior marginals for player1 and player2 skills given player1 wins p out of n tennis points.
    *
-   * @param player1Skill
-   * @param player2Skill
+   * @param directSkills Skills for players 1 and 2
    * @param pointsWon
    * @param allPoints
-   * @param skillCovariance Covariance between skills for players 1 and 2
-   * @return Posterior for [P1Marginal,P2Marginal,skill's covariance]
+   * @return Posterior for skills for player 1 and 2
    */
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int, skillCovariance: Double): Tuple3[PlayerSkill, PlayerSkill,Double]
+  def skillMarginals(directSkills: CanonicalGaussian, pointsWon: Int, allPoints: Int): CanonicalGaussian
 }

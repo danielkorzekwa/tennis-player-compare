@@ -16,7 +16,7 @@ class GenericMultiSkillEMLearnATPTest {
 
   private val logger = Logger(LoggerFactory.getLogger(getClass()))
 
-  @Test def test_atp_results_2011 {
+  @Ignore @Test def test_atp_results_2011 {
       
     val multiSkillParams = MultiSkillParams(
     skillOnServeTransVariance = 0.07862661243106206,

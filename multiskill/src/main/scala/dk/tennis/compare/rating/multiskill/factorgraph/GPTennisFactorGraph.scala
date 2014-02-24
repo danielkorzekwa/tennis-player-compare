@@ -55,11 +55,11 @@ case class GPTennisFactorGraph(tournaments: Seq[TournamentResult], val perfVaria
     println(priorSkillVariance)
     //add skill gp factors
     allPlayers.foreach { player =>
-      val skillGPFactorOnServe = MvnGaussianFactor(nextVarId.getAndIncrement(), CanonicalGaussian((1 to tournamentSize).toArray, priorSkillOnServeMean, priorSkillVariance))
+      val skillGPFactorOnServe = MvnGaussianFactor(nextVarId.getAndIncrement(), CanonicalGaussian(priorSkillOnServeMean, priorSkillVariance))
       factorGraph.addFactor(skillGPFactorOnServe)
       playerGPSkillsOnServeMap.put(player, skillGPFactorOnServe)
 
-      val skillGPFactorOnReturn = MvnGaussianFactor(nextVarId.getAndIncrement(), CanonicalGaussian((1 to tournamentSize).toArray, priorSkillOnReturn, priorSkillVariance))
+      val skillGPFactorOnReturn = MvnGaussianFactor(nextVarId.getAndIncrement(), CanonicalGaussian(priorSkillOnReturn, priorSkillVariance))
       factorGraph.addFactor(skillGPFactorOnReturn)
       playerGPSkillsOnReturnMap.put(player, skillGPFactorOnReturn)
     }

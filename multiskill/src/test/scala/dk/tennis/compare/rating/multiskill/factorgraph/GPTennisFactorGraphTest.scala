@@ -11,7 +11,7 @@ class GPTennisFactorGraphTest {
 
   val perfVariance = 150
  
-  @Test def test {
+ @Ignore @Test def test {
     println(tournaments.size)
     val gpFactorGraph = GPTennisFactorGraph(tournaments.take(20), perfVariance,skillOnServeMean=0,skillOnReturnMean=1)
     println(gpFactorGraph.calibrate(100))

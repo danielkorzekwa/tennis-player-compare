@@ -29,12 +29,12 @@ class GenericEventsMatcherTest {
     assertEquals(0.935, matchingProbs.toList(0)._2, 0.001)
 
     assertEquals("Los Angeles CA; U.S.A. ATP World Tour 2502010Group AFarmers Classic2010", matchingProbs.toList(5)._1)
-    assertEquals(0.961, matchingProbs.toList(5)._2, 0.001)
+    assertEquals(0.9629, matchingProbs.toList(5)._2, 0.001)
 
-    assertEquals("Stockholm Sweden ATP World Tour 2502011Group AIF Stockholm Open 20112011", matchingProbs.toList(20)._1)
-    assertEquals(0.923, matchingProbs.toList(20)._2, 0.001)
+    assertEquals("Stockholm Sweden ATP World Tour 2502011Group AIF Stockholm Open 20112011", matchingProbs.toList(19)._1)
+    assertEquals(0.923, matchingProbs.toList(19)._2, 0.001)
 
-    assertEquals(21, matchingProbs.size, 0.0001)
+    assertEquals(20, matchingProbs.size, 0.0001)
   }
 
 }

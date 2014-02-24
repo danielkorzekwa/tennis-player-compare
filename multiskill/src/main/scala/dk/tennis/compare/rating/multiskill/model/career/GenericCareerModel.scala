@@ -35,7 +35,7 @@ case class GenericCareerModel(config: CareerModelConfig) extends CareerModel wit
     //update latest skills given tournament results
     val tournamentDBNModel = GenericTournamentDBNModel(beforeTSkills, t, config.pointPerfVarianceOnServe, config.pointPerfVarianceOnReturn)
     val epSummary = tournamentDBNModel.calibrate(200, iter => {})
-    logger.debug("Calibrating tournament dbn model: " + epSummary)
+    logger.info("Calibrating tournament dbn model: " + epSummary)
 
     val afterTSkills = tournamentDBNModel.getAfterTSkills()
     afterTSkills.foreach { case (player, playerSkills) => latestSkills += Tuple2(player, playerSkills) }

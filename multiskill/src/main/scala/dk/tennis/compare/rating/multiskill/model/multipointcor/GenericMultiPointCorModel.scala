@@ -1,39 +1,34 @@
 package dk.tennis.compare.rating.multiskill.model.multipointcor
 
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-
 import scala.annotation.tailrec
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
+import dk.bayes.math.gaussian.CanonicalGaussian
 
 case class GenericMultiPointCorModel(p1PerfVariance: Double, p2PerfVariance: Double) extends MultiPointCorModel {
 
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int, skillCovariance: Double): Tuple3[PlayerSkill, PlayerSkill, Double] = {
-
-    val p1SkillFactor = Gaussian(player1Skill.mean, player1Skill.variance)
-    val p2SkillFactor = Gaussian(player2Skill.mean, player2Skill.variance)
+  def skillMarginals(directSkills: CanonicalGaussian, pointsWon: Int, allPoints: Int): CanonicalGaussian = {
 
     val threshold = 1e-5
 
-    val factorGraph = PointsFactorGraph(p1SkillFactor, p2SkillFactor, skillCovariance, p1PerfVariance, p2PerfVariance, pointsWon, allPoints)
+    val factorGraph = PointsFactorGraph(directSkills, p1PerfVariance, p2PerfVariance, pointsWon, allPoints)
 
     @tailrec
-    def calibrate(p1Marginal: Gaussian, p2Marginal: Gaussian, skillCovariance: Double): Tuple3[Gaussian, Gaussian, Double] = {
+    def calibrate(currDirectSkills: CanonicalGaussian): CanonicalGaussian = {
       factorGraph.sendMsgs()
 
-      val newP1Marginal = factorGraph.getP1Marginal()
-      val newP2Marginal = factorGraph.getP2Marginal()
-      val newSkillCovariance = factorGraph.getCovariance()
+      val skillsMarginal = factorGraph.getSkillsMarginal()
 
-      if (equals(newP1Marginal, p1Marginal, threshold) && equals(newP2Marginal, p2Marginal, threshold) && abs(newSkillCovariance - skillCovariance) < threshold)
-        (newP1Marginal, newP2Marginal, newSkillCovariance)
-      else calibrate(newP1Marginal, newP2Marginal, newSkillCovariance)
+      if (equals(skillsMarginal, currDirectSkills, threshold)) skillsMarginal else calibrate(skillsMarginal)
     }
 
-    val (p1Marginal, p2Marginal, covarianceMarginal) = calibrate(p1SkillFactor, p2SkillFactor, skillCovariance)
-    (PlayerSkill(p1Marginal.m, p1Marginal.v), PlayerSkill(p2Marginal.m, p2Marginal.v), covarianceMarginal)
+    val skillsMarginal = calibrate(directSkills)
+    skillsMarginal
   }
 
-  private def equals(gaussian1: Gaussian, gaussian2: Gaussian, threshold: Double): Boolean =
-    abs(gaussian1.m - gaussian1.m) < threshold && (abs(gaussian1.v - gaussian2.v) < threshold)
+  private def equals(gaussian1: CanonicalGaussian, gaussian2: CanonicalGaussian, threshold: Double): Boolean =
+    gaussian1.k.matrix.isIdentical(gaussian2.k.matrix, threshold) &&
+      gaussian1.h.matrix.isIdentical(gaussian2.h.matrix, threshold) &&
+      abs(gaussian1.g - gaussian2.g) < threshold
 }

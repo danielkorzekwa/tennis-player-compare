@@ -1,28 +1,56 @@
 package dk.tennis.compare.rating.multiskill.model.multipointcor
 
+import org.scalatest.Matchers
+import org.scalatest.FunSuite
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import org.junit._
 import Assert._
-import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
-import dk.tennis.compare.rating.multiskill.model.multipoint.GenericMultiPointModel
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
+import dk.tennis.compare.rating.multiskill.model.pointcormodel.GenericPointCorModel
+import org.junit._
+import Assert._
+import dk.bayes.math.gaussian.CanonicalGaussian
+import dk.bayes.math.gaussian.Linear._
 
 class GenericMultiPointCorModelTest {
 
-  @Test def skill_covariance_is_zero {
+  @Test def single_point_match_0_covariance {
+    val directSkills = CanonicalGaussian(Matrix(0.2, -0.2), Matrix(2, 2, Array(0.7, 0d, 0d, 0.5)))
 
-    val p1Skill = PlayerSkill(-1, 1)
-    val p2Skill = PlayerSkill(0.5, 1.2)
+    val p1PerfVariance = 17
+    val p2PerfVariance = 15
+
+    val model = GenericMultiPointCorModel(p1PerfVariance, p2PerfVariance)
+    val newDirectSkills = model.skillMarginals(directSkills, 1, 1)
+
+    // println(new GenericPointCorModel(p1PerfVariance, p2PerfVariance).pointProb(newP1Skill, newP2Skill, newCovariance))
+
+    assertEquals(Matrix(0.291, -0.265).toString, newDirectSkills.getMean().toString)
+    assertEquals(Matrix(2, 2, Array(0.691, 0.0065, 0.0065, 0.4953)).toString, newDirectSkills.getVariance().toString)
+
+  }
+
+  @Test def multiple_results_till_convergence {
+
+    var directSkills = CanonicalGaussian(Matrix(-1, 0.5), Matrix(2, 2, Array(1, 0d, 0d, 1.2)))
 
     val p1PerfVariance = 190
     val p2PerfVariance = 170
 
     val model = GenericMultiPointCorModel(p1PerfVariance, p2PerfVariance)
 
-    val (newP1Skill, newP2Skill, covariance) = model.skillMarginals(p1Skill, p2Skill, 7400, 10000, skillCovariance = 0)
+    for (i <- 1 to 1000) {
+      directSkills = model.skillMarginals(directSkills, 74, 100)
 
-    assertPlayerSkill(PlayerSkill(5.0527, 0.0613), newP1Skill, 0.0001)
-    assertPlayerSkill(PlayerSkill(-6.7624, 0.0620), newP2Skill, 0.0001)
+      println(new GenericPointCorModel(p1PerfVariance, p2PerfVariance).pointProb(directSkills))
+    }
 
-    assertEquals(0.45546, covariance, 0.00001)
+    assertEquals(Matrix(4.9887, -6.6864).toString, directSkills.getMean.toString)
+    assertEquals(Matrix(2, 2, Array(0.5467, 0.5438, 0.5438, 0.5473)).toString, directSkills.getVariance.toString)
+
   }
+
 }

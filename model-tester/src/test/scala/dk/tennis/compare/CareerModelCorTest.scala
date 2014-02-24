@@ -23,13 +23,15 @@ import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import java.util.Date
 import dk.tennis.compare.rating.multiskill.model.career.CorCareerModel
+import dk.tennis.compare.rating.multiskill.model.career.TournamentSkillsCor
 
-class CareerModelTest {
+class CareerModelCorTest {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2009, 2011).take(5)
+  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2009, 2011).take(2)
 
   @Test def test {
+    println("start test")
 
     for (i <- 0 to 0) {
 
@@ -50,7 +52,7 @@ class CareerModelTest {
 
   private def singleTest(careerModelConfig: CareerModelConfig, tournamentModelConfig: TournamentModelConfig, matchModelConfig: Tuple2[Double, Double]) {
 
-    val tournamentSkills: Seq[TournamentSkills] = GenericCareerModel(careerModelConfig).calcTournamentSkills(tournaments)
+    val tournamentSkills: Seq[TournamentSkillsCor] = CorCareerModel(careerModelConfig).calcTournamentSkills(tournaments)
 
     val matchSkills = tournamentSkills.flatMap { t =>
       val initialPlayerSkills = t.initialPlayerSkills

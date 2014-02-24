@@ -1,26 +1,23 @@
 package dk.tennis.compare.rating.multiskill.model.pointcormodel
 
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import dk.bayes.math.gaussian.CanonicalGaussian
 
 trait PointCorModel {
 
   /**
    * Returns posterior marginals for player1 and player2 given player1 is a winner or loser.
    *
-   * @param player1Skill
-   * @param player2Skill
+   * @param directSkills Skills for players 1 and 2
    * @param p1Wins
-   * @param skillCovariance Covariance between skills for players 1 and 2
-   * @return Posterior for [P1Marginal,P2Marginal,skill covariance]
+   * @return Posterior for skills of player 1 and 2
    */
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, p1Wins: Boolean, skillCovariance: Double): Tuple3[PlayerSkill, PlayerSkill, Double]
+  def skillMarginals(directSkills: CanonicalGaussian, p1Wins: Boolean): CanonicalGaussian
 
   /**
-   * @param player1Skill
-   * @param player2Skill
-   * @param skillCovariance Covariance between skills for players 1 and 2
+   * @param directSkills Skills for players 1 and 2
    *
    * Returns the probability of winning the point by player 1.
    */
-  def pointProb(player1Skill: PlayerSkill, player2Skill: PlayerSkill, skillCovariance: Double): Double
+  def pointProb(directSkills: CanonicalGaussian): Double
 }
