@@ -13,10 +13,10 @@ import dk.bayes.model.factor.GaussianFactor
 
 case class GenericPointModel(perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends PointModel {
 
-  def skillMarginals(playerSkillOnServe: PlayerSkill, playerSkillOnReturn: PlayerSkill, p1Wins: Boolean): Tuple2[PlayerSkill, PlayerSkill] = {
+  def skillMarginals(playerSkillOnServe: Gaussian, playerSkillOnReturn: Gaussian, p1Wins: Boolean): Tuple2[Gaussian, Gaussian] = {
 
-    val perf_on_serve_to_diff = Gaussian(playerSkillOnServe.mean, playerSkillOnServe.variance + perfVarianceOnServe)
-    val perf_on_return_to_diff = Gaussian(playerSkillOnReturn.mean, playerSkillOnReturn.variance + perfVarianceOnReturn)
+    val perf_on_serve_to_diff = Gaussian(playerSkillOnServe.m, playerSkillOnServe.v + perfVarianceOnServe)
+    val perf_on_return_to_diff = Gaussian(playerSkillOnReturn.m, playerSkillOnReturn.v + perfVarianceOnReturn)
 
     val diff_to_outcome = perf_on_serve_to_diff - perf_on_return_to_diff
     val outcome_to_diff = (diff_to_outcome.truncate(0, p1Wins)) / diff_to_outcome
@@ -27,20 +27,18 @@ case class GenericPointModel(perfVarianceOnServe: Double, perfVarianceOnReturn: 
     var perf_to_skill_on_serve = Gaussian(diff_to_perf_on_serve.m, diff_to_perf_on_serve.v + perfVarianceOnServe)
     val perf_to_skill_on_return = Gaussian(diff_to_perf_on_return.m, diff_to_perf_on_return.v + perfVarianceOnReturn)
 
-    val p1Marginal = Gaussian(playerSkillOnServe.mean, playerSkillOnServe.variance) * (perf_to_skill_on_serve)
-    val p2Marginal = Gaussian(playerSkillOnReturn.mean, playerSkillOnReturn.variance) * perf_to_skill_on_return
+    val p1Marginal = Gaussian(playerSkillOnServe.m, playerSkillOnServe.v) * (perf_to_skill_on_serve)
+    val p2Marginal = Gaussian(playerSkillOnReturn.m, playerSkillOnReturn.v) * perf_to_skill_on_return
 
-    val p1MarginalFactor = PlayerSkill(p1Marginal.m, p1Marginal.v)
-    val p2MarginalFactor = PlayerSkill(p2Marginal.m, p2Marginal.v)
-    (p1MarginalFactor, p2MarginalFactor)
+    (p1Marginal, p2Marginal)
 
   }
 
   /**Returns Tuple2[perf on serve,perf on return]*/
-  def perfMarginals(playerSkillOnServe: PlayerSkill, playerSkillOnReturn: PlayerSkill, p1Wins: Boolean): Tuple2[BivariateGaussianFactor, BivariateGaussianFactor] = {
+  def perfMarginals(playerSkillOnServe: Gaussian, playerSkillOnReturn: Gaussian, p1Wins: Boolean): Tuple2[MultivariateGaussian, MultivariateGaussian] = {
 
-    val perf_on_serve_to_diff = Gaussian(playerSkillOnServe.mean, playerSkillOnServe.variance + perfVarianceOnServe)
-    val perf_on_return_to_diff = Gaussian(playerSkillOnReturn.mean, playerSkillOnReturn.variance + perfVarianceOnReturn)
+    val perf_on_serve_to_diff = Gaussian(playerSkillOnServe.m, playerSkillOnServe.v + perfVarianceOnServe)
+    val perf_on_return_to_diff = Gaussian(playerSkillOnReturn.m, playerSkillOnReturn.v + perfVarianceOnReturn)
 
     val diff_to_outcome = perf_on_serve_to_diff - perf_on_return_to_diff
     val outcome_to_diff = diff_to_outcome.truncate(0, p1Wins) / diff_to_outcome
@@ -48,21 +46,22 @@ case class GenericPointModel(perfVarianceOnServe: Double, perfVarianceOnReturn: 
     val diff_to_perf_on_serve = outcome_to_diff + perf_on_return_to_diff
     val diff_to_perf_on_return = perf_on_serve_to_diff - outcome_to_diff
 
-    val perf_on_serve_marginal = LinearGaussianFactor(parentVarId = 1, varId = 2, 1, 0, perfVarianceOnServe) *
-      GaussianFactor(varId = 1, playerSkillOnServe.mean, playerSkillOnServe.variance) *
-    GaussianFactor(varId = 2, diff_to_perf_on_serve.m, diff_to_perf_on_serve.v)
+    val perf_on_serve_marginal = LinearGaussianFactor(parentVarId = 1, varId = 2, 1, 0, perfVarianceOnServe, evidence = None) *
+      GaussianFactor(varId = 1, playerSkillOnServe.m, playerSkillOnServe.v) *
+      GaussianFactor(varId = 2, diff_to_perf_on_serve.m, diff_to_perf_on_serve.v)
 
-    val perf_on_return_marginal = LinearGaussianFactor(parentVarId = 1, varId = 2, 1, 0, perfVarianceOnReturn) *
-      GaussianFactor(varId = 1, playerSkillOnReturn.mean, playerSkillOnReturn.variance) *
-    GaussianFactor(varId = 2, diff_to_perf_on_return.m, diff_to_perf_on_return.v)
+    val perf_on_return_marginal = LinearGaussianFactor(parentVarId = 1, varId = 2, 1, 0, perfVarianceOnReturn, evidence = None) *
+      GaussianFactor(varId = 1, playerSkillOnReturn.m, playerSkillOnReturn.v) *
+      GaussianFactor(varId = 2, diff_to_perf_on_return.m, diff_to_perf_on_return.v)
 
-    (perf_on_serve_marginal, perf_on_return_marginal)
+      
+    (MultivariateGaussian(perf_on_serve_marginal.mean,perf_on_serve_marginal.variance), MultivariateGaussian(perf_on_return_marginal.mean,perf_on_return_marginal.variance))
 
   }
 
-  def pointProb(playerSkillOnServe: PlayerSkill, playerSkillOnReturn: PlayerSkill): Double = {
-    val perf_on_serve_to_diff = Gaussian(playerSkillOnServe.mean, playerSkillOnServe.variance + perfVarianceOnServe)
-    val perf_on_return_to_diff = Gaussian(playerSkillOnReturn.mean, playerSkillOnReturn.variance + perfVarianceOnReturn)
+  def pointProb(playerSkillOnServe: Gaussian, playerSkillOnReturn: Gaussian): Double = {
+    val perf_on_serve_to_diff = Gaussian(playerSkillOnServe.m, playerSkillOnServe.v + perfVarianceOnServe)
+    val perf_on_return_to_diff = Gaussian(playerSkillOnReturn.m, playerSkillOnReturn.v + perfVarianceOnReturn)
     val diff_to_outcome = perf_on_serve_to_diff - perf_on_return_to_diff
     val pointProb = 1 - diff_to_outcome.cdf(0)
 

@@ -8,14 +8,11 @@ import dk.bayes.model.factor.BivariateGaussianFactor
 
 case class GenericMultiPointModel(p1PerfVariance: Double,p2PerfVariance: Double) extends MultiPointModel {
 
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int): Tuple3[PlayerSkill,PlayerSkill,PointsFactorGraph] = {
-
-    val p1SkillFactor = Gaussian(player1Skill.mean, player1Skill.variance)
-    val p2SkillFactor = Gaussian(player2Skill.mean, player2Skill.variance)
+  def skillMarginals(player1Skill: Gaussian, player2Skill: Gaussian, pointsWon: Int, allPoints: Int): Tuple3[Gaussian,Gaussian,PointsFactorGraph] = {
 
     val threshold = 1e-5
 
-    val factorGraph = PointsFactorGraph(p1SkillFactor, p2SkillFactor, p1PerfVariance,p2PerfVariance, pointsWon, allPoints)
+    val factorGraph = PointsFactorGraph(player1Skill, player2Skill, p1PerfVariance,p2PerfVariance, pointsWon, allPoints)
 
     @tailrec
     def calibrate(p1Marginal: Gaussian, p2Marginal: Gaussian): Tuple2[Gaussian, Gaussian] = {
@@ -29,8 +26,8 @@ case class GenericMultiPointModel(p1PerfVariance: Double,p2PerfVariance: Double)
       else calibrate(newP1Marginal, newP2Marginal)
     }
 
-    val (p1Marginal, p2Marginal) = calibrate(p1SkillFactor, p2SkillFactor)
-  (PlayerSkill(p1Marginal.m, p1Marginal.v), PlayerSkill(p2Marginal.m, p2Marginal.v),factorGraph)
+    val (p1Marginal, p2Marginal) = calibrate(player2Skill, player2Skill)
+  (p1Marginal,p2Marginal,factorGraph)
 
   }
   

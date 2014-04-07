@@ -6,7 +6,7 @@ import scala.math._
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.bayes.math.gaussian.Linear._
+import dk.bayes.math.linear._
 
 class GenericPointCorModelTest {
 
@@ -18,8 +18,8 @@ class GenericPointCorModelTest {
     val skills = CanonicalGaussian(Matrix(0.2, -0.2), Matrix(2, 2, Array(0.7, 0, 0, 0.5)))
     val skillsMarginal = pointModel.skillMarginals(skills, true)
 
-    assertEquals(Matrix(0.2914, -0.2654).toString, skillsMarginal.getMean.toString)
-    assertEquals(Matrix(2, 2, Array(0.6908, 0.0065, 0.0065, 0.4953)).toString, skillsMarginal.getVariance.toString)
+    assertEquals(Matrix(0.2914, -0.2654).toString, skillsMarginal.mean.toString)
+    assertEquals(Matrix(2, 2, Array(0.6908, 0.0065, 0.0065, 0.4953)).toString, skillsMarginal.variance.toString)
 
   }
 
@@ -28,8 +28,8 @@ class GenericPointCorModelTest {
     val skills = CanonicalGaussian(Matrix(0.2, -0.2), Matrix(2, 2, Array(0.7, 0.3, 0.3, 0.5)))
     val skillsMarginal = pointModel.skillMarginals(skills, true)
 
-    assertEquals(Matrix(0.2527, -0.2263).toString, skillsMarginal.getMean.toString)
-    assertEquals(Matrix(2, 2, Array(0.6969, 0.3015, 0.3015, 0.4992)).toString, skillsMarginal.getVariance.toString)
+    assertEquals(Matrix(0.2527, -0.2263).toString, skillsMarginal.mean.toString)
+    assertEquals(Matrix(2, 2, Array(0.6969, 0.3015, 0.3015, 0.4992)).toString, skillsMarginal.variance.toString)
 
   }
 
@@ -43,8 +43,8 @@ class GenericPointCorModelTest {
 
     }
 
-    assertEquals(Matrix(-2.6449, 1.8320).toString, skills.getMean.toString)
-    assertEquals(Matrix(2, 2, Array(0.3116, 0.2773, 0.2773, 0.3018)).toString, skills.getVariance.toString)
+    assertEquals(Matrix(-2.6449, 1.8320).toString, skills.mean.toString)
+    assertEquals(Matrix(2, 2, Array(0.3116, 0.2773, 0.2773, 0.3018)).toString, skills.variance.toString)
 
   }
 

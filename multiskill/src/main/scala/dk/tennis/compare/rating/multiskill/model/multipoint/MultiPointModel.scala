@@ -1,6 +1,7 @@
 package dk.tennis.compare.rating.multiskill.model.multipoint
 
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
+import dk.bayes.math.gaussian.Gaussian
 
 /**
  * @author Daniel Korzekwa
@@ -12,5 +13,5 @@ trait MultiPointModel {
    *
    * @return Posterior for [P1Marginal,P2Marginal]
    */
-  def skillMarginals(player1Skill: PlayerSkill, player2Skill: PlayerSkill, pointsWon: Int, allPoints: Int): Tuple3[PlayerSkill,PlayerSkill,PointsFactorGraph]
+  def skillMarginals(player1Skill: Gaussian, player2Skill: Gaussian, pointsWon: Int, allPoints: Int): Tuple3[Gaussian,Gaussian,PointsFactorGraph]
 }

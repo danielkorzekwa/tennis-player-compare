@@ -7,7 +7,7 @@ import dk.bayes.model.factor.LinearGaussianFactor
 import dk.bayes.model.factor.GaussianFactor
 import dk.bayes.model.factor.BivariateGaussianFactor
 import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.bayes.math.gaussian.Linear._
+import dk.bayes.math.linear._
 import dk.bayes.math.gaussian.CanonicalGaussian
 
 case class PointsFactorGraph(directSkills: CanonicalGaussian, p1PerfVariance: Double, p2PerfVariance: Double, pointsWon: Int, allPoints: Int) {
@@ -41,14 +41,15 @@ case class PointsFactorGraph(directSkills: CanonicalGaussian, p1PerfVariance: Do
 
     val diff_to_perf = (perf_diff_factor * CanonicalGaussian(outcome_to_diff.m, outcome_to_diff.v).extend(3,2)).marginalise(2)
 
-    val perf_to_skill = (perf_factor * diff_to_perf.extend(4, 2)).marginal(0,1)
+    val perf_to_skill = (perf_factor * diff_to_perf.extend(4, 2)).marginalise(3).marginalise(2)
+     //val perf_to_skill = (skillToPerfMsg.extend(4, 0)* perf_factor * diff_to_perf.extend(4, 2)).marginal(0,1) / skillToPerfMsg
 
     perf_to_skill
   }
 
   private def power(gaussian: CanonicalGaussian, x: Int): CanonicalGaussian = {
     x match {
-      case 0 => CanonicalGaussian(gaussian.getMean * 0, gaussian.getVariance * Double.PositiveInfinity)
+      case 0 => CanonicalGaussian(gaussian.mean * 0, gaussian.variance * Double.PositiveInfinity)
       case _ => {
         var product = gaussian
         var i = 1

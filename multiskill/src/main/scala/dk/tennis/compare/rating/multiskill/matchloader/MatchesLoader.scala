@@ -6,7 +6,6 @@ import scala.util.Random
 import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
-import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.atp.api.tournament.TournamentAtpApi._
 
 object MatchesLoader {
@@ -48,6 +47,7 @@ object MatchesLoader {
       new MatchResult(
         m.matchFacts.playerAFacts.playerName,
         m.matchFacts.playerBFacts.playerName,
+        m.tournament.tournamentTime,
         m.matchFacts.winner.equals(m.matchFacts.playerAFacts.playerName),
         numOfSets = m.tournament.numOfSet,
         p1Stats,

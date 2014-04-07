@@ -7,9 +7,9 @@ object LogLik {
   /**
    * @param predictions Seq of [predicted prob, points won, points total]
    *
-   * Returns [total,avg] log likelihood
+   * Returns [total,avg,totalPoints] log likelihood
    */
-  def logLik(predictions: Seq[Tuple3[Double, Int, Int]]): Tuple2[Double, Double] = {
+  def logLik(predictions: Seq[Tuple3[Double, Int, Int]]): Tuple3[Double, Double,Double] = {
 
     val totalLoglik = predictions.foldLeft(0d) { (totalLoglik, p) =>
 
@@ -21,6 +21,6 @@ object LogLik {
     val totalPoints = predictions.map(p => p._3).sum
     val avgLogLik = totalLoglik / totalPoints
 
-    (totalLoglik, avgLogLik)
+    (totalLoglik, avgLogLik,totalPoints)
   }
 }

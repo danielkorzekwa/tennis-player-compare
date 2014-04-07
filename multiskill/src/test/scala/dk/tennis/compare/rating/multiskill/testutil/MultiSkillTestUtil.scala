@@ -9,15 +9,20 @@ import Assert._
 import dk.atp.api.domain.MatchComposite
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
-import dk.tennis.compare.rating.multiskill.domain.MultiSkillParams
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.atp.api.tournament.TournamentAtpApi._
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.matchloader.PlayerStats
+import dk.bayes.math.gaussian.Gaussian
 
 object MultiSkillTestUtil {
 
+   def assertGaussian(expected: Gaussian, actual: Gaussian, delta: Double) = {
+    assertEquals(expected.m, actual.m, delta)
+    assertEquals(expected.v, actual.v, delta)
+  }
+  
   def assertPlayerSkill(expected: PlayerSkill, actual: PlayerSkill, delta: Double) = {
     assertEquals(expected.mean, actual.mean, delta)
     assertEquals(expected.variance, actual.variance, delta)
@@ -32,10 +37,4 @@ object MultiSkillTestUtil {
     assertEquals(expected.skillOnReturn.variance, actual.skillOnReturn.variance, delta)
   }
 
-  def assertMultiSkillParams(expected: MultiSkillParams, actual: MultiSkillParams, delta: Double) = {
-    assertEquals(expected.skillOnServeTransVariance, actual.skillOnServeTransVariance, delta)
-    assertEquals(expected.skillOnReturnTransVariance, actual.skillOnReturnTransVariance, delta)
-    assertEquals(expected.perfVarianceOnServe, actual.perfVarianceOnServe, delta)
-    assertEquals(expected.perfVarianceOnReturn, actual.perfVarianceOnReturn, delta)
-  }
 }

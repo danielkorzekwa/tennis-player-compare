@@ -12,5 +12,5 @@ trait MultiPointCorModel {
    * @param allPoints
    * @return Posterior for skills for player 1 and 2
    */
-  def skillMarginals(directSkills: CanonicalGaussian, pointsWon: Int, allPoints: Int): CanonicalGaussian
+  def skillMarginals(directSkills: CanonicalGaussian, pointsWon: Int, allPoints: Int, maxIter: Int = 100, threshold: Double): CanonicalGaussian
 }

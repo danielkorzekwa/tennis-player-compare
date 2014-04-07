@@ -13,7 +13,7 @@ import dk.tennis.compare.rating.multiskill.model.pointcormodel.GenericPointCorMo
 import org.junit._
 import Assert._
 import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.bayes.math.gaussian.Linear._
+import dk.bayes.math.linear._
 
 class GenericMultiPointCorModelTest {
 
@@ -28,9 +28,8 @@ class GenericMultiPointCorModelTest {
 
     // println(new GenericPointCorModel(p1PerfVariance, p2PerfVariance).pointProb(newP1Skill, newP2Skill, newCovariance))
 
-    assertEquals(Matrix(0.291, -0.265).toString, newDirectSkills.getMean().toString)
-    assertEquals(Matrix(2, 2, Array(0.691, 0.0065, 0.0065, 0.4953)).toString, newDirectSkills.getVariance().toString)
-
+    assertEquals(Matrix(0.291, -0.265).toString, newDirectSkills.mean.toString)
+    assertEquals(Matrix(2, 2, Array(0.691, 0.0065, 0.0065, 0.4953)).toString, newDirectSkills.variance.toString)
   }
 
   @Test def multiple_results_till_convergence {
@@ -48,8 +47,8 @@ class GenericMultiPointCorModelTest {
       println(new GenericPointCorModel(p1PerfVariance, p2PerfVariance).pointProb(directSkills))
     }
 
-    assertEquals(Matrix(4.9887, -6.6864).toString, directSkills.getMean.toString)
-    assertEquals(Matrix(2, 2, Array(0.5467, 0.5438, 0.5438, 0.5473)).toString, directSkills.getVariance.toString)
+    assertEquals(Matrix(4.9887, -6.6864).toString, directSkills.mean.toString)
+    assertEquals(Matrix(2, 2, Array(0.5467, 0.5438, 0.5438, 0.5473)).toString, directSkills.variance.toString)
 
   }
 
