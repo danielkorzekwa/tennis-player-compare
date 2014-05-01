@@ -1,15 +1,9 @@
 package dk.tennis.compare.rating.multiskill.model.pointmodel
 
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.bayes.math.gaussian.Gaussian
-import dk.bayes.math.gaussian.LinearGaussian
-import dk.bayes.model.factor.BivariateGaussianFactor
 import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.bayes.math.gaussian.LinearGaussian
-import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.bayes.model.factor.LinearGaussianFactor
 import dk.bayes.model.factor.GaussianFactor
+import dk.bayes.model.factor.LinearGaussianFactor
 
 case class GenericPointModel(perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends PointModel {
 

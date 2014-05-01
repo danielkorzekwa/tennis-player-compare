@@ -4,7 +4,6 @@ import org.scalatest.Matchers
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import org.junit._
 import Assert._

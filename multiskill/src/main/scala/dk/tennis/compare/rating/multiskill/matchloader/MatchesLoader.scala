@@ -1,12 +1,11 @@
 package dk.tennis.compare.rating.multiskill.matchloader
 
-import dk.atp.api.CSVATPMatchesLoader
-import dk.atp.api.domain.SurfaceEnum._
 import scala.util.Random
+
+import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.MatchComposite
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkills
-import dk.atp.api.tournament.TournamentAtpApi._
+import dk.atp.api.domain.SurfaceEnum.HARD
+import dk.atp.api.tournament.TournamentAtpApi.Tournament
 
 object MatchesLoader {
 

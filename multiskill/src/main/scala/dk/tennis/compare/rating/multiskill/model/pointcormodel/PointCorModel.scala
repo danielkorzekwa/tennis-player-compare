@@ -1,6 +1,5 @@
 package dk.tennis.compare.rating.multiskill.model.pointcormodel
 
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.bayes.math.gaussian.CanonicalGaussian
 
 trait PointCorModel {

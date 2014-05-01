@@ -2,7 +2,6 @@ package dk.tennis.compare.rating.multiskill.model.multipoint
 
 import org.junit._
 import Assert._
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
 import dk.tennis.compare.rating.multiskill.model.pointcormodel.GenericPointCorModel

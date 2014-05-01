@@ -3,7 +3,6 @@ package dk.tennis.compare.rating.multiskill.model.pointmodel
 import org.junit._
 import Assert._
 import scala.math._
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import dk.tennis.compare.rating.multiskill.model.pointcormodel.GenericPointCorModel
 import dk.bayes.math.gaussian.Gaussian

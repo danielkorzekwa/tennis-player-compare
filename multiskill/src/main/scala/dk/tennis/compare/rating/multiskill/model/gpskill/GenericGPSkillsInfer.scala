@@ -1,17 +1,16 @@
-package dk.tennis.compare.rating.multiskill.model.gpskill.factorgraph
-import dk.bayes.math.gaussian.CanonicalGaussian
+package dk.tennis.compare.rating.multiskill.model.gpskill
 import scala.annotation.tailrec
 import com.typesafe.scalalogging.slf4j.Logging
-import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
-import dk.tennis.compare.rating.multiskill.model.gpskill.GPSkills
 import dk.bayes.math.gaussian.MultivariateGaussian
+import dk.tennis.compare.rating.multiskill.matchloader.Player
+import dk.tennis.compare.rating.multiskill.model.gpskill.factorgraph.GPSkillsFactorGraph
 
-case class GenericGPSkillsInfer(perfVarOnServe: Double, perfVarOnReturn: Double) extends GPSkillsInfer with Logging {
+case class GenericGPSkillsInfer(perfVarOnServe: Double, perfVarOnReturn: Double,players:Array[Player]) extends GPSkillsInfer with Logging {
 
-  def skillsMarginal(playerSkills: GPSkills, threshold: Double = 1e-4): MultivariateGaussian = {
+  def skillsMarginal(skillsGaussian: MultivariateGaussian, threshold: Double = 1e-4): MultivariateGaussian = {
 
     logger.info("Creating factor graph")
-    val factorGraph = GPSkillsFactorGraph(playerSkills, perfVarOnServe, perfVarOnReturn)
+    val factorGraph = GPSkillsFactorGraph(skillsGaussian,players, perfVarOnServe, perfVarOnReturn)
 
     @tailrec
     def calibrate(playerSkillsMarginal: MultivariateGaussian): MultivariateGaussian = {
@@ -24,7 +23,7 @@ case class GenericGPSkillsInfer(perfVarOnServe: Double, perfVarOnReturn: Double)
       else calibrate(newSkillsMarginal)
     }
 
-    val skillsMarginal = calibrate(playerSkills.skillsGaussian)
+    val skillsMarginal = calibrate(skillsGaussian)
     skillsMarginal
 
   }

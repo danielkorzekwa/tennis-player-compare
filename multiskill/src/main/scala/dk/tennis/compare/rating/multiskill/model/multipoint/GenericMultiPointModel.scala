@@ -1,10 +1,9 @@
 package dk.tennis.compare.rating.multiskill.model.multipoint
 
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import scala.annotation.tailrec
+import scala.math.abs
+
 import dk.bayes.math.gaussian.Gaussian
-import scala.math._
-import dk.bayes.model.factor.BivariateGaussianFactor
 
 case class GenericMultiPointModel(p1PerfVariance: Double,p2PerfVariance: Double) extends MultiPointModel {
 

@@ -1,6 +1,5 @@
 package dk.tennis.compare.rating.multiskill.model.multipointcor
 
-import dk.tennis.compare.rating.multiskill.domain.PlayerSkill
 import scala.annotation.tailrec
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
@@ -15,6 +14,7 @@ case class GenericMultiPointCorModel(p1PerfVariance: Double, p2PerfVariance: Dou
 
     @tailrec
     def calibrate(currDirectSkills: CanonicalGaussian,iterNum:Int): CanonicalGaussian = {
+     
       require(iterNum<=maxIter,s"Skills not converged in less than ${maxIter} iterations")
       factorGraph.sendMsgs()
 
