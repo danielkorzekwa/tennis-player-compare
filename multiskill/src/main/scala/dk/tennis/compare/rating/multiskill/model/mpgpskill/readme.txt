@@ -1,6 +1,54 @@
 Message passing Gaussian process skill model
 --------------------------------------------
 
+Learn on signal processing:
+book: http://www.sp4comm.org/docs/sp4comm_corrected.pdf
+courses:
+
+https://www.coursera.org/courses?orderby=upcoming&search=signal
+
+Signals and Systems by Prof. S.C. Dutta Roy sir
+https://www.youtube.com/playlist?list=PLC6210462711083C4
+
+***************************************************************************
+
+Inference in Bayesian Time-Series Models
+http://web4.cs.ucl.ac.uk/staff/C.Bracegirdle/PhDThesis.php
+
+David Barber on time series:
+http://web4.cs.ucl.ac.uk/staff/d.barber/pmwiki/pmwiki.php
+
+http://www2.imperial.ac.uk/~nsjones/TalkSlides/RobertsSlides.pdf
+(Sequential) Non-parametric Bayesian 
+inference for Time Series Modelling
+
+
+State-Space Inference in Gaussian Process
+Regression Models
+http://sal.aalto.fi/publications/pdf-files/tkos13_public.pdf
+
+
+Pseudo-Marginal Bayesian Inference for
+Gaussian Processes
+http://www.engage-project.org/wp-content/uploads/2014/04/ieee-tpami12_double.pdf
+
+The EM-EP Algorithm for
+Gaussian Process Classication
+http://mlg.eng.cam.ac.uk/zoubin/papers/ecml03.pdf
+
+
+Kernels for Vector-Valued Functions: a Review
+Mauricio A. Alvarez, Lorenzo Rosasco, and Neil D. Lawrence
+http://cbcl.mit.edu/publications/ps/MIT-CSAIL-TR-2011-033.pdf
+
+Unconstrained Parameterizations for Variance-Covariance Matrices
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.31.494&rep=rep1&type=pdf
+
+http://www.fabiomercurio.it/riskcorr.pdf
+
+Real-time information processing of environmental sensor network data using Bayesian Gaussian processes
+http://www.robots.ox.ac.uk/~parg/pubs/tosn_gp.pdf
+
 Overlapping Mixtures of Gaussian Processes for the data association problem
 http://www.tsc.uc3m.es/~miguel/papers/OMGP.pdf
 

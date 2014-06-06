@@ -5,6 +5,7 @@ import dk.tennis.compare.rating.multiskill.matchloader.Player
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
+import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
 
 case class GenericSkillsFactorGraph(priorSupportSkills: MultivariateGaussian, allVsSupportCov: Matrix, players: Array[Player],
   perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends SkillsFactorGraph {

@@ -50,6 +50,8 @@ object PriorSkills {
     val theSameSkillTypeVar = if (player1.skillOnServe == player2.skillOnServe) 0.1 else 0.0000001
 
     theSameGameVar + playerOverTimeVar + theSameSkillTypeVar
+    
+    
   }
 
 }

@@ -5,7 +5,6 @@ import com.typesafe.scalalogging.slf4j.Logging
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.analysis.LogLik
 import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
-import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.matchloader.Player
 import dk.bayes.math.linear.Matrix
@@ -25,20 +24,33 @@ class GenericGPSkillModelTest extends Logging {
 
   @Test def test {
 
-    val players: Array[Player] = Player.toPlayers(tournaments)//.take(2)
+    val players: Array[Player] = Player.toPlayers(tournaments)
     logger.info(s"All players in all games: ${players.size}")
 
-    val priorSkills = PriorSkills.priorSkills(players, initialSkillsOnServe, initialSkillsOnReturn)
-    println(priorSkills.v)
+    val skillsMean = Matrix.zeros(players.size, 1)
+    val skillsCov = covarianceMatrix(players)
+
+    val priorSkillsMean = PriorSkills.meanVector(players, initialSkillsOnServe.m, initialSkillsOnReturn.m)
+    val priorSkillsCov = PriorSkills.covarianceMatrix(players, players, initialSkillsOnServe.v, initialSkillsOnReturn.v)
+
+    println(priorSkillsCov)
+    val priorSkills = MultivariateGaussian(priorSkillsMean, priorSkillsCov)
     val infer = GenericGPSkillsInfer(pointPerfVarianceOnServe, pointPerfVarianceOnReturn, players)
-    val skillsGaussianMarginal = infer.skillsMarginal(priorSkills, threshold = 0.6)
-    val skillMarginal = skillsGaussianMarginal.m.toArray.zipWithIndex.map {
-      case (m, index) => Gaussian(m, skillsGaussianMarginal.v(index, index))
-    }
+    val skillsFactorGraph = infer.skillsMarginal(priorSkills, threshold = 0.6)
 
     logger.info("Calculating log likelihood")
-    println("Log lik(totalLik,avgLik,pointsTotal): " + LogLik.logLik(skillMarginal, players))
+    val loglik = infer.loglik(skillsFactorGraph)
+    println("Total log lik: " + loglik)
 
+  }
+
+  def covarianceMatrix(players: Array[Player]): Matrix = {
+    Matrix(players.size, players.size, (rowIndex, colIndex) => covariance(players(rowIndex), players(colIndex)))
+  }
+
+  private def covariance(player1: Player, player2: Player): Double = {
+
+    if (player1.playerName.equals(player1.playerName)) 1d else 0
   }
 
 }

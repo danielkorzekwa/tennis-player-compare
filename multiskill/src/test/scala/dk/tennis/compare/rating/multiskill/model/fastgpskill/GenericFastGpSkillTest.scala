@@ -7,7 +7,6 @@ import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.analysis.LogLik
 import dk.bayes.math.gaussian.Gaussian
-import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
 import dk.tennis.compare.rating.multiskill.matchloader.Player
 
 class GenericFastGpSkillTest extends Logging {
@@ -32,7 +31,7 @@ class GenericFastGpSkillTest extends Logging {
     val skillMarginal = infer.skillMarginals(players)
 
     logger.info("Calculating log likelihood")
-    println("Log lik(totalLik,avgLik,pointsTotal): " + LogLik.logLik(skillMarginal, players))
+   // println("Log lik(totalLik,avgLik,pointsTotal): " + LogLik.logLik(skillMarginal, players))
   }
 
 }

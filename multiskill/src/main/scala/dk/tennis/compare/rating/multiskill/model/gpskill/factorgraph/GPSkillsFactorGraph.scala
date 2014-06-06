@@ -11,6 +11,7 @@ import dk.bayes.math.gaussian.MultivariateGaussian
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.matchloader.Player
 import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
+import dk.tennis.compare.rating.multiskill.model.gpskill.GPSkillMath
 
 case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, players: Array[Player],
   perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends Logging {
@@ -24,7 +25,7 @@ case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, players:
     precision, precision * Matrix.zeros(2, 1),
     Double.NaN)
 
-  private var gameToSkillsFactorMsgs: Seq[CanonicalGaussian] = (1 to players.size / 2).map { gameFactor =>
+  var gameToSkillsFactorMsgs: Seq[CanonicalGaussian] = (1 to players.size / 2).map { gameFactor =>
     priorGameToSkillsFactorMsg
   }
   def sendMsgs() {
@@ -55,30 +56,10 @@ case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, players:
 
     //compute marginal
 
-    val copy = new CanonicalGaussian(canonPriorSkills.k.copy,canonPriorSkills.h.copy,canonPriorSkills.g)
-    val canonSkillsMarginal = gameToSkillsFactorMsgs.zipWithIndex.foldLeft(copy) {
-      case (marginal, (gameToSkillMsg, index)) =>
-
-        val k00 = marginal.k(index * 2, index * 2)
-        marginal.k.set(index * 2, index * 2, k00 + gameToSkillMsg.k(0, 0))
-
-        val k01 = marginal.k(index * 2, index * 2 + 1)
-        marginal.k.set(index * 2, index * 2 + 1, k01 + gameToSkillMsg.k(0, 1))
-
-        val k10 = marginal.k(index * 2 + 1, index * 2)
-        marginal.k.set(index * 2 + 1, index * 2, k10 + gameToSkillMsg.k(1, 0))
-
-        val k11 = marginal.k(index * 2 + 1, index * 2 + 1)
-        marginal.k.set(index * 2 + 1, index * 2 + 1, k11 + gameToSkillMsg.k(1, 1))
-
-        val h0 = marginal.h(index * 2)
-        marginal.h.set(index * 2, 0, h0 + gameToSkillMsg.h(0))
-
-        val h1 = marginal.h(index * 2 + 1)
-        marginal.h.set(index * 2 + 1, 0, h1 + gameToSkillMsg.h(1))
-
-        marginal
-
+    val canonSkillsMarginal = new CanonicalGaussian(canonPriorSkills.k.copy, canonPriorSkills.h.copy, canonPriorSkills.g)
+    gameToSkillsFactorMsgs.zipWithIndex.foreach {
+      case (gameToSkillMsg, index) =>
+        GPSkillMath.updateProduct(canonSkillsMarginal, gameToSkillMsg, index,true)
     }
 
     skillsMarginal = MultivariateGaussian(canonSkillsMarginal.mean, canonSkillsMarginal.variance)

@@ -7,7 +7,6 @@ import org.scalatest.junit.JUnitRunner
 import dk.tennis.compare.rating.multiskill.testutil.MultiSkillTestUtil._
 import org.junit._
 import Assert._
-import dk.tennis.compare.rating.multiskill.model.pointmodel.GenericPointModel
 import dk.tennis.compare.rating.multiskill.model.pointcormodel.GenericPointCorModel
 import org.junit._
 import Assert._
