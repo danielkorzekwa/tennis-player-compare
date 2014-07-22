@@ -2,7 +2,6 @@ package dk.tennis.compare.rating.multiskill.analysis
 
 import scala.math._
 import dk.bayes.math.gaussian.Gaussian
-import dk.tennis.compare.rating.multiskill.matchloader.Player
 
 object LogLik {
 

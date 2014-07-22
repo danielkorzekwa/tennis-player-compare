@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.model.gpskill.factorgraph
+package dk.tennis.compare.rating.multiskill.model.gpskill.naive.factorgraph
 
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear._
@@ -9,11 +9,11 @@ import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import scala.math._
 import dk.bayes.math.gaussian.MultivariateGaussian
 import com.typesafe.scalalogging.slf4j.Logging
-import dk.tennis.compare.rating.multiskill.matchloader.Player
 import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
-import dk.tennis.compare.rating.multiskill.model.gpskill.GPSkillMath
+import dk.tennis.compare.rating.multiskill.model.gpskill.Score
+import dk.tennis.compare.rating.multiskill.model.gpskill.naive.GPSkillMath
 
-case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, players: Array[Player],
+case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, scores: Array[Score],
   perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends Logging {
 
   private val canonPriorSkills = CanonicalGaussian(priorPlayerSkills.m, priorPlayerSkills.v)
@@ -25,7 +25,7 @@ case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, players:
     precision, precision * Matrix.zeros(2, 1),
     Double.NaN)
 
-  var gameToSkillsFactorMsgs: Seq[CanonicalGaussian] = (1 to players.size / 2).map { gameFactor =>
+  var gameToSkillsFactorMsgs: Seq[CanonicalGaussian] = (1 to scores.size ).map { gameFactor =>
     priorGameToSkillsFactorMsg
   }
   def sendMsgs() {
@@ -45,8 +45,8 @@ case class GPSkillsFactorGraph(priorPlayerSkills: MultivariateGaussian, players:
 
         val model = GenericMultiPointCorModel(perfVarianceOnServe, perfVarianceOnReturn)
 
-        val p1PointsWon = players(index * 2).pointsWon
-        val p2PointsWon = players(index * 2 + 1).pointsWon
+        val p1PointsWon = scores(index).p1PointsWon
+        val p2PointsWon = scores(index).p2PointsWon
         val newDirectSkills = model.skillMarginals(skillsToGameMsg, p1PointsWon, p1PointsWon + p2PointsWon, threshold = 1e-4)
 
         val directSkillsMsg = newDirectSkills / skillsToGameMsg

@@ -6,10 +6,11 @@ import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.analysis.LogLik
 import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
-import dk.tennis.compare.rating.multiskill.matchloader.Player
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.priorskills.PriorSkills
+import dk.tennis.compare.rating.multiskill.model.gpskill.naive.NaiveGPSkills
+import scala.math._
 
 class GenericGPSkillModelTest extends Logging {
 
@@ -24,33 +25,50 @@ class GenericGPSkillModelTest extends Logging {
 
   @Test def test {
 
-    val players: Array[Player] = Player.toPlayers(tournaments)
+    val players: Array[Player] = toPlayers(tournaments)
+    val scores: Array[Score] = toScores(tournaments)
     logger.info(s"All players in all games: ${players.size}")
 
-    val skillsMean = Matrix.zeros(players.size, 1)
-    val skillsCov = covarianceMatrix(players)
+    val infer = NaiveGPSkills(Array(log(1)), pointPerfVarianceOnServe, pointPerfVarianceOnReturn, players, scores, threshold = 0.6)
 
-    val priorSkillsMean = PriorSkills.meanVector(players, initialSkillsOnServe.m, initialSkillsOnReturn.m)
-    val priorSkillsCov = PriorSkills.covarianceMatrix(players, players, initialSkillsOnServe.v, initialSkillsOnReturn.v)
-
-    println(priorSkillsCov)
-    val priorSkills = MultivariateGaussian(priorSkillsMean, priorSkillsCov)
-    val infer = GenericGPSkillsInfer(pointPerfVarianceOnServe, pointPerfVarianceOnReturn, players)
-    val skillsFactorGraph = infer.skillsMarginal(priorSkills, threshold = 0.6)
+    println("skill covariance:" + infer.priorSkillsCov)
 
     logger.info("Calculating log likelihood")
-    val loglik = infer.loglik(skillsFactorGraph)
+    val loglik = infer.loglik()
     println("Total log lik: " + loglik)
 
   }
 
-  def covarianceMatrix(players: Array[Player]): Matrix = {
-    Matrix(players.size, players.size, (rowIndex, colIndex) => covariance(players(rowIndex), players(colIndex)))
+  def toPlayers(tournaments: Seq[TournamentResult]): Array[Player] = {
+
+    val players = tournaments.flatMap { t =>
+
+      t.matchResults.flatMap { r =>
+        val player1OnServe = Player(r.player1, r.player2, onServe = true, r.matchTime)
+        val player2OnReturn = Player(r.player2, r.player1, onServe = false, r.matchTime)
+
+        val player2OnServe = Player(r.player2, r.player1, onServe = true, r.matchTime)
+        val player1OnReturn = Player(r.player1, r.player2, onServe = false, r.matchTime)
+
+        Array(player1OnServe, player2OnReturn, player2OnServe, player1OnReturn)
+      }
+    }
+
+    players.toArray
   }
 
-  private def covariance(player1: Player, player2: Player): Double = {
+  def toScores(tournaments: Seq[TournamentResult]): Array[Score] = {
 
-    if (player1.playerName.equals(player1.playerName)) 1d else 0
+    val scores = tournaments.flatMap { t =>
+
+      t.matchResults.flatMap { r =>
+        val player1OnServeScore = Score(r.p1Stats.servicePointsWon, r.p1Stats.servicePointsTotal - r.p1Stats.servicePointsWon)
+        val player2OnServeScore = Score(r.p2Stats.servicePointsWon, r.p2Stats.servicePointsTotal - r.p2Stats.servicePointsWon)
+        Array(player1OnServeScore, player2OnServeScore)
+      }
+    }
+
+    scores.toArray
   }
 
 }

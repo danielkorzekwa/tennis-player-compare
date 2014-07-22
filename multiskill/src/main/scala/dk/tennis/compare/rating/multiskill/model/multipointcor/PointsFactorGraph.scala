@@ -14,7 +14,7 @@ case class PointsFactorGraph(directSkills: CanonicalGaussian, p1PerfVariance: Do
 
   private val priorSkills = directSkills
   private val perf_factor = CanonicalGaussian(a = Matrix(2, 2, Array(1d, 0, 0, 1)), b = Matrix(0, 0), v = Matrix(2, 2, Array(p1PerfVariance, 0, 0, p2PerfVariance)))
-  private val perf_diff_factor = CanonicalGaussian(Matrix(1d, -1d), 0, 1e-12)
+  private val perf_diff_factor = CanonicalGaussian(Matrix(1d, -1d).t, 0, 1e-12)
 
   private var p1WonPerfToSkillMsg = CanonicalGaussian(Matrix(0, 0), Matrix(2, 2, Array(Double.PositiveInfinity, 0, 0, Double.PositiveInfinity)))
   private var p2WonPerfToSkillMsg = CanonicalGaussian(Matrix(0, 0), Matrix(2, 2, Array(Double.PositiveInfinity, 0, 0, Double.PositiveInfinity)))
