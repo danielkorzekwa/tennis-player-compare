@@ -1,22 +1,25 @@
 package dk.tennis.compare.rating.multiskill.learn
 
-import org.junit._
-import Assert._
-import java.util.Date
-import breeze.linalg.DenseVector
-import scala.math._
-import breeze.optimize.LBFGS
-import breeze.optimize.DiffFunction
-import dk.bayes.infer.gp.cov.CovSEiso
-import dk.bayes.math.linear.Matrix
-import dk.tennis.compare.rating.multiskill.model.gpskill.Player
-import dk.tennis.compare.rating.multiskill.model.gpskill.naive.NaiveGPSkills
-import dk.tennis.compare.rating.multiskill.model.gpskill.multi.MultiGPSkills
+import scala.math.exp
+import scala.math.log
 
-class LearnTennisParamsTest {
+import org.junit.Test
+
+import com.typesafe.scalalogging.slf4j.Logging
+
+import breeze.linalg.DenseVector
+import breeze.optimize.DiffFunction
+import breeze.optimize.LBFGS
+import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
+import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiff
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SingleGPSkillsFactor
+
+class LearnTennisParamsTest extends Logging {
 
   val players = (1 to 5).flatMap(i => GameTestData.players).toArray
   val scores = (1 to 5).flatMap(i => GameTestData.scores).toArray
+
+  logger.info(s"All players in all games: ${players.size}")
 
   @Test def test {
 
@@ -24,7 +27,7 @@ class LearnTennisParamsTest {
     val initialParams = DenseVector(log(10))
     val diffFunction = SkillsDiffFunction()
 
-    val optimizer = new LBFGS[DenseVector[Double]](maxIter = 100, m = 6, tolerance = 1.0E-6)
+    val optimizer = new LBFGS[DenseVector[Double]](maxIter = 1000, m = 6, tolerance = 1.0E-6)
     val optIters = optimizer.iterations(diffFunction, initialParams).toList
     val newParams = optIters.last.x
 
@@ -41,13 +44,26 @@ class LearnTennisParamsTest {
 
     def calculate(params: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
-      // val gp = NaiveGPSkills(params.toArray, perfVar, perfVar, players, scores, threshold = 0.6)
-      val gp = MultiGPSkills(params.toArray, perfVar, perfVar, players, scores, threshold = 0.6)
+      val ell = params(0)
+      val skillsFactor = SingleGPSkillsFactor(ell, players)
+      val gp = GenericPerfDiff(skillsFactor, perfVar, perfVar, scores, threshold = 0.6)
 
-      val f = -gp.loglik()
-      val df = gp.loglikD()
+      val (perfDiffs, perfDiffsMeanD, perfDiffsVarD) = gp.inferPerfDiffs()
+
+      val f = -OutcomeLik.totalLoglik(perfDiffs, scores)
+
+      val df = (0 until perfDiffsMeanD.numCols).map { i =>
+        val meanD = perfDiffsMeanD.column(i)
+        val varD = perfDiffsVarD.column(i)
+
+        val partialDf = OutcomeLik.totalLoglikD(perfDiffs, meanD.toArray, varD.toArray, scores)
+        partialDf
+
+      }.toArray
+
       (f, DenseVector(df) * (-1d))
     }
 
   }
+
 }

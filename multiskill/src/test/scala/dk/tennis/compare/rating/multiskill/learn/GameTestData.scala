@@ -1,8 +1,8 @@
 package dk.tennis.compare.rating.multiskill.learn
 
-import dk.tennis.compare.rating.multiskill.model.gpskill.Player
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import java.util.Date
-import dk.tennis.compare.rating.multiskill.model.gpskill.Score
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 
 object GameTestData {
 

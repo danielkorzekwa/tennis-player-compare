@@ -4,6 +4,11 @@ Message passing Gaussian process skill model
 -----------------------------------------------------------
 GP large data sets
 -----------------------------------------------------------
+
+Online Sparse Matrix Gaussian Process Regression and Vision Applications
+http://ananth.in/Publications_files/Ranganathan08eccv_1.pdf
+
+
 Efﬁcient Gaussian Process Regression for Large Data Sets
 http://people.ee.duke.edu/~lcarin/rp_draft5.pdf
 http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3712798/

@@ -1,21 +1,21 @@
-package dk.tennis.compare.rating.multiskill.model.gpskill
+package dk.tennis.compare.rating.multiskill.model.perfdiff
+
+import scala.math.log
 
 import org.junit.Test
+
 import com.typesafe.scalalogging.slf4j.Logging
+
 import dk.bayes.math.gaussian.Gaussian
-import dk.tennis.compare.rating.multiskill.analysis.LogLik
 import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
-import dk.bayes.math.linear.Matrix
-import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.tennis.compare.rating.multiskill.model.priorskills.PriorSkills
-import dk.tennis.compare.rating.multiskill.model.gpskill.naive.NaiveGPSkills
-import scala.math._
+import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SingleGPSkillsFactor
 
-class GenericGPSkillModelTest extends Logging {
+class GenericPerfDiffTest extends Logging {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2009, 2011).take(1)
+  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2009, 2011) //.take(2)
 
   val initialSkillsOnServe = Gaussian(0, 0.8806472793221474)
   val initialSkillsOnReturn = Gaussian(3997.9909513252546 - 4002.542974700307, 0.7527376376092434)
@@ -29,12 +29,16 @@ class GenericGPSkillModelTest extends Logging {
     val scores: Array[Score] = toScores(tournaments)
     logger.info(s"All players in all games: ${players.size}")
 
-    val infer = NaiveGPSkills(Array(log(1)), pointPerfVarianceOnServe, pointPerfVarianceOnReturn, players, scores, threshold = 0.6)
-
-    println("skill covariance:" + infer.priorSkillsCov)
+    val ell = log(1)
+    val skillsFactor = SingleGPSkillsFactor(ell, players)
+    val infer = GenericPerfDiff(skillsFactor, pointPerfVarianceOnServe, pointPerfVarianceOnReturn, scores, threshold = 0.6)
 
     logger.info("Calculating log likelihood")
-    val loglik = infer.loglik()
+
+    val (perfDiffs, perfDiffsMeanD, perfDiffsVarD) = infer.inferPerfDiffs()
+
+    val loglik = OutcomeLik.totalLoglik(perfDiffs, scores)
+
     println("Total log lik: " + loglik)
 
   }

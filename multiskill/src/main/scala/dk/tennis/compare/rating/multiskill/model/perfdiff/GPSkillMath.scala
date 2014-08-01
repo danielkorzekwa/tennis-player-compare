@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.model.gpskill.naive
+package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear.Matrix

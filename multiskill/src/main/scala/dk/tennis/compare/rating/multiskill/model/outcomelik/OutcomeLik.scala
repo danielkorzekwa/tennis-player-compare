@@ -3,16 +3,46 @@ package dk.tennis.compare.rating.multiskill.model.outcomelik
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
 import Gaussian._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 
 object OutcomeLik {
 
-  def loglik(skillDiff: Gaussian, win: Boolean): Double = {
+  def totalLoglik(perfDiffs: Array[Gaussian], scores: Array[Score]): Double = {
 
-    val winProb = 1 - stdCdf(-skillDiff.m / sqrt(skillDiff.v))
+    val totalLogLik = scores.zip(perfDiffs).map {
+      case (score, perfDiff) =>
+        val loglik = score.p1PointsWon * OutcomeLik.loglik(perfDiff, true) + score.p2PointsWon * OutcomeLik.loglik(perfDiff, false)
+        loglik
+    }.sum
+
+    totalLogLik
+  }
+
+  def loglik(perfDiff: Gaussian, win: Boolean): Double = {
+
+    val winProb = 1 - stdCdf(-perfDiff.m / sqrt(perfDiff.v))
     win match {
       case true => log(winProb)
       case false => log1p(-winProb)
     }
+  }
+
+  /**
+   * @param perfDiffsMuD Partial derivative for the mean of the game performance difference with respect to some hyper parameter
+   * @param perfDiffsVaRD Partial derivative for the variance of the game performance difference with respect to some hyper parameter
+   */
+  def totalLoglikD(perfDiffs: Array[Gaussian], perfDiffsMuD: Array[Double], perfDiffsVarD: Array[Double], scores: Array[Score]): Double = {
+
+    val totalLogLikD = (0 until perfDiffs.size).map { i =>
+      val perfDiff = perfDiffs(i)
+      val muD = perfDiffsMuD(i)
+      val varD = perfDiffsVarD(i)
+      val score = scores(i)
+
+      val loglikD = score.p1PointsWon * OutcomeLik.loglikD(perfDiff, true, muD, varD) + score.p2PointsWon * OutcomeLik.loglikD(perfDiff, false, muD, varD)
+      loglikD
+    }.sum
+    totalLogLikD
   }
 
   /**

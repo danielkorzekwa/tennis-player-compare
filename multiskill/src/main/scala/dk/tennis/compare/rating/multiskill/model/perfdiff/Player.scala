@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.model.gpskill
+package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import java.util.Date
 
