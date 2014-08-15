@@ -12,6 +12,7 @@ import org.junit._
 import Assert._
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear._
+import dk.bayes.math.gaussian.MultivariateGaussian
 
 class GenericMultiPointCorModelTest {
 
@@ -26,7 +27,7 @@ class GenericMultiPointCorModelTest {
 
     // println(new GenericPointCorModel(p1PerfVariance, p2PerfVariance).pointProb(newP1Skill, newP2Skill, newCovariance))
 
-    assertEquals(Matrix(0.291, -0.265).toString, newDirectSkills.mean.toString)
+    assertEquals(Matrix(0.292, -0.265).toString, newDirectSkills.mean.toString)
     assertEquals(Matrix(2, 2, Array(0.691, 0.0065, 0.0065, 0.4953)).toString, newDirectSkills.variance.toString)
   }
 
@@ -45,9 +46,18 @@ class GenericMultiPointCorModelTest {
       println(new GenericPointCorModel(p1PerfVariance, p2PerfVariance).pointProb(directSkills))
     }
 
-    assertEquals(Matrix(4.9887, -6.6864).toString, directSkills.mean.toString)
+    assertEquals(Matrix(5.210, -6.952).toString, directSkills.mean.toString)
     assertEquals(Matrix(2, 2, Array(0.5467, 0.5438, 0.5438, 0.5473)).toString, directSkills.variance.toString)
 
+  }
+
+  @Test def check_perf_var_is_zero {
+    val model = GenericMultiPointCorModel(p1PerfVariance = 2.075892613611445E-16, p2PerfVariance = 2.075892613611445E-16)
+
+    val skills = CanonicalGaussian(Matrix(0d, 0), Matrix(2, 2, Array(1.1000198716370064, 0.0, 0.0, 1.1000080290094625)))
+    val marginal = model.skillMarginals(skills, pointsWon = 25, allPoints = 42, maxIter = 49)
+
+    println("marginal:" + marginal.mean + ":" + marginal.variance)
   }
 
 }

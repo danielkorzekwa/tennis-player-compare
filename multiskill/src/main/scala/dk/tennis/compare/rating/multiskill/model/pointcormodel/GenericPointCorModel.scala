@@ -13,7 +13,7 @@ case class GenericPointCorModel(perfVarianceOnServe: Double, perfVarianceOnRetur
 
     //factors
     val perf_factor = CanonicalGaussian(a = Matrix(2, 2, Array(1d, 0, 0, 1)), b = Matrix(0, 0), v = Matrix(2, 2, Array(perfVarianceOnServe, 0, 0, perfVarianceOnReturn)))
-    val perf_diff_factor = CanonicalGaussian(Matrix(1d, -1d), 0, 1e-12)
+    val perf_diff_factor = CanonicalGaussian(Matrix(1d, -1d).t, 0, 1e-12)
 
     //message passing
     val perf_factor_down = (directSkills.extend(4, 0) * perf_factor).marginal(2, 3)

@@ -3,6 +3,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.MultivariateGaussian
+import dk.bayes.math.gaussian.Gaussian
 
 object GPSkillMath {
 
@@ -30,6 +31,21 @@ object GPSkillMath {
 
     val h1 = skills.h(gameIndex * 2 + 1)
     skills.h.set(gameIndex * 2 + 1, 0, h1 update gameToSkillMsg.h(1))
+
+  }
+
+  /**Updates skills = skills*gameMsg*/
+  def updateOnPlayerMsg(skills: CanonicalGaussian, playerMsg: CanonicalGaussian, playerIndex: Int, mult: Boolean) {
+
+    implicit class Update(x: Double) {
+      def update(v: Double) = if (mult) x + v else x - v
+    }
+
+    val k00 = skills.k(playerIndex, playerIndex)
+    skills.k.set(playerIndex, playerIndex, k00 update playerMsg.k(0, 0))
+
+    val h0 = skills.h(playerIndex)
+    skills.h.set(playerIndex, 0, h0 update playerMsg.h(0))
 
   }
 

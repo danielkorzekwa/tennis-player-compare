@@ -21,33 +21,24 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.GPSkillMath
  */
 case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends SkillsFactor {
 
+  private val DAY_MILLIS = 1000L * 3600 * 24
+
   private val priorSkillsMean = Matrix(players.map(p => meanFunc(p)))
 
   //add some noise on diagonal for numerical stability
   private val priorSkillsCov = Matrix(players.size, players.size, (rowIndex, colIndex) => covariance(ell)(players(rowIndex), players(colIndex))) + Matrix.identity(players.size) * 1e-1
-
   private val priorPlayerSkills = CanonicalGaussian(priorSkillsMean, priorSkillsCov)
-
   private val covD = covarianceMatrix_df_ell(players, ell)
 
   def getGameSkillsMarginals(gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {
 
-    val skillsMarginal = calcSkillsMarginal(gameSkillsVarUpMsgs)
+    val skillsMarginalCanon = calcSkillsMarginal(gameSkillsVarUpMsgs)
 
-    val gameSkillsMarginals = gameSkillsVarUpMsgs.zipWithIndex.map {
-      case (gameSkillsVarUpMsg, index) =>
+    val skillsMarginal = MultivariateGaussian(skillsMarginalCanon.mean, skillsMarginalCanon.variance)
+    val gameSkillsMarginals = (0 until gameSkillsVarUpMsgs.size).map { index =>
 
-        val (mean, variance) = (skillsMarginal.mean, skillsMarginal.variance)
-        val directSkillsMean = Matrix(mean(index * 2), mean(index * 2 + 1))
-        val var00 = variance(index * 2, index * 2)
-        val var01 = variance(index * 2, index * 2 + 1)
-        val var10 = variance(index * 2 + 1, index * 2)
-        val var11 = variance(index * 2 + 1, index * 2 + 1)
-        val directSkillsVariance = Matrix(2, 2, Array(var00, var01, var10, var11))
-
-        val gameSkillsMarginal = CanonicalGaussian(directSkillsMean, directSkillsVariance)
-
-        gameSkillsMarginal
+      val gameSkillsMarginal = GPSkillMath.getSkills(skillsMarginal, index)
+      CanonicalGaussian(gameSkillsMarginal.m, gameSkillsMarginal.v)
     }
 
     gameSkillsMarginals
@@ -61,7 +52,7 @@ case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends Ski
 
     val skillsMarginalVarD = skillsMarginal.variance * Kinv * covD * Kinv * skillsMarginal.variance
     val h_d = (-1 * Kinv * covD * Kinv) * priorPlayerSkills.mean
-    val skillsMarginalMeanD = skillsMarginalVarD * skillsMarginal.h
+    val skillsMarginalMeanD = skillsMarginalVarD * skillsMarginal.h + skillsMarginal.variance * h_d
 
     val gameSkillsMarginalsD = (0 until gameSkillsVarUpMsgs.size).map { index =>
 
@@ -71,6 +62,12 @@ case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends Ski
 
     gameSkillsMarginalsD
   }
+
+  def getGameSkillsMarginalsWithD(gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Tuple2[Seq[CanonicalGaussian], Seq[Seq[MultivariateGaussian]]] = {
+    throw new UnsupportedOperationException("Not implemented yet")
+  }
+
+  def getPlayerSkillsPriorMean(): Matrix = priorPlayerSkills.mean
 
   def getPlayerSkillsMarginalMean(gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Matrix = {
     val skillsMarginal = new CanonicalGaussian(priorPlayerSkills.k.copy, priorPlayerSkills.h.copy, priorPlayerSkills.g)
@@ -95,9 +92,10 @@ case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends Ski
   }
 
   private def covariance(ell: Double)(player1: Player, player2: Player): Double = {
+    val onServeCov = if (player1.onServe.equals(player2.onServe)) 1d else 0
     val theSamePlayerCov = if (player1.playerName.equals(player2.playerName)) 1d else 0
-    val timeDiffCov = new CovSEiso(sf = log(1), ell).cov(Matrix(player1.timestamp.getTime), Matrix(player2.timestamp.getTime()))
-    timeDiffCov * theSamePlayerCov
+    val timeDiffCov = new CovSEiso(sf = log(1), ell).cov(Matrix(player1.timestamp.getTime / DAY_MILLIS), Matrix(player2.timestamp.getTime / DAY_MILLIS))
+    onServeCov * theSamePlayerCov * timeDiffCov
   }
 
   private def meanFunc(player: Player): Double = 0d
@@ -107,10 +105,11 @@ case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends Ski
   }
 
   private def covariance_df_ell(player1: Player, player2: Player, ell: Double): Double = {
+    val onServeCov = if (player1.onServe.equals(player2.onServe)) 1d else 0
 
     val theSamePlayerCov = if (player1.playerName.equals(player2.playerName)) 1d else 0
-    val timeDiffCov = new CovSEiso(sf = log(1), ell).df_dEll(Matrix(player1.timestamp.getTime), Matrix(player2.timestamp.getTime()))
-    timeDiffCov * theSamePlayerCov
+    val timeDiffCov = new CovSEiso(sf = log(1), ell).df_dEll(Matrix(player1.timestamp.getTime / DAY_MILLIS), Matrix(player2.timestamp.getTime / DAY_MILLIS))
+    onServeCov * theSamePlayerCov * timeDiffCov
   }
 
 }

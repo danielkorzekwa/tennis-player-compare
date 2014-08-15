@@ -5,6 +5,12 @@ import dk.bayes.math.linear.Matrix
 
 trait PerfDiff {
 
+    /**
+   * Returns perf diffs for all games,
+   *
+   */
+  def inferPerfDiffs():Array[Gaussian]
+  
   /**
    * Returns Tuple3(
    * - Perf diffs for all games,
@@ -12,6 +18,6 @@ trait PerfDiff {
    * - Partial derivatives for the variance of the game performance difference with respect to some hyper parameters
    * )
    */
-  def inferPerfDiffs(): Tuple3[Array[Gaussian], Matrix, Matrix]
+  def inferPerfDiffsWithD(): Tuple3[Array[Gaussian], Matrix, Matrix]
 
 }

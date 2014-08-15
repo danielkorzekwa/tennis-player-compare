@@ -47,6 +47,30 @@ class GenericPointCorModelTest {
 
   }
 
+  @Test def skillsMarginals_zero_perf_variance {
+
+    val perfVarianceOnServe = 1e-10
+    val perfVarianceOnReturn = 1e-10
+    val pointModel = GenericPointCorModel(perfVarianceOnServe, perfVarianceOnReturn)
+
+    val skills = CanonicalGaussian(Matrix(0.8, -0.8), Matrix(2, 2, Array(1, 0.2, 0.2, 1)))
+
+    val skillsMarginal = pointModel.skillMarginals(skills, false)
+    assertEquals(Matrix(-0.301, 0.301).toString, skillsMarginal.mean.toString)
+    assertEquals(Matrix(2, 2, Array(0.668, 0.532, 0.532, 0.668)).toString, skillsMarginal.variance.toString)
+  }
+
+  @Test def skillsMarginals_NaN {
+
+    val perfVarianceOnServe = 1
+    val perfVarianceOnReturn = 1
+    val pointModel = GenericPointCorModel(perfVarianceOnServe, perfVarianceOnReturn)
+
+    var skills = CanonicalGaussian(Matrix(2.592, 5.251), Matrix(2, 2, Array(-1d,0,0,-1)))
+
+    println(pointModel.skillMarginals(skills, true).mean)
+  }
+
   @Test def pointProb {
     assertEquals(0.5276, pointModel.pointProb(CanonicalGaussian(Matrix(0.2, -0.2), Matrix(2, 2, Array(0.7, 0.0, 0.0, 0.5)))), 0.0001)
     assertEquals(0.528, pointModel.pointProb(CanonicalGaussian(Matrix(0.2, -0.2), Matrix(2, 2, Array(0.7, 0.45, 0.45, 0.5)))), 0.0001)
