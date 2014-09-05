@@ -89,6 +89,11 @@
 	<!-- Dependency management -->
 	<dependencies>
 
+		<dependency>
+			<groupId>org.scalanlp</groupId>
+			<artifactId>breeze-viz_2.10</artifactId>
+			<version>0.9</version>
+		</dependency>
 
 		<!-- External dependencies -->
 		<dependency>
