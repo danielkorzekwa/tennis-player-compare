@@ -1,33 +1,43 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff
 
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
-import dk.bayes.math.linear.Matrix
-import dk.bayes.math.gaussian.CanonicalGaussian
+import scala.math._
 import com.typesafe.scalalogging.slf4j.Logging
+import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.gaussian.Gaussian
 import dk.bayes.math.gaussian.MultivariateGaussian
+import dk.bayes.math.linear.Matrix
+import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
+import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.calibrate
-import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
-import scala.math._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
+import dk.tennis.compare.rating.multiskill.model.perfdiff.math.gameSkillsToPerfDiffs
 
-case class GenericPerfDiff(skillsFactorGraph: SkillsFactorGraph, logPerfStdDev: Double, scores: Array[Score],
-  threshold: Double = 1e-4) extends Logging {
+case class GenericPerfDiff(createPlayersSkillsFactor: (Array[Player]) => SkillsFactor, logPerfStdDev: Double, scores: Array[Score],
+  threshold: Double = 1e-3) extends Logging {
 
-  logger.info("Creating factor graph")
+  logger.debug("Creating factor graph")
+  val players = Score.toPlayers(scores)
+  val skillsFactor = createPlayersSkillsFactor(players)
+  val skillsFactorGraph = SkillsFactorGraph(scores, logPerfStdDev, skillsFactor)
 
-  logger.info("Calibrating factor graph")
-  calibrate(skillsFactorGraph, threshold)
-  logger.info("Calibrating factor graph - completed")
+  def calibrateModel() {
+    logger.debug("Calibrating factor graph")
+    calibrate(skillsFactorGraph, threshold)
+    logger.debug("Calibrating factor graph - completed")
+  }
 
   def inferPerfDiffs(): Array[Gaussian] = {
     val gameSkillsMarginals = skillsFactorGraph.skillsFactor.getGameSkillsMarginals(skillsFactorGraph.gameToSkillsFactorMsgs)
-    val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals)
+    val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals).map(toMvnGaussian(_))
 
-    val perfDiffs = getPerfDiffToOutcomeMsgs(skillsToGameMsgs).toArray
+    val perfDiffs = gameSkillsToPerfDiffs(skillsToGameMsgs, logPerfStdDev).toArray
 
     perfDiffs
 
+  }
+
+  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): MultivariateGaussian = {
+    skillsFactor.calcPosteriorSkillsForPlayer(playerName, skillOnServe, skillsFactorGraph.gameToSkillsFactorMsgs)
   }
 
   def inferPerfDiffsWithD(): Tuple3[Array[Gaussian], Matrix, Matrix] = {
@@ -35,34 +45,19 @@ case class GenericPerfDiff(skillsFactorGraph: SkillsFactorGraph, logPerfStdDev: 
     val (gameSkillsMarginals, gameSkillsMarginalsD) = skillsFactorGraph.skillsFactor.getGameSkillsMarginalsWithD(skillsFactorGraph.gameToSkillsFactorMsgs)
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals)
 
-    val perfDiffs = getPerfDiffToOutcomeMsgs(skillsToGameMsgs).toArray
+    val perfDiffs = gameSkillsToPerfDiffs(skillsToGameMsgs.map(toMvnGaussian(_)), logPerfStdDev).toArray
 
     val (perfDiffsMeanD, perfDiffsVarD) = getPerfDiffToOutcomeMsgsD(skillsToGameMsgs, gameSkillsMarginals, gameSkillsMarginalsD)
     (perfDiffs, perfDiffsMeanD, perfDiffsVarD)
   }
 
-  private def getPerfDiffToOutcomeMsgs(skillsToGameMsgs: Seq[CanonicalGaussian]): Seq[Gaussian] = {
-
-    val perfDiffToOutcomeMsgs = skillsToGameMsgs.map { skillsToGameMsg =>
-      val A_d = Matrix(1d, -1d).t
-      val V_d = Matrix(2, 2, Array(exp(logPerfStdDev) * exp(logPerfStdDev), 0, 0, exp(logPerfStdDev) * exp(logPerfStdDev)))
-
-      val perfDiffMsg = MultivariateGaussian((A_d * skillsToGameMsg.m), (A_d * (skillsToGameMsg.v + V_d) * A_d.t)).toGaussian
-
-      perfDiffMsg
-    }
-
-    perfDiffToOutcomeMsgs
-  }
-
   private def getPerfDiffToOutcomeMsgsD(skillsToGameMsgs: Seq[CanonicalGaussian], gameSkillsMarginals: Seq[CanonicalGaussian],
-    gameSkillsMarginalsD: Seq[Seq[MultivariateGaussian]]): Tuple2[Matrix, Matrix] = {
+    gamesSkillsMarginalsD: Seq[Seq[MultivariateGaussian]]): Tuple2[Matrix, Matrix] = {
 
     val perfDiffToOutcomeMsgsD = (0 until scores.size).map { index =>
 
       val skillsToGameMsg = skillsToGameMsgs(index)
       val gameSkillsMarginal = gameSkillsMarginals(index)
-
       def perfDiffD(gameSkillsMarginalD: MultivariateGaussian): Tuple2[Double, Double] = {
         val skillsToGameMsgVarD = skillsToGameMsg.variance * gameSkillsMarginal.variance.inv * gameSkillsMarginalD.v * gameSkillsMarginal.variance.inv * skillsToGameMsg.variance
 
@@ -77,40 +72,29 @@ case class GenericPerfDiff(skillsFactorGraph: SkillsFactorGraph, logPerfStdDev: 
 
         (muD, varD)
       }
-      //      
-      //      val skillsToGameMsgVarD = skillsToGameMsg.variance * gameSkillsMarginal.variance.inv * gameSkillsMarginalD.v * gameSkillsMarginal.variance.inv * skillsToGameMsg.variance
-      //
-      //      val h_d = -1 * (gameSkillsMarginal.variance.inv * gameSkillsMarginalD.v * gameSkillsMarginal.variance.inv * gameSkillsMarginal.m) + gameSkillsMarginal.variance.inv * gameSkillsMarginalD.m
-      //      val skillsToGameMsgMeanD = skillsToGameMsgVarD * skillsToGameMsg.h + skillsToGameMsg.variance * h_d
-      //      val skillsToGameMsgD = MultivariateGaussian(skillsToGameMsgMeanD, skillsToGameMsgVarD)
-      //
-      //      val A = Matrix(1d, -1d).t
-      //
-      //      val muD = (A * skillsToGameMsgD.m).at(0)
-      //      val varD = (A * skillsToGameMsgD.v * A.t).at(0)
 
-      val gameSkillsMarginalD_sf = gameSkillsMarginalsD(index)(0)
-      val (muD_sf, varD_sf) = perfDiffD(gameSkillsMarginalD_sf)
+      val gameSkillsMarginalsDs = gamesSkillsMarginalsD(index)
 
-      val gameSkillsMarginalD_ell = gameSkillsMarginalsD(index)(1)
-      val (muD_ell, varD_ell) = perfDiffD(gameSkillsMarginalD_ell)
+      //*Seq of tuple(meanD,VarD) for n hyper parameters
+      val perfDiffDs: Seq[Tuple2[Double, Double]] = gameSkillsMarginalsDs.map(gameSkillsMarginalsD => perfDiffD(gameSkillsMarginalsD))
+      val perfDiffDMean: Array[Double] = perfDiffDs.map(d => d._1).toArray
+      val perfDiffDVar: Array[Double] = perfDiffDs.map(d => d._2).toArray
 
-      //derivatives with respect to performance variance
       val A = Matrix(1d, -1d).t
-      val muD_perfVar = 0
+      val muD_perfVar = 0d
       val varD_perfVar = (A * Matrix(2, 2, Array(2 * exp(2 * logPerfStdDev), 0, 0, 2 * exp(2 * logPerfStdDev))) * A.t).at(0)
-
-      (Array(muD_sf, muD_ell, muD_perfVar), Array(varD_sf, varD_ell, varD_perfVar))
+      (perfDiffDMean :+ muD_perfVar, perfDiffDVar :+ varD_perfVar)
 
     }.toArray
 
-    val perfDiffToOutcomeMsgsMeanD = Matrix(scores.size, 3, perfDiffToOutcomeMsgsD.flatMap(_._1))
-    val perfDiffToOutcomeMsgsVarD = Matrix(scores.size, 3, perfDiffToOutcomeMsgsD.flatMap(_._2))
+    val hypSize = perfDiffToOutcomeMsgsD.head._1.size
+    val perfDiffToOutcomeMsgsMeanD = Matrix(scores.size, hypSize, perfDiffToOutcomeMsgsD.flatMap(_._1))
+    val perfDiffToOutcomeMsgsVarD = Matrix(scores.size, hypSize, perfDiffToOutcomeMsgsD.flatMap(_._2))
     (perfDiffToOutcomeMsgsMeanD, perfDiffToOutcomeMsgsVarD)
 
   }
 
-  private implicit def MvnGaussian(canon: CanonicalGaussian): MultivariateGaussian = {
+  private implicit def toMvnGaussian(canon: CanonicalGaussian): MultivariateGaussian = {
     MultivariateGaussian(canon.mean, canon.variance)
   }
 

@@ -27,28 +27,34 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
     val gameSkillsMarginals = skillsFactor.getGameSkillsMarginals(gameToSkillsFactorMsgs)
     val skillsToGameMsgs = calcSkillsToGameMsgs(gameSkillsMarginals)
 
-    gameToSkillsFactorMsgs = skillsToGameMsgs.zipWithIndex.map {
-      case (skillsToGameMsg, index) =>
+    gameToSkillsFactorMsgs = skillsToGameMsgs.zip(gameToSkillsFactorMsgs).zipWithIndex.map {
+      case ((skillsToGameMsg, gameToSkillsMsg), index) =>
+        try {
+          val model = GenericMultiPointCorModel(exp(2 * logPerfStdDev), exp(2 * logPerfStdDev))
 
-        val model = GenericMultiPointCorModel(exp(2 * logPerfStdDev), exp(2 * logPerfStdDev))
+          val p1PointsWon = scores(index).p1PointsWon
+          val p2PointsWon = scores(index).p2PointsWon
 
-        val p1PointsWon = scores(index).p1PointsWon
-        val p2PointsWon = scores(index).p2PointsWon
-
-        val newDirectSkills = model.skillMarginals(skillsToGameMsg, p1PointsWon, p1PointsWon + p2PointsWon, threshold = 1e-4)
-        val directSkillsMsg = newDirectSkills / skillsToGameMsg
-
-        directSkillsMsg
-
+          var newDirectSkills = model.skillMarginals(skillsToGameMsg, p1PointsWon, p1PointsWon + p2PointsWon, threshold = 1e-4)
+          newDirectSkills = CanonicalGaussian(newDirectSkills.mean, Matrix(2, 2, Array(newDirectSkills.variance(0, 0), 0d, 0d, newDirectSkills.variance(1, 1))))
+          var directSkillsMsg = newDirectSkills / skillsToGameMsg
+          directSkillsMsg
+        } catch {
+          case e: Exception => {
+            logger.debug("Message passing error (single message)")
+            gameToSkillsMsg
+          }
+        }
     }
 
   }
 
   def calcSkillsToGameMsgs(gameSkillsMarginals: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {
+
     val skillsToGameMsgs = gameSkillsMarginals.zip(gameToSkillsFactorMsgs).map {
       case (gameSkillsMarginal, gameToSkillsMsg) =>
 
-        val skillsToGameMsg = if (!gameToSkillsMsg.variance(0).isInfinity) gameSkillsMarginal / gameToSkillsMsg else gameSkillsMarginal
+        val skillsToGameMsg = gameSkillsMarginal / gameToSkillsMsg
         skillsToGameMsg
     }
 

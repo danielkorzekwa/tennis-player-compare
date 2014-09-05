@@ -15,7 +15,7 @@ case class GenericMultiPointCorModel(p1PerfVariance: Double, p2PerfVariance: Dou
     @tailrec
     def calibrate(currDirectSkills: CanonicalGaussian, iterNum: Int): CanonicalGaussian = {
 
-      if (iterNum > maxIter) logger.warn(s"Skills not converged in less than ${maxIter} iterations")
+      if (iterNum >= maxIter) logger.debug(s"Skills not converged in less than ${maxIter} iterations")
 
       factorGraph.sendMsgs()
       val skillsMarginal = factorGraph.getSkillsMarginal()

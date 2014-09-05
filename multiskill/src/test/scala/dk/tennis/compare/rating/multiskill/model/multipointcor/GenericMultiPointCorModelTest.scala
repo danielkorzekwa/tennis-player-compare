@@ -60,4 +60,13 @@ class GenericMultiPointCorModelTest {
     println("marginal:" + marginal.mean + ":" + marginal.variance)
   }
 
+  @Test def test {
+    val model = GenericMultiPointCorModel(p1PerfVariance = 99.48431564193378, p2PerfVariance = 99.48431564193378)
+
+    val skills = CanonicalGaussian(Matrix(2.121, 2.830), Matrix(2, 2, Array(15.688, 17.671, 17.671, 14.558)))
+    var marginal = model.skillMarginals(skills, pointsWon = 31, allPoints = 62, maxIter = 49)
+
+    println("marginal:" + marginal.mean + ":" + marginal.variance)
+  }
+
 }

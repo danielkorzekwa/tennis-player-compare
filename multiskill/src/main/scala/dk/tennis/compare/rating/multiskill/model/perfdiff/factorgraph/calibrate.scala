@@ -5,18 +5,18 @@ import dk.bayes.math.linear.Matrix
 
 object calibrate extends Logging {
 
-  def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 100) {
+  def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 10) {
 
     @tailrec
     def calibrate(playerSkillsMarginal: Matrix, iterNum: Int) {
-      logger.info("Calibrating factor graph...")
+      logger.debug("Calibrating factor graph:" + iterNum)
       if (iterNum > maxIter) logger.warn(s"Skills not converged in less than ${maxIter} iterations")
 
       factorGraph.sendMsgs()
 
       val newSkillsMarginal = factorGraph.getPlayerSkillsMarginalMean()
       if (iterNum >= maxIter || equals(newSkillsMarginal, playerSkillsMarginal, threshold)) return
-      else calibrate(newSkillsMarginal,iterNum+1)
+      else calibrate(newSkillsMarginal, iterNum + 1)
     }
 
     calibrate(factorGraph.getPlayerSkillsPriorMean(), 1)

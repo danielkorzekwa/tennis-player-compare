@@ -26,8 +26,14 @@ case class PointsFactorGraph(directSkills: CanonicalGaussian, p1PerfVariance: Do
   def getSkillsMarginal(): CanonicalGaussian = skillsMarginal
 
   def sendMsgs() {
-    p1WonPerfToSkillMsg = calcPerfToSkillMsgs(skillsMarginal / p1WonPerfToSkillMsg, true)
-    p2WonPerfToSkillMsg = calcPerfToSkillMsgs(skillsMarginal / p2WonPerfToSkillMsg, false)
+    p1WonPerfToSkillMsg = try {
+      calcPerfToSkillMsgs(skillsMarginal / p1WonPerfToSkillMsg, true)
+    } catch { case e: Exception => p1WonPerfToSkillMsg }
+    
+    p2WonPerfToSkillMsg = try {
+      calcPerfToSkillMsgs(skillsMarginal / p2WonPerfToSkillMsg, false)
+    } catch { case e: Exception => p2WonPerfToSkillMsg }
+    
     skillsMarginal = priorSkills * power(p1WonPerfToSkillMsg, pointsWon) * power(p2WonPerfToSkillMsg, allPoints - pointsWon)
   }
 

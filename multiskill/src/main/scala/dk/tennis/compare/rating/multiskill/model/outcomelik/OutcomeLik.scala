@@ -7,15 +7,15 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 
 object OutcomeLik {
 
-  def totalLoglik(perfDiffs: Array[Gaussian], scores: Array[Score]): Double = {
+  def totalLoglik(perfDiffs: Array[Gaussian], scores: Array[Score], filter: (Score) => Boolean = { score => true }): Double = {
 
-    val totalLogLik = scores.zip(perfDiffs).map {
+    val logliks = scores.zip(perfDiffs).filter { case (score, perfDiff) => filter(score) }.map {
       case (score, perfDiff) =>
         val loglik = score.p1PointsWon * OutcomeLik.loglik(perfDiff, true) + score.p2PointsWon * OutcomeLik.loglik(perfDiff, false)
+      
         loglik
-    }.sum
-
-    totalLogLik
+    }
+    logliks.sum
   }
 
   def loglik(perfDiff: Gaussian, win: Boolean): Double = {

@@ -10,6 +10,10 @@ import dk.bayes.math.linear.Matrix
  */
 trait SkillsFactor {
 
+  def getPriorSkillsForPlayer(playerName:String, skillOnServe:Boolean):MultivariateGaussian
+  
+  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean, gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): MultivariateGaussian
+
   /**
    * Returns the prior mean of all player skills.
    *

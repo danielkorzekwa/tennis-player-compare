@@ -3,7 +3,12 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff
 import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import scala.collection.immutable.HashSet
 
-case class Score(player1: Player, player2: Player, p1PointsWon: Int, p2PointsWon: Int)
+case class Score(player1: Player, player2: Player, p1PointsWon: Int, p2PointsWon: Int) {
+
+  def hasPlayer(playerName: String): Boolean = {
+    (player1.playerName.equals(playerName) || player2.playerName.equals(playerName))
+  }
+}
 
 object Score {
   def toScores(tournaments: Seq[TournamentResult], playersFilter: Set[String] = HashSet()): Array[Score] = {
@@ -25,5 +30,11 @@ object Score {
     }
 
     scores.toArray
+  }
+
+  def toPlayers(scores: Array[Score]): Array[Player] = {
+    scores.flatMap { s =>
+      Array(s.player1, s.player2)
+    }
   }
 }
