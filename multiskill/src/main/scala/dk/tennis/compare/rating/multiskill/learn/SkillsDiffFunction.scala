@@ -7,23 +7,26 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFac
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiff
 import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFuncShort
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
 
-case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
+case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, createPlayerCovFunc: (Array[Double]) => PlayerCovFunc, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
 
   private var currSkillPriorMeanOnServe = skillPriorMeanOnServe
   private var currSkillPriorMeanOnReturn = skillPriorMeanOnReturn
 
   def calculate(params: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
+    if (gradientMask.isDefined)
+      require(params.size == gradientMask.get.size, "Params and gradient mask size don't match")
+
     logger.info("params: %s, priorMean(serve/return): %.2f / %.2f".format(params.toString, currSkillPriorMeanOnServe, currSkillPriorMeanOnReturn))
 
     val covarianceParams = params.data.dropRight(1)
     val logPerfStdDev = params.data.last
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, PlayerCovFuncShort(covarianceParams), players)
+    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, createPlayerCovFunc(covarianceParams), players)
 
     val gp = GenericPerfDiff(createPlayersSkillsFactor, logPerfStdDev, scores)
     try {
@@ -32,7 +35,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
       case e: Exception => logger.warn("Calibrabion error")
     }
 
-    try {
+    val (loglik, df) = try {
 
       val (perfDiffs, perfDiffsMeanD, perfDiffsVarD) =
         gp.inferPerfDiffsWithD()
@@ -60,7 +63,6 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
       currSkillPriorMeanOnServe = newPriorSkillMeanOnServe
       currSkillPriorMeanOnReturn = newPriorSkillMeanOnReturn
 
-      logger.info("loglik: %.2f, d: %s,".format(f, dfWithMask.toList))
       if (trueLoglik.isDefined) logger.info("Loglik actual-true delta: " + (f - trueLoglik.get))
 
       (f, DenseVector(dfWithMask) * (-1d))
@@ -71,6 +73,9 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
         (Double.NaN, params.map(v => Double.NaN))
       }
     }
+    
+    logger.info("loglik: %.2f, d: %s,".format(loglik, df.toString))
+    (loglik, df)
   }
 
   private def playerSkillMeanPrior(player: Player): Double = {

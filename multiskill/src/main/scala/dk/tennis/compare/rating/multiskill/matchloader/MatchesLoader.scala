@@ -9,27 +9,19 @@ import dk.atp.api.tournament.TournamentAtpApi.Tournament
 
 object MatchesLoader {
 
-  def loadTournaments(atpFile: String, yearFrom: Int, yearTo: Int): Seq[TournamentResult] = {
+  def loadMatches(atpFile: String, yearFrom: Int, yearTo: Int): Seq[MatchResult] = {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(atpFile)
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.servicePointsTotal > 10 && m.matchFacts.playerBFacts.servicePointsTotal > 10)
 
-    val matchesByTournament: Map[Tournament, Seq[MatchComposite]] = filteredMatches.groupBy(m => m.tournament)
+    val matchResults = fromMatches(filteredMatches)
 
-    val random = new Random(0)
-    val tournaments = matchesByTournament.keys.toList.sortBy(t => t.tournamentTime).map { t =>
-      val matches = matchesByTournament(t)
-      val matchResults = fromMatches(matches, random)
-      val players = matchResults.flatMap(r => List(r.player1, r.player2)).distinct
-
-      TournamentResult(t.tournamentTime, t.tournamentName, players, matchResults)
-    }
-
-    tournaments
+    matchResults
   }
 
-  private def fromMatches(matches: Seq[MatchComposite], random: Random = new Random(System.currentTimeMillis())): Seq[MatchResult] = {
+
+  private def fromMatches(matches: Seq[MatchComposite]): Seq[MatchResult] = {
     val gameResults = matches.map { m =>
 
       val player1 = m.matchFacts.playerAFacts.playerName
@@ -44,6 +36,7 @@ object MatchesLoader {
         m.matchFacts.playerBFacts.servicePointsWon, m.matchFacts.playerBFacts.servicePointsTotal)
 
       new MatchResult(
+        m.tournament.tournamentTime, m.tournament.tournamentName,
         m.matchFacts.playerAFacts.playerName,
         m.matchFacts.playerBFacts.playerName,
         m.tournament.tournamentTime,

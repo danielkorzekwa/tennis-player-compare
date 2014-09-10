@@ -1,10 +1,12 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff
+package dk.tennis.compare.rating.multiskill.model.matchmodel
 
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
+import scala.Array.canBuildFrom
 
 case class MatchPrediction(p1OnServeScore: Score, p2OnServeScore: Score, p1OnServePerfDiff: Gaussian, p2OnServePerfDiff: Gaussian) {
 
@@ -46,8 +48,8 @@ case class MatchPrediction(p1OnServeScore: Score, p2OnServeScore: Score, p1OnSer
   }
 
   def matchWinner(): Option[String] = {
-    val p1TotalPoints = p1OnServeScore.p1PointsWon + p2OnServeScore.p2PointsWon
-    val p2TotalPoints = p2OnServeScore.p1PointsWon + p1OnServeScore.p2PointsWon
+    val p1TotalPoints = p1OnServeScore.pointsWon.get._1 + p2OnServeScore.pointsWon.get._2
+    val p2TotalPoints = p2OnServeScore.pointsWon.get._1 + p1OnServeScore.pointsWon.get._2
 
     val winner = if (p1TotalPoints > p2TotalPoints) Some(p1OnServeScore.player1.playerName)
     else if (p2TotalPoints > p1TotalPoints) Some(p2OnServeScore.player1.playerName)

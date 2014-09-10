@@ -11,7 +11,7 @@ object OutcomeLik {
 
     val logliks = scores.zip(perfDiffs).filter { case (score, perfDiff) => filter(score) }.map {
       case (score, perfDiff) =>
-        val loglik = score.p1PointsWon * OutcomeLik.loglik(perfDiff, true) + score.p2PointsWon * OutcomeLik.loglik(perfDiff, false)
+        val loglik = score.pointsWon.get._1 * OutcomeLik.loglik(perfDiff, true) + score.pointsWon.get._2 * OutcomeLik.loglik(perfDiff, false)
       
         loglik
     }
@@ -39,7 +39,7 @@ object OutcomeLik {
       val varD = perfDiffsVarD(i)
       val score = scores(i)
 
-      val loglikD = score.p1PointsWon * OutcomeLik.loglikD(perfDiff, true, muD, varD) + score.p2PointsWon * OutcomeLik.loglikD(perfDiff, false, muD, varD)
+      val loglikD = score.pointsWon.get._1 * OutcomeLik.loglikD(perfDiff, true, muD, varD) + score.pointsWon.get._2 * OutcomeLik.loglikD(perfDiff, false, muD, varD)
       loglikD
     }.sum
     totalLogLikD

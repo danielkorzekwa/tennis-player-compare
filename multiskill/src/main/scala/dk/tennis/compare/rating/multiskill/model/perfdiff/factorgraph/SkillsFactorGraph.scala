@@ -16,42 +16,48 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFac
 case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skillsFactor: SkillsFactor) extends Logging {
 
   val variance = Matrix(2, 2, Array(Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity))
-  val priorGameToSkillsFactorMsg = CanonicalGaussian(Matrix.zeros(2, 1), variance)
+  val priorGameSkillsVarUpMsg = CanonicalGaussian(Matrix.zeros(2, 1), variance)
 
-  var gameToSkillsFactorMsgs: Seq[CanonicalGaussian] = (1 to scores.size).map { gameFactor =>
-    priorGameToSkillsFactorMsg
+  var gameSkillsVarUpMsgs: Seq[CanonicalGaussian] = (1 to scores.size).map { gameFactor =>
+    priorGameSkillsVarUpMsg
   }
 
   def sendMsgs() {
 
-    val gameSkillsMarginals = skillsFactor.getGameSkillsMarginals(gameToSkillsFactorMsgs)
+    val gameSkillsMarginals = skillsFactor.getGameSkillsMarginals(gameSkillsVarUpMsgs)
     val skillsToGameMsgs = calcSkillsToGameMsgs(gameSkillsMarginals)
 
-    gameToSkillsFactorMsgs = skillsToGameMsgs.zip(gameToSkillsFactorMsgs).zipWithIndex.map {
-      case ((skillsToGameMsg, gameToSkillsMsg), index) =>
-        try {
-          val model = GenericMultiPointCorModel(exp(2 * logPerfStdDev), exp(2 * logPerfStdDev))
+    gameSkillsVarUpMsgs = skillsToGameMsgs.zip(gameSkillsVarUpMsgs).zipWithIndex.map {
+      case ((skillsToGameMsg, gameSkillsVarUpMsg), index) =>
 
-          val p1PointsWon = scores(index).p1PointsWon
-          val p2PointsWon = scores(index).p2PointsWon
+        val newGameSkillsVarUpMsg = scores(index).pointsWon match {
+          case Some((p1PointsWon, p2PointsWon)) => {
+            try {
+              val model = GenericMultiPointCorModel(exp(2 * logPerfStdDev), exp(2 * logPerfStdDev))
 
-          var newDirectSkills = model.skillMarginals(skillsToGameMsg, p1PointsWon, p1PointsWon + p2PointsWon, threshold = 1e-4)
-          newDirectSkills = CanonicalGaussian(newDirectSkills.mean, Matrix(2, 2, Array(newDirectSkills.variance(0, 0), 0d, 0d, newDirectSkills.variance(1, 1))))
-          var directSkillsMsg = newDirectSkills / skillsToGameMsg
-          directSkillsMsg
-        } catch {
-          case e: Exception => {
-            logger.debug("Message passing error (single message)")
-            gameToSkillsMsg
+              var newDirectSkills = model.skillMarginals(skillsToGameMsg, p1PointsWon, p1PointsWon + p2PointsWon, threshold = 1e-4)
+              newDirectSkills = CanonicalGaussian(newDirectSkills.mean, Matrix(2, 2, Array(newDirectSkills.variance(0, 0), 0d, 0d, newDirectSkills.variance(1, 1))))
+              var directSkillsMsg = newDirectSkills / skillsToGameMsg
+              directSkillsMsg
+            } catch {
+              case e: Exception => {
+                logger.debug("Message passing error (single message)")
+                gameSkillsVarUpMsg
+              }
+            }
           }
+          case None => gameSkillsVarUpMsg
         }
+        
+        newGameSkillsVarUpMsg
+
     }
 
   }
 
   def calcSkillsToGameMsgs(gameSkillsMarginals: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {
 
-    val skillsToGameMsgs = gameSkillsMarginals.zip(gameToSkillsFactorMsgs).map {
+    val skillsToGameMsgs = gameSkillsMarginals.zip(gameSkillsVarUpMsgs).map {
       case (gameSkillsMarginal, gameToSkillsMsg) =>
 
         val skillsToGameMsg = gameSkillsMarginal / gameToSkillsMsg
@@ -62,6 +68,6 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
   }
 
   def getPlayerSkillsPriorMean(): Matrix = skillsFactor.getPlayerSkillsPriorMean()
-  def getPlayerSkillsMarginalMean(): Matrix = skillsFactor.getPlayerSkillsMarginalMean(gameToSkillsFactorMsgs)
+  def getPlayerSkillsMarginalMean(): Matrix = skillsFactor.getPlayerSkillsMarginalMean(gameSkillsVarUpMsgs)
 
 }

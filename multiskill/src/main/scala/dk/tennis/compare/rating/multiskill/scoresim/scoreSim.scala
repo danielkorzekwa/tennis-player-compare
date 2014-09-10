@@ -43,11 +43,11 @@ object scoreSim {
     val player1PointProb = exp(OutcomeLik.loglik(gamePerfDiff, true))
     var player1PointsWon = 0
     var player2PointsWon = 0
-    for (i <- 1 to score.p1PointsWon + score.p2PointsWon) {
+    for (i <- 1 to (score.pointsWon.get._1 + score.pointsWon.get._2)) {
       if (rand.nextDouble < player1PointProb) player1PointsWon += 1
       else player2PointsWon += 1
     }
-    val simulScore = score.copy(p1PointsWon = player1PointsWon, p2PointsWon = player2PointsWon)
+    val simulScore = score.copy(pointsWon = Some(player1PointsWon,player2PointsWon))
 
     simulScore
   }

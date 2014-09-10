@@ -27,7 +27,7 @@ case class GenericPerfDiff(createPlayersSkillsFactor: (Array[Player]) => SkillsF
   }
 
   def inferPerfDiffs(): Array[Gaussian] = {
-    val gameSkillsMarginals = skillsFactorGraph.skillsFactor.getGameSkillsMarginals(skillsFactorGraph.gameToSkillsFactorMsgs)
+    val gameSkillsMarginals = skillsFactorGraph.skillsFactor.getGameSkillsMarginals(skillsFactorGraph.gameSkillsVarUpMsgs)
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals).map(toMvnGaussian(_))
 
     val perfDiffs = gameSkillsToPerfDiffs(skillsToGameMsgs, logPerfStdDev).toArray
@@ -37,12 +37,12 @@ case class GenericPerfDiff(createPlayersSkillsFactor: (Array[Player]) => SkillsF
   }
 
   def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): MultivariateGaussian = {
-    skillsFactor.calcPosteriorSkillsForPlayer(playerName, skillOnServe, skillsFactorGraph.gameToSkillsFactorMsgs)
+    skillsFactor.calcPosteriorSkillsForPlayer(playerName, skillOnServe, skillsFactorGraph.gameSkillsVarUpMsgs)
   }
 
   def inferPerfDiffsWithD(): Tuple3[Array[Gaussian], Matrix, Matrix] = {
 
-    val (gameSkillsMarginals, gameSkillsMarginalsD) = skillsFactorGraph.skillsFactor.getGameSkillsMarginalsWithD(skillsFactorGraph.gameToSkillsFactorMsgs)
+    val (gameSkillsMarginals, gameSkillsMarginalsD) = skillsFactorGraph.skillsFactor.getGameSkillsMarginalsWithD(skillsFactorGraph.gameSkillsVarUpMsgs)
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals)
 
     val perfDiffs = gameSkillsToPerfDiffs(skillsToGameMsgs.map(toMvnGaussian(_)), logPerfStdDev).toArray
