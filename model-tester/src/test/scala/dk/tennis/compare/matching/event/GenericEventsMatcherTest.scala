@@ -14,12 +14,12 @@ import dk.tennis.compare.domain.BfMarket
 class GenericEventsMatcherTest {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2011.csv"
-  val tournaments = MatchesLoader.loadTournaments(matchesFile, 2006, 2011)
+  val matchResults = MatchesLoader.loadMatches(matchesFile, 2006, 2011)
 
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
   val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
 
-  val eventsMatcher = GenericEventsMatcher(tournaments, bfMarkets)
+  val eventsMatcher = GenericEventsMatcher(matchResults, bfMarkets)
 
   @Test def test_high_matching_prob {
 

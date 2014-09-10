@@ -6,19 +6,18 @@ import org.slf4j.LoggerFactory
 import dk.tennis.compare.domain.BfMarket
 import dk.tennis.compare.matching.event.GenericEventsMatcher
 import dk.tennis.compare.matching.playerspair.GenericPlayersPairMatcher
-import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 
-case class ExPricesMatchModel(atpTournaments: Seq[TournamentResult], bfMarkets: Seq[BfMarket]) {
+case class ExPricesMatchModel(matchResults: Seq[MatchResult], bfMarkets: Seq[BfMarket]) {
 
   private val log = LoggerFactory.getLogger(getClass)
-  val eventsMatcher = GenericEventsMatcher(atpTournaments, bfMarkets)
+  val eventsMatcher = GenericEventsMatcher(matchResults, bfMarkets)
 
-  def gameProb(tournament: TournamentResult, matchResult: MatchResult): Option[Double] = {
+  def gameProb(matchResult: MatchResult): Option[Double] = {
 
     val playersPairAtp = Tuple2(matchResult.player1, matchResult.player2)
-    val atpEventName =tournament.tournamentName
-    val atpEventYear = new DateTime(tournament.tournamentTime.getTime).getYear
+    val atpEventName =matchResult.tournamentName
+    val atpEventYear = new DateTime(matchResult.tournamentTime.getTime).getYear
 
     val matchedBfMarkets = bfMarkets.filter { bfMarket =>
 

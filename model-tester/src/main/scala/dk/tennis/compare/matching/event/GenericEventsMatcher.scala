@@ -3,7 +3,6 @@ package dk.tennis.compare.matching.event
 import dk.atp.api.domain.MatchComposite
 import org.joda.time.DateTime
 import dk.tennis.compare.domain.BfMarket
-import dk.tennis.compare.rating.multiskill.matchloader.TournamentResult
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 
 /**
@@ -12,7 +11,7 @@ import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
  * @author Daniel Korzekwa
  *
  */
-case class GenericEventsMatcher(atpTournaments: Seq[TournamentResult], betfairMarkets: Seq[BfMarket]) extends EventsMatcher {
+case class GenericEventsMatcher(matchResults: Seq[MatchResult], betfairMarkets: Seq[BfMarket]) extends EventsMatcher {
 
   /**Map[atpEventKey+bfEventKey,matchingProb]*/
   private val matchingProbs: Map[String, Double] = calcMatchingProbs()
@@ -32,15 +31,15 @@ case class GenericEventsMatcher(atpTournaments: Seq[TournamentResult], betfairMa
   private def calcMatchingProbs(): Map[String, Double] = {
 
     /**Map[bfEventKey,event markets]*/
+    val atpMarketsByEvent = matchResults.groupBy(m => getEventKey(m.tournamentName, new DateTime(m.tournamentTime.getTime).getYear))
     val bfMarketsByEvent = betfairMarkets.groupBy(m => getEventKey(m.eventName, new DateTime(m.scheduledOff).getYear))
 
     val matchingProbsList = for {
-      atpTournament <- atpTournaments
-      bfEvent <- bfMarketsByEvent.keys
+      atpTournament <- atpMarketsByEvent.keys.toList
+      bfEvent <- bfMarketsByEvent.keys.toList
 
-      val atpEvent = getEventKey(atpTournament.tournamentName, new DateTime(atpTournament.tournamentTime.getTime).getYear)
-      val eventPairKey = atpEvent.concat(bfEvent)
-      val matchingProb = calcMatchingProb(atpTournament.matchResults, bfMarketsByEvent(bfEvent))
+      val eventPairKey = atpTournament.concat(bfEvent)
+      val matchingProb = calcMatchingProb(atpMarketsByEvent(atpTournament), bfMarketsByEvent(bfEvent))
 
     } yield (eventPairKey, matchingProb)
 
