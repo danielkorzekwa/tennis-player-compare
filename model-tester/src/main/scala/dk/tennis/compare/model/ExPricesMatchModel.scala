@@ -13,7 +13,7 @@ case class ExPricesMatchModel(matchResults: Seq[MatchResult], bfMarkets: Seq[BfM
   private val log = LoggerFactory.getLogger(getClass)
   val eventsMatcher = GenericEventsMatcher(matchResults, bfMarkets)
 
-  def gameProb(matchResult: MatchResult): Option[Double] = {
+  def gamePrices(matchResult: MatchResult): Option[GamePrices] = {
 
     val playersPairAtp = Tuple2(matchResult.player1, matchResult.player2)
     val atpEventName =matchResult.tournamentName
@@ -35,8 +35,9 @@ case class ExPricesMatchModel(matchResults: Seq[MatchResult], bfMarkets: Seq[BfM
     matchedBfMarkets match {
 
       case List(bfMarket) => {
-        val price = bfMarket.runnerMap.values.find(runner => runner.name.toLowerCase() == matchResult.player1.toLowerCase()).get.price
-        Some(1d / price)
+        val p1Price = bfMarket.runnerMap.values.find(runner => runner.name.toLowerCase() == matchResult.player1.toLowerCase()).get.price
+          val p2Price = bfMarket.runnerMap.values.find(runner => runner.name.toLowerCase() == matchResult.player2.toLowerCase()).get.price
+       Some(GamePrices(matchResult.player1,matchResult.player2,p1Price,p2Price))
       }
       case Nil => None
       case _ => {

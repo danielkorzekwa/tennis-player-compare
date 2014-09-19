@@ -6,8 +6,8 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import breeze.linalg.DenseVector
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFuncShortLong
-import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiff
+import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
 
 case class PastDataMatchModel(matchResults: IndexedSeq[MatchResult]) extends MatchModel {
 
@@ -26,21 +26,21 @@ case class PastDataMatchModel(matchResults: IndexedSeq[MatchResult]) extends Mat
 
     val allScores = evidenceScores ++ predictionScores
 
-    val allPredictions = calcMatchPredictions(allScores)
+    val allPredictions = calcMatchPredictions(allScores,matchResults :+ matchResult)
     val matchPrediction = allPredictions.last
 
     matchPrediction
   }
 
-  private def calcMatchPredictions(scores: Array[Score]): Seq[MatchPrediction] = {
+  private def calcMatchPredictions(scores: Array[Score],matchResults:IndexedSeq[MatchResult]): Seq[MatchPrediction] = {
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, PlayerCovFuncShortLong(covarianceParams), players)
-    val infer = GenericPerfDiff(createPlayersSkillsFactor, logPerfStdDev, scores)
+    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, GenericSkillCovFunc(covarianceParams), players)
+    val infer = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
     infer.calibrateModel()
 
     val perfDiffs = infer.inferPerfDiffs()
 
-    val matchPredictions = MatchPrediction.toMatchPredictions(scores, perfDiffs)
+    val matchPredictions = MatchPrediction.toMatchPredictions(scores, perfDiffs,matchResults)
 
     matchPredictions
   }

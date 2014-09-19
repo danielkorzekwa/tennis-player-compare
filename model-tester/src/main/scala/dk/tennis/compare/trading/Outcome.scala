@@ -1,5 +1,5 @@
 package dk.tennis.compare.trading
 
-case class Outcome(price:Option[Double],trueProb:Double,win:Boolean) {
+case class Outcome(price:Double,trueProb:Double,win:Boolean) {
 
 }

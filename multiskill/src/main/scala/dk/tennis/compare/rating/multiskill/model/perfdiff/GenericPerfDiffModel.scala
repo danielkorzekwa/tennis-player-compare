@@ -12,7 +12,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.calibrate
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.gameSkillsToPerfDiffs
 
-case class GenericPerfDiff(createPlayersSkillsFactor: (Array[Player]) => SkillsFactor, logPerfStdDev: Double, scores: Array[Score],
+case class GenericPerfDiffModel(createPlayersSkillsFactor: (Array[Player]) => SkillsFactor, logPerfStdDev: Double, scores: Array[Score],
   threshold: Double = 1e-3) extends Logging {
 
   logger.debug("Creating factor graph")
@@ -26,7 +26,7 @@ case class GenericPerfDiff(createPlayersSkillsFactor: (Array[Player]) => SkillsF
     logger.debug("Calibrating factor graph - completed")
   }
 
-  def inferPerfDiffs(): Array[Gaussian] = {
+  def inferPerfDiffs(): Array[PerfDiff] = {
     val gameSkillsMarginals = skillsFactorGraph.skillsFactor.getGameSkillsMarginals(skillsFactorGraph.gameSkillsVarUpMsgs)
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals).map(toMvnGaussian(_))
 
@@ -40,7 +40,7 @@ case class GenericPerfDiff(createPlayersSkillsFactor: (Array[Player]) => SkillsF
     skillsFactor.calcPosteriorSkillsForPlayer(playerName, skillOnServe, skillsFactorGraph.gameSkillsVarUpMsgs)
   }
 
-  def inferPerfDiffsWithD(): Tuple3[Array[Gaussian], Matrix, Matrix] = {
+  def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix] = {
 
     val (gameSkillsMarginals, gameSkillsMarginalsD) = skillsFactorGraph.skillsFactor.getGameSkillsMarginalsWithD(skillsFactorGraph.gameSkillsVarUpMsgs)
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals)

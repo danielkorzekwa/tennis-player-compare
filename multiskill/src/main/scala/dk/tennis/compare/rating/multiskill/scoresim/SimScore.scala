@@ -3,8 +3,9 @@ package dk.tennis.compare.rating.multiskill.scoresim
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.gaussian.Gaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
 
-case class SimScore(gameSkills: MultivariateGaussian, gamePerfDiff: Gaussian, score: Score) {
+case class SimScore(gameSkills: MultivariateGaussian, gamePerfDiff: PerfDiff, score: Score) {
   def playerSkill(playerName: String): Gaussian = {
     
     if (score.player1.playerName.equals(playerName)) gameSkills.marginal(0)

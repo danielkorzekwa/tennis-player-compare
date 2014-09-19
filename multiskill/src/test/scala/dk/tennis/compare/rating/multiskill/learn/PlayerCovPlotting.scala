@@ -2,13 +2,12 @@ package dk.tennis.compare.rating.multiskill.learn
 
 import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFuncShort
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFuncShortLong
 import scala.math._
 import java.util.Date
 import dk.bayes.math.gaussian.MultivariateGaussian
 import breeze.plot.Figure
 import breeze.plot._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
 
 object PlayerCovPlotting extends App {
 
@@ -22,7 +21,7 @@ object PlayerCovPlotting extends App {
 
   private def sampleSkills(): Array[Double] = {
 
-    val covFunc = PlayerCovFuncShortLong(Array(-1.0208097533488787, 3.779464609040853, 0.08623887840621325, 8.158528184446062))
+    val covFunc = GenericSkillCovFunc(Array(-1.0208097533488787, 3.779464609040853, 0.08623887840621325, 8.158528184446062))
    // val covFunc = PlayerCovFuncShort(Array(log(1), log(300)))
     //val covFunc = PlayerCovFuncShortLong(Array(log(0.2), log(10), log(1), log(300)))
 

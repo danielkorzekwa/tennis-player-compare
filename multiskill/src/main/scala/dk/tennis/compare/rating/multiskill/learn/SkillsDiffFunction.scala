@@ -5,13 +5,14 @@ import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiff
+import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
 import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.SkillCovFunc
 
-case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, createPlayerCovFunc: (Array[Double]) => PlayerCovFunc, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
+case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, createPlayerCovFunc: (Array[Double]) => SkillCovFunc, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
 
   private var currSkillPriorMeanOnServe = skillPriorMeanOnServe
   private var currSkillPriorMeanOnReturn = skillPriorMeanOnReturn
@@ -28,7 +29,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
 
     def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, createPlayerCovFunc(covarianceParams), players)
 
-    val gp = GenericPerfDiff(createPlayersSkillsFactor, logPerfStdDev, scores)
+    val gp = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
     try {
       gp.calibrateModel()
     } catch {
@@ -40,13 +41,13 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
       val (perfDiffs, perfDiffsMeanD, perfDiffsVarD) =
         gp.inferPerfDiffsWithD()
 
-      val f = -OutcomeLik.totalLoglik(perfDiffs, scores, score => { score.player2.playerName.equals("Novak Djokovic"); true })
+      val f = -OutcomeLik.totalLoglik(perfDiffs.map(p => p.perfDiff), scores, score => { score.player2.playerName.equals("Novak Djokovic"); true })
 
       val df = (0 until perfDiffsMeanD.numCols).map { i =>
         val meanD = perfDiffsMeanD.column(i)
         val varD = perfDiffsVarD.column(i)
 
-        val partialDf = OutcomeLik.totalLoglikD(perfDiffs, meanD.toArray, varD.toArray, scores)
+        val partialDf = OutcomeLik.totalLoglikD(perfDiffs.map(p => p.perfDiff), meanD.toArray, varD.toArray, scores)
 
         partialDf
 

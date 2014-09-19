@@ -7,10 +7,15 @@ import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.matchloader.PlayerStats
 
 object MatchPredictionApp extends App {
-
-  val player1 = "Roger Federer"
-  val player2 = "Novak Djokovic"
-  val matchTime = new SimpleDateFormat("dd/mm/yyyy").parse("10/09/2014")
+   
+ 
+ 
+ 
+  
+ 
+  val player1 = "Laurent Lokoli"
+  val player2 = "Paolo Lorenzi"
+  val matchTime = new SimpleDateFormat("dd/mm/yyyy").parse("15/09/2014")
 
   val predictionResult = MatchResult(matchTime, "tournament name", player1, player2, matchTime, player1Won = true, numOfSets = 3, PlayerStats(0, 0, 0), PlayerStats(0, 0, 0))
 
@@ -22,7 +27,7 @@ object MatchPredictionApp extends App {
 
   val matchModel = PastDataMatchModel(matchResults.toIndexedSeq)
   val matchPrediction = matchModel.predict(predictionResult)
-  println("p1 wins prob=" + matchPrediction.matchProb(player1))
+  println("p1 wins prob=" + matchPrediction.matchProb(player1) + ":" + 1d/matchPrediction.matchProb(player1) + ":" + 1d/(1-matchPrediction.matchProb(player1)))
   println("p1 matches=" + p1Matches.size)
   println("p2 matches=" + p2Matches.size)
 }

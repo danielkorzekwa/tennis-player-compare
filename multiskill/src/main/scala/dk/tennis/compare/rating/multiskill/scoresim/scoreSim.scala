@@ -10,7 +10,6 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp._
 import dk.tennis.compare.rating.multiskill.model.perfdiff._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFuncShort
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov._
 
 /**
@@ -22,12 +21,12 @@ object scoreSim {
    * Returns scores with simulated points won by both players.
    *
    */
-  def apply(scores: Array[Score], meanFunc: Player => Double, playerCovFunc: PlayerCovFunc, logPerfStdDev: Double): Array[SimScore] = {
+  def apply(scores: Array[Score], meanFunc: Player => Double, playerCovFunc: SkillCovFunc, logPerfStdDev: Double): Array[SimScore] = {
 
     val rand = new Random(0)
 
     val gameSkills: Seq[MultivariateGaussian] = MultiGPSkillsFactor3(meanFunc, playerCovFunc, Score.toPlayers(scores)).sampleGameSkills(rand)
-    val gamePerfDiffs: Seq[Gaussian] = gameSkillsToPerfDiffs(gameSkills, logPerfStdDev)
+    val gamePerfDiffs: Seq[Gaussian] = gameSkillsToPerfDiffs(gameSkills, logPerfStdDev).map(p => p.perfDiff)
 
     val simulScores = scores.zip(gameSkills).map {
       case (score, gameSkills) =>
@@ -38,9 +37,9 @@ object scoreSim {
     simulScores
   }
 
-  def simScore(score: Score, gamePerfDiff: Gaussian, rand: Random): Score = {
+  def simScore(score: Score, gamePerfDiff: PerfDiff, rand: Random): Score = {
 
-    val player1PointProb = exp(OutcomeLik.loglik(gamePerfDiff, true))
+    val player1PointProb = exp(OutcomeLik.loglik(gamePerfDiff.perfDiff, true))
     var player1PointsWon = 0
     var player2PointsWon = 0
     for (i <- 1 to (score.pointsWon.get._1 + score.pointsWon.get._2)) {

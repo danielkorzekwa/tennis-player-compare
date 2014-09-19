@@ -7,8 +7,9 @@ import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear.doubleToLinearDouble
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.GPSkillMath
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.SkillCovFunc
 
-case class PlayerSkillsFactor(meanFunc: Player => Double, playerCovFunc: PlayerCovFunc, players: Array[Player]) {
+case class PlayerSkillsFactor(meanFunc: Player => Double, playerCovFunc: SkillCovFunc, players: Array[Player]) {
 
   private val priorSkillsMean = Matrix(players.map(p => meanFunc(p)))
 
@@ -43,7 +44,9 @@ case class PlayerSkillsFactor(meanFunc: Player => Double, playerCovFunc: PlayerC
 
     }
 
-    val covDs: Seq[Matrix] = playerCovFunc.covarianceMatrixD(players)
+    val covDs: Seq[Matrix] = (0 until playerCovFunc.getParams().size).map { i =>
+      Matrix(players.size, players.size, (rowIndex, colIndex) => playerCovFunc.covarianceD(players(rowIndex), players(colIndex), i))
+    }
 
     val skillPosteriorD = covDs.map(covD => PlayerSkills(calcSkillMarginalD(covD), players))
     skillPosteriorD

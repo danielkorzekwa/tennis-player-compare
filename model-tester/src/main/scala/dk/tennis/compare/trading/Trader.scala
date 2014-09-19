@@ -6,7 +6,7 @@ case class Trader {
   private var betsNum = 0
 
   def placeBet(outcome: Outcome) {
-    val price = outcome.price.get
+    val price = outcome.price
     val trueProb = outcome.trueProb
     val outcomeBit = if (outcome.win) 1 else 0
     val stake = 1
