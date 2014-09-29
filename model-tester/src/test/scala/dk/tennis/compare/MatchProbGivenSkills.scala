@@ -5,7 +5,7 @@ import dk.tennis.compare.rating.multiskill.model.matchmodel.calc.calcMatchProb
 
 object MatchProbGivenSkills extends App {
 
-  val p1OnServe = Gaussian(8.79, 0)
+  val p1OnServe = Gaussian(8.0, 0)
   val p1OnReturn = Gaussian(2.30, 0)
 
   val p2OnServe = Gaussian(7.4, 0)

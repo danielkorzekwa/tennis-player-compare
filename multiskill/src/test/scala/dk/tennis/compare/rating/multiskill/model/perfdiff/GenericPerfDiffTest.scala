@@ -29,9 +29,7 @@ class GenericPerfDiffTest extends Logging {
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
   val matchResults = MatchesLoader.loadMatches(matchesFile, 2008, 2011)
 
-  //  val playersList = HashSet("Roger Federer", "Novak Djokovic")
-  val playersList = HashSet[String]()
-  val realScores: Array[Score] = Score.toScores(matchResults, playersList)
+  val realScores: Array[Score] = Score.toScores(matchResults)
 
   val scores = realScores //simulateScores(realScores)
   val playerNames: Array[String] = Score.toPlayers(scores).map(p => p.playerName).distinct
@@ -54,9 +52,9 @@ class GenericPerfDiffTest extends Logging {
 
     println("Total/avg log lik: %.3f/%.4f".format(loglik, loglik / scores.map(s => s.pointsWon.get._1 + s.pointsWon.get._2).sum))
 
-   // println("Player skills on serve")
-  //  val p1SkillsMean = infer.calcPosteriorSkillsForPlayer("Roger Federer", true).m
-  //  println(p1SkillsMean)
+    // println("Player skills on serve")
+    //  val p1SkillsMean = infer.calcPosteriorSkillsForPlayer("Roger Federer", true).m
+    //  println(p1SkillsMean)
 
   }
 

@@ -20,24 +20,26 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFac
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import dk.tennis.compare.rating.multiskill.scoresim.scoreSim
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponenttype.OpponentTypeOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponenttype.OpponentType
+import scala.util.Random
 
 class LearnTennisParamsTest extends Logging {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-  val matchResults = MatchesLoader.loadMatches(matchesFile, 2008, 2011)
-
+  val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2011)
 
   logger.info("Simulating scores")
   val realScores: Array[Score] = Score.toScores(matchResults)
 
-  //simulate scores
-  val trueParams = DenseVector(log(0.2), log(10), log(1), log(300),log(0.00001),log(1), 2.3)
-  val (trueSkillMeanOnServe, trueSkillMeanOnReturn) = (5d, 0)
-  val meanFunc = (player: Player) => { if (player.onServe) trueSkillMeanOnServe else trueSkillMeanOnReturn }
-  val covFunc = GenericSkillCovFunc(trueParams.data.dropRight(1))
-  val simScores = scoreSim(realScores, meanFunc, covFunc, logPerfStdDev = trueParams.data.last)
- 
-  val scores = realScores//simScores.map(s => s.score) 
+  val rand = new Random()
+  val opponentMap = realScores.map(s => s.player1.playerName).map { playerName =>
+    playerName -> OpponentType(playerName, rand.nextBoolean)
+  }.toMap
+
+  val (scores, trueLoglik) = simulateScores(realScores)
+  // val (scores, trueLoglik) = (realScores,Double.NaN)//simulateScores(realScores)
+
   val playerNames: Array[String] = Score.toPlayers(scores).map(p => p.playerName).distinct
 
   logger.info(s"Players by name: ${playerNames.size}")
@@ -47,18 +49,10 @@ class LearnTennisParamsTest extends Logging {
     val skillPriorMeanOnServe = 5
     val skillPriorMeanOnReturn = 0
 
-    //short term covariance -log of signal standard deviation
-    //short term covariance - log of length scale standard deviation 
-    //log of player performance standard deviation
-    //log of the same opponent signal standard deviation
-     //log of every opponent signal standard deviation
-    val initialParams = DenseVector(
-     log(1),log(30),log(1), log(300), log(0.1),log(1),2.3)
+    val initialParams = DenseVector(log(1), log(0.4), log(0.6),
+      log(0.3), log(30), log(1), log(365), 2.3)
 
-    //   val trueLoglik = Double.NaN
-      val trueLoglik = SkillsDiffFunction(scores, trueSkillMeanOnServe, trueSkillMeanOnReturn, params => GenericSkillCovFunc(params)).calculate(trueParams)._1
-
-    val diffFunction = SkillsDiffFunction(scores, skillPriorMeanOnServe, skillPriorMeanOnReturn, params => GenericSkillCovFunc(params), gradientMask = Some(Array(1, 1, 1,1,1,1,0)), Some(trueLoglik))
+    val diffFunction = SkillsDiffFunction(scores, skillPriorMeanOnServe, skillPriorMeanOnReturn, params => OpponentTypeOverTimeCovFunc(params, opponentMap), gradientMask = Some(Array(1, 1, 1, 1, 1, 1,1, 0)), Some(trueLoglik))
 
     val optimizer = new LBFGS[DenseVector[Double]](maxIter = 100, m = 6, tolerance = 1.0E-9)
     val optIters = optimizer.iterations(diffFunction, initialParams).toList
@@ -66,6 +60,24 @@ class LearnTennisParamsTest extends Logging {
 
     println("Iterations = " + optIters.size)
 
+  }
+
+  /**
+   * Returns simulated scores, total loglik
+   */
+  private def simulateScores(scores: Array[Score]): Tuple2[Array[Score], Double] = {
+
+    val trueParams = DenseVector(log(1), log(0.4), log(0.6),
+      log(0.3), log(30), log(1), log(365), 2.3)
+
+    val (trueSkillMeanOnServe, trueSkillMeanOnReturn) = (5d, 0)
+    val meanFunc = (player: Player) => { if (player.onServe) trueSkillMeanOnServe else trueSkillMeanOnReturn }
+    val covFunc = OpponentTypeOverTimeCovFunc(trueParams.data.dropRight(1), opponentMap)
+    val simScores = scoreSim(scores, meanFunc, covFunc, logPerfStdDev = trueParams.data.last).map(s => s.score)
+
+    val trueLoglik = SkillsDiffFunction(simScores, trueSkillMeanOnServe, trueSkillMeanOnReturn, params => OpponentTypeOverTimeCovFunc(params, opponentMap)).calculate(trueParams)._1
+
+    (simScores, trueLoglik)
   }
 
 }

@@ -27,10 +27,9 @@ object Score {
     val player2OnServeScore = Score(player2OnServe, player1OnReturn, Some(r.p2Stats.servicePointsWon, r.p2Stats.servicePointsTotal - r.p2Stats.servicePointsWon))
     Array(player1OnServeScore, player2OnServeScore)
   }
-  def toScores(matchResults: Seq[MatchResult], playersFilter: Set[String] = HashSet()): Array[Score] = {
+  def toScores(matchResults: Seq[MatchResult]): Array[Score] = {
 
-    val scores = matchResults
-      .filter(r => playersFilter.isEmpty || (playersFilter.contains(r.player1) && playersFilter.contains(r.player2)))
+    val scores = matchResults  
       .flatMap { r => toScores(r) }
 
     scores.toArray

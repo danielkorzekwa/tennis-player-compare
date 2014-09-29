@@ -2,7 +2,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.
 
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 
-case class GenericSkillCovFunc(params: Seq[Double]) extends SkillCovFunc {
+case class GenericSkillCovFunc(params: Seq[Double]) extends CovFunc {
 
   val Seq(logSfShort, logEllShort, logSfLong, logEllLong,
     theSameOpponentLogSf, everyOpponentLogSf) = params

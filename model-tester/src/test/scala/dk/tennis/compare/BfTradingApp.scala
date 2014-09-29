@@ -9,26 +9,26 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import breeze.linalg.DenseVector
-import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
 import dk.tennis.compare.trading.Outcome
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.trading.Trader
-import dk.tennis.compare.rating.multiskill.model.matchmodel.LooMatchModel
 import dk.tennis.compare.model.ExPricesMatchModel
-import dk.tennis.compare.rating.multiskill.model.matchmodel.PastDataMatchModel
 import scala.util.Random
 import dk.tennis.compare.rating.multiskill.analysis.OnlineAvg
 import scala.math._
 import dk.tennis.compare.model.ExPricesMatchModel
+import dk.tennis.compare.rating.multiskill.model.matchmodel.LooMatchModel
+import scala.collection.immutable.HashSet
 
 object BfTradingApp extends App with Logging {
 
   logger.info("Starting BfTradingApp")
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-  val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2008, 2011))
- 
+  val playersSet = HashSet("Roger Federer", "Andy Roddick")
+  val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2008, 2011, playersSet))
+  logger.info("Matches=" + matchResults.size)
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
   val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
 
@@ -41,28 +41,28 @@ object BfTradingApp extends App with Logging {
 
   def run() {
 
-//trading simulation
- 
+    //trading simulation
+
     val trader = Trader()
-          val loglik = OnlineAvg()
-            matchResults.foreach { result =>
-              val exPrices = exPricesModel.gamePrices(result)
-        
-              if (exPrices.isDefined) {
-                val matchPrediction = matchModel.predict(result)
-        
-                val p1Price = exPrices.get.p1Price
-                val p1TrueProb = matchPrediction.matchProb(result.player1)
-                val win = result.player1Won
-                val outcome = Outcome(p1Price, p1TrueProb, win)
-                trader.placeBet(outcome)
-                //println(trader.getBetsNum + "," + trader.getProfit)
-        
-                val winnerProb = matchPrediction.matchProb(matchPrediction.matchWinner)
-                loglik.add(log(winnerProb))
-                 println("loglik: " + loglik.getAvg)
-              }
-            }
+    val loglik = OnlineAvg()
+    matchResults.foreach { result =>
+      val exPrices = exPricesModel.gamePrices(result)
+
+      if (exPrices.isDefined) {
+        val matchPrediction = matchModel.predict(result)
+
+        val p1Price = exPrices.get.p1Price
+        val p1TrueProb = matchPrediction.matchProb(result.player1)
+        val win = result.player1Won
+        val outcome = Outcome(p1Price, p1TrueProb, win)
+        trader.placeBet(outcome)
+        //println(trader.getBetsNum + "," + trader.getProfit)
+
+        val winnerProb = matchPrediction.matchProb(matchPrediction.matchWinner)
+        loglik.add(log(winnerProb))
+        println("loglik: " + loglik.getAvg)
+      }
+    }
 
     matchResults.foreach { result =>
       val exPrices = exPricesModel.gamePrices(result)
@@ -70,7 +70,7 @@ object BfTradingApp extends App with Logging {
       val player1 = "Roger Federer"
       val player2 = "Novak Djokovic"
 
-      if (result.containsPlayer(player1) && exPrices.isDefined) {
+      if (result.containsPlayer(player1)) {
         val matchPrediction = matchModel.predict(result)
 
         val playerExProb = if (exPrices.isDefined) 1d / exPrices.get.getPrice(player1) else Double.NaN

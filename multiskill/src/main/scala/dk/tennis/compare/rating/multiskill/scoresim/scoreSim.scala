@@ -21,7 +21,7 @@ object scoreSim {
    * Returns scores with simulated points won by both players.
    *
    */
-  def apply(scores: Array[Score], meanFunc: Player => Double, playerCovFunc: SkillCovFunc, logPerfStdDev: Double): Array[SimScore] = {
+  def apply(scores: Array[Score], meanFunc: Player => Double, playerCovFunc: CovFunc, logPerfStdDev: Double): Array[SimScore] = {
 
     val rand = new Random(0)
 

@@ -13,14 +13,14 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.c
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.factorops.calcPosteriorSkillsByPlayerMap
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.factorops.calcPosteriorSkillsByPlayerMap
 import dk.bayes.math.gaussian.Gaussian
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.SkillCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 
 object MultiGPSkillsFactor3 {
   case class PlayerKey(playerName: String, onServe: Boolean)
 
   implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
 
-  def apply(meanFunc: Player => Double, playerCovFunc: SkillCovFunc, players: Array[Player]): MultiGPSkillsFactor3 = {
+  def apply(meanFunc: Player => Double, playerCovFunc: CovFunc, players: Array[Player]): MultiGPSkillsFactor3 = {
 
     require(players.size == players.distinct.size, "Players are not unique")
 

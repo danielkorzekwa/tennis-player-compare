@@ -3,7 +3,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.linear.Matrix
 
-trait SkillCovFunc {
+trait CovFunc {
 
   def covarianceMatrix(players: Array[Player]): Matrix = Matrix(players.size, players.size, (rowIndex, colIndex) => covariance(players(rowIndex), players(colIndex))) + Matrix.identity(players.size) * 1e-5
 

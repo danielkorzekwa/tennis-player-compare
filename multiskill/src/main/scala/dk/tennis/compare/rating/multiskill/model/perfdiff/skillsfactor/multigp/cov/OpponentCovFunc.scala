@@ -14,7 +14,7 @@ import scala.math._
  * theSameOpponentLogSf -log of signal standard deviation
  * everyOpponentLogSf - log of length scale standard deviation
  */
-case class OpponentCovFunc(params: Seq[Double]) extends SkillCovFunc {
+case class OpponentCovFunc(params: Seq[Double]) extends CovFunc {
 
   val Seq(theSameOpponentLogSf, everyOpponentLogSf) = params
 
@@ -46,7 +46,7 @@ case class OpponentCovFunc(params: Seq[Double]) extends SkillCovFunc {
   }
 
   private def cov_df_d1(player1: Player, player2: Player): Double = {
-    0 + 2 * exp(everyOpponentLogSf)
+    0 + 2 * exp(2*everyOpponentLogSf)
   }
 
 }

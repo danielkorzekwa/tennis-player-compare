@@ -1,25 +1,25 @@
 package dk.tennis.compare.rating.multiskill.matchloader
 
 import scala.util.Random
-
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.MatchComposite
 import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.atp.api.tournament.TournamentAtpApi.Tournament
+import scala.collection.immutable.HashSet
 
 object MatchesLoader {
 
-  def loadMatches(atpFile: String, yearFrom: Int, yearTo: Int): Seq[MatchResult] = {
+  def loadMatches(atpFile: String, yearFrom: Int, yearTo: Int, playersFilter: Set[String] = HashSet()): Seq[MatchResult] = {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(atpFile)
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
     val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.servicePointsTotal > 10 && m.matchFacts.playerBFacts.servicePointsTotal > 10)
 
     val matchResults = fromMatches(filteredMatches)
+      .filter(r => playersFilter.isEmpty || (playersFilter.contains(r.player1) && playersFilter.contains(r.player2)))
 
     matchResults
   }
-
 
   private def fromMatches(matches: Seq[MatchComposite]): Seq[MatchResult] = {
     val gameResults = matches.map { m =>

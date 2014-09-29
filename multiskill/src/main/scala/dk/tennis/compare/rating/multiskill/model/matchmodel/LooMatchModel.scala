@@ -17,8 +17,9 @@ import scala.math._
  */
 case class LooMatchModel(matchResults: IndexedSeq[MatchResult]) extends MatchModel with Logging {
 
-  private val (priorSkillOnServe, priorSkillOnReturn) = (5d, 0)
-  private val initialParams = DenseVector(-1.0394676060535801, 3.8382339487840085, 0.0032389722419957287, 8.282433925904247,log(0.00001),log(1), 2.3)
+  private val (priorSkillOnServe, priorSkillOnReturn) = (4.96d, 0)
+  private val initialParams = DenseVector(-0.8905121105461389, 3.430519279367633, 0.05980742993570404, 8.036933411241728, log(1e-10),  log(1), 2.3)
+ //  private val initialParams = DenseVector(-0.8905121105461389, 3.430519279367633, 0.05980742993570404, 8.036933411241728, -1.7196515647057071, -0.0999651876799888, 2.3)
   private val covarianceParams = initialParams.data.dropRight(1)
   private val logPerfStdDev = initialParams.data.last
 

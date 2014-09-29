@@ -10,9 +10,9 @@ import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.SkillCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 
-case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, createPlayerCovFunc: (Array[Double]) => SkillCovFunc, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
+case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, createPlayerCovFunc: (Array[Double]) => CovFunc, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
 
   private var currSkillPriorMeanOnServe = skillPriorMeanOnServe
   private var currSkillPriorMeanOnReturn = skillPriorMeanOnReturn
@@ -70,7 +70,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
 
     } catch {
       case e: Exception => {
-        logger.warn("Perf diff inference error")
+        logger.warn("Perf diff inference error",e)
         (Double.NaN, params.map(v => Double.NaN))
       }
     }

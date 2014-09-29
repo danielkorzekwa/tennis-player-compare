@@ -11,7 +11,7 @@ import dk.bayes.math.linear.Matrix
  * logSf - long term covariance -log of signal standard deviation
  * logEll - long term covariance - log of length scale standard deviation
  */
-case class PlayerCovFunc(params: Seq[Double]) extends SkillCovFunc {
+case class PlayerCovFunc(params: Seq[Double]) extends CovFunc {
 
   val Seq(logSfShort, logEllShort,
     logSfLong, logEllLong) = params
