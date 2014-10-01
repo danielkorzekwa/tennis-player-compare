@@ -11,8 +11,12 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent.PlayerSkill
 
-case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, createPlayerCovFunc: (Array[Double]) => CovFunc, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
+/**
+ * @param priorSkillsGivenOpponent key - opponent name, value - player skills against opponent
+ */
+case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, priorSkillsGivenOpponent: Map[String, Seq[PlayerSkill]],playerCovFuncFactory: PlayerCovFuncFactory, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
 
   private var currSkillPriorMeanOnServe = skillPriorMeanOnServe
   private var currSkillPriorMeanOnReturn = skillPriorMeanOnReturn
@@ -27,7 +31,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
     val covarianceParams = params.data.dropRight(1)
     val logPerfStdDev = params.data.last
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, createPlayerCovFunc(covarianceParams), players)
+    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, playerCovFuncFactory.create(covarianceParams,priorSkillsGivenOpponent), players)
 
     val gp = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
     try {
