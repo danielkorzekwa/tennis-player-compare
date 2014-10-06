@@ -8,5 +8,5 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.c
  */
 trait PlayerCovFuncFactory {
 
-  def create(params: Seq[Double], skillsGivenOpponent: Map[String, Seq[PlayerSkill]]): CovFunc
+  def create(params: Seq[Double], skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]): CovFunc
 }

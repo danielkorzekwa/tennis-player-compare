@@ -16,10 +16,12 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.c
 /**
  * @param priorSkillsGivenOpponent key - opponent name, value - player skills against opponent
  */
-case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double, priorSkillsGivenOpponent: Map[String, Seq[PlayerSkill]],playerCovFuncFactory: PlayerCovFuncFactory, gradientMask: Option[Array[Double]] = None, trueLoglik: Option[Double] = None) extends DiffFunction[DenseVector[Double]] with Logging {
+case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double,
+  priorSkillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], priorSkillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]],
+  playerCovFuncFactory: PlayerCovFuncFactory, gradientMask: Option[Array[Double]] = None) extends DiffFunction[DenseVector[Double]] with Logging {
 
-  private var currSkillPriorMeanOnServe = skillPriorMeanOnServe
-  private var currSkillPriorMeanOnReturn = skillPriorMeanOnReturn
+  var currSkillPriorMeanOnServe = skillPriorMeanOnServe
+  var currSkillPriorMeanOnReturn = skillPriorMeanOnReturn
 
   def calculate(params: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
@@ -31,7 +33,10 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
     val covarianceParams = params.data.dropRight(1)
     val logPerfStdDev = params.data.last
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, playerCovFuncFactory.create(covarianceParams,priorSkillsGivenOpponent), players)
+    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = {
+      val skillsCov = playerCovFuncFactory.create(covarianceParams, priorSkillsOnServeGivenOpponent, priorSkillsOnReturnGivenOpponent)
+      MultiGPSkillsFactor3(playerSkillMeanPrior, skillsCov, players)
+    }
 
     val gp = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
     try {
@@ -68,17 +73,15 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
       currSkillPriorMeanOnServe = newPriorSkillMeanOnServe
       currSkillPriorMeanOnReturn = newPriorSkillMeanOnReturn
 
-      if (trueLoglik.isDefined) logger.info("Loglik actual-true delta: " + (f - trueLoglik.get))
-
       (f, DenseVector(dfWithMask) * (-1d))
 
     } catch {
       case e: Exception => {
-        logger.warn("Perf diff inference error",e)
+        logger.warn("Perf diff inference error", e)
         (Double.NaN, params.map(v => Double.NaN))
       }
     }
-    
+
     logger.info("loglik: %.2f, d: %s,".format(loglik, df.toString))
     (loglik, df)
   }

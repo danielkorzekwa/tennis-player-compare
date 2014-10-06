@@ -9,13 +9,14 @@ import dk.bayes.math.linear.Matrix
 /**
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent
  */
-case class OpponentOverTimeCovFunc(params: Seq[Double], skillsGivenOpponent: Map[String, Seq[PlayerSkill]]) extends CovFunc {
+case class OpponentOverTimeCovFunc(params: Seq[Double],
+  skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]) extends CovFunc {
 
   private val Seq(
     opponentCovLogSf, opponentCovLogEll,
     logSfShort, logEllShort, logSfLong, logEllLong) = params
 
-  private val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsGivenOpponent)
+  private val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
   private val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
 
   def getParams(): Seq[Double] = params
