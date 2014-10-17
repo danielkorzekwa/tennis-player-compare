@@ -22,10 +22,11 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
     priorGameSkillsVarUpMsg
   }
 
+  var allSkills = skillsFactor.calcPosteriorSkillsByPlayerMap2(gameSkillsVarUpMsgs)
+
   def sendMsgs() {
 
-    val gameSkillsMarginals = skillsFactor.getGameSkillsMarginals(gameSkillsVarUpMsgs)
-    val skillsToGameMsgs = calcSkillsToGameMsgs(gameSkillsMarginals)
+    val skillsToGameMsgs = calcSkillsToGameMsgs(allSkills.getGameSkillsMarginals())
 
     gameSkillsVarUpMsgs = skillsToGameMsgs.zip(gameSkillsVarUpMsgs).zipWithIndex.map {
       case ((skillsToGameMsg, gameSkillsVarUpMsg), index) =>
@@ -48,11 +49,12 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
           }
           case None => gameSkillsVarUpMsg
         }
-        
+
         newGameSkillsVarUpMsg
 
     }
 
+    allSkills = skillsFactor.calcPosteriorSkillsByPlayerMap2(gameSkillsVarUpMsgs)
   }
 
   def calcSkillsToGameMsgs(gameSkillsMarginals: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {
@@ -67,7 +69,7 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
     skillsToGameMsgs
   }
 
-  def getPlayerSkillsPriorMean(): Matrix = skillsFactor.getPlayerSkillsPriorMean()
-  def getPlayerSkillsMarginalMean(): Matrix = skillsFactor.getPlayerSkillsMarginalMean(gameSkillsVarUpMsgs)
+  def getPlayerSkillsPriorMean(): Matrix = allSkills.getPlayerSkillsPriorMean()
+  def getPlayerSkillsMarginalMean(): Matrix = allSkills.getPlayerSkillsMarginalMean()
 
 }

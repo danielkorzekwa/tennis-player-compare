@@ -8,6 +8,9 @@ import dk.bayes.infer.gp.cov.CovSEiso
 import scala.math._
 import scala.Array.canBuildFrom
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.GPSkillMath
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkills
+import dk.bayes.math.gaussian.Gaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.factorops.AllSkills
 
 /**
  * Uses a single gp for all players across all games. It's a reference implementation and it does not scale well.
@@ -30,6 +33,10 @@ case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends Ski
   private val priorPlayerSkills = CanonicalGaussian(priorSkillsMean, priorSkillsCov)
   private val covD = covarianceMatrix_df_ell(players, ell)
 
+  def calcPosteriorSkillsByPlayerMap2(gameSkillsVarUpMsgs: Seq[CanonicalGaussian]):AllSkills = throw new UnsupportedOperationException("Not implemented yet")
+  
+   def calcPlayerSkill(player: Player, gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Gaussian = throw new UnsupportedOperationException("Not implemented yet")
+  
    def getPriorSkillsForPlayer(playerName:String, skillOnServe:Boolean):MultivariateGaussian = throw new UnsupportedOperationException("Not implemented yet")
   
   def getGameSkillsMarginals(gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {
@@ -114,6 +121,6 @@ case class SingleGPSkillsFactor(ell: Double, players: Array[Player]) extends Ski
     onServeCov * theSamePlayerCov * timeDiffCov
   }
 
-  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean, gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): MultivariateGaussian = throw new UnsupportedOperationException("Not implemented yet")
+  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean, gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): PlayerSkills = throw new UnsupportedOperationException("Not implemented yet")
 
 }

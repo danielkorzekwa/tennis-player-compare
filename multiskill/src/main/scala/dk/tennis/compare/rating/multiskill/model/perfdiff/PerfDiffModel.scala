@@ -2,15 +2,16 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import dk.bayes.math.gaussian.Gaussian
 import dk.bayes.math.linear.Matrix
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkills
 
 trait PerfDiffModel {
 
-    /**
+  /**
    * Returns perf diffs for all games,
    *
    */
-  def inferPerfDiffs():Array[PerfDiff]
-  
+  def inferPerfDiffs(): Array[PerfDiff]
+
   /**
    * Returns Tuple3(
    * - Perf diffs for all games,
@@ -19,5 +20,11 @@ trait PerfDiffModel {
    * )
    */
   def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix]
+
+  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills
+
+  def calcPlayerSkill(player:Player):Gaussian
+  
+  def calibrateModel()
 
 }

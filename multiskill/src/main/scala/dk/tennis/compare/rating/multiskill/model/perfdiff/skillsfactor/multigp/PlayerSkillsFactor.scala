@@ -6,7 +6,6 @@ import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear.doubleToLinearDouble
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.GPSkillMath
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 
 case class PlayerSkillsFactor(meanFunc: Player => Double, playerCovFunc: CovFunc, players: Array[Player]) {

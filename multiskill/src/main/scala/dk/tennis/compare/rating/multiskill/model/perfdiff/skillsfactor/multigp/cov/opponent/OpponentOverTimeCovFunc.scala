@@ -16,8 +16,8 @@ case class OpponentOverTimeCovFunc(params: Seq[Double],
     opponentCovLogSf, opponentCovLogEll,
     logSfShort, logEllShort, logSfLong, logEllLong) = params
 
-  private val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
-  private val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
+  val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
+  val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
 
   def getParams(): Seq[Double] = params
 
@@ -29,6 +29,7 @@ case class OpponentOverTimeCovFunc(params: Seq[Double],
   }
 
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {
+
     val covD = paramIndex match {
 
       case 0 => opponentCovFunc.covarianceD(player1, player2, 0) * skillOverTimeCovFunc.covariance(player1, player2)
@@ -40,5 +41,9 @@ case class OpponentOverTimeCovFunc(params: Seq[Double],
     }
 
     covD
+  }
+
+  def opponentOnReturnSimMatrix(players: Seq[String]) = {
+    opponentCovFunc.opponentOnReturnSimMatrix(players)
   }
 }

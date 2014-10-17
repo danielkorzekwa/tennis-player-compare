@@ -11,7 +11,6 @@ import scala.collection.immutable.HashSet
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import breeze.linalg.DenseVector
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.PlayerCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import dk.tennis.compare.rating.multiskill.scoresim.scoreSim

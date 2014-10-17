@@ -11,4 +11,6 @@ trait CovFunc {
 
   def covarianceMatrix(players: Array[Player]): Matrix = Matrix(players.size, players.size, (rowIndex, colIndex) => covariance(players(rowIndex), players(colIndex))) + Matrix.identity(players.size) * 1e-5
 
+   def covarianceMatrix(playersA: Array[Player],playersB: Array[Player]): Matrix = Matrix(playersA.size, playersB.size, (rowIndex, colIndex) => covariance(playersA(rowIndex), playersB(colIndex)))
+
 }

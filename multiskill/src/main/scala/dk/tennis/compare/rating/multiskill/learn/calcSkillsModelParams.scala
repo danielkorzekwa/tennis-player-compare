@@ -12,7 +12,7 @@ object calcSkillsModelParams {
     gradientMask(gradientMask.size - 1) = 0 //do not learn performance variance
     val diffFunction = SkillsDiffFunction(scores,
       priorSkillParams.skillPriorMeanOnServe, priorSkillParams.skillPriorMeanOnReturn,
-      priorSkillParams.priorSkillsOnServeGivenOpponent, priorSkillParams.priorSkillsOnReturnGivenOpponent, skillsCovFactory,
+      priorSkillParams.skillsOnServeGivenOpponent, priorSkillParams.skillsOnReturnGivenOpponent, skillsCovFactory,
       Some(gradientMask))
 
     val optimizer = new LBFGS[DenseVector[Double]](maxIter = 100, m = 6, tolerance = 1.0E-9)
@@ -21,7 +21,7 @@ object calcSkillsModelParams {
 
     SkillsModelParams(diffFunction.currSkillPriorMeanOnServe, diffFunction.currSkillPriorMeanOnReturn,
       newParams.data,
-      priorSkillParams.priorSkillsOnServeGivenOpponent, priorSkillParams.priorSkillsOnReturnGivenOpponent)
+     diffFunction.currSkillsOnServeGivenOpponent, diffFunction.currSkillsOnReturnGivenOpponent)
 
   }
 }

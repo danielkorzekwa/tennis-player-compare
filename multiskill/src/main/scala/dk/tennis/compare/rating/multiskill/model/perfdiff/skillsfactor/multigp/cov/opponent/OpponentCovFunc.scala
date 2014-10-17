@@ -4,6 +4,8 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.c
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
+import scala.collection.mutable.Set
+import scala.collection.mutable.HashSet
 
 /**
  * Inspired by
@@ -19,44 +21,54 @@ case class OpponentCovFunc(params: Seq[Double],
 
   private val opponentCovFunc = new CovSEiso(sf = opponentCovLogSf, opponentCovLogEll)
 
+  private val opponentOnReturnSimMap = OpponentSimMap("onReturn", (playerName) => skillsOnServeGivenOpponent(playerName).map(skill => skill.skill).toArray, opponentCovFunc)
+  private val opponentOnServeSimMap = OpponentSimMap("onServe", (playerName) => skillsOnReturnGivenOpponent(playerName).map(skill => skill.skill).toArray, opponentCovFunc)
+
   def getParams(): Seq[Double] = params
 
   def covariance(player1: Player, player2: Player): Double = {
 
     require(player1.onServe == player2.onServe)
 
-    val (skillsGivenOpponent1, skillsGivenOpponent2) = skillsGivenOpponent(player1, player2)
-    val opponentCovVal = opponentCovFunc.cov(skillsGivenOpponent1, skillsGivenOpponent2)
-    opponentCovVal
+    val covValue = if (player1.onServe) {
+      opponentOnReturnSimMap.getCovValue(player1.opponentName, player2.opponentName)
+    } else {
+      opponentOnServeSimMap.getCovValue(player1.opponentName, player2.opponentName)
+    }
+
+    covValue.cov
   }
 
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {
 
-    val (skillsGivenOpponent1, skillsGivenOpponent2) = skillsGivenOpponent(player1, player2)
+    require(player1.onServe == player2.onServe)
+
+    val covValue = if (player1.onServe) {
+      opponentOnReturnSimMap.getCovValue(player1.opponentName, player2.opponentName)
+    } else {
+      opponentOnServeSimMap.getCovValue(player1.opponentName, player2.opponentName)
+    }
 
     val covD = paramIndex match {
 
-      case 0 => opponentCovFunc.df_dSf(skillsGivenOpponent1, skillsGivenOpponent2)
-      case 1 => opponentCovFunc.df_dEll(skillsGivenOpponent1, skillsGivenOpponent2)
+      case 0 => covValue.covDSf
+      case 1 => covValue.covDEll
 
     }
 
     covD
   }
 
-  private def skillsGivenOpponent(player1: Player, player2: Player): Tuple2[Matrix, Matrix] = {
-    require(player1.onServe == player2.onServe)
+  def opponentOnReturnSimMatrix(players: Seq[String]) = {
 
-    val (skillsGivenOpponent1, skillsGivenOpponent2) = if (player1.onServe) {
-      val skillsGivenOpponent1 = Matrix(skillsOnReturnGivenOpponent(player1.opponentName).map(skill => skill.skill).toArray)
-      val skillsGivenOpponent2 = Matrix(skillsOnReturnGivenOpponent(player2.opponentName).map(skill => skill.skill).toArray)
-      (skillsGivenOpponent1, skillsGivenOpponent2)
-    } else {
-      val skillsGivenOpponent1 = Matrix(skillsOnServeGivenOpponent(player1.opponentName).map(skill => skill.skill).toArray)
-      val skillsGivenOpponent2 = Matrix(skillsOnServeGivenOpponent(player2.opponentName).map(skill => skill.skill).toArray)
-      (skillsGivenOpponent1, skillsGivenOpponent2)
+    def simMatrixValue(rowIndex: Int, colIndex: Int): Double = {
+      val covValue = opponentOnReturnSimMap.getCovValue(players(rowIndex), players(colIndex)).cov
+
+      covValue
     }
 
-    (skillsGivenOpponent1, skillsGivenOpponent2)
+    val simMatrix = Matrix(players.size, players.size, (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex))
+    simMatrix
   }
+
 }

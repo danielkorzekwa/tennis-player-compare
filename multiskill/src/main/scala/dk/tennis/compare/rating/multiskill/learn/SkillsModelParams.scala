@@ -7,4 +7,4 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.c
  */
 case class SkillsModelParams(skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double,
   skillCovParams: Array[Double],
-  priorSkillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], priorSkillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]])
+ skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]])

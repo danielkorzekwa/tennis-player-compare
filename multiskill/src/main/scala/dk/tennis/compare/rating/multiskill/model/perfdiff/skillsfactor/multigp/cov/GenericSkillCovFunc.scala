@@ -1,6 +1,7 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov
 
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.skillovertime.SkillOverTimeCovFunc
 
 case class GenericSkillCovFunc(params: Seq[Double]) extends CovFunc {
 
@@ -8,7 +9,7 @@ case class GenericSkillCovFunc(params: Seq[Double]) extends CovFunc {
     theSameOpponentLogSf, everyOpponentLogSf) = params
 
   //basic covariances
-  private val playerCov = PlayerCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
+  private val playerCov = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
   private val opponentCov = OpponentCovFunc(List(theSameOpponentLogSf, everyOpponentLogSf))
 
   def covariance(player1: Player, player2: Player): Double = {
