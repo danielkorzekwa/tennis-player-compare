@@ -1,10 +1,10 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent
 
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.skillovertime.SkillOverTimeCovFunc
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.bayes.math.linear.Matrix
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 /**
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent

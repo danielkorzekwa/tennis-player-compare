@@ -1,9 +1,9 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.skillovertime
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime
 
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.linear.Matrix
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 case class SkillOverTimeCovFunc(params: Seq[Double]) extends CovFunc {
 

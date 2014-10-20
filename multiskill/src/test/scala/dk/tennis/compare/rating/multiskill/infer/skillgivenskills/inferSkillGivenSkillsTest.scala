@@ -7,8 +7,8 @@ import java.util.Date
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.linear.Matrix
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.skillovertime.SkillOverTimeCovFunc
 import scala.math._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 
 class inferSkillGivenSkillsTest {
 

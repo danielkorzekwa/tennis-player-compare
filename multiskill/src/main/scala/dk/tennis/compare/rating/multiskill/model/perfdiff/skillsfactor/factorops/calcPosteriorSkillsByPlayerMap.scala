@@ -1,22 +1,33 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.factorops
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops
 
 import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkillsFactor
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.linear.Matrix
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerKey
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerKey
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 object calcPosteriorSkillsByPlayerMap {
 
-   def apply(players:Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor],gameSkillsVarUpMsgs: Seq[CanonicalGaussian],
-        meanFunc: Player => Double, playerCovFunc: CovFunc):AllSkills = {
+  implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
+
+  def apply(players: Seq[Player], gameSkillsVarUpMsgs: Seq[CanonicalGaussian],
+    meanFunc: Player => Double, playerCovFunc: CovFunc): AllSkills = {
+
+    require(players.size == players.distinct.size, "Players are not unique")
+
+    val playersMap = players.groupBy(p => toPlayerKey(p)).mapValues(players => players.sortBy(p => (p.timestamp, p.onServe)))
+
+    val priorSkillsByPlayersMap = playersMap.map {
+      case (playerName, players) =>
+        (playerName, PlayerSkillsFactor(meanFunc, playerCovFunc, players.toArray))
+
+    }.toMap
 
     //key - player name
-    val skillVarUpMsgsByPlayer: Map[PlayerKey, Array[CanonicalGaussian]] = toSkillVarUpMsgsByPlayer(players,priorSkillsByPlayersMap,gameSkillsVarUpMsgs)
+    val skillVarUpMsgsByPlayer: Map[PlayerKey, Array[CanonicalGaussian]] = toSkillVarUpMsgsByPlayer(players, priorSkillsByPlayersMap, gameSkillsVarUpMsgs)
 
     val marginalSkillsByPlayerMap: Map[PlayerKey, PlayerSkills] = priorSkillsByPlayersMap.par.map {
       case (playerKey, priorSkills) =>
@@ -33,13 +44,13 @@ object calcPosteriorSkillsByPlayerMap {
         (playerKey, PlayerSkills(MultivariateGaussian(playerSkillsMarginal.mean, playerSkillsMarginal.variance), priorSkills.players))
     }.toList.toMap
 
-    AllSkills(players,priorSkillsByPlayersMap,marginalSkillsByPlayerMap,meanFunc,playerCovFunc)
+    AllSkills(players, priorSkillsByPlayersMap, marginalSkillsByPlayerMap, meanFunc, playerCovFunc)
   }
-   
-    /**
+
+  /**
    * Returns Map[player name,skillsVarUpMsgs]
    */
-  private def toSkillVarUpMsgsByPlayer(players:Seq[Player],priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor],gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Map[PlayerKey, Array[CanonicalGaussian]] = {
+  private def toSkillVarUpMsgsByPlayer(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor], gameSkillsVarUpMsgs: Seq[CanonicalGaussian]): Map[PlayerKey, Array[CanonicalGaussian]] = {
     val skillsVarUpMsgsByPlayer: Map[PlayerKey, Array[CanonicalGaussian]] = gameSkillsVarUpMsgs.zipWithIndex.flatMap {
       case (msg, index) =>
 

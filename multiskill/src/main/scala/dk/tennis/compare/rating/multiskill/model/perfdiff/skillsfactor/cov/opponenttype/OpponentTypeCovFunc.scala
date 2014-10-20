@@ -1,8 +1,8 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponenttype
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype
 
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.math._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 case class OpponentTypeCovFunc(params: Seq[Double], opponentTypeMap: Map[String, OpponentType]) extends CovFunc {
 

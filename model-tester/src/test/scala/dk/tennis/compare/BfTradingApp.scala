@@ -6,8 +6,6 @@ import dk.tennis.compare.domain.BfMarket
 import dk.tennis.compare.matching.event.GenericEventsMatcher
 import dk.tennis.compare.model.ExPricesMatchModel
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import breeze.linalg.DenseVector
 import dk.tennis.compare.trading.Outcome
 import com.typesafe.scalalogging.slf4j.Logging
@@ -20,6 +18,7 @@ import scala.math._
 import dk.tennis.compare.model.ExPricesMatchModel
 import dk.tennis.compare.rating.multiskill.model.matchmodel.LooMatchModel
 import scala.collection.immutable.HashSet
+import dk.tennis.compare.model.ExPricesMatchModel
 
 object BfTradingApp extends App with Logging {
 

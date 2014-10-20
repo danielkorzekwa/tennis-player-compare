@@ -1,11 +1,11 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent
 
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.collection.mutable.Set
 import scala.collection.mutable.HashSet
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 /**
  * Inspired by

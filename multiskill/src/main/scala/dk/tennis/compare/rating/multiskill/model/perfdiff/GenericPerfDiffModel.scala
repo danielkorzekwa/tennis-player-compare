@@ -9,18 +9,17 @@ import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.calibrate
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.gameSkillsToPerfDiffs
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.inferSkillGivenSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
-case class GenericPerfDiffModel(createPlayersSkillsFactor: (Array[Player]) => SkillsFactor, logPerfStdDev: Double, scores: Array[Score],
+case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFunc, logPerfStdDev: Double, scores: Array[Score],
   threshold: Double = 1e-3) extends PerfDiffModel with Logging {
 
   logger.debug("Creating factor graph")
-  val players = Score.toPlayers(scores)
-  val skillsFactor = createPlayersSkillsFactor(players)
-  val skillsFactorGraph = SkillsFactorGraph(scores, logPerfStdDev, skillsFactor)
+  val skillsFactorGraph = SkillsFactorGraph(meanFunc, playerCovFunc, scores, logPerfStdDev)
 
   def calibrateModel() {
     logger.debug("Calibrating factor graph")

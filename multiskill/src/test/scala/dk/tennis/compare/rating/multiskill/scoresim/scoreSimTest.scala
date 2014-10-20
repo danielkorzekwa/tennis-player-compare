@@ -13,7 +13,7 @@ import breeze.plot._
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.linear.Matrix
 import java.util.Date
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 
 class scoreSimTest {
 
@@ -25,7 +25,7 @@ class scoreSimTest {
   @Test def test {
 
     val meanFunc = (player: Player) => { if (player.onServe) 5d else 0 }
-    val covFunc = GenericSkillCovFunc(Array(log(0.2), log(10), log(1), log(300)))
+    val covFunc = SkillOverTimeCovFunc(Array(log(0.2), log(10), log(1), log(300)))
     val simulScores = scoreSim(scores, meanFunc, covFunc, logPerfStdDev = 2.3)
 
     val p1 = "Roger Federer"

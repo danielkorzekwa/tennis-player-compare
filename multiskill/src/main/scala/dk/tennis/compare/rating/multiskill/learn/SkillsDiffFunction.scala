@@ -2,15 +2,12 @@ package dk.tennis.compare.rating.multiskill.learn
 
 import breeze.optimize.DiffFunction
 import breeze.linalg.DenseVector
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
 import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent.PlayerSkill
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 
 /**
  * @param priorSkillsGivenOpponent key - opponent name, value - player skills against opponent
@@ -35,12 +32,8 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
     val covarianceParams = params.data.dropRight(1)
     val logPerfStdDev = params.data.last
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = {
-      val skillsCov = playerCovFuncFactory.create(covarianceParams, currSkillsOnServeGivenOpponent, currSkillsOnReturnGivenOpponent)
-      MultiGPSkillsFactor3(playerSkillMeanPrior, skillsCov, players)
-    }
-
-    val gp = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
+    val skillsCov = playerCovFuncFactory.create(covarianceParams, currSkillsOnServeGivenOpponent, currSkillsOnReturnGivenOpponent)
+    val gp = GenericPerfDiffModel(playerSkillMeanPrior, skillsCov, logPerfStdDev, scores)
     try {
       gp.calibrateModel()
     } catch {
@@ -76,18 +69,18 @@ case class SkillsDiffFunction(scores: Array[Score], skillPriorMeanOnServe: Doubl
       currSkillPriorMeanOnReturn = newPriorSkillMeanOnReturn
 
       //learn skills given opponent
-//      currSkillsOnServeGivenOpponent = currSkillsOnServeGivenOpponent.map {
-//        case (player, skills) =>
-//
-//          val newSkills = skills.map(s => PlayerSkill(gp.calcPlayerSkill(s.player).m, s.player))
-//          (player, newSkills)
-//      }
-//      currSkillsOnReturnGivenOpponent = currSkillsOnReturnGivenOpponent.map {
-//        case (player, skills) =>
-//
-//          val newSkills = skills.map(s => PlayerSkill(gp.calcPlayerSkill(s.player).m, s.player))
-//          (player, newSkills)
-//      }
+      //      currSkillsOnServeGivenOpponent = currSkillsOnServeGivenOpponent.map {
+      //        case (player, skills) =>
+      //
+      //          val newSkills = skills.map(s => PlayerSkill(gp.calcPlayerSkill(s.player).m, s.player))
+      //          (player, newSkills)
+      //      }
+      //      currSkillsOnReturnGivenOpponent = currSkillsOnReturnGivenOpponent.map {
+      //        case (player, skills) =>
+      //
+      //          val newSkills = skills.map(s => PlayerSkill(gp.calcPlayerSkill(s.player).m, s.player))
+      //          (player, newSkills)
+      //      }
 
       (f, DenseVector(dfWithMask) * (-1d))
 

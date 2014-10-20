@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor
 
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player

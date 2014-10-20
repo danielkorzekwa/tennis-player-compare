@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponenttype
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype
 
 /**
  * If false then player is defensive

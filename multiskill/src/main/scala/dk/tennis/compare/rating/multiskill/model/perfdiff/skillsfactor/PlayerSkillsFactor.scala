@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor
 
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.linear.Matrix
@@ -6,7 +6,8 @@ import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear.doubleToLinearDouble
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.GPSkillMath
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
+import scala.Array.canBuildFrom
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 case class PlayerSkillsFactor(meanFunc: Player => Double, playerCovFunc: CovFunc, players: Array[Player]) {
 

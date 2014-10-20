@@ -11,9 +11,11 @@ import dk.bayes.math.gaussian.MultivariateGaussian
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops.calcPosteriorSkillsByPlayerMap
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
-case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skillsFactor: SkillsFactor) extends Logging {
+case class SkillsFactorGraph(meanFunc: Player => Double, playerCovFunc: CovFunc,scores: Array[Score], logPerfStdDev: Double) extends Logging {
 
   val variance = Matrix(2, 2, Array(Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity))
   val priorGameSkillsVarUpMsg = CanonicalGaussian(Matrix.zeros(2, 1), variance)
@@ -22,7 +24,9 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
     priorGameSkillsVarUpMsg
   }
 
-  var allSkills = skillsFactor.calcPosteriorSkillsByPlayerMap2(gameSkillsVarUpMsgs)
+   val players = Score.toPlayers(scores)
+  
+  var allSkills = calcPosteriorSkillsByPlayerMap(players,gameSkillsVarUpMsgs,meanFunc,playerCovFunc)
 
   def sendMsgs() {
 
@@ -54,7 +58,7 @@ case class SkillsFactorGraph(scores: Array[Score], logPerfStdDev: Double, skills
 
     }
 
-    allSkills = skillsFactor.calcPosteriorSkillsByPlayerMap2(gameSkillsVarUpMsgs)
+    allSkills = calcPosteriorSkillsByPlayerMap(players,gameSkillsVarUpMsgs,meanFunc,playerCovFunc)
   }
 
   def calcSkillsToGameMsgs(gameSkillsMarginals: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {

@@ -6,11 +6,11 @@ import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import scala.math._
 import scala.util.Random
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp._
 import dk.tennis.compare.rating.multiskill.model.perfdiff._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov._
 
 /**
  * Simulates scores from a history of tennis matches
@@ -25,7 +25,7 @@ object scoreSim {
 
     val rand = new Random(0)
 
-    val gameSkills: Seq[MultivariateGaussian] = MultiGPSkillsFactor3(meanFunc, playerCovFunc, Score.toPlayers(scores)).sampleGameSkills(rand)
+    val gameSkills: Seq[MultivariateGaussian] = sampleGameSkills(Score.toPlayers(scores),meanFunc, playerCovFunc)
     val gamePerfDiffs: Seq[Gaussian] = gameSkillsToPerfDiffs(gameSkills, logPerfStdDev).map(p => p.perfDiff)
 
     val simulScores = scores.zip(gameSkills).map {

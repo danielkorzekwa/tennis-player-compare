@@ -10,18 +10,18 @@ import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import calcSkillsModelParamsTest._
 import scala.util.Random
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponenttype.OpponentType
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponenttype.OpponentTypeOverTimeCovFunc
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent.PlayerSkill
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.scoresim.scoreSim
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent.OpponentOverTimeCovFunc
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.opponent.OpponentOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.OpponentCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentType
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentTypeOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.OpponentOverTimeCovFunc
 
 class calcSkillsModelParamsTest extends Logging {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-  val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2011)//.take(100)
+  val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2011) //.take(100)
 
   logger.info("Simulating scores")
   val realScores: Array[Score] = Score.toScores(matchResults)
@@ -36,12 +36,12 @@ class calcSkillsModelParamsTest extends Logging {
   @Test def test {
 
     logger.info("Learning parameters...")
-    //  val skillCovParams = Array(log(1), log(0.4), log(0.6),
-    //    log(0.3), log(30), log(1), log(365), 2.3)
-
-    val skillCovParams = Array(log(1), log(0.4),
+    val skillCovParams = Array(log(1), log(0.4), log(0.6),
       log(0.3), log(30), log(1), log(365), 2.3)
-    val skillCovFactory = OpponentSkillCovFactory()
+
+    //  val skillCovParams = Array(log(1), log(0.4),
+    //    log(0.3), log(30), log(1), log(365), 2.3)
+    //val skillCovFactory = OpponentSkillCovFactory()
 
     val priorSkillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player1))
     val priorSkillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player2))
@@ -50,7 +50,7 @@ class calcSkillsModelParamsTest extends Logging {
       skillPriorMeanOnServe = 0, skillPriorMeanOnReturn = 0,
       skillCovParams, priorSkillsOnServeGivenOpponent, priorSkillsOnReturnGivenOpponent)
 
-    val skillsModelParams = calcSkillsModelParams(priorModelParams, skillCovFactory, scores)
+    val skillsModelParams = calcSkillsModelParams(priorModelParams, trueSkillCovFactory, scores)
 
     println("-----------------------")
     println("Prior skill cov params: " + priorModelParams.skillCovParams.toList)
@@ -59,12 +59,10 @@ class calcSkillsModelParamsTest extends Logging {
     println("Prior skill mean on serve/return: " + priorModelParams.skillPriorMeanOnServe + "/" + priorModelParams.skillPriorMeanOnReturn)
     println("New skill mean on serve/return: " + skillsModelParams.skillPriorMeanOnServe + "/" + skillsModelParams.skillPriorMeanOnReturn)
 
-    val playerCovFunc = skillCovFactory.create(
-      skillsModelParams.skillCovParams.dropRight(1),
-      skillsModelParams.skillsOnServeGivenOpponent, skillsModelParams.skillsOnReturnGivenOpponent).asInstanceOf[OpponentOverTimeCovFunc]
+    val playerCovFunc = OpponentCovFunc(Array(log(1), log(2)),skillsModelParams.skillsOnServeGivenOpponent, skillsModelParams.skillsOnReturnGivenOpponent)
 
     val playerNamesOffensive = trueSkillCovFactory.opponentMap.values.filter(o => o.offensive).map(o => o.player).take(10).toList
-     val playerNamesDefensive = trueSkillCovFactory.opponentMap.values.filter(o => !o.offensive).map(o => o.player).take(10).toList
+    val playerNamesDefensive = trueSkillCovFactory.opponentMap.values.filter(o => !o.offensive).map(o => o.player).take(10).toList
     val m = playerCovFunc.opponentOnReturnSimMatrix(playerNamesOffensive ::: playerNamesDefensive)
 
     println(m)
@@ -80,7 +78,7 @@ class calcSkillsModelParamsTest extends Logging {
 
     val skillsGivenOpponentMap = allPlayers.map { playerKey =>
 
-      val skills = playersGivenOpponent.map(p => PlayerSkill(rand.nextDouble*0.1, p.copy(opponentName = playerKey))).toSeq
+      val skills = playersGivenOpponent.map(p => PlayerSkill(rand.nextDouble * 0.1, p.copy(opponentName = playerKey))).toSeq
       (playerKey, skills)
     }.toMap
 

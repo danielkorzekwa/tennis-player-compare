@@ -1,15 +1,15 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.factorops
+package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops
 
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerKey
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerKey
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.inferSkillGivenSkills
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.CovFunc
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkillsFactor
 import dk.bayes.math.gaussian.MultivariateGaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor],skillsMap: Map[PlayerKey, PlayerSkills],
   meanFunc: Player => Double, playerCovFunc: CovFunc) {

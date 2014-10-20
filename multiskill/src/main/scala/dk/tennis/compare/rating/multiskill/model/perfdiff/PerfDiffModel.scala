@@ -2,7 +2,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import dk.bayes.math.gaussian.Gaussian
 import dk.bayes.math.linear.Matrix
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.PlayerSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 
 trait PerfDiffModel {
 

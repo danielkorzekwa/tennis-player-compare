@@ -11,12 +11,9 @@ import scala.collection.immutable.HashSet
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import breeze.linalg.DenseVector
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import dk.tennis.compare.rating.multiskill.scoresim.scoreSim
 import dk.tennis.compare.rating.multiskill.model.matchmodel.MatchPrediction
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 
 class GenericPerfDiffTest extends Logging {
 
@@ -38,8 +35,7 @@ class GenericPerfDiffTest extends Logging {
 
   @Test def test {
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, GenericSkillCovFunc(covarianceParams), players)
-    val infer = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
+    val infer = GenericPerfDiffModel(playerSkillMeanPrior, SkillOverTimeCovFunc(covarianceParams), logPerfStdDev, scores)
     infer.calibrateModel()
     // println(infer.skillsFactor.getPriorSkillsForPlayer("Roger Federer", true).v)
 
@@ -64,7 +60,7 @@ class GenericPerfDiffTest extends Logging {
 
   private def simulateScores(realScores: Array[Score]): Array[Score] = {
     val meanFunc = (player: Player) => { if (player.onServe) priorSkillOnServe else priorSkillOnReturn }
-    val covFunc = GenericSkillCovFunc(initialParams.data.take(4))
+    val covFunc = SkillOverTimeCovFunc(initialParams.data.take(4))
     val simScores = scoreSim(realScores, meanFunc, covFunc, logPerfStdDev = initialParams.data.last)
     val scores = simScores.map(s => s.score)
     scores

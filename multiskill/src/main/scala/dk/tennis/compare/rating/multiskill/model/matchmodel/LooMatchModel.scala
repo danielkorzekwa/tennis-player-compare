@@ -3,13 +3,11 @@ package dk.tennis.compare.rating.multiskill.model.matchmodel
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.SkillsFactor
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.MultiGPSkillsFactor3
 import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
 import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.multigp.cov.GenericSkillCovFunc
 import scala.math._
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 
 /**
  *  Leave one out match prediction model
@@ -36,8 +34,7 @@ case class LooMatchModel(matchResults: IndexedSeq[MatchResult]) extends MatchMod
   private def calcMatchPredictions(): Seq[MatchPrediction] = {
     val scores = Score.toScores(matchResults)
 
-    def createPlayersSkillsFactor(players: Array[Player]): SkillsFactor = MultiGPSkillsFactor3(playerSkillMeanPrior, GenericSkillCovFunc(covarianceParams), players)
-    val infer = GenericPerfDiffModel(createPlayersSkillsFactor, logPerfStdDev, scores)
+    val infer = GenericPerfDiffModel(playerSkillMeanPrior, SkillOverTimeCovFunc(covarianceParams), logPerfStdDev, scores)
     infer.calibrateModel()
 
     val perfDiffs = infer.inferPerfDiffs()
