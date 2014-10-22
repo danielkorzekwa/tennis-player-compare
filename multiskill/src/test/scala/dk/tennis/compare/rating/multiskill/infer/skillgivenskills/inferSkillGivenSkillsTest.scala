@@ -9,6 +9,7 @@ import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.bayes.math.linear.Matrix
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 
 class inferSkillGivenSkillsTest {
 
@@ -27,11 +28,14 @@ class inferSkillGivenSkillsTest {
 
   val skillsGaussian = MultivariateGaussian(skillsMean, skillsVar)
 
+  val playerSkills = PlayerSkills(skillsGaussian, players)
+
   @Test def test {
 
     val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day))
 
-    val playerSkill = inferSkillGivenSkills(players, skillsGaussian, player, skillCovFunc, skillMeanFunc)
+    val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
+    val playerSkill = infer.infer(player)
     assertEquals(0.1950, playerSkill.m, 0.0001)
     assertEquals(1.0900, playerSkill.v, 0.0001)
   }
@@ -40,9 +44,25 @@ class inferSkillGivenSkillsTest {
 
     val player = Player("p1", "p5", onServe = true, timestamp = new Date(1200 * day))
 
-    val playerSkill = inferSkillGivenSkills(players, skillsGaussian, player, skillCovFunc, skillMeanFunc)
+    val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
+    val playerSkill = infer.infer(player)
 
     assertEquals(0.6174, playerSkill.m, 0.0001)
     assertEquals(1.0900, playerSkill.v, 0.0001)
+  }
+
+  @Test def perf_test {
+
+    val allPlayers = (1 to 100).flatMap(i => players).toArray
+    val skillsMean = Matrix.zeros(allPlayers.size, 1)
+    val skillsVar = skillCovFunc.covarianceMatrix(allPlayers)
+    val skillsGaussian = MultivariateGaussian(skillsMean, skillsVar)
+    val playerSkills = PlayerSkills(skillsGaussian, allPlayers)
+
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day))
+
+    val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
+    (1 to 200).foreach(i => infer.infer(player))
+
   }
 }

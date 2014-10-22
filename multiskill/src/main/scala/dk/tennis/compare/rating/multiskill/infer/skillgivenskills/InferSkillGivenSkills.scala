@@ -6,22 +6,27 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 
 /**
  * Infer player skill given other players skills
  */
-object inferSkillGivenSkills {
+case class InferSkillGivenSkills(playerSkills: PlayerSkills, playerCovFunc: CovFunc, skillMeanFunc: (Player) => Double) {
 
-  def apply(players: Array[Player], x: MultivariateGaussian, z: Player, playerCovFunc: CovFunc, skillMeanFunc: (Player) => Double): Gaussian = {
+  private val players = playerSkills.players
+  private val x = playerSkills.skillsGaussian
+
+  private val xSkillMean = Matrix(players.map(p => skillMeanFunc(p)))
+  private val KxxInv = x.v.inv
+
+  def infer(z: Player): Gaussian = {
 
     /** A and Kz_x parameters for p(z|x)*/
-
-    val KxxInv = x.v.inv
     val Kzx = playerCovFunc.covarianceMatrix(Array(z), players)
-    val Kxz = playerCovFunc.covarianceMatrix(players, Array(z))
+    val Kxz = Kzx.t
+
     val Kzz = playerCovFunc.covarianceMatrix(Array(z))
 
-    val xSkillMean = Matrix(players.map(p => skillMeanFunc(p)))
     val zSkillMean = Matrix(skillMeanFunc(z))
 
     val A = Kzx * KxxInv

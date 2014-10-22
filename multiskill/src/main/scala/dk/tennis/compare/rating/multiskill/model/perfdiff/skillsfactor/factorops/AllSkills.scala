@@ -6,17 +6,17 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.gaussian.Gaussian
-import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.inferSkillGivenSkills
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.InferSkillGivenSkills
 
-case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor],skillsMap: Map[PlayerKey, PlayerSkills],
+case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor], skillsMap: Map[PlayerKey, PlayerSkills],
   meanFunc: Player => Double, playerCovFunc: CovFunc) {
 
   implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
 
-   def getPlayerSkillsPriorMean(): Matrix = Matrix(players.toArray.map(p => priorSkillsByPlayersMap(p).priorPlayerSkills.marginal(p).m))
+  def getPlayerSkillsPriorMean(): Matrix = Matrix(players.toArray.map(p => priorSkillsByPlayersMap(p).priorPlayerSkills.marginal(p).m))
 
   def getPlayerSkillsMarginalMean(): Matrix = {
 
@@ -51,7 +51,7 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
 
   }
 
-   def getGameSkillsMarginalsWithD(): Tuple2[Seq[CanonicalGaussian], Seq[Seq[MultivariateGaussian]]] = {
+  def getGameSkillsMarginalsWithD(): Tuple2[Seq[CanonicalGaussian], Seq[Seq[MultivariateGaussian]]] = {
 
     val gameSkillsMarginals = getGameSkillsMarginals()
     val gameSkillsMarginalsD = getGameSkillsMarginalsD()
@@ -59,8 +59,8 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
     (gameSkillsMarginals, gameSkillsMarginalsD)
 
   }
-   
-    /**
+
+  /**
    * Returns partial derivatives of skills marginals for all games with respect log length scale of player's covariance.
    *
    * @param gameSkillsVarUpMsgs Messages send from game skills variables to skills variable for all players
@@ -70,7 +70,7 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
     //key - playerName
     val posteriorSkillsDByPlayerMap: Map[PlayerKey, Seq[PlayerSkills]] = calcPosteriorSkillsDByPlayerMap()
 
-    val gamesSkillsMarginalsD = (0 until players.size/2).map { gameIndex =>
+    val gamesSkillsMarginalsD = (0 until players.size / 2).map { gameIndex =>
 
       val player1 = players(2 * gameIndex)
       val player2 = players(2 * gameIndex + 1)
@@ -111,15 +111,9 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
 
     marginalSkillsDByPlayerMap
   }
-  
-  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills = {
+
+  def getPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills = {
     skillsMap(PlayerKey(playerName, skillOnServe))
   }
 
-  def calcPlayerSkill(player: Player): Gaussian = {
-
-    val playerSkills = skillsMap(PlayerKey(player.playerName, player.onServe))
-    val playerSkill = inferSkillGivenSkills(playerSkills.players, playerSkills.skillsGaussian, player, playerCovFunc, meanFunc)
-    playerSkill
-  }
 }

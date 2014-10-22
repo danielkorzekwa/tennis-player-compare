@@ -22,8 +22,6 @@ trait PerfDiffModel {
   def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix]
 
   def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills
-
-  def calcPlayerSkill(player:Player):Gaussian
   
   def calibrateModel()
 

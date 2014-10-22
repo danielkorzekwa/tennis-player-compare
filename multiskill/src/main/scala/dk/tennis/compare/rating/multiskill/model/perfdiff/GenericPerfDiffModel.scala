@@ -11,7 +11,6 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFact
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.calibrate
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math.gameSkillsToPerfDiffs
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
-import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.inferSkillGivenSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
@@ -37,13 +36,8 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
 
   }
 
-  def calcPlayerSkill(player: Player): Gaussian = {
-
-    skillsFactorGraph.allSkills.calcPlayerSkill(player)
-  }
-
   def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills = {
-    skillsFactorGraph.allSkills.calcPosteriorSkillsForPlayer(playerName, skillOnServe)
+    skillsFactorGraph.allSkills.getPosteriorSkillsForPlayer(playerName, skillOnServe)
   }
 
   def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix] = {

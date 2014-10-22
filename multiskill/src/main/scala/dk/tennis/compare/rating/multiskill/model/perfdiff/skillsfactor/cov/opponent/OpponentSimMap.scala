@@ -15,10 +15,17 @@ case class OpponentSimMap(id: String, getPlayerSkills: String => Array[Double], 
     def calcCovValue(): OpponentCovValue = {
       val skillsGivenOpponent1 = getPlayerSkills(opponentName1)
       val skillsGivenOpponent2 = getPlayerSkills(opponentName2)
+
       val covVal = opponentCovFunc.cov(skillsGivenOpponent1, skillsGivenOpponent2)
-      val df_dSf = 0//opponentCovFunc.df_dSf(Matrix(skillsGivenOpponent1), Matrix(skillsGivenOpponent2))
+      val df_dSf = 0 //opponentCovFunc.df_dSf(Matrix(skillsGivenOpponent1), Matrix(skillsGivenOpponent2))
       val df_dEll = 0d //opponentCovFunc.df_dEll(Matrix(skillsGivenOpponent1), Matrix(skillsGivenOpponent2))
-      
+
+//      println(opponentName1, opponentName2)
+//      println(skillsGivenOpponent1.toList)
+//      println(skillsGivenOpponent2.toList)
+//      println(covVal)
+//      println("-----------------------")
+
       OpponentCovValue(covVal, df_dSf, df_dEll)
     }
 
