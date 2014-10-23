@@ -19,9 +19,9 @@ class inferSkillsGivenOpponentTest extends Logging {
 
   logger.info("Generating match results")
   val opponentMap = Map(
-    "p1" -> OpponentType("p1", true), "p2" -> OpponentType("p2", true),
+    "p1" -> OpponentType("p1", false), "p2" -> OpponentType("p2", false),
     "p3" -> OpponentType("p3", false), "p4" -> OpponentType("p4", false))
-  val matchResults = generateMatches(opponentMap.keys.toList, rounds = 10)
+  val matchResults = generateMatches(opponentMap.keys.toList, rounds = 20)
 
   logger.info("All matches:" + matchResults.size)
 
@@ -34,24 +34,33 @@ class inferSkillsGivenOpponentTest extends Logging {
   val scoresSimulator = ScoresSimulator()
   val (scores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap)
 
+  logger.info("true loglik:" + trueLoglik)
   val players = opponentMap.keys.toList
 
-  val skillCovParams = Array(log(1), log(2),
+  val skillCovParams = Array(log(1), log(3),
     log(0.3), log(30), log(1), log(365))
 
   val logPerfStdDev = 2.3
 
   val skillCovFactory = OpponentSkillCovFactory()
 
-  val priorSkillsGivenOpponent = SkillsGivenOpponent(calcPriorSkillsGivenOpponent(scores.map(s => s.player1)), calcPriorSkillsGivenOpponent(scores.map(s => s.player2)))
+  val priorSkillsGivenOpponent = SkillsGivenOpponent(calcPriorSkillsGivenOpponent(scores.map(s => s.score.player1)), calcPriorSkillsGivenOpponent(scores.map(s => s.score.player2)))
 
   @Test def test {
-    val skillsGivenOpponent = inferSkillsGivenOpponent(priorSkillsGivenOpponent, scores, scoresSimulator.skillMeanFunc, skillCovParams, skillCovFactory, logPerfStdDev)
 
-    val playerCovFunc = OpponentCovFunc(Array(log(1), log(2)), skillsGivenOpponent.skillsOnServeGivenOpponent, skillsGivenOpponent.skillsOnReturnGivenOpponent)
+    scores.take(20).foreach { s =>
+      println(s.score.player1 + ":" + s.score.player2 + ":" + s.gameSkills.m.toArray.toList + ":" + s.gamePerfDiff.perfDiff + ":" +  (1-s.gamePerfDiff.perfDiff.cdf(0)))
+    }
+    val skillsGivenOpponent = inferSkillsGivenOpponent(priorSkillsGivenOpponent, scores.map(s => s.score), scoresSimulator.skillMeanFunc, skillCovParams, skillCovFactory, logPerfStdDev, iterNum = 100,
+      progressListener)
+
+  }
+
+  private def progressListener(currSkillsGivenOpponent: SkillsGivenOpponent) {
+
+    val playerCovFunc = OpponentCovFunc(Array(log(1), log(3)), currSkillsGivenOpponent.skillsOnServeGivenOpponent, currSkillsGivenOpponent.skillsOnReturnGivenOpponent)
 
     val m = playerCovFunc.opponentOnReturnSimMatrix(players)
-
     println(m)
   }
 

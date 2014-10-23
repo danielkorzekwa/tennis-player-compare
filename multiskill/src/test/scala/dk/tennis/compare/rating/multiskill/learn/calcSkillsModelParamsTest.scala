@@ -56,14 +56,14 @@ class calcSkillsModelParamsTest extends Logging {
       log(0.3), log(30), log(1), log(365), 2.3)
     val skillCovFactory = OpponentSkillCovFactory()
 
-    val priorSkillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player1))
-    val priorSkillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player2))
+    val priorSkillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.score.player1))
+    val priorSkillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.score.player2))
 
     val priorModelParams = SkillsModelParams(
       skillPriorMeanOnServe = 0, skillPriorMeanOnReturn = 0,
       skillCovParams, priorSkillsOnServeGivenOpponent, priorSkillsOnReturnGivenOpponent)
 
-    val skillsModelParams = calcSkillsModelParams(priorModelParams, skillCovFactory, scores, gradientMask = Array(1, 1, 1, 1, 0, 0, 0), progressListener)
+    val skillsModelParams = calcSkillsModelParams(priorModelParams, skillCovFactory, scores.map(s => s.score), gradientMask = Array(1, 1, 1, 1, 0, 0, 0), progressListener)
 
     println("-----------------------")
     println("Prior skill cov params: " + priorModelParams.skillCovParams.toList)

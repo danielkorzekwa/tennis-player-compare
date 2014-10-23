@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 object generateMatches {
 
-  private val MINUTE = 1000L * 3600 * 24
 
   def apply(players: Seq[String], rounds: Int): Seq[MatchResult] = {
 
@@ -16,7 +15,7 @@ object generateMatches {
       val matches = players.flatMap { p =>
 
         val opponents = players.filter(opponent => !opponent.equals(p))
-        opponents.map(opponent => toMatchResult(p, opponent, new Date(MINUTE * matchTime.getAndIncrement())))
+        opponents.map(opponent => toMatchResult(p, opponent, new Date(matchTime.getAndIncrement())))
       }
 
       matches
