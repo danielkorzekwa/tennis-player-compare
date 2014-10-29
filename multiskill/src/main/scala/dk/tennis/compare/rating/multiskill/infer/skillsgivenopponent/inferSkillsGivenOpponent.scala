@@ -16,7 +16,7 @@ object inferSkillsGivenOpponent {
 
   def apply(priorSkillsGivenOpponent: SkillsGivenOpponent, scores: Array[Score], skillMeanFunc: (Player) => Double,
     playerCovParams: Array[Double], playerCovFuncFactory: PlayerCovFuncFactory, logPerfStdDev: Double, iterNum: Int,
-    progressListener: (SkillsGivenOpponent) => Unit): SkillsGivenOpponent = {
+    progressListener: (SkillsGivenOpponent) => Unit = (skillsGivenOpponent) =>{}): SkillsGivenOpponent = {
 
     var currSkillsGivenOpponent = priorSkillsGivenOpponent
 
@@ -28,17 +28,10 @@ object inferSkillsGivenOpponent {
       gp.calibrateModel()
 
       val loglik = -OutcomeLik.totalLoglik(gp.inferPerfDiffs().map(p => p.perfDiff), scores)
-      println("loglik:" + loglik)
-      if (i > 10) {
-        val perfDiffs = gp.inferPerfDiffs()
-        perfDiffs.zip(scores).take(20).foreach {
-          case (perfDiff, score) =>
-            println(score.player1 + ":" + score.player2 + ":" + perfDiff.gameSkills.m.toArray.toList + ":" + perfDiff.perfDiff + ":" + (1 - perfDiff.perfDiff.cdf(0)))
 
-        }
-      }
       val currSkillsOnServeGivenOpponent = mStep(currSkillsGivenOpponent.skillsOnServeGivenOpponent, gp, skillsCovFunc, skillMeanFunc, true)
       val currSkillsOnReturnGivenOpponent = mStep(currSkillsGivenOpponent.skillsOnReturnGivenOpponent, gp, skillsCovFunc, skillMeanFunc, false)
+
       currSkillsGivenOpponent = SkillsGivenOpponent(currSkillsOnServeGivenOpponent, currSkillsOnReturnGivenOpponent)
     }
 

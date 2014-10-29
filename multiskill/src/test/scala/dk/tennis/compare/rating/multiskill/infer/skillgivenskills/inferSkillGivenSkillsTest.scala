@@ -39,6 +39,8 @@ class inferSkillGivenSkillsTest {
     assertEquals(0.1950, playerSkill.m, 0.0001)
     assertEquals(1.0900, playerSkill.v, 0.0001)
   }
+  
+  
 
   @Test def test_converge_to_mean_value {
 

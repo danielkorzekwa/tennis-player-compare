@@ -16,28 +16,23 @@ case class InferSkillGivenSkills(playerSkills: PlayerSkills, playerCovFunc: CovF
   private val players = playerSkills.players
   private val x = playerSkills.skillsGaussian
 
-  private val xSkillMean = Matrix(players.map(p => skillMeanFunc(p)))
+  private val xPriorSkillMean = Matrix(players.map(p => skillMeanFunc(p)))
+  private val xPriorSkillVarInv = playerCovFunc.covarianceMatrix(players).inv
   private val KxxInv = x.v.inv
 
   def infer(z: Player): Gaussian = {
 
     /** A and Kz_x parameters for p(z|x)*/
     val Kzx = playerCovFunc.covarianceMatrix(Array(z), players)
-    val Kxz = Kzx.t
 
     val Kzz = playerCovFunc.covarianceMatrix(Array(z))
 
     val zSkillMean = Matrix(skillMeanFunc(z))
 
-    val A = Kzx * KxxInv
+    val skill = inferMarginalOfZ(xPriorSkillMean, xPriorSkillVarInv, x.m, x.v, zSkillMean, Kzz, Kzx)
 
-    val Kz_x = Kzz - Kzx * KxxInv * Kxz
-
-    /** RUN INFERENCE - Compute p(z) = integral of p(x)*p(z|x)dx*/
-    val skillMean = zSkillMean + A * (x.m - xSkillMean)
-    val skillVar = Kz_x + A * x.v * A.t
-
-    Gaussian(skillMean(0), skillVar(0))
+    skill
   }
 
 }
+

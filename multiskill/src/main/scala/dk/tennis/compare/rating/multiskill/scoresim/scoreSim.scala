@@ -21,11 +21,11 @@ object scoreSim {
    * Returns scores with simulated points won by both players.
    *
    */
-  def apply(scores: Array[Score], meanFunc: Player => Double, playerCovFunc: CovFunc, logPerfStdDev: Double): Array[SimScore] = {
+  def apply(scores: Array[Score], meanFunc: Player => Double, playerCovFunc: CovFunc, logPerfStdDev: Double,randSeed:Int): Array[SimScore] = {
 
-    val rand = new Random(0)
+    val rand = new Random(randSeed)
 
-    val gameSkills: Seq[MultivariateGaussian] = sampleGameSkills(Score.toPlayers(scores),meanFunc, playerCovFunc)
+    val gameSkills: Seq[MultivariateGaussian] = sampleGameSkills(Score.toPlayers(scores),meanFunc, playerCovFunc,rand)
     val gamePerfDiffs: Seq[Gaussian] = gameSkillsToPerfDiffs(gameSkills, logPerfStdDev).map(p => p.perfDiff)
 
     val simulScores = scores.zip(gameSkills).map {

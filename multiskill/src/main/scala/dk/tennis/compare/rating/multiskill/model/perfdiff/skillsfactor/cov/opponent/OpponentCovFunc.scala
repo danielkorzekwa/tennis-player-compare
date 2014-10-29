@@ -14,15 +14,15 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFu
  *
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent
  */
-case class OpponentCovFunc(params: Seq[Double],
-  skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]) extends CovFunc {
+ class OpponentCovFunc(params: Seq[Double],
+  skillsOnServeGivenOpponent: Map[String, Seq[Double]], skillsOnReturnGivenOpponent: Map[String, Seq[Double]]) extends CovFunc {
 
   private val Seq(opponentCovLogSf, opponentCovLogEll) = params
 
   private val opponentCovFunc = new CovSEiso(sf = opponentCovLogSf, opponentCovLogEll)
 
-  private val opponentOnReturnSimMap = OpponentSimMap("onReturn", (playerName) => skillsOnServeGivenOpponent(playerName).map(skill => skill.skill).toArray, opponentCovFunc)
-  private val opponentOnServeSimMap = OpponentSimMap("onServe", (playerName) => skillsOnReturnGivenOpponent(playerName).map(skill => skill.skill).toArray, opponentCovFunc)
+  private val opponentOnReturnSimMap = OpponentSimMap("onReturn", (playerName) => skillsOnServeGivenOpponent(playerName).toArray, opponentCovFunc)
+  private val opponentOnServeSimMap = OpponentSimMap("onServe", (playerName) => skillsOnReturnGivenOpponent(playerName).toArray, opponentCovFunc)
 
   def getParams(): Seq[Double] = params
 
@@ -70,5 +70,28 @@ case class OpponentCovFunc(params: Seq[Double],
     val simMatrix = Matrix(players.size, players.size, (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex))
     simMatrix
   }
+  
+   def opponentOnServeSimMatrix(players: Seq[String]) = {
 
+    def simMatrixValue(rowIndex: Int, colIndex: Int): Double = {
+      val covValue = opponentOnServeSimMap.getCovValue(players(rowIndex), players(colIndex)).cov
+
+      covValue
+    }
+
+    val simMatrix = Matrix(players.size, players.size, (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex))
+    simMatrix
+  }
+
+}
+
+object OpponentCovFunc {
+  
+  def apply(params: Seq[Double],
+    skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]): OpponentCovFunc = {
+   
+    new OpponentCovFunc(params,
+      skillsOnServeGivenOpponent.mapValues(s => s.map(s => s.skill)),
+      skillsOnReturnGivenOpponent.mapValues(s => s.map(s => s.skill)))
+  }
 }

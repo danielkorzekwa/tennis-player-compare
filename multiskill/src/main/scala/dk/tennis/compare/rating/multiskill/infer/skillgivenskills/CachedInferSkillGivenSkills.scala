@@ -20,7 +20,6 @@ case class CachedInferSkillGivenSkills(getPlayerSkillsForPlayer: (String) => Pla
   def infer(z: Player): Gaussian = {
 
     def getInfer(playerName: String): InferSkillGivenSkills = {
-//println(playerName)
       val playerSkills = getPlayerSkillsForPlayer(z.playerName)
       val infer = InferSkillGivenSkills(playerSkills, playerCovFunc, skillMeanFunc)
       infer

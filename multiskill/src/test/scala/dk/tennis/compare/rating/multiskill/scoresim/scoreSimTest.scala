@@ -26,7 +26,7 @@ class scoreSimTest {
 
     val meanFunc = (player: Player) => { if (player.onServe) 5d else 0 }
     val covFunc = SkillOverTimeCovFunc(Array(log(0.2), log(10), log(1), log(300)))
-    val simulScores = scoreSim(scores, meanFunc, covFunc, logPerfStdDev = 2.3)
+    val simulScores = scoreSim(scores, meanFunc, covFunc, logPerfStdDev = 2.3,randSeed=124066)
 
     val p1 = "Roger Federer"
     val p2 = "Novak Djokovic"

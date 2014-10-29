@@ -61,7 +61,7 @@ class GenericPerfDiffTest extends Logging {
   private def simulateScores(realScores: Array[Score]): Array[Score] = {
     val meanFunc = (player: Player) => { if (player.onServe) priorSkillOnServe else priorSkillOnReturn }
     val covFunc = SkillOverTimeCovFunc(initialParams.data.take(4))
-    val simScores = scoreSim(realScores, meanFunc, covFunc, logPerfStdDev = initialParams.data.last)
+    val simScores = scoreSim(realScores, meanFunc, covFunc, logPerfStdDev = initialParams.data.last,randSeed=555677675)
     val scores = simScores.map(s => s.score)
     scores
   }

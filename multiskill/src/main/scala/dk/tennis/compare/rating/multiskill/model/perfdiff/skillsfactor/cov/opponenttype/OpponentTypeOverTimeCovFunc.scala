@@ -20,7 +20,9 @@ case class OpponentTypeOverTimeCovFunc(params: Seq[Double], opponentTypeMap: Map
 
     val opponentTypeCov = opponentTypeCovFunc.covariance(player1, player2)
     val skillOverTimeCov = skillOverTimeCovFunc.covariance(player1, player2)
-    opponentTypeCov * skillOverTimeCov
+    
+    if(player1.onServe) opponentTypeCov * skillOverTimeCov
+    else opponentTypeCov * skillOverTimeCov
   }
 
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {

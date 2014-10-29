@@ -51,7 +51,7 @@ object PlayerCovPlotting extends App {
     //val playerSkills
     val variance = covFunc.covarianceMatrix(players1 ++ players2)
 
-    val sampledSkills = MultivariateGaussian(mean, variance).draw
+    val sampledSkills = MultivariateGaussian(mean, variance).draw(randSeed=565768)
 
     sampledSkills
   }

@@ -7,10 +7,11 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSki
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import scala.util.Random
 
 object sampleGameSkills {
 
-  def apply(players: Seq[Player], meanFunc: Player => Double, playerCovFunc: CovFunc): Seq[MultivariateGaussian] = {
+  def apply(players: Seq[Player], meanFunc: Player => Double, playerCovFunc: CovFunc,rand:Random): Seq[MultivariateGaussian] = {
 
     require(players.size == players.distinct.size, "Players are not unique")
 
@@ -24,7 +25,7 @@ object sampleGameSkills {
 
     val sampledSkillsByPlayerMap: Map[PlayerKey, PlayerSkills] = priorSkillsByPlayersMap.toMap.map {
       case (playerKey, factor) =>
-        val sampledSkillsMean = Matrix(factor.priorPlayerSkills.skillsGaussian.draw())
+        val sampledSkillsMean = Matrix(factor.priorPlayerSkills.skillsGaussian.draw(rand.nextInt))
 
         val newPlayerSkillFactor = factor.priorPlayerSkills.copy(skillsGaussian = MultivariateGaussian(sampledSkillsMean, factor.priorPlayerSkills.skillsGaussian.v))
 

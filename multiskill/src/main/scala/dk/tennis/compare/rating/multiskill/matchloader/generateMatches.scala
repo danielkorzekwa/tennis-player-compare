@@ -26,8 +26,8 @@ object generateMatches {
 
   private def toMatchResult(player1: String, player2: String, matchTime: Date): MatchResult = {
 
-    val p1Stats = PlayerStats(0, 51, 49)
-    val p2Stats = PlayerStats(0, 49, 51)
+    val p1Stats = PlayerStats(0, 1000, 1000)
+    val p2Stats = PlayerStats(0, 1000, 1000)
     MatchResult(matchTime, "tournament name", player1, player2, matchTime, true, 2, p1Stats, p2Stats)
   }
 }
