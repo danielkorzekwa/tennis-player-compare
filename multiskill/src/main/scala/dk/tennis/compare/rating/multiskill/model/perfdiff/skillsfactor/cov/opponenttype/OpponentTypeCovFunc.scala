@@ -8,6 +8,8 @@ case class OpponentTypeCovFunc(params: Seq[Double], opponentTypeMap: Map[String,
 
   val Seq(generalSkillLogSf, offensiveSkillLogSf, defensiveSkillLogSf) = params
 
+  def withParams(params: Seq[Double]): CovFunc = throw new UnsupportedOperationException("Not implemented yet")
+  
   def getParams(): Seq[Double] = params
 
   def covariance(player1: Player, player2: Player): Double = {

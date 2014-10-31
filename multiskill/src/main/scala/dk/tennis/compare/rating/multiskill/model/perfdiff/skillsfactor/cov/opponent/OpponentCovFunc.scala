@@ -14,7 +14,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFu
  *
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent
  */
- class OpponentCovFunc(params: Seq[Double],
+class OpponentCovFunc(params: Seq[Double],
   skillsOnServeGivenOpponent: Map[String, Seq[Double]], skillsOnReturnGivenOpponent: Map[String, Seq[Double]]) extends CovFunc {
 
   private val Seq(opponentCovLogSf, opponentCovLogEll) = params
@@ -23,6 +23,12 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFu
 
   private val opponentOnReturnSimMap = OpponentSimMap("onReturn", (playerName) => skillsOnServeGivenOpponent(playerName).toArray, opponentCovFunc)
   private val opponentOnServeSimMap = OpponentSimMap("onServe", (playerName) => skillsOnReturnGivenOpponent(playerName).toArray, opponentCovFunc)
+
+  def withParams(newParams: Seq[Double]): OpponentCovFunc = {
+    
+   
+    new OpponentCovFunc(newParams,skillsOnServeGivenOpponent,skillsOnReturnGivenOpponent)
+  }
 
   def getParams(): Seq[Double] = params
 
@@ -70,8 +76,8 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFu
     val simMatrix = Matrix(players.size, players.size, (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex))
     simMatrix
   }
-  
-   def opponentOnServeSimMatrix(players: Seq[String]) = {
+
+  def opponentOnServeSimMatrix(players: Seq[String]) = {
 
     def simMatrixValue(rowIndex: Int, colIndex: Int): Double = {
       val covValue = opponentOnServeSimMap.getCovValue(players(rowIndex), players(colIndex)).cov
@@ -86,10 +92,10 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFu
 }
 
 object OpponentCovFunc {
-  
+
   def apply(params: Seq[Double],
     skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]): OpponentCovFunc = {
-   
+
     new OpponentCovFunc(params,
       skillsOnServeGivenOpponent.mapValues(s => s.map(s => s.skill)),
       skillsOnReturnGivenOpponent.mapValues(s => s.map(s => s.skill)))

@@ -16,7 +16,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skill
 case class LooMatchModel(matchResults: IndexedSeq[MatchResult]) extends MatchModel with Logging {
 
   private val (priorSkillOnServe, priorSkillOnReturn) = (4.96d, 0)
-  private val initialParams = DenseVector(-0.8905121105461389, 3.430519279367633, 0.05980742993570404, 8.036933411241728, log(1e-10),  log(1), 2.3)
+  private val initialParams = DenseVector( -0.625343662255204, 3.263911687513335, -0.04617824159058743, 6.556709591597913, 2.3)
  //  private val initialParams = DenseVector(-0.8905121105461389, 3.430519279367633, 0.05980742993570404, 8.036933411241728, -1.7196515647057071, -0.0999651876799888, 2.3)
   private val covarianceParams = initialParams.data.dropRight(1)
   private val logPerfStdDev = initialParams.data.last

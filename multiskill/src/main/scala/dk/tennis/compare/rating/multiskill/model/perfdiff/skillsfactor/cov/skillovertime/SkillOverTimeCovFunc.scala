@@ -12,6 +12,10 @@ case class SkillOverTimeCovFunc(params: Seq[Double]) extends CovFunc {
 
   private val DAY_MILLIS = 1000L * 3600 * 24
 
+  def withParams(params: Seq[Double]): SkillOverTimeCovFunc = {
+    new SkillOverTimeCovFunc(params)
+  }
+  
   def getParams(): Seq[Double] = params
 
   //basic covariances

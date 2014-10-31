@@ -26,7 +26,7 @@ object BfTradingApp extends App with Logging {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
   val playersSet = HashSet("Roger Federer", "Andy Roddick")
-  val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2008, 2011, playersSet))
+  val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2011, 2011))
   logger.info("Matches=" + matchResults.size)
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
   val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
@@ -55,7 +55,7 @@ object BfTradingApp extends App with Logging {
         val win = result.player1Won
         val outcome = Outcome(p1Price, p1TrueProb, win)
         trader.placeBet(outcome)
-        //println(trader.getBetsNum + "," + trader.getProfit)
+        println(trader.getBetsNum + "," + trader.getProfit)
 
         val winnerProb = matchPrediction.matchProb(matchPrediction.matchWinner)
         loglik.add(log(winnerProb))
@@ -63,24 +63,25 @@ object BfTradingApp extends App with Logging {
       }
     }
 
-    matchResults.foreach { result =>
-      val exPrices = exPricesModel.gamePrices(result)
-
-      val player1 = "Roger Federer"
-      val player2 = "Novak Djokovic"
-
-      if (result.containsPlayer(player1)) {
-        val matchPrediction = matchModel.predict(result)
-
-        val playerExProb = if (exPrices.isDefined) 1d / exPrices.get.getPrice(player1) else Double.NaN
-        println("%s, %s, %s, %s, prob/exProb: %.2f / %.2f, %s".format(
-          matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
-          player1, matchPrediction.opponentOf(player1), matchPrediction.matchProb(player1), playerExProb, matchPrediction.matchWinner))
-
-        //   println("%s, %s, %.2f, %.2f".format( matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
-        //       matchPrediction.skillOnServe(player2).m, matchPrediction.skillOnReturn(player2).m))
-      }
-    }
+    //match analysis
+    //    matchResults.foreach { result =>
+    //      val exPrices = exPricesModel.gamePrices(result)
+    //
+    //      val player1 = "Roger Federer"
+    //      val player2 = "Novak Djokovic"
+    //
+    //      if (result.containsPlayer(player1)) {
+    //        val matchPrediction = matchModel.predict(result)
+    //
+    //        val playerExProb = if (exPrices.isDefined) 1d / exPrices.get.getPrice(player1) else Double.NaN
+    //        println("%s, %s, %s, %s, prob/exProb: %.2f / %.2f, %s".format(
+    //          matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
+    //          player1, matchPrediction.opponentOf(player1), matchPrediction.matchProb(player1), playerExProb, matchPrediction.matchWinner))
+    //
+    //        //   println("%s, %s, %.2f, %.2f".format( matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
+    //        //       matchPrediction.skillOnServe(player2).m, matchPrediction.skillOnReturn(player2).m))
+    //      }
+    //    }
 
   }
 

@@ -38,18 +38,18 @@ object inferSkillsGivenOpponent {
     currSkillsGivenOpponent
   }
 
-  private def mStep(oldSkillsGivenOpponent: Map[String, Seq[PlayerSkill]], gp: PerfDiffModel, skillsCovFunc: CovFunc, skillMeanFunc: (Player) => Double, playersOnServe: Boolean): Map[String, Seq[PlayerSkill]] = {
-
-    def getPlayerSkillsForPlayer(playerName: String): PlayerSkills = gp.calcPosteriorSkillsForPlayer(playerName, playersOnServe)
-    val skillInfer = CachedInferSkillGivenSkills(getPlayerSkillsForPlayer, skillsCovFunc, skillMeanFunc)
-
-    val newSkillsGivenOpponent = oldSkillsGivenOpponent.map {
-      case (player, skills) =>
-
-        val newSkills = skills.map(s => PlayerSkill(skillInfer.infer(s.player).m, s.player))
-        (player, newSkills)
-    }
-
-    newSkillsGivenOpponent
-  }
+//  private def mStep(oldSkillsGivenOpponent: Map[String, Seq[PlayerSkill]], gp: PerfDiffModel, skillsCovFunc: CovFunc, skillMeanFunc: (Player) => Double, playersOnServe: Boolean): Map[String, Seq[PlayerSkill]] = {
+//
+//    def getPlayerSkillsForPlayer(playerName: String): PlayerSkills = gp.calcPosteriorSkillsForPlayer(playerName, playersOnServe)
+//    val skillInfer = CachedInferSkillGivenSkills(getPlayerSkillsForPlayer, skillsCovFunc, skillMeanFunc)
+//
+//    val newSkillsGivenOpponent = oldSkillsGivenOpponent.map {
+//      case (player, skills) =>
+//
+//        val newSkills = skills.map(s => PlayerSkill(skillInfer.infer(s.player).m, s.player))
+//        (player, newSkills)
+//    }
+//
+//    newSkillsGivenOpponent
+//  }
 }

@@ -14,6 +14,10 @@ case class OpponentTypeOverTimeCovFunc(params: Seq[Double], opponentTypeMap: Map
   private val opponentTypeCovFunc = OpponentTypeCovFunc(List(generalSkillLogSf, offensiveSkillLogSf, defensiveSkillLogSf), opponentTypeMap)
   private val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
 
+  def withParams(newParams: Seq[Double]): OpponentTypeOverTimeCovFunc = {
+    OpponentTypeOverTimeCovFunc(newParams,opponentTypeMap)
+  }
+  
   def getParams(): Seq[Double] = params
 
   def covariance(player1: Player, player2: Player): Double = {

@@ -9,6 +9,7 @@ import breeze.plot.Figure
 import breeze.plot._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentType
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentTypeOverTimeCovFunc
+import scala.util.Random
 
 object PlayerCovPlotting extends App {
 
@@ -30,11 +31,18 @@ object PlayerCovPlotting extends App {
       "opponent1" -> OpponentType("opponent1", true),
       "opponent2" -> OpponentType("opponent1", false))
 
-    val covFunc = OpponentTypeOverTimeCovFunc(
+//    val covFunc = OpponentTypeOverTimeCovFunc(
+//      Array(log(1), log(0.4), log(0.6),
+//        log(0.3), log(30), log(1), log(365)),
+//      opponentTypeMap)
+      
+        val covFunc = OpponentTypeOverTimeCovFunc(
       Array(log(1), log(0.4), log(0.6),
-        log(0.3), log(30), log(1), log(365)),
+        -0.625343662255204, 3.263911687513335, -0.04617824159058743, 6.556709591597913),
       opponentTypeMap)
 
+      
+    //  -0.625343662255204, 3.263911687513335, -0.04617824159058743, 6.556709591597913, 2.3
     // val covFunc = PlayerCovFuncShort(Array(log(1), log(300)))
     //val covFunc = PlayerCovFuncShortLong(Array(log(0.2), log(10), log(1), log(300)))
 
@@ -51,7 +59,7 @@ object PlayerCovPlotting extends App {
     //val playerSkills
     val variance = covFunc.covarianceMatrix(players1 ++ players2)
 
-    val sampledSkills = MultivariateGaussian(mean, variance).draw(randSeed=565768)
+    val sampledSkills = MultivariateGaussian(mean, variance).draw(randSeed=new Random().nextInt)
 
     sampledSkills
   }

@@ -5,19 +5,23 @@ import dk.bayes.infer.gp.cov.CovSEiso
 import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
+import scala.util.Random
 
 /**
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent
  */
-case class OpponentOverTimeCovFunc(params: Seq[Double],
-  skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]) extends CovFunc {
+class OpponentOverTimeCovFunc(val params: Seq[Double], val opponentCovFunc: OpponentCovFunc, val skillOverTimeCovFunc: SkillOverTimeCovFunc) extends CovFunc {
 
-  private val Seq(
-    opponentCovLogSf, opponentCovLogEll,
-    logSfShort, logEllShort, logSfLong, logEllLong) = params
+  def withParams(newParams: Seq[Double]): OpponentOverTimeCovFunc = {
 
-  val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
-  val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
+    val Seq(opponentCovLogSf, opponentCovLogEll, logSfShort, logEllShort, logSfLong, logEllLong) = newParams
+
+    val newOpponentCovFunc = opponentCovFunc.withParams(Array(opponentCovLogSf, opponentCovLogEll))
+    val newSkillOverTimeCovFunc = skillOverTimeCovFunc.withParams(Array(logSfShort, logEllShort, logSfLong, logEllLong))
+
+    new OpponentOverTimeCovFunc(newParams, newOpponentCovFunc, newSkillOverTimeCovFunc)
+  }
 
   def getParams(): Seq[Double] = params
 
@@ -45,5 +49,43 @@ case class OpponentOverTimeCovFunc(params: Seq[Double],
 
   def opponentOnReturnSimMatrix(players: Seq[String]) = {
     opponentCovFunc.opponentOnReturnSimMatrix(players)
+  }
+}
+
+object OpponentOverTimeCovFunc {
+  def apply(params: Seq[Double],
+    scores: Seq[Score], getPlayerSkill: (Player) => PlayerSkill): OpponentOverTimeCovFunc = {
+
+    val Seq(
+      opponentCovLogSf, opponentCovLogEll,
+      logSfShort, logEllShort, logSfLong, logEllLong) = params
+
+    val skillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player1), getPlayerSkill)
+    val skillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player2), getPlayerSkill)
+
+    val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
+    val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
+
+    new OpponentOverTimeCovFunc(params, opponentCovFunc, skillOverTimeCovFunc)
+  }
+
+  /**
+   * Returns Map[opponent name, player skills against opponent]
+   */
+  private def calcPriorSkillsGivenOpponent(playersGivenOpponent: Seq[Player], getPlayerSkill: (Player) => PlayerSkill): Map[String, Seq[PlayerSkill]] = {
+
+    val allPlayers = playersGivenOpponent.map(p => p.playerName).distinct
+
+    val skillsGivenOpponentMap = allPlayers.map { playerKey =>
+
+      val skills = playersGivenOpponent.map { p =>
+        val player = p.copy(opponentName = playerKey)
+        val skill = getPlayerSkill(player)
+        skill
+      }.toSeq
+      (playerKey, skills)
+    }.toMap
+
+    skillsGivenOpponentMap
   }
 }

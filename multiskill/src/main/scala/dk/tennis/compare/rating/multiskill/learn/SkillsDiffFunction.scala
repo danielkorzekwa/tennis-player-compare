@@ -19,12 +19,11 @@ import dk.tennis.compare.rating.multiskill.infer.skillsgivenopponent.SkillsGiven
  * @param priorSkillsGivenOpponent key - opponent name, value - player skills against opponent
  */
 case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => Double,
-  priorSkillsGivenOpponent: SkillsGivenOpponent,
-  playerCovFuncFactory: PlayerCovFuncFactory, gradientMask: Option[Array[Double]] = None, progressListener: (SkillDiffFuncState) => Unit = (state) => {}) extends DiffFunction[DenseVector[Double]] with Logging {
+  gradientMask: Option[Array[Double]] = None, progressListener: (SkillDiffFuncState) => Unit = (state) => {},
+  skillCovFunc: CovFunc) extends DiffFunction[DenseVector[Double]] with Logging {
 
   var currSkillPriorMeanFunc = skillMeanFunc
-
- 
+  var currSkillCovFunc = skillCovFunc
 
   var i = 0
   def calculate(params: DenseVector[Double]): (Double, DenseVector[Double]) = {
@@ -37,7 +36,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
     val covarianceParams = params.data.dropRight(1)
     val logPerfStdDev = params.data.last
 
-    val skillsCov = playerCovFuncFactory.create(covarianceParams, priorSkillsGivenOpponent.skillsOnServeGivenOpponent, priorSkillsGivenOpponent.skillsOnReturnGivenOpponent)
+    val skillsCov = currSkillCovFunc.withParams(covarianceParams)
     val gp = GenericPerfDiffModel(currSkillPriorMeanFunc, skillsCov, logPerfStdDev, scores)
     try {
       gp.calibrateModel()
@@ -71,10 +70,13 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
       val playerSkillMarginals: Array[Double] = gp.skillsFactorGraph.getPlayerSkillsMarginalMean().toArray
       val newPriorSkillMeanFunc = learnSkillMeanFunction(Score.toPlayers(scores), playerSkillMarginals)
 
-      val state = SkillDiffFuncState(params)
+     
 
       currSkillPriorMeanFunc = newPriorSkillMeanFunc
-
+      currSkillCovFunc = skillsCov
+      
+       val state = SkillDiffFuncState(currSkillCovFunc)
+      
       progressListener(state)
 
       (f, DenseVector(dfWithMask) * (-1d))
@@ -103,7 +105,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
       if (player.onServe) skillPriorMeanOnServe else skillPriorMeanOnReturn
     }
 
-    playerSkillMeanPrior(meanOnServe-meanOnReturn, 0)
+    playerSkillMeanPrior(meanOnServe - meanOnReturn, 0)
   }
 
 }

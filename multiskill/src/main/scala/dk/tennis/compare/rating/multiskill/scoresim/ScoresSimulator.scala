@@ -23,7 +23,7 @@ case class ScoresSimulator {
   def simulate(scores: Array[Score], opponentMap: Map[String, OpponentType],randSeed: Int): Tuple2[Array[SimScore], Double] = {
 
     val trueParams = DenseVector(log(0.0000000000001), log(1), log(1),
-      log(0.3), log(30), log(1), log(365), 2.3)
+       -0.625343662255204, 3.263911687513335, -0.04617824159058743, 6.556709591597913, 2.3)
 
     val trueSkillCovFactory = TrueSkillCovFactory(opponentMap)
 
@@ -33,8 +33,7 @@ case class ScoresSimulator {
     val priorSkillsOnServeGivenOpponent = Map[String, Seq[PlayerSkill]]()
     val priorSkillsOnReturnGivenOpponent = Map[String, Seq[PlayerSkill]]()
     
-    val trueLoglik = SkillsDiffFunction(simScores.map(s => s.score), skillMeanFunc,
-      SkillsGivenOpponent(priorSkillsOnServeGivenOpponent, priorSkillsOnReturnGivenOpponent), trueSkillCovFactory, None).calculate(trueParams)._1
+    val trueLoglik = SkillsDiffFunction(simScores.map(s => s.score), skillMeanFunc,  None,(state) => {},covFunc).calculate(trueParams)._1
 
     (simScores, trueLoglik)
   }
