@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.learn
+package dk.tennis.compare.rating.multiskill.infer.skillmodelparams
 
 import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
@@ -10,6 +10,7 @@ import breeze.plot._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentType
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentTypeOverTimeCovFunc
 import scala.util.Random
+import scala.Array.canBuildFrom
 
 object PlayerCovPlotting extends App {
 

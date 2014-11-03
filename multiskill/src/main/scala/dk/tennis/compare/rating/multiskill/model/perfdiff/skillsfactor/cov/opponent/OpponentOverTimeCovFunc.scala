@@ -7,11 +7,15 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skill
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import scala.util.Random
+import java.io.ObjectOutputStream
+import java.io.FileOutputStream
+import java.io.ObjectInputStream
+import java.io.FileInputStream
 
 /**
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent
  */
-class OpponentOverTimeCovFunc(val params: Seq[Double], val opponentCovFunc: OpponentCovFunc, val skillOverTimeCovFunc: SkillOverTimeCovFunc) extends CovFunc {
+class OpponentOverTimeCovFunc(val params: Seq[Double], val scores: Seq[Score], val opponentCovFunc: OpponentCovFunc, val skillOverTimeCovFunc: SkillOverTimeCovFunc) extends CovFunc with Serializable {
 
   def withParams(newParams: Seq[Double]): OpponentOverTimeCovFunc = {
 
@@ -20,7 +24,16 @@ class OpponentOverTimeCovFunc(val params: Seq[Double], val opponentCovFunc: Oppo
     val newOpponentCovFunc = opponentCovFunc.withParams(Array(opponentCovLogSf, opponentCovLogEll))
     val newSkillOverTimeCovFunc = skillOverTimeCovFunc.withParams(Array(logSfShort, logEllShort, logSfLong, logEllLong))
 
-    new OpponentOverTimeCovFunc(newParams, newOpponentCovFunc, newSkillOverTimeCovFunc)
+    new OpponentOverTimeCovFunc(newParams, scores, newOpponentCovFunc, newSkillOverTimeCovFunc)
+  }
+
+  def save(file: String) = {
+    new ObjectOutputStream(new FileOutputStream(file)).writeObject(this)
+  }
+
+  def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): CovFunc = {
+
+    OpponentOverTimeCovFunc(params, scores, getPlayerSkill)
   }
 
   def getParams(): Seq[Double] = params
@@ -53,6 +66,11 @@ class OpponentOverTimeCovFunc(val params: Seq[Double], val opponentCovFunc: Oppo
 }
 
 object OpponentOverTimeCovFunc {
+
+  def fromFile(file: String): OpponentOverTimeCovFunc = {
+    new ObjectInputStream(new FileInputStream(file)).readObject().asInstanceOf[OpponentOverTimeCovFunc]
+  }
+
   def apply(params: Seq[Double],
     scores: Seq[Score], getPlayerSkill: (Player) => PlayerSkill): OpponentOverTimeCovFunc = {
 
@@ -60,13 +78,13 @@ object OpponentOverTimeCovFunc {
       opponentCovLogSf, opponentCovLogEll,
       logSfShort, logEllShort, logSfLong, logEllLong) = params
 
-    val skillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player1), getPlayerSkill)
-    val skillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player2), getPlayerSkill)
+    val skillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player1), getPlayerSkill) map identity
+    val skillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player2), getPlayerSkill) map identity
 
     val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
     val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
 
-    new OpponentOverTimeCovFunc(params, opponentCovFunc, skillOverTimeCovFunc)
+    new OpponentOverTimeCovFunc(params, scores, opponentCovFunc, skillOverTimeCovFunc)
   }
 
   /**

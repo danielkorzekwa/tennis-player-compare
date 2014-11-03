@@ -3,12 +3,19 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppo
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 
 case class OpponentTypeCovFunc(params: Seq[Double], opponentTypeMap: Map[String, OpponentType]) extends CovFunc {
 
   val Seq(generalSkillLogSf, offensiveSkillLogSf, defensiveSkillLogSf) = params
 
+   def save(file: String) = throw new UnsupportedOperationException("Not implemented yet")
+  
   def withParams(params: Seq[Double]): CovFunc = throw new UnsupportedOperationException("Not implemented yet")
+  
+   def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill):CovFunc = {
+     throw new UnsupportedOperationException("Not implemented yet")
+   }
   
   def getParams(): Seq[Double] = params
 

@@ -4,6 +4,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 
 case class OpponentTypeOverTimeCovFunc(params: Seq[Double], opponentTypeMap: Map[String, OpponentType]) extends CovFunc {
 
@@ -14,18 +15,24 @@ case class OpponentTypeOverTimeCovFunc(params: Seq[Double], opponentTypeMap: Map
   private val opponentTypeCovFunc = OpponentTypeCovFunc(List(generalSkillLogSf, offensiveSkillLogSf, defensiveSkillLogSf), opponentTypeMap)
   private val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
 
+  def save(file: String) = throw new UnsupportedOperationException("Not implemented yet")
+
   def withParams(newParams: Seq[Double]): OpponentTypeOverTimeCovFunc = {
-    OpponentTypeOverTimeCovFunc(newParams,opponentTypeMap)
+    OpponentTypeOverTimeCovFunc(newParams, opponentTypeMap)
   }
-  
+
+  def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): CovFunc = {
+    throw new UnsupportedOperationException("Not implemented yet")
+  }
+
   def getParams(): Seq[Double] = params
 
   def covariance(player1: Player, player2: Player): Double = {
 
     val opponentTypeCov = opponentTypeCovFunc.covariance(player1, player2)
     val skillOverTimeCov = skillOverTimeCovFunc.covariance(player1, player2)
-    
-    if(player1.onServe) opponentTypeCov * skillOverTimeCov
+
+    if (player1.onServe) opponentTypeCov * skillOverTimeCov
     else opponentTypeCov * skillOverTimeCov
   }
 

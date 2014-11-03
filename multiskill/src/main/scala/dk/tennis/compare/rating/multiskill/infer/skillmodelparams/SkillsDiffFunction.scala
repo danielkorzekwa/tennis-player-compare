@@ -1,4 +1,4 @@
-package dk.tennis.compare.rating.multiskill.learn
+package dk.tennis.compare.rating.multiskill.infer.skillmodelparams
 
 import breeze.optimize.DiffFunction
 import breeze.linalg.DenseVector
@@ -7,13 +7,8 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
 import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
-import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.CachedInferSkillGivenSkills
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
-import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.CachedInferSkillGivenSkills
-import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiffModel
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
-import dk.tennis.compare.rating.multiskill.infer.skillsgivenopponent.SkillsGivenOpponent
+import scala.Array.canBuildFrom
 
 /**
  * @param priorSkillsGivenOpponent key - opponent name, value - player skills against opponent

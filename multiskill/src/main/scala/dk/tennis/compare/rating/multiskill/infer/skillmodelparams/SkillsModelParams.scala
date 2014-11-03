@@ -1,8 +1,5 @@
-package dk.tennis.compare.rating.multiskill.learn
-
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
+package dk.tennis.compare.rating.multiskill.infer.skillmodelparams
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.infer.skillsgivenopponent.SkillsGivenOpponent
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 
 /**

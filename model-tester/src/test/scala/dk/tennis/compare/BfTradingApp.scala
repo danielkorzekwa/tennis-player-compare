@@ -89,9 +89,9 @@ object BfTradingApp extends App with Logging {
     val rand = new Random()
     matchResults.map { r =>
 
-      //      if (true) r
-      //      else r.copy(player1 = r.player2, player2 = r.player1, player1Won = !r.player1Won, p1Stats = r.p2Stats, p2Stats = r.p1Stats)
-      r
+            if (rand.nextBoolean) r
+            else r.copy(player1 = r.player2, player2 = r.player1, player1Won = !r.player1Won, p1Stats = r.p2Stats, p2Stats = r.p1Stats)
+      
     }
   }
 }

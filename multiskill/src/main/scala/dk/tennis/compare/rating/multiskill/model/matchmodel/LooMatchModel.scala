@@ -8,6 +8,7 @@ import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.OpponentOverTimeCovFunc
 
 /**
  *  Leave one out match prediction model
@@ -16,10 +17,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skill
 case class LooMatchModel(matchResults: IndexedSeq[MatchResult]) extends MatchModel with Logging {
 
   private val (priorSkillOnServe, priorSkillOnReturn) = (4.96d, 0)
-  private val initialParams = DenseVector( -0.625343662255204, 3.263911687513335, -0.04617824159058743, 6.556709591597913, 2.3)
- //  private val initialParams = DenseVector(-0.8905121105461389, 3.430519279367633, 0.05980742993570404, 8.036933411241728, -1.7196515647057071, -0.0999651876799888, 2.3)
-  private val covarianceParams = initialParams.data.dropRight(1)
-  private val logPerfStdDev = initialParams.data.last
+  private val logPerfStdDev = 2.3
 
   logger.info("Computing match predictions...")
   private val matchPredictions = calcMatchPredictions()
@@ -34,12 +32,13 @@ case class LooMatchModel(matchResults: IndexedSeq[MatchResult]) extends MatchMod
   private def calcMatchPredictions(): Seq[MatchPrediction] = {
     val scores = Score.toScores(matchResults)
 
-    val infer = GenericPerfDiffModel(playerSkillMeanPrior, SkillOverTimeCovFunc(covarianceParams), logPerfStdDev, scores)
+    val skillCovFunc = OpponentOverTimeCovFunc.fromFile("target/skillCovFunc")
+    val infer = GenericPerfDiffModel(playerSkillMeanPrior, skillCovFunc, logPerfStdDev, scores)
     infer.calibrateModel()
 
     val perfDiffs = infer.inferPerfDiffs()
 
-    val matchPredictions = MatchPrediction.toMatchPredictions(scores, perfDiffs,matchResults)
+    val matchPredictions = MatchPrediction.toMatchPredictions(scores, perfDiffs, matchResults)
 
     matchPredictions
   }
