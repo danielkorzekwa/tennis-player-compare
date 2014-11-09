@@ -3,6 +3,7 @@ package dk.tennis.compare.rating.multiskill.matchloader
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentType
 import java.util.Date
 import java.util.concurrent.atomic.AtomicInteger
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 
 object generateMatches {
 
@@ -14,7 +15,7 @@ object generateMatches {
     def genMatches(): Seq[MatchResult] = {
       val matches = players.flatMap { p =>
 
-        val opponents = players.filter(opponent => !opponent.equals(p))
+        val opponents = players//.filter(opponent => !opponent.equals(p))
         opponents.map(opponent => toMatchResult(p, opponent, new Date(matchTime.getAndIncrement())))
       }
 
@@ -26,8 +27,8 @@ object generateMatches {
 
   private def toMatchResult(player1: String, player2: String, matchTime: Date): MatchResult = {
 
-    val p1Stats = PlayerStats(0, 1000, 1000)
-    val p2Stats = PlayerStats(0, 1000, 1000)
-    MatchResult(matchTime, "tournament name", player1, player2, matchTime, true, 2, p1Stats, p2Stats)
+    val p1Stats = PlayerStats(0, 100, 100)
+    val p2Stats = PlayerStats(0, 100, 100)
+    MatchResult(matchTime, "tournament name",Surface.HARD, player1, player2, matchTime, true, 2, p1Stats, p2Stats)
   }
 }

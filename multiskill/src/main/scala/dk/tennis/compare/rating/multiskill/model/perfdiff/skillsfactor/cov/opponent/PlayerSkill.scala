@@ -3,6 +3,6 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppo
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.math.gaussian.Gaussian
 
-case class PlayerSkill(skill:Double,player:Player) {
+case class PlayerSkill(skill:Gaussian,player:Player) {
 
 }

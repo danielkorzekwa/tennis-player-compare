@@ -8,6 +8,12 @@ import scala.collection.mutable.HashSet
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import java.io.ObjectOutputStream
 import java.io.FileOutputStream
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
+import java.io.ObjectInputStream
+import java.io.FileInputStream
+import java.util.Date
+import dk.bayes.math.gaussian.Gaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 
 /**
  * Inspired by
@@ -16,8 +22,8 @@ import java.io.FileOutputStream
  *
  * @param skillsGivenOpponent key - opponent name, value - player skills against opponent
  */
-class OpponentCovFunc(val params: Seq[Double],
-  val skillsOnServeGivenOpponent: Map[String, Seq[Double]], val skillsOnReturnGivenOpponent: Map[String, Seq[Double]]) extends CovFunc with Serializable {
+class OpponentCovFunc(val params: Seq[Double], scores: Seq[Score],
+  val skillsOnServeGivenOpponent: Map[String, Seq[Gaussian]], val skillsOnReturnGivenOpponent: Map[String, Seq[Gaussian]]) extends CovFunc with Serializable {
   private val Seq(opponentCovLogSf, opponentCovLogEll) = params
 
   private val opponentCovFunc = new CovSEiso(sf = opponentCovLogSf, opponentCovLogEll)
@@ -25,14 +31,14 @@ class OpponentCovFunc(val params: Seq[Double],
   private val opponentOnReturnSimMap = OpponentSimMap("onReturn", (playerName) => skillsOnServeGivenOpponent(playerName).toArray, opponentCovFunc)
   private val opponentOnServeSimMap = OpponentSimMap("onServe", (playerName) => skillsOnReturnGivenOpponent(playerName).toArray, opponentCovFunc)
 
-  def save(file: String) = throw new UnsupportedOperationException("Not implemented yet")
+  def save(file: String) = new ObjectOutputStream(new FileOutputStream(file)).writeObject(this)
 
   def withParams(newParams: Seq[Double]): OpponentCovFunc = {
-    new OpponentCovFunc(newParams, skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
+    new OpponentCovFunc(newParams, scores, skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
   }
 
   def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): CovFunc = {
-    throw new UnsupportedOperationException("Not implemented yet")
+    OpponentCovFunc(params, scores, getPlayerSkill)
   }
 
   def getParams(): Seq[Double] = params
@@ -98,11 +104,64 @@ class OpponentCovFunc(val params: Seq[Double],
 
 object OpponentCovFunc {
 
-  def apply(params: Seq[Double],
+  def fromFile(file: String): OpponentCovFunc = {
+    new ObjectInputStream(new FileInputStream(file)).readObject().asInstanceOf[OpponentCovFunc]
+  }
+
+  def apply(params: Seq[Double], scores: Seq[Score], getPlayerSkill: (Player) => PlayerSkill): OpponentCovFunc = {
+
+    val Seq(
+      opponentCovLogSf, opponentCovLogEll) = params
+
+    val allPlayers = scores.map(s => s.player1.playerName).distinct
+    val skillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(allPlayers, getPlayerSkill, onServe = true) map identity
+    val skillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(allPlayers, getPlayerSkill, onServe = false) map identity
+
+    val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), scores, skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
+
+    opponentCovFunc
+  }
+
+  def apply(params: Seq[Double], scores: Seq[Score],
     skillsOnServeGivenOpponent: Map[String, Seq[PlayerSkill]], skillsOnReturnGivenOpponent: Map[String, Seq[PlayerSkill]]): OpponentCovFunc = {
 
-    new OpponentCovFunc(params,
+    println(skillsOnServeGivenOpponent("Roger Federer").take(10))
+    println(skillsOnServeGivenOpponent("Andy Murray").take(10))
+    println(skillsOnServeGivenOpponent("Omar Awadhy").take(10))
+    println(skillsOnServeGivenOpponent("Zhe Li").take(10))
+    println(skillsOnServeGivenOpponent("Novak Djokovic").take(10))
+
+    //println(skillsOnReturnGivenOpponent("Adrian Mannarino").take(10))
+    //  println(skillsOnReturnGivenOpponent("Albert Ramos").take(10))
+    //  println(skillsOnReturnGivenOpponent("p3").take(10))
+    //   println(skillsOnReturnGivenOpponent("p10").take(10))
+
+    new OpponentCovFunc(params, scores,
       skillsOnServeGivenOpponent.mapValues(s => s.map(s => s.skill)).map(identity),
       skillsOnReturnGivenOpponent.mapValues(s => s.map(s => s.skill)).map(identity))
+  }
+
+  /**
+   * Returns Map[opponent name, player skills against opponent]
+   */
+  private def calcPriorSkillsGivenOpponent(allPlayers: Seq[String], getPlayerSkill: (Player) => PlayerSkill, onServe: Boolean): Map[String, Seq[PlayerSkill]] = {
+
+    val skillsGivenOpponentMap = allPlayers.map { playerKey =>
+
+      val skills = allPlayers.map { p =>
+        val player = Player(p, playerKey, onServe, new Date(0),Surface.HARD)
+        //  val opponent = Player(playerKey,p, !onServe, new Date(0))
+        val skill = getPlayerSkill(player)
+        //   val playerSkill = getPlayerSkill(player)
+        //    val opponentSkill = getPlayerSkill(opponent)
+        //    import scala.math._
+        //  skill.copy(skill=abs(playerSkill.skill-opponentSkill.skill))
+        skill
+      }.toSeq
+
+      (playerKey, skills)
+    }.toMap
+
+    skillsGivenOpponentMap
   }
 }

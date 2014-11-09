@@ -21,9 +21,8 @@ case class InferSkillGivenPlayer(skillsModelParams: SkillsModelParams, logPerfSt
 
     val playerKey = PlayerKey(player.playerName, player.onServe)
     val infer = inferByPlayerMap.getOrElseUpdate(playerKey, getInfer(playerKey))
-
     val skill = infer.infer(player)
-    PlayerSkill(skill.m, player)
+    PlayerSkill(skill, player)
   }
 
   private def getInfer(playerKey: PlayerKey): InferSkillGivenSkills = {

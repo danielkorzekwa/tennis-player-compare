@@ -6,6 +6,8 @@ import dk.atp.api.domain.MatchComposite
 import dk.atp.api.domain.SurfaceEnum.HARD
 import dk.atp.api.tournament.TournamentAtpApi.Tournament
 import scala.collection.immutable.HashSet
+import dk.atp.api.domain.SurfaceEnum
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 
 object MatchesLoader {
 
@@ -24,6 +26,11 @@ object MatchesLoader {
   private def fromMatches(matches: Seq[MatchComposite]): Seq[MatchResult] = {
     val gameResults = matches.map { m =>
 
+      val surface = m.tournament.surface match {
+        case SurfaceEnum.HARD => Surface.HARD
+           case SurfaceEnum.CLAY => Surface.CLAY
+      }
+      
       val player1 = m.matchFacts.playerAFacts.playerName
       val player2 = m.matchFacts.playerBFacts.playerName
 
@@ -35,8 +42,9 @@ object MatchesLoader {
         m.matchFacts.playerBFacts.aces,
         m.matchFacts.playerBFacts.servicePointsWon, m.matchFacts.playerBFacts.servicePointsTotal)
 
+        
       new MatchResult(
-        m.tournament.tournamentTime, m.tournament.tournamentName,
+        m.tournament.tournamentTime, m.tournament.tournamentName,surface,
         m.matchFacts.playerAFacts.playerName,
         m.matchFacts.playerBFacts.playerName,
         m.tournament.tournamentTime,

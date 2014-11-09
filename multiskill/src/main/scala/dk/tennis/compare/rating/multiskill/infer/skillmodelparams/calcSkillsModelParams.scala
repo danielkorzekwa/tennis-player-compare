@@ -43,7 +43,7 @@ object calcSkillsModelParams extends Logging {
       val inferPlayerSkill = InferSkillGivenPlayer(currSkillParams, logPerfStdDev, scores)
       def getPlayerSkill(player: Player): PlayerSkill = inferPlayerSkill.inferSkill(player)
 
-      val newSkillCovFunc2 = currSkillParams.skillCovFunc.withPlayerSkills(getPlayerSkill)
+      val newSkillCovFunc2 = currSkillParams.skillCovFunc.withPlayerSkills(getPlayerSkill)//.withParams(priorSkillParams.skillCovFunc.getParams)
       currSkillParams = SkillsModelParams(currSkillParams.skillMeanFunc, newSkillCovFunc2)
     }
 

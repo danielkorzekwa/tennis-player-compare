@@ -11,7 +11,7 @@ case class OpponentTypeCovFunc(params: Seq[Double], opponentTypeMap: Map[String,
 
    def save(file: String) = throw new UnsupportedOperationException("Not implemented yet")
   
-  def withParams(params: Seq[Double]): CovFunc = throw new UnsupportedOperationException("Not implemented yet")
+  def withParams(newParams: Seq[Double]): OpponentTypeCovFunc = OpponentTypeCovFunc(newParams,opponentTypeMap)
   
    def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill):CovFunc = {
      throw new UnsupportedOperationException("Not implemented yet")
@@ -37,6 +37,8 @@ case class OpponentTypeCovFunc(params: Seq[Double], opponentTypeMap: Map[String,
     val cov = generalCov + o1OffBit * offensiveCov * o2OffBit + o1DefBit * defensiveCov * o2DefBit
 
     cov
+    
+   //    if (!player1.onServe) 0 else cov
   }
 
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {

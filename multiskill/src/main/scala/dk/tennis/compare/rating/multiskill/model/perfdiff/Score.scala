@@ -2,6 +2,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import scala.collection.immutable.HashSet
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
+import java.util.Date
 
 /**
  * @param pointsWon (points won by player 1, points won by player 2)
@@ -17,11 +18,11 @@ object Score {
 
   def toScores(r: MatchResult): Array[Score] = {
 
-    val player1OnServe = Player(r.player1, r.player2, onServe = true, r.matchTime)
-    val player2OnReturn = Player(r.player2, r.player1, onServe = false, r.matchTime)
+    val player1OnServe = Player(r.player1, r.player2, onServe = true, r.matchTime,r.surface)
+    val player2OnReturn = Player(r.player2, r.player1, onServe = false, r.matchTime,r.surface)
 
-    val player2OnServe = Player(r.player2, r.player1, onServe = true, r.matchTime)
-    val player1OnReturn = Player(r.player1, r.player2, onServe = false, r.matchTime)
+    val player2OnServe = Player(r.player2, r.player1, onServe = true, new Date(r.matchTime.getTime+1),r.surface)
+    val player1OnReturn = Player(r.player1, r.player2, onServe = false, new Date(r.matchTime.getTime+1),r.surface)
 
     val player1OnServeScore = Score(player1OnServe, player2OnReturn, Some(r.p1Stats.servicePointsWon, r.p1Stats.servicePointsTotal - r.p1Stats.servicePointsWon))
     val player2OnServeScore = Score(player2OnServe, player1OnReturn, Some(r.p2Stats.servicePointsWon, r.p2Stats.servicePointsTotal - r.p2Stats.servicePointsWon))

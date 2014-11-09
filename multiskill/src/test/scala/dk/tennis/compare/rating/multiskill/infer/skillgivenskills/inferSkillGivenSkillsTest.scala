@@ -10,6 +10,7 @@ import dk.bayes.math.linear.Matrix
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 
 class inferSkillGivenSkillsTest {
 
@@ -19,9 +20,9 @@ class inferSkillGivenSkillsTest {
   val skillMeanFunc = (player: Player) => 0.6
 
   val players = Array(
-    Player("p1", "p2", onServe = true, timestamp = new Date(day)),
-    Player("p1", "p2", onServe = true, timestamp = new Date(30 * day)),
-    Player("p1", "p3", onServe = true, timestamp = new Date(5 * day)))
+    Player("p1", "p2", onServe = true, timestamp = new Date(day),Surface.HARD),
+    Player("p1", "p2", onServe = true, timestamp = new Date(30 * day),Surface.HARD),
+    Player("p1", "p3", onServe = true, timestamp = new Date(5 * day),Surface.HARD))
 
   val skillsMean = Matrix(0.2, 0.8, -0.1)
   val skillsVar = skillCovFunc.covarianceMatrix(players)
@@ -32,7 +33,7 @@ class inferSkillGivenSkillsTest {
 
   @Test def test {
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day))
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD)
 
     val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
@@ -44,7 +45,7 @@ class inferSkillGivenSkillsTest {
 
   @Test def test_converge_to_mean_value {
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1200 * day))
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1200 * day),Surface.HARD)
 
     val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
@@ -61,7 +62,7 @@ class inferSkillGivenSkillsTest {
     val skillsGaussian = MultivariateGaussian(skillsMean, skillsVar)
     val playerSkills = PlayerSkills(skillsGaussian, allPlayers)
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day))
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD)
 
     val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
     (1 to 200).foreach(i => infer.infer(player))

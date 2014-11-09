@@ -12,6 +12,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentType
 import ScoresSimulator._
 import dk.tennis.compare.rating.multiskill.infer.skillmodelparams.SkillsDiffFunction
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentTypeCovFunc
 
 case class ScoresSimulator {
 
@@ -21,30 +22,14 @@ case class ScoresSimulator {
 
   def simulate(scores: Array[Score], opponentMap: Map[String, OpponentType], randSeed: Int): Tuple2[Array[SimScore], Double] = {
 
-    val trueParams = DenseVector(log(0.0000000000001), log(1), log(1),
-      -0.625343662255204, 3.263911687513335, -0.04617824159058743, 6.556709591597913, 2.3)
+    val trueParams = DenseVector(log(0.000000000000000001), log(1), log(1), 2.3)
 
-    val trueSkillCovFactory = TrueSkillCovFactory(opponentMap)
-
-    def getPlayerSkill(player: Player): PlayerSkill = throw new UnsupportedOperationException("Not implemented yet")
-    val covFunc = trueSkillCovFactory.create(trueParams.data.dropRight(1), getPlayerSkill)
+    val covFunc = OpponentTypeCovFunc(trueParams.data.dropRight(1), opponentMap)
     val simScores = scoreSim(scores, skillMeanFunc, covFunc, logPerfStdDev = trueParams.data.last, randSeed)
-
-    val priorSkillsOnServeGivenOpponent = Map[String, Seq[PlayerSkill]]()
-    val priorSkillsOnReturnGivenOpponent = Map[String, Seq[PlayerSkill]]()
 
     val trueLoglik = SkillsDiffFunction(simScores.map(s => s.score), skillMeanFunc, None, (state) => {}, covFunc).calculate(trueParams)._1
 
     (simScores, trueLoglik)
   }
 
-}
-
-object ScoresSimulator {
-  case class TrueSkillCovFactory(opponentMap: Map[String, OpponentType]) extends PlayerCovFuncFactory {
-
-    def create(params: Seq[Double], getPlayerSkill: (Player) => PlayerSkill): CovFunc = {
-      OpponentTypeOverTimeCovFunc(params, opponentMap)
-    }
-  }
 }

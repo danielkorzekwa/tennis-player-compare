@@ -31,7 +31,7 @@ class OpponentOverTimeCovFunc(val params: Seq[Double], val scores: Seq[Score], v
     new ObjectOutputStream(new FileOutputStream(file)).writeObject(this)
   }
 
-  def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): CovFunc = {
+  def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): OpponentOverTimeCovFunc = {
 
     OpponentOverTimeCovFunc(params, scores, getPlayerSkill)
   }
@@ -42,7 +42,8 @@ class OpponentOverTimeCovFunc(val params: Seq[Double], val scores: Seq[Score], v
 
     val opponentCovVal = opponentCovFunc.covariance(player1, player2)
     val skillOverTimeCovVal = skillOverTimeCovFunc.covariance(player1, player2)
-    opponentCovVal * skillOverTimeCovVal
+    
+   opponentCovVal * skillOverTimeCovVal
   }
 
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {
@@ -78,32 +79,10 @@ object OpponentOverTimeCovFunc {
       opponentCovLogSf, opponentCovLogEll,
       logSfShort, logEllShort, logSfLong, logEllLong) = params
 
-    val skillsOnServeGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player1), getPlayerSkill) map identity
-    val skillsOnReturnGivenOpponent = calcPriorSkillsGivenOpponent(scores.map(s => s.player2), getPlayerSkill) map identity
-
-    val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), skillsOnServeGivenOpponent, skillsOnReturnGivenOpponent)
+    val opponentCovFunc = OpponentCovFunc(Array(opponentCovLogSf, opponentCovLogEll), scores, getPlayerSkill)
     val skillOverTimeCovFunc = SkillOverTimeCovFunc(List(logSfShort, logEllShort, logSfLong, logEllLong))
 
     new OpponentOverTimeCovFunc(params, scores, opponentCovFunc, skillOverTimeCovFunc)
   }
 
-  /**
-   * Returns Map[opponent name, player skills against opponent]
-   */
-  private def calcPriorSkillsGivenOpponent(playersGivenOpponent: Seq[Player], getPlayerSkill: (Player) => PlayerSkill): Map[String, Seq[PlayerSkill]] = {
-
-    val allPlayers = playersGivenOpponent.map(p => p.playerName).distinct
-
-    val skillsGivenOpponentMap = allPlayers.map { playerKey =>
-
-      val skills = playersGivenOpponent.map { p =>
-        val player = p.copy(opponentName = playerKey)
-        val skill = getPlayerSkill(player)
-        skill
-      }.toSeq
-      (playerKey, skills)
-    }.toMap
-
-    skillsGivenOpponentMap
-  }
 }

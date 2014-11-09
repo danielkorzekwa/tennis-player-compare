@@ -92,15 +92,15 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
     val marginalsOnServe = players.zip(playerSkillMarginals).filter(p => p._1.onServe).map(_._2)
     val marginalsOnReturn = players.zip(playerSkillMarginals).filter(p => !p._1.onServe).map(_._2)
 
-    val meanOnServe = marginalsOnServe.sum / marginalsOnServe.size
-    val meanOnReturn = marginalsOnReturn.sum / marginalsOnReturn.size
+    val meanOnServe = (marginalsOnServe.sum / marginalsOnServe.size) - (marginalsOnReturn.sum / marginalsOnReturn.size)
+    val meanOnReturn = 0d
 
     logger.info("New mean on serve/return: %.2f/%.2f".format(meanOnServe, meanOnReturn))
     def playerSkillMeanPrior(skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double)(player: Player): Double = {
       if (player.onServe) skillPriorMeanOnServe else skillPriorMeanOnReturn
     }
 
-    playerSkillMeanPrior(meanOnServe - meanOnReturn, 0)
+    playerSkillMeanPrior(meanOnServe, meanOnReturn)
   }
 
 }

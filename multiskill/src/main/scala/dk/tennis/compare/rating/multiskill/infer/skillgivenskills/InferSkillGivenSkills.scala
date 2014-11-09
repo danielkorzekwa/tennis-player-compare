@@ -15,8 +15,9 @@ case class InferSkillGivenSkills(playerSkills: PlayerSkills, playerCovFunc: CovF
 
   private val players = playerSkills.players
   private val x = playerSkills.skillsGaussian
+private val mleSkillMean = (x.m.toArray.sum/x.m.toArray.size)
 
-  private val xPriorSkillMean = Matrix(players.map(p => skillMeanFunc(p)))
+  private val xPriorSkillMean = Matrix(players.map(p => mleSkillMean))
   private val xPriorSkillVarInv = playerCovFunc.covarianceMatrix(players).inv
   private val KxxInv = x.v.inv
 
@@ -27,8 +28,9 @@ case class InferSkillGivenSkills(playerSkills: PlayerSkills, playerCovFunc: CovF
 
     val Kzz = playerCovFunc.covarianceMatrix(Array(z))
 
-    val zSkillMean = Matrix(skillMeanFunc(z))
+    val zSkillMean = Matrix(mleSkillMean)
 
+   
     val skill = inferMarginalOfZ(xPriorSkillMean, xPriorSkillVarInv, x.m, x.v, zSkillMean, Kzz, Kzx)
 
     skill
