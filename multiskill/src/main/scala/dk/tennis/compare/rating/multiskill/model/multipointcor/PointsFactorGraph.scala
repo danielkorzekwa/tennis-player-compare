@@ -61,6 +61,7 @@ case class PointsFactorGraph(directSkills: CanonicalGaussian, p1PerfVariance: Do
   }
 
   private def power(gaussian: CanonicalGaussian, x: Int): CanonicalGaussian = {
+   
     x match {
       case 0 => CanonicalGaussian(gaussian.mean * 0, gaussian.variance * Double.PositiveInfinity)
       case _ => {

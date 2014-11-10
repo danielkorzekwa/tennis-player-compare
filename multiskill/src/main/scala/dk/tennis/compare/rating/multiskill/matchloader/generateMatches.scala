@@ -4,19 +4,21 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import java.util.Date
 import java.util.concurrent.atomic.AtomicInteger
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
+import scala.util.Random
+import Surface._
 
 object generateMatches {
 
+  def apply(players: Seq[String], rounds: Int, randSeed: Int): Seq[MatchResult] = {
 
-  def apply(players: Seq[String], rounds: Int): Seq[MatchResult] = {
-
+    val random = new Random(randSeed)
     val matchTime = new AtomicInteger()
 
     def genMatches(): Seq[MatchResult] = {
       val matches = players.flatMap { p =>
 
-        val opponents = players//.filter(opponent => !opponent.equals(p))
-        opponents.map(opponent => toMatchResult(p, opponent, new Date(matchTime.getAndIncrement())))
+        val opponents = players //.filter(opponent => !opponent.equals(p))
+        opponents.map(opponent => toMatchResult(p, opponent, new Date(matchTime.getAndIncrement() * 1000L), random))
       }
 
       matches
@@ -25,10 +27,12 @@ object generateMatches {
     List.fill(rounds)(genMatches()).flatten
   }
 
-  private def toMatchResult(player1: String, player2: String, matchTime: Date): MatchResult = {
+  private def toMatchResult(player1: String, player2: String, matchTime: Date, random: Random): MatchResult = {
 
     val p1Stats = PlayerStats(0, 100, 100)
     val p2Stats = PlayerStats(0, 100, 100)
-    MatchResult(matchTime, "tournament name",Surface.HARD, player1, player2, matchTime, true, 2, p1Stats, p2Stats)
+
+    val surface = Surface(random.nextInt(3))
+    MatchResult(matchTime, "tournament name", surface, player1, player2, matchTime, true, 2, p1Stats, p2Stats)
   }
 }

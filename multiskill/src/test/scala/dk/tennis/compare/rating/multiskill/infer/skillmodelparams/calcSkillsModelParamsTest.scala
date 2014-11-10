@@ -20,69 +20,64 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.OpponentCovFunc
 import dk.tennis.compare.rating.multiskill.scoresim.SimScore
 import dk.bayes.math.gaussian.Gaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillcov.SkillCovFunc
+import java.util.Date
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 
 class calcSkillsModelParamsTest extends Logging {
 
-  val scores = getATPScores()
-  val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed=576576)
-//  val (simScores, scoresSimulator, opponentMap) = getGeneratedScores(randSeed=576576)
-  
-//  println(opponentMap)
-//    println("Prior skills for all scores")
-//    simScores.take(2000).foreach { s =>
-//      if (s.score.player1.playerName.equals("p1"))
-//        println(s.score.player1 + ":" + s.score.player2 + ":" + s.gameSkills.m.toArray.toList + ":" + s.gamePerfDiff.perfDiff + ":" + (1 - s.gamePerfDiff.perfDiff.cdf(0)) + ":" + s.score)
-//    }
-//  
-//  val scores = simScores.map(s => s.score)
-  
+  //  val scores = getATPScores()
+  //  val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed=576576)
+  val (simScores, scoresSimulator, opponentMap) = getGeneratedScores(randSeed = 576576)
+  val scores = simScores.map(s => s.score)
+
+  println("Prior skills for all scores")
+  simScores.take(30).foreach { s =>
+    if (s.score.player1.playerName.equals("p1"))
+      println(s.score.player1 + ":" + s.score.player2 + ":" + s.gameSkills.m.toArray.toList + ":" + s.gamePerfDiff.perfDiff + ":" + (1 - s.gamePerfDiff.perfDiff.cdf(0)) + ":" + s.score)
+  }
+
   @Test def test {
 
-    logger.info("Learning parameters...")
+    logger.info("\nLearning parameters...")
 
-    val skillCovParams = Array(log(1), log(5), 2.3)
-
-
-    val rand = new Random(444543)
-    def getPlayerSkill(player: Player): PlayerSkill = PlayerSkill(Gaussian(scoresSimulator.skillMeanFunc(player) + rand.nextDouble *50.1,0), player)
-    val priorSkillCovFunc = OpponentCovFunc(skillCovParams.dropRight(1), scores, getPlayerSkill(_))
-//val priorSkillCovFunc = OpponentCovFunc.fromFile("target/Copy of skillCovFunc")
-    
+    val skillCovParams = Array(log(1), log(1), log(1), log(1), log(1))
+    val priorSkillCovFunc = SkillCovFunc(skillCovParams)
     val priorModelParams = SkillsModelParams(scoresSimulator.skillMeanFunc, priorSkillCovFunc)
 
-    val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask = Array(0, 0, 0), progressListener,
-      iterNum = 50, skillCovParams.last)
+    val logPerfStdDev = 2.3
+    val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask = Array(1, 1, 1, 1, 1, 0), progressListener,
+      iterNum = 3, logPerfStdDev)
+
+    println("")
+    logger.info("Final params: %s".format(skillsModelParams.skillCovFunc.getParams.toString))
+
+    // val p1SkillsOnServe = scores.map(s => s.player1).filter(p => p.playerName.equals("p1")).toArray
+    // val p1CovMatrix = skillsModelParams.skillCovFunc.covarianceMatrix(p1SkillsOnServe)
+    // println(p1CovMatrix)
 
   }
 
-  private def progressListener(currParams: SkillsModelParams, covParamsLearn: Boolean) {
+  private def progressListener(state: SkillDiffFuncState) {
 
-    //  val players = opponentMap.keys.toList.sortBy(player => player)
-    val playerNamesOffensive = opponentMap.values.filter(o => o.offensive).map(o => o.player).toList.sorted.take(4).toList
-    val playerNamesDefensive = opponentMap.values.filter(o => !o.offensive).map(o => o.player).toList.sorted.take(4).toList
-//    val players = playerNamesOffensive ++ playerNamesDefensive
-    val players=List("Roger Federer","Andy Murray","Omar Awadhy","Novak Djokovic","Rafael Nadal","Zhe Li")
-   
-    println(players)
-    val opponentOnReturnM = currParams.skillCovFunc.asInstanceOf[OpponentCovFunc].opponentOnReturnSimMatrix(players)
-    println(opponentOnReturnM)
+    println("")
+    logger.info("params: %s".format(state.skillCovFunc.getParams.toString))
 
-    val opponentOnServeM = currParams.skillCovFunc.asInstanceOf[OpponentCovFunc].opponentOnServeSimMatrix(players)
-    println(opponentOnServeM)
+    val playerOnServe = Player("p1", "p2", onServe = true, new Date(0), Surface.HARD)
+    val playerOnReturn = Player("p1", "p2", onServe = false, new Date(0), Surface.HARD)
+    logger.info("New mean on serve/return: %.2f/%.2f".format(state.skillMeanFunc(playerOnServe), state.skillMeanFunc(playerOnReturn)))
 
-    if (!covParamsLearn) {
-
-      currParams.skillCovFunc.save("target/skillCovFunc")
-    }
+    logger.info("loglik: %.2f, d: %s,".format(state.logLik, state.loglikD.toList))
   }
 
-  private def getGeneratedScores(randSeed:Int): Tuple3[Seq[SimScore], ScoresSimulator, Map[String, OpponentType]] = {
+  private def getGeneratedScores(randSeed: Int): Tuple3[Seq[SimScore], ScoresSimulator, Map[String, OpponentType]] = {
     val offensivePlayers = (1 to 9).map(i => OpponentType("p" + i, true))
     val defensivePlayers = (10 to 19).map(i => OpponentType("p" + i, false))
     val opponentMap = (offensivePlayers ++ defensivePlayers).groupBy(o => o.player).mapValues(v => v.head)
-    val matchResults = generateMatches(opponentMap.keys.toList.sortBy(player => player), rounds = 1)
+    val matchResults = generateMatches(opponentMap.keys.toList.sortBy(player => player), rounds = 1, randSeed)
 
-    logger.info("Simulating scores")
+    logger.info("\nSimulating scores")
     val realScores: Array[Score] = Score.toScores(matchResults)
 
     logger.info("All matches:" + realScores.size / 2)
@@ -91,6 +86,7 @@ class calcSkillsModelParamsTest extends Logging {
     logger.info("Simulating scores...")
     val scoresSimulator = ScoresSimulator()
     val (simScores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap, randSeed)
+    logger.info("True loglik: %.2f".format(trueLoglik))
 
     (simScores, scoresSimulator, opponentMap)
 
@@ -108,7 +104,7 @@ class calcSkillsModelParamsTest extends Logging {
     realScores
   }
 
-  private def getATPSimulatedScores(randSeed:Int): Tuple3[Seq[SimScore], ScoresSimulator, Map[String, OpponentType]] = {
+  private def getATPSimulatedScores(randSeed: Int): Tuple3[Seq[SimScore], ScoresSimulator, Map[String, OpponentType]] = {
 
     val realScores = getATPScores().toArray
 
@@ -122,7 +118,7 @@ class calcSkillsModelParamsTest extends Logging {
     val (simScores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap, randSeed)
 
     val scores = simScores.map(s => s.score)
-    
-    (simScores,scoresSimulator,opponentMap)
+
+    (simScores, scoresSimulator, opponentMap)
   }
 }

@@ -14,6 +14,8 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.surface.SurfaceCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.surface.SurfaceCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponentseiso.OpponentSeIsoCovFunc
+import scala.math._
 
 object PlayerCovPlotting extends App {
 
@@ -39,7 +41,8 @@ object PlayerCovPlotting extends App {
   
   private def sampleSkills(): Array[Double] = {
 
-    val covFunc = SurfaceCovFunc(Array(log(1), log(1), log(20),log(20)))
+   // val covFunc = OpponentSeIsoCovFunc(Array(log(1000)))
+    val covFunc = SurfaceCovFunc(Array( log(1), log(20),log(20)))
 
     val mean = Matrix((1 to 3 * 365).map(i => 5d).toArray)
 

@@ -7,10 +7,11 @@ import dk.bayes.infer.gp.cov.CovSEiso
 import dk.bayes.infer.gp.cov.CovSEiso
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface._
+import dk.bayes.math.linear.Matrix
 
 case class SurfaceCovFunc(params: Seq[Double]) extends CovFunc {
 
-  private val Seq(logSf, logEllHard, logEllClay, logEllGrass) = params
+  private val Seq(logEllHard, logEllClay, logEllGrass) = params
 
   private val covHard = CovSEiso(log(1d), logEllHard)
   private val covClay = CovSEiso(log(1d), logEllClay)
@@ -28,10 +29,26 @@ case class SurfaceCovFunc(params: Seq[Double]) extends CovFunc {
     val p2Surf = Array(0, 0, 0)
     p2Surf(player2.surface.id) = 1
 
-    val cov = exp(2 * logSf) * covHard.cov(p1Surf(0), p2Surf(0)) * covClay.cov(p1Surf(1), p2Surf(1)) * covGrass.cov(p1Surf(2), p2Surf(2))
+    val cov = covHard.cov(p1Surf(0), p2Surf(0)) * covClay.cov(p1Surf(1), p2Surf(1)) * covGrass.cov(p1Surf(2), p2Surf(2))
     cov
   }
-  def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = throw new UnsupportedOperationException("Not implemented yet")
+  def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {
+
+    val p1Surf = Array(0, 0, 0)
+    p1Surf(player1.surface.id) = 1
+
+    val p2Surf = Array(0, 0, 0)
+    p2Surf(player2.surface.id) = 1
+
+    val covD = paramIndex match {
+      case 0 => covHard.df_dEll(Matrix(p1Surf(0)), Matrix(p2Surf(0))) * covClay.cov(Matrix(p1Surf(1)), Matrix(p2Surf(1))) * covGrass.cov(Matrix(p1Surf(2)), Matrix(p2Surf(2)))
+      case 1 => covHard.cov(Matrix(p1Surf(0)), Matrix(p2Surf(0))) * covClay.df_dEll(Matrix(p1Surf(1)), Matrix(p2Surf(1))) * covGrass.cov(Matrix(p1Surf(2)), Matrix(p2Surf(2)))
+      case 2 => covHard.cov(Matrix(p1Surf(0)), Matrix(p2Surf(0))) * covClay.cov(Matrix(p1Surf(1)), Matrix(p2Surf(1))) * covGrass.df_dEll(Matrix(p1Surf(2)), Matrix(p2Surf(2)))
+
+    }
+    covD
+   
+  }
 
   def save(file: String) = throw new UnsupportedOperationException("Not implemented yet")
 

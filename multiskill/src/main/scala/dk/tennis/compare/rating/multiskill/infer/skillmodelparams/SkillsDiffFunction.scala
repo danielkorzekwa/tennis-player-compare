@@ -17,22 +17,19 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
   gradientMask: Option[Array[Double]] = None, progressListener: (SkillDiffFuncState) => Unit = (state) => {},
   skillCovFunc: CovFunc) extends DiffFunction[DenseVector[Double]] with Logging {
 
-  var currSkillPriorMeanFunc = skillMeanFunc
+  var currSkillMeanFunc = skillMeanFunc
   var currSkillCovFunc = skillCovFunc
 
-  var i = 0
   def calculate(params: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
     if (gradientMask.isDefined)
       require(params.size == gradientMask.get.size, "Params and gradient mask size don't match")
 
-    logger.info("params: %s".format(params.toString))
-
     val covarianceParams = params.data.dropRight(1)
     val logPerfStdDev = params.data.last
 
     val skillsCov = currSkillCovFunc.withParams(covarianceParams)
-    val gp = GenericPerfDiffModel(currSkillPriorMeanFunc, skillsCov, logPerfStdDev, scores)
+    val gp = GenericPerfDiffModel(currSkillMeanFunc, skillsCov, logPerfStdDev, scores)
     try {
       gp.calibrateModel()
     } catch {
@@ -61,20 +58,19 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
         case None => df
       }
 
+      val loglikD = DenseVector(dfWithMask) * (-1d)
       //learning of the skills mean function
       val playerSkillMarginals: Array[Double] = gp.skillsFactorGraph.getPlayerSkillsMarginalMean().toArray
       val newPriorSkillMeanFunc = learnSkillMeanFunction(Score.toPlayers(scores), playerSkillMarginals)
 
-     
-
-      currSkillPriorMeanFunc = newPriorSkillMeanFunc
+      currSkillMeanFunc = newPriorSkillMeanFunc
       currSkillCovFunc = skillsCov
-      
-       val state = SkillDiffFuncState(currSkillCovFunc)
-      
+
+      val state = SkillDiffFuncState(currSkillMeanFunc, currSkillCovFunc, f, loglikD.data)
+
       progressListener(state)
 
-      (f, DenseVector(dfWithMask) * (-1d))
+      (f, loglikD)
 
     } catch {
       case e: Exception => {
@@ -83,7 +79,6 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
       }
     }
 
-    logger.info("loglik: %.2f, d: %s,".format(loglik, df.toString))
     (loglik, df)
   }
 
@@ -95,7 +90,6 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
     val meanOnServe = (marginalsOnServe.sum / marginalsOnServe.size) - (marginalsOnReturn.sum / marginalsOnReturn.size)
     val meanOnReturn = 0d
 
-    logger.info("New mean on serve/return: %.2f/%.2f".format(meanOnServe, meanOnReturn))
     def playerSkillMeanPrior(skillPriorMeanOnServe: Double, skillPriorMeanOnReturn: Double)(player: Player): Double = {
       if (player.onServe) skillPriorMeanOnServe else skillPriorMeanOnReturn
     }

@@ -13,6 +13,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import ScoresSimulator._
 import dk.tennis.compare.rating.multiskill.infer.skillmodelparams.SkillsDiffFunction
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponenttype.OpponentTypeCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillcov.SkillCovFunc
 
 case class ScoresSimulator {
 
@@ -22,12 +23,13 @@ case class ScoresSimulator {
 
   def simulate(scores: Array[Score], opponentMap: Map[String, OpponentType], randSeed: Int): Tuple2[Array[SimScore], Double] = {
 
-    val trueParams = DenseVector(log(0.000000000000000001), log(1), log(1), 2.3)
+    val trueCovParams = Array(log(1),log(1e5),log(1e5),log(1e-5),log(1e5))
+    val logPerfStdDev = 2.3
 
-    val covFunc = OpponentTypeCovFunc(trueParams.data.dropRight(1), opponentMap)
-    val simScores = scoreSim(scores, skillMeanFunc, covFunc, logPerfStdDev = trueParams.data.last, randSeed)
+    val covFunc = SkillCovFunc(trueCovParams)
+    val simScores = scoreSim(scores, skillMeanFunc, covFunc, logPerfStdDev, randSeed)
 
-    val trueLoglik = SkillsDiffFunction(simScores.map(s => s.score), skillMeanFunc, None, (state) => {}, covFunc).calculate(trueParams)._1
+    val trueLoglik = SkillsDiffFunction(simScores.map(s => s.score), skillMeanFunc, None, (state) => {}, covFunc).calculate(DenseVector(trueCovParams :+ logPerfStdDev))._1
 
     (simScores, trueLoglik)
   }

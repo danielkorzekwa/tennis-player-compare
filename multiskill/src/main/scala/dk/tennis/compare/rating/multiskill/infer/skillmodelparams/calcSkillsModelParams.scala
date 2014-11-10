@@ -11,43 +11,20 @@ import dk.tennis.compare.rating.multiskill.infer.skillgivenplayer.InferSkillGive
 object calcSkillsModelParams extends Logging {
 
   def apply(priorSkillParams: SkillsModelParams, scores: Array[Score], gradientMask: Array[Double],
-    progressListener: (SkillsModelParams, Boolean) => Unit = (state, covParamsLearn) => {}, iterNum: Int, logPerfStdDev: Double): SkillsModelParams = {
+    progressListener: (SkillDiffFuncState) => Unit = (state) => {}, iterNum: Int, logPerfStdDev: Double): SkillsModelParams = {
 
-    var currSkillParams = priorSkillParams
-    for (i <- 0 until iterNum) {
+    val diffFunction = SkillsDiffFunction(scores, priorSkillParams.skillMeanFunc,
+      Some(gradientMask), progressListener, priorSkillParams.skillCovFunc)
 
-      logger.info("======================================================")
-      logger.info("Learning cov params")
-      logger.info("======================================================")
+    val optimizer = new LBFGS[DenseVector[Double]](maxIter = iterNum, m = 6, tolerance = 1.0E-9)
 
-      def diffFuncProgressListener(state: SkillDiffFuncState) {
-        progressListener(currSkillParams.copy(skillCovFunc = state.skillCovFunc), true)
-      }
+    val optIters = optimizer.iterations(diffFunction, DenseVector(priorSkillParams.skillCovFunc.getParams().toArray :+ logPerfStdDev)).toList
+    val newParams = optIters.last.x
 
-      val diffFunction = SkillsDiffFunction(scores, currSkillParams.skillMeanFunc,
-        Some(gradientMask), diffFuncProgressListener, currSkillParams.skillCovFunc)
+    val newSkillCovFunc = priorSkillParams.skillCovFunc.withParams(newParams.data.dropRight(1))
 
-      val optimizer = new LBFGS[DenseVector[Double]](maxIter = 1, m = 6, tolerance = 1.0E-9)
-
-      val optIters = optimizer.iterations(diffFunction, DenseVector(currSkillParams.skillCovFunc.getParams().toArray :+ logPerfStdDev)).toList
-      val newParams = optIters.last.x
-
-      val newSkillCovFunc = currSkillParams.skillCovFunc.withParams(newParams.data.dropRight(1))
-      currSkillParams = SkillsModelParams(diffFunction.currSkillPriorMeanFunc, newSkillCovFunc)
-      progressListener(currSkillParams, false)
-
-      logger.info("======================================================")
-      logger.info("Learning skills given opponent")
-      logger.info("======================================================")
-
-      val inferPlayerSkill = InferSkillGivenPlayer(currSkillParams, logPerfStdDev, scores)
-      def getPlayerSkill(player: Player): PlayerSkill = inferPlayerSkill.inferSkill(player)
-
-      val newSkillCovFunc2 = currSkillParams.skillCovFunc.withPlayerSkills(getPlayerSkill)//.withParams(priorSkillParams.skillCovFunc.getParams)
-      currSkillParams = SkillsModelParams(currSkillParams.skillMeanFunc, newSkillCovFunc2)
-    }
-
-    currSkillParams
+    val newSkillModelParams = SkillsModelParams(diffFunction.currSkillMeanFunc, newSkillCovFunc)
+    newSkillModelParams
 
   }
 }
