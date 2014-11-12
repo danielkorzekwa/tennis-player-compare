@@ -15,7 +15,7 @@ object MatchesLoader {
     val atpMatchesLoader = CSVATPMatchesLoader.fromCSVFile(atpFile)
 
     val matches = (yearFrom to yearTo).flatMap(year => atpMatchesLoader.loadMatches(year))
-    val filteredMatches = matches.filter(m => (m.tournament.surface == HARD) && m.matchFacts.playerAFacts.servicePointsTotal > 10 && m.matchFacts.playerBFacts.servicePointsTotal > 10)
+    val filteredMatches = matches.filter(m => m.matchFacts.playerAFacts.servicePointsTotal > 10 && m.matchFacts.playerBFacts.servicePointsTotal > 10)
 
     val matchResults = fromMatches(filteredMatches)
       .filter(r => playersFilter.isEmpty || (playersFilter.contains(r.player1) && playersFilter.contains(r.player2)))
@@ -28,9 +28,10 @@ object MatchesLoader {
 
       val surface = m.tournament.surface match {
         case SurfaceEnum.HARD => Surface.HARD
-           case SurfaceEnum.CLAY => Surface.CLAY
+        case SurfaceEnum.CLAY => Surface.CLAY
+        case SurfaceEnum.GRASS => Surface.GRASS
       }
-      
+
       val player1 = m.matchFacts.playerAFacts.playerName
       val player2 = m.matchFacts.playerBFacts.playerName
 
@@ -42,9 +43,8 @@ object MatchesLoader {
         m.matchFacts.playerBFacts.aces,
         m.matchFacts.playerBFacts.servicePointsWon, m.matchFacts.playerBFacts.servicePointsTotal)
 
-        
       new MatchResult(
-        m.tournament.tournamentTime, m.tournament.tournamentName,surface,
+        m.tournament.tournamentTime, m.tournament.tournamentName, surface,
         m.matchFacts.playerAFacts.playerName,
         m.matchFacts.playerBFacts.playerName,
         m.tournament.tournamentTime,

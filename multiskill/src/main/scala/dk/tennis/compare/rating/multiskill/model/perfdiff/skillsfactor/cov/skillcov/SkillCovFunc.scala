@@ -9,14 +9,19 @@ import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponentseiso.OpponentSeIsoCovFunc
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.surface.SurfaceCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 
 case class SkillCovFunc(params: Seq[Double]) extends CovFunc {
 
-  val Seq(scalingFactorLogSf, opponentLogSf, surfaceHardLogSf, surfaceClayLogSf, surfaceGrassLogSf) = params
+  val Seq(
+    opponentLogSf,
+    surfaceHardLogSf, surfaceClayLogSf, surfaceGrassLogSf,
+    logSfShort, logEllShort, logSfLong, logEllLong
+    ) = params
 
-  private val scalingFactorCov = CovSEiso(scalingFactorLogSf, log(1))
   private val opponentCovFunc = OpponentSeIsoCovFunc(Array(opponentLogSf))
   private val surfaceCovFunc = SurfaceCovFunc(Array(surfaceHardLogSf, surfaceClayLogSf, surfaceGrassLogSf))
+  private val overTimeCovFunc = SkillOverTimeCovFunc(Array(logSfShort, logEllShort, logSfLong, logEllLong))
 
   def withParams(newParams: Seq[Double]): CovFunc = SkillCovFunc(newParams)
   def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): CovFunc = throw new UnsupportedOperationException("Not implemented yet")
@@ -24,18 +29,20 @@ case class SkillCovFunc(params: Seq[Double]) extends CovFunc {
   def getParams(): Seq[Double] = params
   def covariance(player1: Player, player2: Player): Double = {
 
-    scalingFactorCov.cov(0, 0) * opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2)
+    opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covariance(player1, player2)
   }
 
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {
 
     val covD = paramIndex match {
-      case 0 => scalingFactorCov.df_dSf(Matrix(0d), Matrix(0d)) * opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2)
-      case 1 => scalingFactorCov.cov(0, 0) * opponentCovFunc.covarianceD(player1, player2, 0) * surfaceCovFunc.covariance(player1, player2)
-      case 2 => scalingFactorCov.cov(0, 0) * opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 0)
-      case 3 => scalingFactorCov.cov(0, 0) * opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 1)
-      case 4 => scalingFactorCov.cov(0, 0) * opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 2)
-
+      case 0 => opponentCovFunc.covarianceD(player1, player2, 0) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covariance(player1, player2)
+      case 1 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 0) * overTimeCovFunc.covariance(player1, player2)
+      case 2 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 1) * overTimeCovFunc.covariance(player1, player2)
+      case 3 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 2) * overTimeCovFunc.covariance(player1, player2)
+      case 4 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 0)
+      case 5 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 1)
+      case 6 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 2)
+      case 7 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 3)
     }
 
     covD

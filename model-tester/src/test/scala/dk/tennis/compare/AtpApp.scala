@@ -12,7 +12,7 @@ object AtpApp extends App {
   for (i <- 2014 to 2014) {
     val matches = atpMatchesLoader.loadMatches(i)
 
-    CSVATPMatchesLoader.toCSVFile(matches, "match_data_" + i + ".csv")
+    CSVATPMatchesLoader.toCSVFile(matches, "target/match_data_" + i + ".csv")
   }
 
 }

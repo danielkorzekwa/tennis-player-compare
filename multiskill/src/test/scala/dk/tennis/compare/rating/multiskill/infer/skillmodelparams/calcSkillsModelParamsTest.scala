@@ -24,31 +24,37 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skill
 import java.util.Date
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
+import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
+import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
 
 class calcSkillsModelParamsTest extends Logging {
 
-  //  val scores = getATPScores()
-  //  val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed=576576)
-  val (simScores, scoresSimulator, opponentMap) = getGeneratedScores(randSeed = 576576)
-  val scores = simScores.map(s => s.score)
+  val scores = getATPScores()
+  val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed = 576576)
+  //val (simScores, scoresSimulator, opponentMap) = getGeneratedScores(randSeed = 576576)
+  //val scores = simScores.map(s => s.score)
 
-  println("Prior skills for all scores")
-  simScores.take(30).foreach { s =>
-    if (s.score.player1.playerName.equals("p1"))
-      println(s.score.player1 + ":" + s.score.player2 + ":" + s.gameSkills.m.toArray.toList + ":" + s.gamePerfDiff.perfDiff + ":" + (1 - s.gamePerfDiff.perfDiff.cdf(0)) + ":" + s.score)
-  }
+  //  println("Prior skills for all scores")
+  //  simScores.take(30).foreach { s =>
+  //    if (s.score.player1.playerName.equals("p1"))
+  //      println(s.score.player1 + ":" + s.score.player2 + ":" + s.gameSkills.m.toArray.toList + ":" + s.gamePerfDiff.perfDiff + ":" + (1 - s.gamePerfDiff.perfDiff.cdf(0)) + ":" + s.score)
+  //  }
 
   @Test def test {
 
     logger.info("\nLearning parameters...")
 
-    val skillCovParams = Array(log(1), log(1), log(1), log(1), log(1))
+    val skillCovParams = Array(
+      log(1), // opponent 
+      log(1), log(1), log(1), // surface
+      log(1), log(30), log(1), log(365) //time
+      )
     val priorSkillCovFunc = SkillCovFunc(skillCovParams)
     val priorModelParams = SkillsModelParams(scoresSimulator.skillMeanFunc, priorSkillCovFunc)
 
     val logPerfStdDev = 2.3
-    val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask = Array(1, 1, 1, 1, 1, 0), progressListener,
-      iterNum = 3, logPerfStdDev)
+    val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask = Array(1, 1, 1, 1, 1, 1, 1, 1, 0), progressListener,
+      iterNum = 10, logPerfStdDev)
 
     println("")
     logger.info("Final params: %s".format(skillsModelParams.skillCovFunc.getParams.toString))
@@ -69,6 +75,11 @@ class calcSkillsModelParamsTest extends Logging {
     logger.info("New mean on serve/return: %.2f/%.2f".format(state.skillMeanFunc(playerOnServe), state.skillMeanFunc(playerOnReturn)))
 
     logger.info("loglik: %.2f, d: %s,".format(state.logLik, state.loglikD.toList))
+
+    val hardPerfLoglik = -OutcomeLik.totalLoglik(state.perfDiffs.map(p => p.perfDiff), scores.toArray, score => { score.player1.surface == Surface.HARD })
+
+    logger.info("hard loglik: %.2f".format(hardPerfLoglik))
+
   }
 
   private def getGeneratedScores(randSeed: Int): Tuple3[Seq[SimScore], ScoresSimulator, Map[String, OpponentType]] = {
@@ -94,7 +105,7 @@ class calcSkillsModelParamsTest extends Logging {
 
   private def getATPScores(): Seq[Score] = {
     val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-    val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2011) //.take(500)
+    val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2013) //.take(500)
 
     val realScores: Array[Score] = Score.toScores(matchResults)
 
@@ -119,6 +130,7 @@ class calcSkillsModelParamsTest extends Logging {
 
     val scores = simScores.map(s => s.score)
 
+    logger.info("True loglik: %.2f".format(trueLoglik))
     (simScores, scoresSimulator, opponentMap)
   }
 }

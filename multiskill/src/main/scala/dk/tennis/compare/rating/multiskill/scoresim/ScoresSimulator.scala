@@ -23,7 +23,11 @@ case class ScoresSimulator {
 
   def simulate(scores: Array[Score], opponentMap: Map[String, OpponentType], randSeed: Int): Tuple2[Array[SimScore], Double] = {
 
-    val trueCovParams = Array(log(1),log(1e5),log(1e5),log(1e-5),log(1e5))
+    val trueCovParams = Array(
+        log(100), //opponent
+        log(200),log(50),log(200), //surface
+        -1.0394676060535801, 3.8382339487840085, 0.0032389722419957287, 8.282433925904247 //time
+        )
     val logPerfStdDev = 2.3
 
     val covFunc = SkillCovFunc(trueCovParams)

@@ -66,7 +66,7 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
       currSkillMeanFunc = newPriorSkillMeanFunc
       currSkillCovFunc = skillsCov
 
-      val state = SkillDiffFuncState(currSkillMeanFunc, currSkillCovFunc, f, loglikD.data)
+      val state = SkillDiffFuncState(currSkillMeanFunc, currSkillCovFunc, f, loglikD.data,perfDiffs)
 
       progressListener(state)
 

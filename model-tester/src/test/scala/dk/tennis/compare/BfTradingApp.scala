@@ -27,8 +27,7 @@ object BfTradingApp extends App with Logging {
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
   val playersSet = HashSet("Roger Federer", "Andy Roddick")
  
-   val players2011 = shuffle(MatchesLoader.loadMatches(matchesFile, 2011, 2011)).map(r => r.player1).distinct
-  val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2010, 2010)).filter(m => players2011.contains(m.player1) &&  players2011.contains(m.player2))
+  val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2008, 2011))
   logger.info("Matches=" + matchResults.size)
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
   val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
