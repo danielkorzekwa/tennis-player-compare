@@ -16,9 +16,10 @@ import scala.util.Random
 import dk.tennis.compare.rating.multiskill.analysis.OnlineAvg
 import scala.math._
 import dk.tennis.compare.model.ExPricesMatchModel
-import dk.tennis.compare.rating.multiskill.model.matchmodel.LooMatchModel
 import scala.collection.immutable.HashSet
 import dk.tennis.compare.model.ExPricesMatchModel
+import dk.tennis.compare.rating.multiskill.infer.matchprob.givenpastmatchresults.InferMatchProbGivenPastMatchResults
+import dk.tennis.compare.rating.multiskill.infer.matchprob.givenmatchresultsloo.InferMatchProbGivenMatchResultsLoo
 
 object BfTradingApp extends App with Logging {
 
@@ -26,7 +27,7 @@ object BfTradingApp extends App with Logging {
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
   val playersSet = HashSet("Roger Federer", "Andy Roddick")
- 
+
   val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2008, 2011))
   logger.info("Matches=" + matchResults.size)
   val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
@@ -34,8 +35,8 @@ object BfTradingApp extends App with Logging {
 
   val exPricesModel = ExPricesMatchModel(matchResults, bfMarkets)
 
-  val matchModel = LooMatchModel(matchResults.toIndexedSeq)
-  // val matchModel = PastDataMatchModel(matchResults.toIndexedSeq)
+  //  val matchModel = InferMatchProbGivenMatchResultsLoo(matchResults.toIndexedSeq)
+  val matchModel = InferMatchProbGivenPastMatchResults(matchResults.toIndexedSeq)
 
   run()
 
@@ -87,12 +88,12 @@ object BfTradingApp extends App with Logging {
   }
 
   private def shuffle(matchResults: Seq[MatchResult]): Seq[MatchResult] = {
-    val rand = new Random()
+    val rand = new Random(876867765)
     matchResults.map { r =>
 
-            if (rand.nextBoolean) r
-            else r.copy(player1 = r.player2, player2 = r.player1, player1Won = !r.player1Won, p1Stats = r.p2Stats, p2Stats = r.p1Stats)
-      
+      if (rand.nextBoolean) r
+      else r.copy(player1 = r.player2, player2 = r.player1, player1Won = !r.player1Won, p1Stats = r.p2Stats, p2Stats = r.p1Stats)
+
     }
   }
 }

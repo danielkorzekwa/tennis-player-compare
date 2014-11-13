@@ -32,7 +32,7 @@ object sampleGameSkills {
         (playerKey, newPlayerSkillFactor)
     }
 
-    val sampledGameSkills = AllSkills(players, priorSkillsByPlayersMap, sampledSkillsByPlayerMap, meanFunc, playerCovFunc).getGameSkillsMarginals().map(c => MultivariateGaussian(c.mean, c.variance))
+    val sampledGameSkills = AllSkills(players, priorSkillsByPlayersMap, sampledSkillsByPlayerMap).getGameSkillsMarginals().map(c => MultivariateGaussian(c.mean, c.variance))
     sampledGameSkills
 
   }

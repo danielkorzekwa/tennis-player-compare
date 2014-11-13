@@ -11,6 +11,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov._
+import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills._
 
 /**
  * Simulates scores from a history of tennis matches
@@ -26,11 +27,11 @@ object scoreSim {
     val rand = new Random(randSeed)
 
     val gameSkills: Seq[MultivariateGaussian] = sampleGameSkills(Score.toPlayers(scores),meanFunc, playerCovFunc,rand)
-    val gamePerfDiffs: Seq[Gaussian] = gameSkillsToPerfDiffs(gameSkills, logPerfStdDev).map(p => p.perfDiff)
+    val gamePerfDiffs: Seq[Gaussian] = inferPerfDiffsGivenSkills(gameSkills, logPerfStdDev).map(p => p.perfDiff)
 
     val simulScores = scores.zip(gameSkills).map {
       case (score, gameSkills) =>
-        val gamePerfDiff = gameSkillToPerfDiff(gameSkills, logPerfStdDev)
+        val gamePerfDiff = inferPerfDiffGivenSkills(gameSkills, logPerfStdDev)
         val simulScore = simScore(score, gamePerfDiff, rand)
         SimScore(gameSkills, gamePerfDiff, simulScore)
     }

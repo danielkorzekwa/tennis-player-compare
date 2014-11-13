@@ -10,6 +10,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.surface.SurfaceCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
+import java.util.concurrent.atomic.AtomicInteger
 
 case class SkillCovFunc(params: Seq[Double]) extends CovFunc {
 
@@ -28,7 +29,6 @@ case class SkillCovFunc(params: Seq[Double]) extends CovFunc {
 
   def getParams(): Seq[Double] = params
   def covariance(player1: Player, player2: Player): Double = {
-
     opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covariance(player1, player2)
   }
 

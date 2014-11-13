@@ -60,7 +60,7 @@ class GenericPointCorModelTest {
     assertEquals(Matrix(2, 2, Array(0.668, 0.532, 0.532, 0.668)).toString, skillsMarginal.variance.toString)
   }
 
-  @Test def skillsMarginals_NaN {
+  @Ignore @Test def skillsMarginals_NaN {
 
     val perfVarianceOnServe = 1
     val perfVarianceOnReturn = 1

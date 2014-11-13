@@ -35,9 +35,19 @@ class inferSkillGivenSkillsTest {
 
     val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD)
 
-    val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
+    val infer = InferSkillGivenSkills(Some(playerSkills), skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
     assertEquals(0.1950, playerSkill.m, 0.0001)
+    assertEquals(1.0900, playerSkill.v, 0.0001)
+  }
+  
+   @Test def test_no_prior_skills {
+
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(100 * day),Surface.HARD)
+
+    val infer = InferSkillGivenSkills(None, skillCovFunc, skillMeanFunc)
+    val playerSkill = infer.infer(player)
+    assertEquals(0.6, playerSkill.m, 0.0001)
     assertEquals(1.0900, playerSkill.v, 0.0001)
   }
   
@@ -47,7 +57,7 @@ class inferSkillGivenSkillsTest {
 
     val player = Player("p1", "p5", onServe = true, timestamp = new Date(1200 * day),Surface.HARD)
 
-    val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
+    val infer = InferSkillGivenSkills(Some(playerSkills), skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
 
     assertEquals(0.6174, playerSkill.m, 0.0001)
@@ -64,7 +74,7 @@ class inferSkillGivenSkillsTest {
 
     val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD)
 
-    val infer = InferSkillGivenSkills(playerSkills, skillCovFunc, skillMeanFunc)
+    val infer = InferSkillGivenSkills(Some(playerSkills), skillCovFunc, skillMeanFunc)
     (1 to 200).foreach(i => infer.infer(player))
 
   }

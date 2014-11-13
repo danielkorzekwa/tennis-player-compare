@@ -1,14 +1,14 @@
-package dk.tennis.compare.rating.multiskill.model.perfdiff.math
+package dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills
 
 import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.bayes.math.gaussian.Gaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
 import dk.bayes.math.linear.Matrix
 import scala.math._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
+import dk.bayes.math.gaussian.Gaussian
 
-object gameSkillToPerfDiff {
+object inferPerfDiffGivenSkills {
 
-  def apply(gameSkill: MultivariateGaussian, logPerfStdDev: Double): PerfDiff = {
+ def apply(gameSkill: MultivariateGaussian, logPerfStdDev: Double): PerfDiff = {
 
     val A_d = Matrix(1d, -1d).t
     val V_d = Matrix(2, 2, Array(exp(logPerfStdDev) * exp(logPerfStdDev), 0, 0, exp(logPerfStdDev) * exp(logPerfStdDev)))
@@ -24,7 +24,7 @@ object gameSkillToPerfDiff {
     val skillsVar = Matrix(2, 2, Array(p1Skill.v, 0, 0, p2Skill.v))
     val gameSkills = MultivariateGaussian(skillsMean, skillsVar)
 
-    gameSkillToPerfDiff(gameSkills, logPerfStdDev)
+    inferPerfDiffGivenSkills(gameSkills, logPerfStdDev)
 
   }
 }

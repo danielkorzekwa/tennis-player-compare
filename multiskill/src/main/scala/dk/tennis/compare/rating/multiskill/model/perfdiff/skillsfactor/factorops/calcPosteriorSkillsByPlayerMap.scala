@@ -8,23 +8,18 @@ import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerKey
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
 
 object calcPosteriorSkillsByPlayerMap {
 
   implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
 
-  def apply(players: Seq[Player], gameSkillsVarUpMsgs: Seq[CanonicalGaussian],
-    meanFunc: Player => Double, playerCovFunc: CovFunc): AllSkills = {
+  def apply(players: Seq[Player], gameSkillsVarUpMsgs: Seq[CanonicalGaussian],priorSkillsByPlayersMap:Map[PlayerKey,PlayerSkillsFactor]): AllSkills = {
 
-    require(players.size == players.distinct.size, "Players are not unique")
+   
 
-    val playersMap = players.groupBy(p => toPlayerKey(p)).mapValues(players => players.sortBy(p => (p.timestamp, p.onServe)))
 
-    val priorSkillsByPlayersMap = playersMap.map {
-      case (playerName, players) =>
-        (playerName, PlayerSkillsFactor(meanFunc, playerCovFunc, players.toArray))
-
-    }.toMap
+  
 
     //key - player name
     val skillVarUpMsgsByPlayer: Map[PlayerKey, Array[CanonicalGaussian]] = toSkillVarUpMsgsByPlayer(players, priorSkillsByPlayersMap, gameSkillsVarUpMsgs)
@@ -44,7 +39,7 @@ object calcPosteriorSkillsByPlayerMap {
         (playerKey, PlayerSkills(MultivariateGaussian(playerSkillsMarginal.mean, playerSkillsMarginal.variance), priorSkills.players))
     }.toList.toMap
 
-    AllSkills(players, priorSkillsByPlayersMap, marginalSkillsByPlayerMap, meanFunc, playerCovFunc)
+    AllSkills(players, priorSkillsByPlayersMap, marginalSkillsByPlayerMap)
   }
 
   /**

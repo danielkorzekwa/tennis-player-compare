@@ -54,7 +54,7 @@ class calcSkillsModelParamsTest extends Logging {
 
     val logPerfStdDev = 2.3
     val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask = Array(1, 1, 1, 1, 1, 1, 1, 1, 0), progressListener,
-      iterNum = 10, logPerfStdDev)
+      iterNum = 1, logPerfStdDev)
 
     println("")
     logger.info("Final params: %s".format(skillsModelParams.skillCovFunc.getParams.toString))
@@ -105,7 +105,7 @@ class calcSkillsModelParamsTest extends Logging {
 
   private def getATPScores(): Seq[Score] = {
     val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-    val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2013) //.take(500)
+    val matchResults = MatchesLoader.loadMatches(matchesFile, 2013, 2013) //.take(500)
 
     val realScores: Array[Score] = Score.toScores(matchResults)
 

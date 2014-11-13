@@ -11,8 +11,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSki
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.InferSkillGivenSkills
 
-case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor], skillsMap: Map[PlayerKey, PlayerSkills],
-  meanFunc: Player => Double, playerCovFunc: CovFunc) {
+case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor], skillsMap: Map[PlayerKey, PlayerSkills] ) {
 
   implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
 
@@ -112,8 +111,8 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
     marginalSkillsDByPlayerMap
   }
 
-  def getPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills = {
-    skillsMap(PlayerKey(playerName, skillOnServe))
+  def getPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): Option[PlayerSkills] = {
+    skillsMap.get(PlayerKey(playerName, skillOnServe))
   }
 
 }

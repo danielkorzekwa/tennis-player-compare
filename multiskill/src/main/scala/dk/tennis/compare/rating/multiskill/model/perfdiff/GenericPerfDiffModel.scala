@@ -9,10 +9,10 @@ import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.calibrate
-import dk.tennis.compare.rating.multiskill.model.perfdiff.math.gameSkillsToPerfDiffs
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
+import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills.inferPerfDiffsGivenSkills
 
 case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFunc, logPerfStdDev: Double, scores: Array[Score],
   threshold: Double = 1e-3) extends PerfDiffModel with Logging {
@@ -30,13 +30,13 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
     val gameSkillsMarginals = skillsFactorGraph.allSkills.getGameSkillsMarginals()
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals).map(toMvnGaussian(_))
 
-    val perfDiffs = gameSkillsToPerfDiffs(skillsToGameMsgs, logPerfStdDev).toArray
+    val perfDiffs = inferPerfDiffsGivenSkills(skillsToGameMsgs, logPerfStdDev).toArray
 
     perfDiffs
 
   }
 
-  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills = {
+  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): Option[PlayerSkills] = {
     skillsFactorGraph.allSkills.getPosteriorSkillsForPlayer(playerName, skillOnServe)
   }
 
@@ -45,7 +45,7 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
     val (gameSkillsMarginals, gameSkillsMarginalsD) = skillsFactorGraph.allSkills.getGameSkillsMarginalsWithD()
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals)
 
-    val perfDiffs = gameSkillsToPerfDiffs(skillsToGameMsgs.map(toMvnGaussian(_)), logPerfStdDev).toArray
+    val perfDiffs = inferPerfDiffsGivenSkills(skillsToGameMsgs.map(toMvnGaussian(_)), logPerfStdDev).toArray
 
     val (perfDiffsMeanD, perfDiffsVarD) = getPerfDiffToOutcomeMsgsD(skillsToGameMsgs, gameSkillsMarginals, gameSkillsMarginalsD)
     (perfDiffs, perfDiffsMeanD, perfDiffsVarD)

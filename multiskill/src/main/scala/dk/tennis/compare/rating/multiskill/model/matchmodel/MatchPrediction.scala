@@ -9,8 +9,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import scala.Array.canBuildFrom
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
-import dk.tennis.compare.rating.multiskill.model.matchmodel.calc.calcMatchProb
-import dk.tennis.compare.rating.multiskill.model.matchmodel.calc.calcMatchProb
+import dk.tennis.compare.rating.multiskill.infer.matchprob.givenskills.inferMatchProbGivenSkills
 
 case class MatchPrediction(p1OnServeScore: Score, p2OnServeScore: Score, p1OnServePerfDiff: PerfDiff, p2OnServePerfDiff: PerfDiff, matchResult: MatchResult) {
 
@@ -58,7 +57,7 @@ case class MatchPrediction(p1OnServeScore: Score, p2OnServeScore: Score, p1OnSer
 
     val playerPerfDiff = getPerfDiff(playerName).perfDiff
     val opponentPerfDiff = getPerfDiff(opponentOf(playerName)).perfDiff
-    val matchProb = calcMatchProb(playerPerfDiff, opponentPerfDiff, matchResult.numOfSets)
+    val matchProb = inferMatchProbGivenSkills(playerPerfDiff, opponentPerfDiff, matchResult.numOfSets)
 
     matchProb
   }

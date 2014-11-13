@@ -21,7 +21,7 @@ trait PerfDiffModel {
    */
   def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix]
 
-  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): PlayerSkills
+  def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): Option[PlayerSkills]
   
   def calibrateModel()
 

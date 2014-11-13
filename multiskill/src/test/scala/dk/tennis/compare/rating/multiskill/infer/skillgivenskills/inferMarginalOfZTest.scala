@@ -7,18 +7,18 @@ import dk.bayes.math.linear.Matrix
 class inferMarginalOfZTest {
 
   @Test def test {
-    val xPriorMean = Matrix(0, 0, 0)
+    val xPriorMean = Matrix(0.2, 0.8, 0.6)
     val xPriorVarInv = Matrix(3, 3, Array(1.090, 1.053, 1.089, 1.053, 1.090, 1.061, 1.089, 1.061, 1.090)).inv
 
-    val xMean = Matrix(0.200, 0.800, -0.100)
+    val xMean = Matrix(0.2, 0.8, 0.6)
     val Kxx = Matrix(3, 3, Array(1.090, 1.053, 1.089, 1.053, 1.090, 1.061, 1.089, 1.061, 1.090))
 
-    val zPriorMean = Matrix(0)
+    val zPriorMean = Matrix(0.6)
     val Kzz = Matrix(1.090)
-    val Kzx = Matrix(0.1, 1, 0.1).t
+    val Kzx = Matrix( 1.053, 1.090, 1.061).t
 
     val playerSkill = inferMarginalOfZ(xPriorMean, xPriorVarInv, xMean, Kxx, zPriorMean, Kzz, Kzx)
-    assertEquals(0.1950, playerSkill.m, 0.0001)
+    assertEquals(0.6, playerSkill.m, 0.0001)
     assertEquals(1.0900, playerSkill.v, 0.0001)
   }
 
