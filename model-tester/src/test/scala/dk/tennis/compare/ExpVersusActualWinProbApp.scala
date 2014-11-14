@@ -17,8 +17,8 @@ object ExpVersusActualWinProbApp extends App with Logging {
   logger.info("Computing exp versus actual win stats...")
 
   def playerFilter(player: String, matchPrediction: MatchPrediction, h2hStat: Head2HeadStat): Boolean = {
-   
-  matchPrediction.matchProb(player)<0.5
+   (h2hStat.p1Won-h2hStat.p2Won)>3 && h2hStat.p2Won==0
+  //matchPrediction.matchProb(player)<0.5
   }
 
   val (expProb, actualProb, matchesNum) = expVersusActualWinProb(matchResults, playerFilter)
