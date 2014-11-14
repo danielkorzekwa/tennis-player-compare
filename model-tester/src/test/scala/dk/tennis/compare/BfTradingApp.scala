@@ -20,6 +20,7 @@ import scala.collection.immutable.HashSet
 import dk.tennis.compare.model.ExPricesMatchModel
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenpastmatchresults.InferMatchProbGivenPastMatchResults
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenmatchresultsloo.InferMatchProbGivenMatchResultsLoo
+import dk.tennis.compare.rating.multiskill.analysis.h2h.Head2HeadStatsDB
 
 object BfTradingApp extends App with Logging {
 
@@ -35,9 +36,10 @@ object BfTradingApp extends App with Logging {
 
   val exPricesModel = ExPricesMatchModel(matchResults, bfMarkets)
 
-  //  val matchModel = InferMatchProbGivenMatchResultsLoo(matchResults.toIndexedSeq)
-  val matchModel = InferMatchProbGivenPastMatchResults(matchResults.toIndexedSeq)
+    val matchModel = InferMatchProbGivenMatchResultsLoo(matchResults.toIndexedSeq)
+  //val matchModel = InferMatchProbGivenPastMatchResults(matchResults.toIndexedSeq)
 
+    val head2HeadStatDB = Head2HeadStatsDB(matchResults)
   run()
 
   def run() {
@@ -56,7 +58,8 @@ object BfTradingApp extends App with Logging {
         val p1TrueProb = matchPrediction.matchProb(result.player1)
         val win = result.player1Won
         val outcome = Outcome(p1Price, p1TrueProb, win)
-        trader.placeBet(outcome)
+        val headToHeadStat = head2HeadStatDB.getH2HStat(result.player1, result.player2, result.matchTime)
+        trader.placeBet(outcome,headToHeadStat)
         println(trader.getBetsNum + "," + trader.getProfit)
 
         val winnerProb = matchPrediction.matchProb(matchPrediction.matchWinner)

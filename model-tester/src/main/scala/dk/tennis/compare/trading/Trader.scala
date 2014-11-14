@@ -1,11 +1,13 @@
 package dk.tennis.compare.trading
 
+import dk.tennis.compare.rating.multiskill.analysis.h2h.Head2HeadStat
+
 case class Trader {
 
   private var totalProfit = 0d
   private var betsNum = 0
 
-  def placeBet(outcome: Outcome) {
+  def placeBet(outcome: Outcome, h2hStat: Head2HeadStat) {
     val price = outcome.price
     val trueProb = outcome.trueProb
     val outcomeBit = if (outcome.win) 1 else 0
