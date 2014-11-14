@@ -4,6 +4,8 @@ import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.analysis.expVersusActualWinProb
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
+import dk.tennis.compare.rating.multiskill.analysis.h2h.Head2HeadStat
+import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 
 object ExpVersusActualWinProbApp extends App with Logging {
 
@@ -13,7 +15,12 @@ object ExpVersusActualWinProbApp extends App with Logging {
   logger.info("All players:" + matchResults.flatMap(m => List(m.player1, m.player2)).distinct.size)
 
   logger.info("Computing exp versus actual win stats...")
-  def playerFilter(player: String, matchResult: MatchResult): Boolean = player.equals("Stan Wawrinka") && matchResult.containsPlayer("Marin Cilic")
+
+  def playerFilter(player: String, matchPrediction: MatchPrediction, h2hStat: Head2HeadStat): Boolean = {
+   
+  matchPrediction.matchProb(player)<0.5
+  }
+
   val (expProb, actualProb, matchesNum) = expVersusActualWinProb(matchResults, playerFilter)
   logger.info("DONE")
 

@@ -19,8 +19,8 @@ object MatchPredictionApp extends App with Logging {
   logger.info("All matches:" + matchResults.size)
   logger.info("All players:" + matchResults.flatMap(m => List(m.player1, m.player2)).distinct.size)
 
-  val player1 = "Rafael Nadal"
-  val player2 = "Grigov Dimitrov"
+  val player1 = "Stan Wawrinka"
+  val player2 = "Marin Cilic"
   val p1Matches = matchResults.filter(m => m.containsPlayer(player1))
   val p2Matches = matchResults.filter(m => m.containsPlayer(player2))
 
