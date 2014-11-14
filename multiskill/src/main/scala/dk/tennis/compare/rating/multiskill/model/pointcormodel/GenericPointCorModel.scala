@@ -5,7 +5,7 @@ import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear._
 import dk.bayes.math.gaussian.MultivariateGaussian
 import scala.math._
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
+import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
 case class GenericPointCorModel(perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends PointCorModel {
 
@@ -37,7 +37,7 @@ case class GenericPointCorModel(perfVarianceOnServe: Double, perfVarianceOnRetur
 
     val diff_factor_down = MultivariateGaussian((a * directSkills.mean), (a * (directSkills.variance + v) * a.t)).toGaussian
 
-    exp(OutcomeLik.loglik(diff_factor_down, true))
+    exp(InferOutcomeGivenPerfDiff.loglik(diff_factor_down, true))
   }
 
 }

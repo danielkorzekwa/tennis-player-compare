@@ -5,7 +5,7 @@ import Assert._
 import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.tennis.compare.rating.multiskill.model.matchmodel.MatchPrediction
+import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 import scala.math._
 import breeze.plot.Figure
 import breeze.plot.Plot

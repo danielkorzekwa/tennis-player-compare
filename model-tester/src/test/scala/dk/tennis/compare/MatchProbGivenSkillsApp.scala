@@ -3,7 +3,7 @@ package dk.tennis.compare
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenskills.inferMatchProbGivenSkills
 
-object MatchProbGivenSkills extends App {
+object MatchProbGivenSkillsApp extends App {
 
   val p1OnServe = Gaussian(8.0, 0)
   val p1OnReturn = Gaussian(2.30, 0)

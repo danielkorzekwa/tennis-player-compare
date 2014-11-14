@@ -1,17 +1,17 @@
-package dk.tennis.compare.rating.multiskill.model.outcomelik
+package dk.tennis.compare.rating.multiskill.infer.outcome
 
 import dk.bayes.math.gaussian.Gaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import scala.math._
 import Gaussian._
-import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 
-object OutcomeLik {
+object InferOutcomeGivenPerfDiff {
 
-  def totalLoglik(perfDiffs: Array[Gaussian], scores: Array[Score], filter: (Score) => Boolean = { score => true }): Double = {
+   def totalLoglik(perfDiffs: Array[Gaussian], scores: Array[Score], filter: (Score) => Boolean = { score => true }): Double = {
 
     val logliks = scores.zip(perfDiffs).filter { case (score, perfDiff) => filter(score) }.map {
       case (score, perfDiff) =>
-        val loglik = score.pointsWon.get._1 * OutcomeLik.loglik(perfDiff, true) + score.pointsWon.get._2 * OutcomeLik.loglik(perfDiff, false)
+        val loglik = score.pointsWon.get._1 * InferOutcomeGivenPerfDiff.loglik(perfDiff, true) + score.pointsWon.get._2 * InferOutcomeGivenPerfDiff.loglik(perfDiff, false)
       
         loglik
     }
@@ -39,7 +39,7 @@ object OutcomeLik {
       val varD = perfDiffsVarD(i)
       val score = scores(i)
 
-      val loglikD = score.pointsWon.get._1 * OutcomeLik.loglikD(perfDiff, true, muD, varD) + score.pointsWon.get._2 * OutcomeLik.loglikD(perfDiff, false, muD, varD)
+      val loglikD = score.pointsWon.get._1 * InferOutcomeGivenPerfDiff.loglikD(perfDiff, true, muD, varD) + score.pointsWon.get._2 * InferOutcomeGivenPerfDiff.loglikD(perfDiff, false, muD, varD)
       loglikD
     }.sum
     totalLogLikD
@@ -70,4 +70,5 @@ object OutcomeLik {
       case false => (1d / stdCdf(x)) * cdfValD
     }
   }
+  
 }

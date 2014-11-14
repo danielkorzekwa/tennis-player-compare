@@ -1,15 +1,14 @@
-package dk.tennis.compare.rating.multiskill.model.matchmodel
+package dk.tennis.compare.rating.multiskill.infer.matchprob
 
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
-import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import scala.Array.canBuildFrom
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenskills.inferMatchProbGivenSkills
+import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
 case class MatchPrediction(p1OnServeScore: Score, p2OnServeScore: Score, p1OnServePerfDiff: PerfDiff, p2OnServePerfDiff: PerfDiff, matchResult: MatchResult) {
 
@@ -42,8 +41,8 @@ case class MatchPrediction(p1OnServeScore: Score, p2OnServeScore: Score, p1OnSer
   }
 
   def pointProbOnServe(playerName: String) = {
-    if (p1OnServeScore.player1.playerName.equals(playerName)) exp(OutcomeLik.loglik(p1OnServePerfDiff.perfDiff, true))
-    else if (p2OnServeScore.player1.playerName.equals(playerName)) exp(OutcomeLik.loglik(p2OnServePerfDiff.perfDiff, true))
+    if (p1OnServeScore.player1.playerName.equals(playerName)) exp(InferOutcomeGivenPerfDiff.loglik(p1OnServePerfDiff.perfDiff, true))
+    else if (p2OnServeScore.player1.playerName.equals(playerName)) exp(InferOutcomeGivenPerfDiff.loglik(p2OnServePerfDiff.perfDiff, true))
     else throw new IllegalArgumentException("Player not found")
   }
 

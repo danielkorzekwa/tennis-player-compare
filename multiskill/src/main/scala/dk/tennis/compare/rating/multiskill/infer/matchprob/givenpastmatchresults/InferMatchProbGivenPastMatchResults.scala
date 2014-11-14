@@ -1,7 +1,7 @@
 package dk.tennis.compare.rating.multiskill.infer.matchprob.givenpastmatchresults
 
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
-import dk.tennis.compare.rating.multiskill.model.matchmodel.MatchPrediction
+import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenmatchresults.InferMatchProbGivenMatchResults
 
 case class InferMatchProbGivenPastMatchResults(matchResults: IndexedSeq[MatchResult]) {

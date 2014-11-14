@@ -5,15 +5,15 @@ import org.junit.Test
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import scala.io.Source
 import scala.collection.immutable.HashSet
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.scoresim.scoreSim
-import dk.tennis.compare.rating.multiskill.model.matchmodel.MatchPrediction
+import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
+import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
 class GenericPerfDiffTest extends Logging {
 
@@ -43,7 +43,7 @@ class GenericPerfDiffTest extends Logging {
 
     val perfDiffs = infer.inferPerfDiffs()
 
-    val loglik = OutcomeLik.totalLoglik(perfDiffs.map(p => p.perfDiff), scores, score => { score.player1.playerName.equals("Roger Federer"); true })
+    val loglik = InferOutcomeGivenPerfDiff.totalLoglik(perfDiffs.map(p => p.perfDiff), scores, score => { score.player1.playerName.equals("Roger Federer"); true })
 
     println("Total/avg log lik: %.3f/%.4f".format(loglik, loglik / scores.map(s => s.pointsWon.get._1 + s.pointsWon.get._2).sum))
 

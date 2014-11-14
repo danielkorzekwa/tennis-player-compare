@@ -3,7 +3,6 @@ package dk.tennis.compare.rating.multiskill.scoresim
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import dk.bayes.math.gaussian.Gaussian
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import scala.math._
 import scala.util.Random
 import dk.tennis.compare.rating.multiskill.model.perfdiff._
@@ -12,6 +11,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov._
 import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills._
+import dk.tennis.compare.rating.multiskill.infer.outcome._
 
 /**
  * Simulates scores from a history of tennis matches
@@ -40,7 +40,8 @@ object scoreSim {
 
   def simScore(score: Score, gamePerfDiff: PerfDiff, rand: Random): Score = {
 
-    val player1PointProb = exp(OutcomeLik.loglik(gamePerfDiff.perfDiff, true))
+    
+    val player1PointProb = exp(InferOutcomeGivenPerfDiff.loglik(gamePerfDiff.perfDiff, true))
     var player1PointsWon = 0
     var player2PointsWon = 0
     for (i <- 1 to (score.pointsWon.get._1 + score.pointsWon.get._2)) {

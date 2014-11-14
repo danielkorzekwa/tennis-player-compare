@@ -1,7 +1,7 @@
 package dk.tennis.compare.rating.multiskill.infer.matchprob.givenmatchresults
 
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
-import dk.tennis.compare.rating.multiskill.model.matchmodel.MatchPrediction
+import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillcov.SkillCovFunc
 import dk.tennis.compare.rating.multiskill.infer.skillmodelparams.SkillsModelParams

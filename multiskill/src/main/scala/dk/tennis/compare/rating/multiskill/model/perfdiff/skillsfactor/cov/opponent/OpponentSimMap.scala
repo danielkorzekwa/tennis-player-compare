@@ -6,7 +6,6 @@ import dk.bayes.infer.gp.cov.CovSEiso
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 
 case class OpponentSimMap(id: String, getPlayerSkills: String => Array[Gaussian], opponentCovFunc: CovSEiso) {
 

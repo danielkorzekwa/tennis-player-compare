@@ -4,11 +4,11 @@ import breeze.optimize.DiffFunction
 import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import scala.Array.canBuildFrom
+import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
 /**
  * @param priorSkillsGivenOpponent key - opponent name, value - player skills against opponent
@@ -41,13 +41,13 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
       val (perfDiffs, perfDiffsMeanD, perfDiffsVarD) =
         gp.inferPerfDiffsWithD()
 
-      val f = -OutcomeLik.totalLoglik(perfDiffs.map(p => p.perfDiff), scores, score => { score.player2.playerName.equals("Novak Djokovic"); true })
+      val f = -InferOutcomeGivenPerfDiff.totalLoglik(perfDiffs.map(p => p.perfDiff), scores, score => { score.player2.playerName.equals("Novak Djokovic"); true })
 
       val df = (0 until perfDiffsMeanD.numCols).map { i =>
         val meanD = perfDiffsMeanD.column(i)
         val varD = perfDiffsVarD.column(i)
 
-        val partialDf = OutcomeLik.totalLoglikD(perfDiffs.map(p => p.perfDiff), meanD.toArray, varD.toArray, scores)
+        val partialDf = InferOutcomeGivenPerfDiff.totalLoglikD(perfDiffs.map(p => p.perfDiff), meanD.toArray, varD.toArray, scores)
 
         partialDf
 

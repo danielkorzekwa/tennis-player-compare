@@ -3,10 +3,10 @@ package dk.tennis.compare.rating.multiskill.infer.matchprob.givenskills
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills.inferPerfDiffGivenSkills
 import scala.math._
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennisprob.TennisProbFormulaCalc
 import dk.tennisprob.TennisProbCalc.MatchTypeEnum._
 import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills.inferPerfDiffGivenSkills
+import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
 object inferMatchProbGivenSkills {
 
@@ -22,8 +22,8 @@ object inferMatchProbGivenSkills {
 
   def apply(p1OnServeGamePerfDiff: Gaussian, p2OnServeGamePerfDiff: Gaussian, numOfSets: Int): Double = {
 
-    val p1ProbOnServe = exp(OutcomeLik.loglik(p1OnServeGamePerfDiff, true))
-    val p2ProbOnServe = exp(OutcomeLik.loglik(p2OnServeGamePerfDiff, true))
+    val p1ProbOnServe = exp(InferOutcomeGivenPerfDiff.loglik(p1OnServeGamePerfDiff, true))
+    val p2ProbOnServe = exp(InferOutcomeGivenPerfDiff.loglik(p2OnServeGamePerfDiff, true))
 
     val matchType = if (numOfSets == 2) THREE_SET_MATCH
     else if (numOfSets == 3) FIVE_SET_MATCH

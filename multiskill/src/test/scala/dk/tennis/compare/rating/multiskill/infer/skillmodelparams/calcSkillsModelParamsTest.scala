@@ -24,8 +24,8 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skill
 import java.util.Date
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
-import dk.tennis.compare.rating.multiskill.model.outcomelik.OutcomeLik
 import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
+import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
 class calcSkillsModelParamsTest extends Logging {
 
@@ -76,7 +76,7 @@ class calcSkillsModelParamsTest extends Logging {
 
     logger.info("loglik: %.2f, d: %s,".format(state.logLik, state.loglikD.toList))
 
-    val hardPerfLoglik = -OutcomeLik.totalLoglik(state.perfDiffs.map(p => p.perfDiff), scores.toArray, score => { score.player1.surface == Surface.HARD })
+    val hardPerfLoglik = -InferOutcomeGivenPerfDiff.totalLoglik(state.perfDiffs.map(p => p.perfDiff), scores.toArray, score => { score.player1.surface == Surface.HARD })
 
     logger.info("hard loglik: %.2f".format(hardPerfLoglik))
 
