@@ -19,13 +19,13 @@ object MatchPredictionApp extends App with Logging {
   logger.info("All matches:" + matchResults.size)
   logger.info("All players:" + matchResults.flatMap(m => List(m.player1, m.player2)).distinct.size)
 
-  val player1 = "Stan Wawrinka"
-  val player2 = "Marin Cilic"
+  val player1 = "Roger Federer"
+  val player2 = "Stan Wawrinka"
   val p1Matches = matchResults.filter(m => m.containsPlayer(player1))
   val p2Matches = matchResults.filter(m => m.containsPlayer(player2))
 
   val startTime = df.parse("01/01/2012")
-  val endTime = df.parse("14/11/2014")
+  val endTime = df.parse("15/11/2014")
   val MONTH: Long = 1000L * 3600 * 24 * 30
 
   makePredictions()

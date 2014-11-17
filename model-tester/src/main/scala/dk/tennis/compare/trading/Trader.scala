@@ -14,11 +14,17 @@ case class Trader {
     val stake = 1
 
     val betProfit =
-      if (1d / outcome.trueProb < price) stake * price * outcomeBit - stake //back bet 
-      else -stake * price * outcomeBit - (-stake) //lay bet
+      if (price * outcome.trueProb > 1.5) stake * price * outcomeBit - stake //back bet 
+      else if (price * outcome.trueProb < 0.5) -stake * price * outcomeBit - (-stake) //lay bet
+      else 0
+    //   if (1d / outcome.trueProb < price) stake * price * outcomeBit - stake //back bet 
+    //   else -stake * price * outcomeBit - (-stake) //lay bet
 
-    totalProfit += betProfit
-    betsNum += 1
+    if (betProfit != 0) {
+      totalProfit += betProfit
+
+      betsNum += 1
+    }
   }
 
   def getProfit(): Double = totalProfit
