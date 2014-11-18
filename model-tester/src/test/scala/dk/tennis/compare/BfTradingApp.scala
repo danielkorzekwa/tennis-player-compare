@@ -21,6 +21,7 @@ import dk.tennis.compare.model.ExPricesMatchModel
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenpastmatchresults.InferMatchProbGivenPastMatchResults
 import dk.tennis.compare.rating.multiskill.infer.matchprob.givenmatchresultsloo.InferMatchProbGivenMatchResultsLoo
 import dk.tennis.compare.rating.multiskill.analysis.h2h.Head2HeadStatsDB
+import dk.tennis.compare.rating.multiskill.infer.matchprob.givenmatchresults.InferMatchProbGivenMatchResults
 
 object BfTradingApp extends App with Logging {
 
@@ -38,6 +39,7 @@ object BfTradingApp extends App with Logging {
 
   val matchModel = InferMatchProbGivenMatchResultsLoo(matchResults.toIndexedSeq)
   //val matchModel = InferMatchProbGivenPastMatchResults(matchResults.toIndexedSeq)
+  // val matchModel = InferMatchProbGivenMatchResults(matchResults.toIndexedSeq)
 
   val head2HeadStatDB = Head2HeadStatsDB(matchResults)
   run()
@@ -48,7 +50,10 @@ object BfTradingApp extends App with Logging {
 
     val trader = Trader()
     val loglik = OnlineAvg()
-    matchResults.foreach { result =>
+    val loglikEx = OnlineAvg()
+
+    val players = List("Roger Federer", "NovakDjokovic")
+    matchResults.filter(m => true || players.contains(m.player1) && players.contains(m.player2)).foreach { result =>
       val exPrices = exPricesModel.gamePrices(result)
 
       if (exPrices.isDefined) {
@@ -60,33 +65,40 @@ object BfTradingApp extends App with Logging {
         val outcome = Outcome(p1Price, p1TrueProb, win)
         val headToHeadStat = head2HeadStatDB.getH2HStat(result.player1, result.player2, result.matchTime)
         trader.placeBet(outcome, headToHeadStat)
-        println(trader.getBetsNum + "," + trader.getProfit)
-
+        println(trader.getBetsNum + "," + trader.getProfit + ":")
+println("expB/actB/expL/actL=%.2f/%.2f/%.2f/%.2f".format(trader.expectedExWinsBack,trader.actualWinsBack,trader.expectedExWinsLay,trader.actualWinsLay))
         val winnerProb = matchPrediction.matchProb(matchPrediction.matchWinner)
-        loglik.add(log(winnerProb))
-      //  println("loglik: " + loglik.getAvg)
+        val winnerProbEx = 1d / exPrices.get.getPrice(matchPrediction.matchWinner)
+
+        if (p1Price * p1TrueProb > 1.05 || p1Price * p1TrueProb < 0.95) {
+          
+       //   println("%s:%.4f:%.4f".format(result.matchTime + ":" + result.tournamentName + ":" + result.player1 + ":" + result.player2,winnerProb,winnerProbEx))
+          loglik.add(log(winnerProb))
+          loglikEx.add(log(winnerProbEx))
+          println("loglik/loglikEx: %.2f / %.2f".format(loglik.getAvg, loglikEx.getAvg))
+        }
       }
     }
 
     //match analysis
-        matchResults.foreach { result =>
-          val exPrices = exPricesModel.gamePrices(result)
-    
-          val player1 = "Roger Federer"
-          val player2 = "Novak Djokovic"
-    
-          if (result.containsPlayer(player1)) {
-            val matchPrediction = matchModel.predict(result)
-    
-            val playerExProb = if (exPrices.isDefined) 1d / exPrices.get.getPrice(player1) else Double.NaN
-            println("%s, %s, %s, %s, prob/exProb: %.2f / %.2f, %s".format(
-              matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
-              player1, matchPrediction.opponentOf(player1), matchPrediction.matchProb(player1), playerExProb, matchPrediction.matchWinner))
-    
-            //   println("%s, %s, %.2f, %.2f".format( matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
-            //       matchPrediction.skillOnServe(player2).m, matchPrediction.skillOnReturn(player2).m))
-          }
-        }
+    matchResults.foreach { result =>
+      val exPrices = exPricesModel.gamePrices(result)
+
+      val player1 = "Roger Federer"
+      val player2 = "Novak Djokovic"
+
+      if (result.containsPlayer(player1) && result.containsPlayer(player2)) {
+        val matchPrediction = matchModel.predict(result)
+
+        val playerExProb = if (exPrices.isDefined) 1d / exPrices.get.getPrice(player1) else Double.NaN
+        println("%s, %s, %s, %s, prob/exProb: %.2f / %.2f, %s".format(
+          matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
+          player1, matchPrediction.opponentOf(player1), matchPrediction.matchProb(player1), playerExProb, matchPrediction.matchWinner))
+
+        //   println("%s, %s, %.2f, %.2f".format( matchPrediction.matchResult.tournamentTime, matchPrediction.matchResult.tournamentName,
+        //       matchPrediction.skillOnServe(player2).m, matchPrediction.skillOnReturn(player2).m))
+      }
+    }
 
   }
 

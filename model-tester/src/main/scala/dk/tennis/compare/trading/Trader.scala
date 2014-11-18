@@ -7,6 +7,12 @@ case class Trader {
   private var totalProfit = 0d
   private var betsNum = 0
 
+  var expectedExWinsBack = 0d
+  var actualWinsBack = 0d
+
+  var expectedExWinsLay = 0d
+  var actualWinsLay = 0d
+
   def placeBet(outcome: Outcome, h2hStat: Head2HeadStat) {
     val price = outcome.price
     val trueProb = outcome.trueProb
@@ -14,9 +20,22 @@ case class Trader {
     val stake = 1
 
     val betProfit =
-      if (price * outcome.trueProb > 1.5) stake * price * outcomeBit - stake //back bet 
-      else if (price * outcome.trueProb < 0.5) -stake * price * outcomeBit - (-stake) //lay bet
-      else 0
+      if (price * outcome.trueProb > 1.05) {
+     
+
+        expectedExWinsBack += 1 / price
+        actualWinsBack += outcomeBit
+        
+           stake * price * outcomeBit - stake //back bet
+        
+      } else if (price * outcome.trueProb < 0.95) {
+        
+
+        expectedExWinsLay += 1 / price
+        actualWinsLay += outcomeBit
+        
+        -stake * price * outcomeBit - (-stake) //lay bet
+      } else 0
     //   if (1d / outcome.trueProb < price) stake * price * outcomeBit - stake //back bet 
     //   else -stake * price * outcomeBit - (-stake) //lay bet
 
