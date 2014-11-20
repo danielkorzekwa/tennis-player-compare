@@ -14,7 +14,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 object TournamentApp extends App with Logging {
 
   val df = new SimpleDateFormat("dd/MM/yyyy")
-  val time = df.parse("18/11/2015")
+  val time = df.parse("19/01/2015")
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2014_121114.csv"
   val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2014)
 
