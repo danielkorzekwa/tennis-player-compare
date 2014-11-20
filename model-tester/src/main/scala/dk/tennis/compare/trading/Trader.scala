@@ -36,8 +36,6 @@ case class Trader {
         
         -stake * price * outcomeBit - (-stake) //lay bet
       } else 0
-    //   if (1d / outcome.trueProb < price) stake * price * outcomeBit - stake //back bet 
-    //   else -stake * price * outcomeBit - (-stake) //lay bet
 
     if (betProfit != 0) {
       totalProfit += betProfit

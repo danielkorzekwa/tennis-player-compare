@@ -66,13 +66,13 @@ object BfTradingApp extends App with Logging {
         val headToHeadStat = head2HeadStatDB.getH2HStat(result.player1, result.player2, result.matchTime)
         trader.placeBet(outcome, headToHeadStat)
         println(trader.getBetsNum + "," + trader.getProfit + ":")
-println("expB/actB/expL/actL=%.2f/%.2f/%.2f/%.2f".format(trader.expectedExWinsBack,trader.actualWinsBack,trader.expectedExWinsLay,trader.actualWinsLay))
+        println("expB/actB/expL/actL=%.2f/%.2f/%.2f/%.2f".format(trader.expectedExWinsBack, trader.actualWinsBack, trader.expectedExWinsLay, trader.actualWinsLay))
         val winnerProb = matchPrediction.matchProb(matchPrediction.matchWinner)
         val winnerProbEx = 1d / exPrices.get.getPrice(matchPrediction.matchWinner)
 
         if (p1Price * p1TrueProb > 1.05 || p1Price * p1TrueProb < 0.95) {
-          
-       //   println("%s:%.4f:%.4f".format(result.matchTime + ":" + result.tournamentName + ":" + result.player1 + ":" + result.player2,winnerProb,winnerProbEx))
+
+          //   println("%s:%.4f:%.4f".format(result.matchTime + ":" + result.tournamentName + ":" + result.player1 + ":" + result.player2,winnerProb,winnerProbEx))
           loglik.add(log(winnerProb))
           loglikEx.add(log(winnerProbEx))
           println("loglik/loglikEx: %.2f / %.2f".format(loglik.getAvg, loglikEx.getAvg))
