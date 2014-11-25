@@ -37,7 +37,7 @@ case class ExPricesMatchModel(matchResults: Seq[MatchResult], bfMarkets: Seq[BfM
       case List(bfMarket) => {
         val p1Price = bfMarket.runnerMap.values.find(runner => runner.name.toLowerCase() == matchResult.player1.toLowerCase()).get.price
           val p2Price = bfMarket.runnerMap.values.find(runner => runner.name.toLowerCase() == matchResult.player2.toLowerCase()).get.price
-       Some(GamePrices(matchResult.player1,matchResult.player2,p1Price,p2Price))
+       Some(GamePrices(matchResult.player1,matchResult.player2,p1Price,p2Price,bfMarket))
       }
       case Nil => None
       case _ => {
