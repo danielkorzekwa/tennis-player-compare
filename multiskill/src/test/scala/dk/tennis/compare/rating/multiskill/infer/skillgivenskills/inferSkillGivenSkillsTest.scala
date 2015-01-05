@@ -11,6 +11,7 @@ import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
+import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
 
 class inferSkillGivenSkillsTest {
 
@@ -20,9 +21,9 @@ class inferSkillGivenSkillsTest {
   val skillMeanFunc = (player: Player) => 0.6
 
   val players = Array(
-    Player("p1", "p2", onServe = true, timestamp = new Date(day),Surface.HARD),
-    Player("p1", "p2", onServe = true, timestamp = new Date(30 * day),Surface.HARD),
-    Player("p1", "p3", onServe = true, timestamp = new Date(5 * day),Surface.HARD))
+    Player("p1", "p2", onServe = true, timestamp = new Date(day),Surface.HARD,NumOfSets.THREE_SETS),
+    Player("p1", "p2", onServe = true, timestamp = new Date(30 * day),Surface.HARD,NumOfSets.THREE_SETS),
+    Player("p1", "p3", onServe = true, timestamp = new Date(5 * day),Surface.HARD,NumOfSets.THREE_SETS))
 
   val skillsMean = Matrix(0.2, 0.8, -0.1)
   val skillsVar = skillCovFunc.covarianceMatrix(players)
@@ -33,7 +34,7 @@ class inferSkillGivenSkillsTest {
 
   @Test def test {
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD)
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD,NumOfSets.THREE_SETS)
 
     val infer = InferSkillGivenSkills(Some(playerSkills), skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
@@ -43,7 +44,7 @@ class inferSkillGivenSkillsTest {
   
    @Test def test_no_prior_skills {
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(100 * day),Surface.HARD)
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(100 * day),Surface.HARD,NumOfSets.THREE_SETS)
 
     val infer = InferSkillGivenSkills(None, skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
@@ -55,7 +56,7 @@ class inferSkillGivenSkillsTest {
 
   @Test def test_converge_to_mean_value {
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1200 * day),Surface.HARD)
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1200 * day),Surface.HARD,NumOfSets.THREE_SETS)
 
     val infer = InferSkillGivenSkills(Some(playerSkills), skillCovFunc, skillMeanFunc)
     val playerSkill = infer.infer(player)
@@ -72,7 +73,7 @@ class inferSkillGivenSkillsTest {
     val skillsGaussian = MultivariateGaussian(skillsMean, skillsVar)
     val playerSkills = PlayerSkills(skillsGaussian, allPlayers)
 
-    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD)
+    val player = Player("p1", "p5", onServe = true, timestamp = new Date(1 * day),Surface.HARD,NumOfSets.THREE_SETS)
 
     val infer = InferSkillGivenSkills(Some(playerSkills), skillCovFunc, skillMeanFunc)
     (1 to 200).foreach(i => infer.infer(player))

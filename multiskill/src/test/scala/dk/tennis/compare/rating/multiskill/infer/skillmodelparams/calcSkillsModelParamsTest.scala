@@ -26,11 +26,13 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 import dk.tennis.compare.rating.multiskill.model.perfdiff.PerfDiff
 import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillcov.SkillSumCovFunc
+import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
 
 class calcSkillsModelParamsTest extends Logging {
 
   val scores = getATPScores()
-  val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed = 576576)
+  // val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed = 576576)
   //val (simScores, scoresSimulator, opponentMap) = getGeneratedScores(randSeed = 576576)
   //val scores = simScores.map(s => s.score)
 
@@ -44,17 +46,34 @@ class calcSkillsModelParamsTest extends Logging {
 
     logger.info("\nLearning parameters...")
 
-    val skillCovParams = Array(
-      log(1), // opponent 
-      log(1), log(1), log(1), // surface
-      log(1), log(30), log(1), log(365) //time
-      )
-    val priorSkillCovFunc = SkillCovFunc(skillCovParams)
-    val priorModelParams = SkillsModelParams(scoresSimulator.skillMeanFunc, priorSkillCovFunc)
-
     val logPerfStdDev = 2.3
-    val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask = Array(1, 1, 1, 1, 1, 1, 1, 1, 0), progressListener,
-      iterNum = 1, logPerfStdDev)
+
+    val (priorSkillOnServe, priorSkillOnReturn) = (4.61d, 0)
+    def playerSkillMeanPrior(player: Player): Double = {
+      if (player.onServe) priorSkillOnServe else priorSkillOnReturn
+    }
+
+//    val skillCovParams = Array(
+//      log(10), //opponent 
+//      log(10), log(10), log(10), //surface
+//      log(1), log(30), log(1), log(300) //time
+//      )
+//    val priorSkillCovFunc = SkillCovFunc(skillCovParams)
+//    val priorModelParams = SkillsModelParams(playerSkillMeanPrior, priorSkillCovFunc)
+//    val gradientMask = Array(1d, 1, 1, 1, 1, 1, 1, 1, 0)
+
+        val skillCovParams = Array(
+          log(1), //main
+          log(1), log(10), //opponent 
+          log(1), log(10), log(10), log(10), //surface
+          log(1), log(30), log(1), log(365) //time
+          )
+        val priorSkillCovFunc = SkillSumCovFunc(skillCovParams)
+        val priorModelParams = SkillsModelParams(playerSkillMeanPrior, priorSkillCovFunc)
+        val gradientMask = Array(1d, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+    val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask, progressListener,
+      iterNum = 10, logPerfStdDev)
 
     println("")
     logger.info("Final params: %s".format(skillsModelParams.skillCovFunc.getParams.toString))
@@ -70,8 +89,8 @@ class calcSkillsModelParamsTest extends Logging {
     println("")
     logger.info("params: %s".format(state.skillCovFunc.getParams.toString))
 
-    val playerOnServe = Player("p1", "p2", onServe = true, new Date(0), Surface.HARD)
-    val playerOnReturn = Player("p1", "p2", onServe = false, new Date(0), Surface.HARD)
+    val playerOnServe = Player("p1", "p2", onServe = true, new Date(0), Surface.HARD, NumOfSets.THREE_SETS)
+    val playerOnReturn = Player("p1", "p2", onServe = false, new Date(0), Surface.HARD, NumOfSets.THREE_SETS)
     logger.info("New mean on serve/return: %.2f/%.2f".format(state.skillMeanFunc(playerOnServe), state.skillMeanFunc(playerOnReturn)))
 
     logger.info("loglik: %.2f, d: %s,".format(state.logLik, state.loglikD.toList))
@@ -96,7 +115,9 @@ class calcSkillsModelParamsTest extends Logging {
 
     logger.info("Simulating scores...")
     val scoresSimulator = ScoresSimulator()
-    val (simScores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap, randSeed)
+
+    val (skillsModelParams, logPerfStdDev) = getSimSkillsModelParams()
+    val (simScores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap, randSeed, skillsModelParams, logPerfStdDev)
     logger.info("True loglik: %.2f".format(trueLoglik))
 
     (simScores, scoresSimulator, opponentMap)
@@ -105,7 +126,7 @@ class calcSkillsModelParamsTest extends Logging {
 
   private def getATPScores(): Seq[Score] = {
     val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-    val matchResults = MatchesLoader.loadMatches(matchesFile, 2013, 2013) //.take(500)
+    val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2011) //.take(500)
 
     val realScores: Array[Score] = Score.toScores(matchResults)
 
@@ -126,11 +147,33 @@ class calcSkillsModelParamsTest extends Logging {
 
     logger.info("Simulating scores...")
     val scoresSimulator = ScoresSimulator()
-    val (simScores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap, randSeed)
+
+    val (skillsModelParams, logPerfStdDev) = getSimSkillsModelParams()
+    val (simScores, trueLoglik) = scoresSimulator.simulate(realScores, opponentMap, randSeed, skillsModelParams, logPerfStdDev)
 
     val scores = simScores.map(s => s.score)
 
     logger.info("True loglik: %.2f".format(trueLoglik))
     (simScores, scoresSimulator, opponentMap)
+  }
+
+  private def getSimSkillsModelParams(): Tuple2[SkillsModelParams, Double] = {
+
+    val trueCovParams = Array(
+      log(100), //opponent
+      log(200), log(50), log(200), //surface
+      -1.0394676060535801, 3.8382339487840085, 0.0032389722419957287, 8.282433925904247 //time
+      )
+    val logPerfStdDev = 2.3
+
+    val covFunc = SkillCovFunc(trueCovParams)
+
+    val (trueSkillMeanOnServe, trueSkillMeanOnReturn) = (5d, 0)
+
+    def skillMeanFunc(player: Player): Double = { if (player.onServe) trueSkillMeanOnServe else trueSkillMeanOnReturn }
+
+    val skillsModelParams = SkillsModelParams(skillMeanFunc, covFunc)
+
+    (skillsModelParams, logPerfStdDev)
   }
 }

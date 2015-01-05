@@ -9,9 +9,9 @@ import dk.bayes.math.linear.Matrix
 
 case class OpponentSeIsoCovFunc(params: Seq[Double]) extends CovFunc {
 
-  private val Seq(logEll) = params
+  private val Seq(logSf, logEll) = params
 
-  private val opponentCovFunc = CovSEiso(log(1), logEll)
+  private val opponentCovFunc = CovSEiso(logSf, logEll)
   def withParams(newParams: Seq[Double]): CovFunc = OpponentSeIsoCovFunc(params)
   def withPlayerSkills(getPlayerSkill: (Player) => PlayerSkill): CovFunc = throw new UnsupportedOperationException("Not implemented yet")
 
@@ -27,10 +27,10 @@ case class OpponentSeIsoCovFunc(params: Seq[Double]) extends CovFunc {
     val (player1Vec, player2Vec) = if (player1.opponentName.equals(player2.opponentName)) (Array(0d), Array(0d)) else (Array(0d, 1), Array(1d, 0))
 
     val covD = paramIndex match {
-      case 0 => opponentCovFunc.df_dEll(Matrix(player1Vec), Matrix(player2Vec))
+      case 0 => opponentCovFunc.df_dSf(Matrix(player1Vec), Matrix(player2Vec))
+      case 1 => opponentCovFunc.df_dEll(Matrix(player1Vec), Matrix(player2Vec))
     }
-    
-    
+
     covD
   }
   def save(file: String) = throw new UnsupportedOperationException("Not implemented yet")

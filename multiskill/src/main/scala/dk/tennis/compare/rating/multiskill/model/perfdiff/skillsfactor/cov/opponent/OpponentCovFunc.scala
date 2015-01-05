@@ -14,6 +14,7 @@ import java.io.FileInputStream
 import java.util.Date
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
+import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
 
 /**
  * Inspired by
@@ -149,7 +150,7 @@ object OpponentCovFunc {
     val skillsGivenOpponentMap = allPlayers.map { playerKey =>
 
       val skills = allPlayers.map { p =>
-        val player = Player(p, playerKey, onServe, new Date(0),Surface.HARD)
+        val player = Player(p, playerKey, onServe, new Date(0),Surface.HARD,NumOfSets.THREE_SETS)
         //  val opponent = Player(playerKey,p, !onServe, new Date(0))
         val skill = getPlayerSkill(player)
         //   val playerSkill = getPlayerSkill(player)

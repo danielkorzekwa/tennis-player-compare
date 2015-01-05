@@ -20,8 +20,8 @@ case class SkillCovFunc(params: Seq[Double]) extends CovFunc {
     logSfShort, logEllShort, logSfLong, logEllLong
     ) = params
 
-  private val opponentCovFunc = OpponentSeIsoCovFunc(Array(opponentLogSf))
-  private val surfaceCovFunc = SurfaceCovFunc(Array(surfaceHardLogSf, surfaceClayLogSf, surfaceGrassLogSf))
+  private val opponentCovFunc = OpponentSeIsoCovFunc(Array(log(1), opponentLogSf))
+  private val surfaceCovFunc = SurfaceCovFunc(Array(log(1), surfaceHardLogSf, surfaceClayLogSf, surfaceGrassLogSf))
   private val overTimeCovFunc = SkillOverTimeCovFunc(Array(logSfShort, logEllShort, logSfLong, logEllLong))
 
   def withParams(newParams: Seq[Double]): CovFunc = SkillCovFunc(newParams)
@@ -35,10 +35,10 @@ case class SkillCovFunc(params: Seq[Double]) extends CovFunc {
   def covarianceD(player1: Player, player2: Player, paramIndex: Int): Double = {
 
     val covD = paramIndex match {
-      case 0 => opponentCovFunc.covarianceD(player1, player2, 0) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covariance(player1, player2)
-      case 1 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 0) * overTimeCovFunc.covariance(player1, player2)
-      case 2 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 1) * overTimeCovFunc.covariance(player1, player2)
-      case 3 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 2) * overTimeCovFunc.covariance(player1, player2)
+      case 0 => opponentCovFunc.covarianceD(player1, player2, 1) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covariance(player1, player2)
+      case 1 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 1) * overTimeCovFunc.covariance(player1, player2)
+      case 2 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 2) * overTimeCovFunc.covariance(player1, player2)
+      case 3 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covarianceD(player1, player2, 3) * overTimeCovFunc.covariance(player1, player2)
       case 4 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 0)
       case 5 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 1)
       case 6 => opponentCovFunc.covariance(player1, player2) * surfaceCovFunc.covariance(player1, player2) * overTimeCovFunc.covarianceD(player1, player2, 2)

@@ -3,21 +3,22 @@ package dk.tennis.compare.rating.multiskill.infer.skillgivenskills
 import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.Gaussian
 import dk.bayes.math.gaussian.Gaussian
-
+import dk.bayes._
+import dk.bayes.dsl.infer
 object inferMarginalOfZ {
 
   def apply(xPriorMean: Matrix, xPriorVarInv: Matrix, xMean: Matrix, Kxx: Matrix, zPriorMean: Matrix, Kzz: Matrix, Kzx: Matrix): Gaussian = {
 
-    val Kxz = Kzx.t
+    val x = dsl.variable.Gaussian(xMean, Kxx)
+
     val A = Kzx * xPriorVarInv
+    val b = zPriorMean - A * xPriorMean
+    val Kz_x = Kzz - Kzx * xPriorVarInv * Kzx.t
 
-    val Kz_x = Kzz - Kzx * xPriorVarInv * Kxz
+    val y = dsl.variable.Gaussian(A, x, b, Kz_x)
 
-    /** RUN INFERENCE - Compute p(z) = integral of p(x)*p(z|x)dx*/
-    val skillMean = zPriorMean + A * (xMean - xPriorMean)
-    val skillVar = Kz_x + A * Kxx * A.t
-
-    Gaussian(skillMean(0), skillVar(0))
+    val marginal = infer(y)
+    Gaussian(marginal.m(0), marginal.v(0))
   }
 
 }
