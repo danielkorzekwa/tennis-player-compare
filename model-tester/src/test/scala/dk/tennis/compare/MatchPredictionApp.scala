@@ -24,8 +24,8 @@ object MatchPredictionApp extends App with Logging {
   val p1Matches = matchResults.filter(m => m.containsPlayer(player1))
   val p2Matches = matchResults.filter(m => m.containsPlayer(player2))
 
-  val startTime = df.parse("19/01/2014")
-  val endTime = df.parse("19/01/2015")
+  val startTime = df.parse("05/01/2015")
+  val endTime = df.parse("05/01/2015")
   val DAY: Long = 1000L * 3600 * 24 * 1
 
   makePredictions()

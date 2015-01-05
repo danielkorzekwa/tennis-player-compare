@@ -14,7 +14,9 @@ import BfMarket._
 case class BfMarket(eventId: Long, fullDescription: String, scheduledOff: Date, runnerMap: Map[Long, Selection]) {
   val eventName = {
     val split = fullDescription.split("/")
-    split(0).concat(split(1))
+   
+    if(split.size>1) split(0).concat(split(1))
+    else "na"
   }
 }
 

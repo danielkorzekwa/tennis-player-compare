@@ -32,17 +32,14 @@ object BfTradingApp extends App with Logging {
 
   val matchResults = shuffle(MatchesLoader.loadMatches(matchesFile, 2008, 2011))
   logger.info("Matches=" + matchResults.size)
-  val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/betfair_data_tennis_mens_2010_2011.csv")
+
+  val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/bf_markets_2010_2011.csv")
+  //val marketDataSource = Source.fromFile("./src/test/resources/betfair_data/bf_markets_2013.csv")
+
   val bfMarkets = BfMarket.fromCSV(marketDataSource.getLines().drop(1).toList)
+  logger.info("Bf markets:" + bfMarkets.size)
 
   val exPricesModel = ExPricesMatchModel(matchResults, bfMarkets)
-
-  //val matchModel = InferMatchProbGivenGlicko2Best("./src/test/resources/glicko2_market_probs_2010_2011.csv")
-  val matchModel = InferMatchProbGivenMatchResultsLoo(matchResults.toIndexedSeq)
-  // val matchModel = InferMatchProbGivenPastMatchResults(matchResults.toIndexedSeq)
-  // val matchModel = InferMatchProbGivenMatchResults(matchResults.toIndexedSeq)
-
-  val head2HeadStatDB = Head2HeadStatsDB(matchResults)
   run()
 
   def run() {
@@ -50,29 +47,11 @@ object BfTradingApp extends App with Logging {
     //trading simulation
 
     val betex = Betex(commission = 0.05)
-    val trader = Trader(betex)
+    val trader = Trader(betex, exPricesModel, matchResults)
 
     matchResults.foreach { result =>
-      val exPrices = exPricesModel.gamePrices(result)
 
-      if (exPrices.isDefined) {
-        val matchPrediction = matchModel.predict(result)
-
-        val backPrice = exPrices.get.p1Price
-        val layPrice = 1d / (1 - 1 / exPrices.get.p2Price)
-
-        val p1TrueProb = matchPrediction.matchProb(result.player1)
-        val win = result.player1Won
-        val outcome = Outcome(backPrice, layPrice, p1TrueProb, win)
-        val headToHeadStat = head2HeadStatDB.getH2HStat(result.player1, result.player2, result.matchTime)
-        trader.placeBet(outcome, headToHeadStat)
-
-        println("betsNum=%d, profit=%.2f, expB/actB/expL/actL=%.2f/%.2f/%.2f/%.2f, loglik/loglikEx: %.2f / %.2f, result=%s".format(
-          betex.getBetsNum, betex.getProfit,
-          betex.expectedExWinsBack, betex.actualWinsBack, betex.expectedExWinsLay, betex.actualWinsLay,
-          betex.loglik.getAvg, betex.loglikEx.getAvg,
-          result))
-      }
+      trader.processMatchResult(result)
     }
 
     //match analysis
@@ -98,7 +77,7 @@ object BfTradingApp extends App with Logging {
   }
 
   private def shuffle(matchResults: Seq[MatchResult]): Seq[MatchResult] = {
-    val rand = new Random(876867765)
+    val rand = new Random(65656)
     matchResults.map { r =>
 
       if (rand.nextBoolean) r

@@ -1,2 +1,0 @@
-select event_id,full_description,scheduled_off,selection_id,selection,dt_actual_off,odds as price, LATEST_TAKEN,WIN_FLAG from market_prices() 
-where FULL_DESCRIPTION not like '%Women%' order by scheduled_off

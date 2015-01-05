@@ -10,6 +10,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 import dk.tennis.compare.rating.multiskill.matchloader.PlayerStats
 import com.typesafe.scalalogging.slf4j.Logging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
+import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
 
 object TournamentApp extends App with Logging {
 
@@ -41,10 +42,10 @@ object TournamentApp extends App with Logging {
     val allPlayers = matchResults.filter(m => m.tournamentTime.getTime() > df.parse("01/07/2014").getTime()).flatMap(r => List(r.player1, r.player2)).distinct
 
     val skills = allPlayers.map { p =>
-      val playerOnServe = Player(p, p, true, time, Surface.HARD)
+      val playerOnServe = Player(p, p, true, time, Surface.HARD,NumOfSets.THREE_SETS)
       val skillOnServe = matchModel.infer.inferSkill(playerOnServe)
 
-      val playerOnReturn = Player(p, p, false, time, Surface.HARD)
+      val playerOnReturn = Player(p, p, false, time, Surface.HARD,NumOfSets.THREE_SETS)
       val skillOnReturn = matchModel.infer.inferSkill(playerOnReturn)
 
       (p, skillOnServe.skill.m + skillOnReturn.skill.m)

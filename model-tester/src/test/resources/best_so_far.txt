@@ -1,0 +1,20 @@
+
+
+period: 2010-2011
+mult:
+
+11/12/2014 08:49:32 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - params: WrappedArray(2.359812754065542, 2.2021945860904166, 0.7336945892183001, 1.9400983181062423, -0.30262409579071925, 2.6601797657125483, 0.4245995628062712, 7.152345506936956) 
+11/12/2014 08:49:32 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - New mean on serve/return: 4.64/0.00 
+11/12/2014 08:49:32 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - loglik: 269792.17, d: List(0.8426757762925723, -2.744219596461599, -5.75837380715567, 0.8247775131500503, 97.0893741293758, -10.670967742894721, 60.746580683667744, -0.30735369334939017, -0.0), 
+11/12/2014 08:49:32 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - hard loglik: 149893.14 
+11/12/2014 08:49:32 INFO  breeze.optimize.StrongWolfeLineSearch - Line search t: 0.14264116948700709 fval: 269792.1701780159 rhs: 269815.51589082496 cdd: 202.41316725063783 
+
+
+sum:
+
+11/12/2014 08:56:51 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - params: WrappedArray(-0.06752175746252553, -1.0113707529339377, 2.4488187495488805, 0.026290720424598603, 2.294220360249113, 2.232563518848958, 2.2819016681372464, -0.7620553457309178, 2.6343120756382894, -0.2905464442409732, 6.228026770395624) 
+11/12/2014 08:56:51 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - New mean on serve/return: 4.63/0.00 
+11/12/2014 08:56:51 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - loglik: 269826.85, d: List(4.736884771269543, 7.435320385564226, -0.026490820777503192, 1.9165752703779242, 0.21833550039493788, 2.8630916399141517, 0.6952927481857507, 12.849138651344584, -1.7723147863661741, 1.2396417758662919, -5.578828344920069, -0.0), 
+11/12/2014 08:56:51 INFO  dk.tennis.compare.rating.multiskill.infer.skillmodelparams.calcSkillsModelParamsTest - hard loglik: 149897.85 
+11/12/2014 08:56:51 INFO  breeze.optimize.StrongWolfeLineSearch - Line search t: 1.9000000000000009E-6 fval: 269826.85211398895 rhs: 269826.85245323874 cdd: -291.1224990231934 
+
