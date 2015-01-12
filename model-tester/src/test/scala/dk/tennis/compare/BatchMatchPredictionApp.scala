@@ -20,38 +20,14 @@ object BatchMatchPredictionApp extends App with Logging {
   val matchModel = InferMatchProbGivenMatchResults(matchResults.toIndexedSeq)
 
   val predictionMatches = List(
-    ("Carlos Berlocq", "Alexandr Dolgopolov"), //Brisbane
-    ("Sam Groth", "Lleyton Hewitt"),
-    ("Kevin Anderson", "Lukasz Kubot"),
-    ("Martin Klizan", "Jurgen Melzer"),
-    ("Marinko Matosevic", "Steve Johnson"),
-    ("Bernard Tomic", "Sam Querrey"),
-    ("Rhyne Williams", "John Millman"),
-    ("Andreas Haider-Maurer", "Marcel Granollers"), //Chennai
-    ("Pablo Carreno Busta", "Alejandro Gonzalez"),
-    ("Borna Coric", "Robin Haase"),
-    ("Elias Ymer", "Igor Sijsling"),
-    ("Peter Gojowczyk", "Alejandro Falla"),
-    ("Ramkumar Ramanathan", "Tatsuma Ito"),
-    ("Edouard Roger-Vasselin", "Gilles Muller"),
-    ("Yen-Hsun Lu", "Somdev Devvarman"),
-    ("Simone Bolelli", "Benjamin Becker"), //Quatar
-    ("Ivan Dodig", "Mohamed Safwat"),
-    ("Dustin Brown", "Paolo Lorenzi"),
-    ("Teymuraz Gabashvili", "Fernando Verdasco"),
-    ("Richard Gasquet", "Pablo Andujar"),
-    ("Denis Istomin", "Tomas Berdych"),
-    ("Leonardo Mayer", "Andreas Seppi"),
-    ("Novak Djokovic", "Dusan Lajovic"),
-    ("Lukas Rosol", "Ivo Karlovic"),
-    ("Joao Souza", "Malek Jaziri"),
-    ("Sergiy Stakhovsky", "Jabor Mohammed Ali Muta"),
-    ("Jan-Lennard Struff", "Philipp Kohlschreiber"))
+    ("Stan Wawrinka", "David Goffin"),
+     ("Roger Federer", "Milos Raonic"),
+     ("David Ferrer", "Tomas Berdych"))
 
   predictionMatches.foreach {
     case (p1, p2) =>
 
-      val time = df.parse("05/01/2015")
+      val time = df.parse("10/01/2015")
       val result = MatchResult(time, "tournament name", Surface.HARD, p1, p2, time, player1Won = true, numOfSets = 2, PlayerStats(0, 0, 0), PlayerStats(0, 0, 0))
 
       val prediction = matchModel.predict(result)

@@ -1,6 +1,5 @@
 package dk.tennis.compare.model
 
-import dk.atp.api.domain.MatchComposite
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 import dk.tennis.compare.domain.BfMarket

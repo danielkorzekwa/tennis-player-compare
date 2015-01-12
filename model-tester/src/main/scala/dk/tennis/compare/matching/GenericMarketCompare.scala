@@ -1,6 +1,5 @@
 package dk.tennis.compare.matching
 
-import dk.atp.api.domain.MatchComposite
 import scala.io.Source
 import org.apache.commons.io.FileUtils._
 import java.io.File
@@ -16,14 +15,15 @@ import org.joda.time.DateTime
 import scala.math._
 import dk.atp.api.ATPMatchesLoader
 import dk.tennis.compare.domain.BfMarket
+import dk.atp.api.domain.TennisMatch
 
 object GenericMarketCompare extends MarketCompare {
 
-  def compare(atpMarket: MatchComposite, betfairMarket: BfMarket): Double = {
+  def compare(atpMarket: TennisMatch, betfairMarket: BfMarket): Double = {
 
-    def playerNames(matchFacts: MatchFacts): List[String] = matchFacts.playerAFacts.playerName :: matchFacts.playerBFacts.playerName :: Nil
+    def playerNames(matchFacts: TennisMatch): List[String] = matchFacts.player1 :: matchFacts.player2 :: Nil
 
-    val playerNamesMatched = playerNames(atpMarket.matchFacts).sorted.equals(betfairMarket.runnerMap.values.toList.map(r => r.name).sorted)
+    val playerNamesMatched = playerNames(atpMarket).sorted.equals(betfairMarket.runnerMap.values.toList.map(r => r.name).sorted)
 
     if (playerNamesMatched) {
       val timeDiff = abs(betfairMarket.scheduledOff.getTime() - atpMarket.tournament.tournamentTime.getTime())

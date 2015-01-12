@@ -1,6 +1,5 @@
 package dk.tennis.compare.matching.event
 
-import dk.atp.api.domain.MatchComposite
 import org.joda.time.DateTime
 import dk.tennis.compare.domain.BfMarket
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult

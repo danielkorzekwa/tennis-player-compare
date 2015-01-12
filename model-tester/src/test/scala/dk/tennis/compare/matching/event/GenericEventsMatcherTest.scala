@@ -2,7 +2,6 @@ package dk.tennis.compare.matching.event
 
 import org.junit._
 import Assert._
-import dk.atp.api.domain.MatchComposite
 import dk.atp.api.CSVATPMatchesLoader
 import dk.atp.api.domain.SurfaceEnum._
 import scala.io.Source
