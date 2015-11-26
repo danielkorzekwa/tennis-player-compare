@@ -1,7 +1,6 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent
 
 import dk.bayes.infer.gp.cov.CovSEiso
-import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.collection.mutable.Set
 import scala.collection.mutable.HashSet
@@ -15,6 +14,7 @@ import java.util.Date
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
+import breeze.linalg.DenseMatrix
 
 /**
  * Inspired by
@@ -85,7 +85,8 @@ class OpponentCovFunc(val params: Seq[Double], scores: Seq[Score],
       covValue
     }
 
-    val simMatrix = Matrix(players.size, players.size, (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex))
+    val simMatrix = DenseMatrix.tabulate(players.size, players.size){case (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex)}
+      
     simMatrix
   }
 
@@ -97,7 +98,7 @@ class OpponentCovFunc(val params: Seq[Double], scores: Seq[Score],
       covValue
     }
 
-    val simMatrix = Matrix(players.size, players.size, (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex))
+    val simMatrix = DenseMatrix.tabulate(players.size, players.size){case (rowIndex, colIndex) => simMatrixValue(rowIndex, colIndex)}
     simMatrix
   }
 

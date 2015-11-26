@@ -7,11 +7,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 import scala.math._
-import breeze.plot.Figure
-import breeze.plot.Plot
-import breeze.plot._
 import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.bayes.math.linear.Matrix
 import java.util.Date
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 

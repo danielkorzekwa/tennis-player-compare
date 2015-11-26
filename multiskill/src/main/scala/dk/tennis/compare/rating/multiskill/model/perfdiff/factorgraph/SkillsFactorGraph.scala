@@ -1,6 +1,5 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph
 
-import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear._
 import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
@@ -8,7 +7,7 @@ import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import dk.tennis.compare.rating.multiskill.matchloader.MatchResult
 import scala.math._
 import dk.bayes.math.gaussian.MultivariateGaussian
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import dk.tennis.compare.rating.multiskill.model.multipointcor.GenericMultiPointCorModel
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
@@ -18,13 +17,17 @@ import dk.tennis.compare.rating.multiskill.model.multipoint.GenericMultiPointMod
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerKey
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
+import dk.bayes.math.gaussian.canonical.DenseCanonicalGaussian
+import breeze.linalg.Matrix
+import breeze.linalg.DenseVector
+import breeze.linalg.DenseMatrix
 
-case class SkillsFactorGraph(meanFunc: Player => Double, playerCovFunc: CovFunc, scores: Array[Score], logPerfStdDev: Double) extends Logging {
+case class SkillsFactorGraph(meanFunc: Player => Double, playerCovFunc: CovFunc, scores: Array[Score], logPerfStdDev: Double) extends LazyLogging {
 
-  private val variance = Matrix(2, 2, Array(Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity))
+  private val variance = new DenseMatrix(2, 2, Array(100d,0, 0,100d)).t + DenseMatrix.eye[Double](2)*1e-7
 
-  private val priorGameSkillsVarUpMsg = CanonicalGaussian(Matrix.zeros(2, 1), variance)
-  private var gameSkillsVarUpMsgs: Seq[CanonicalGaussian] = (1 to scores.size).map { gameFactor =>
+  private val priorGameSkillsVarUpMsg = DenseCanonicalGaussian(DenseVector.zeros[Double](2), variance)
+  private var gameSkillsVarUpMsgs: Seq[DenseCanonicalGaussian] = (1 to scores.size).map { gameFactor =>
     priorGameSkillsVarUpMsg
   }
 
@@ -57,9 +60,9 @@ case class SkillsFactorGraph(meanFunc: Player => Double, playerCovFunc: CovFunc,
               //      newDirectSkills = CanonicalGaussian(newDirectSkills.mean, Matrix(2, 2, Array(newDirectSkills.variance(0, 0), 0d, 0d, newDirectSkills.variance(1, 1))))
 
               val (newDirectSkill1, newDirectSkill2, factorGraph) = model2.skillMarginals(skillsToGameMsg.marginal(0), skillsToGameMsg.marginal(1), p1PointsWon, p1PointsWon + p2PointsWon, threshold = 1e-4)
-              val newDirectSkillsMean = Matrix(Array(newDirectSkill1.m, newDirectSkill2.m))
-              val newDirectSkillsVar = Matrix(2, 2, Array(newDirectSkill1.v, 0d, 0d, newDirectSkill2.v))
-              val newDirectSkills = CanonicalGaussian(newDirectSkillsMean, newDirectSkillsVar)
+              val newDirectSkillsMean = DenseVector(Array(newDirectSkill1.m, newDirectSkill2.m))
+              val newDirectSkillsVar = new DenseMatrix(2, 2, Array(newDirectSkill1.v, 0d, 0d, newDirectSkill2.v)).t
+              val newDirectSkills = DenseCanonicalGaussian(newDirectSkillsMean, newDirectSkillsVar)
 
               var directSkillsMsg = newDirectSkills / skillsToGameMsg
               directSkillsMsg
@@ -80,7 +83,7 @@ case class SkillsFactorGraph(meanFunc: Player => Double, playerCovFunc: CovFunc,
     allSkills = calcPosteriorSkillsByPlayerMap(players, gameSkillsVarUpMsgs,   priorSkillsByPlayersMap)
   }
 
-  def calcSkillsToGameMsgs(gameSkillsMarginals: Seq[CanonicalGaussian]): Seq[CanonicalGaussian] = {
+  def calcSkillsToGameMsgs(gameSkillsMarginals: Seq[DenseCanonicalGaussian]): Seq[DenseCanonicalGaussian] = {
 
     val skillsToGameMsgs = gameSkillsMarginals.zip(gameSkillsVarUpMsgs).map {
       case (gameSkillsMarginal, gameToSkillsMsg) =>
@@ -92,8 +95,8 @@ case class SkillsFactorGraph(meanFunc: Player => Double, playerCovFunc: CovFunc,
     skillsToGameMsgs
   }
 
-  def getPlayerSkillsPriorMean(): Matrix = allSkills.getPlayerSkillsPriorMean()
-  def getPlayerSkillsMarginalMean(): Matrix = allSkills.getPlayerSkillsMarginalMean()
+  def getPlayerSkillsPriorMean(): DenseVector[Double] = allSkills.getPlayerSkillsPriorMean()
+  def getPlayerSkillsMarginalMean(): DenseVector[Double] = allSkills.getPlayerSkillsMarginalMean()
 
   implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
 }

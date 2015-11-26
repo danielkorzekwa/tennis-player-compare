@@ -5,7 +5,7 @@ import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.GenericPerfDiffModel
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import scala.Array.canBuildFrom
 import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
@@ -15,7 +15,7 @@ import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDi
  */
 case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => Double,
   gradientMask: Option[Array[Double]] = None, progressListener: (SkillDiffFuncState) => Unit = (state) => {},
-  skillCovFunc: CovFunc) extends DiffFunction[DenseVector[Double]] with Logging {
+  skillCovFunc: CovFunc) extends DiffFunction[DenseVector[Double]] with LazyLogging {
 
   var currSkillMeanFunc = skillMeanFunc
   var currSkillCovFunc = skillCovFunc
@@ -43,9 +43,9 @@ case class SkillsDiffFunction(scores: Array[Score], skillMeanFunc: (Player) => D
 
       val f = -InferOutcomeGivenPerfDiff.totalLoglik(perfDiffs.map(p => p.perfDiff), scores, score => { score.player2.playerName.equals("Novak Djokovic"); true })
 
-      val df = (0 until perfDiffsMeanD.numCols).map { i =>
-        val meanD = perfDiffsMeanD.column(i)
-        val varD = perfDiffsVarD.column(i)
+      val df = (0 until perfDiffsMeanD.cols).map { i =>
+        val meanD = perfDiffsMeanD(::,i)
+        val varD = perfDiffsVarD(::,i)
 
         val partialDf = InferOutcomeGivenPerfDiff.totalLoglikD(perfDiffs.map(p => p.perfDiff), meanD.toArray, varD.toArray, scores)
 

@@ -9,11 +9,11 @@ import dk.bayes.model.factor.BivariateGaussianFactor
 
 case class PointsFactorGraph(p1SkillFactor: Gaussian, p2SkillFactor: Gaussian, p1PerfVariance: Double, p2PerfVariance: Double, pointsWon: Int, allPoints: Int) {
 
-  private var p1WonPerfToSkillMsg = Gaussian(0, Double.PositiveInfinity)
-  private var p1LostPerfToSkillMsg = Gaussian(0, Double.PositiveInfinity)
+  private var p1WonPerfToSkillMsg = Gaussian(0,100d)
+  private var p1LostPerfToSkillMsg = Gaussian(0, 100d)
 
-  private var p2WonPerfToSkillMsg = Gaussian(0, Double.PositiveInfinity)
-  private var p2LostPerfToSkillMsg = Gaussian(0, Double.PositiveInfinity)
+  private var p2WonPerfToSkillMsg = Gaussian(0,100d)
+  private var p2LostPerfToSkillMsg = Gaussian(0, 100d)
 
   private var p1Marginal = p1SkillFactor
   private var p2Marginal = p2SkillFactor
@@ -94,7 +94,7 @@ case class PointsFactorGraph(p1SkillFactor: Gaussian, p2SkillFactor: Gaussian, p
 
   private def power(gaussian: Gaussian, x: Int): Gaussian = {
     x match {
-      case 0 => Gaussian(0, Double.PositiveInfinity)
+      case 0 => Gaussian(0, 100d)
       case _ => {
         var product = gaussian
         var i = 1

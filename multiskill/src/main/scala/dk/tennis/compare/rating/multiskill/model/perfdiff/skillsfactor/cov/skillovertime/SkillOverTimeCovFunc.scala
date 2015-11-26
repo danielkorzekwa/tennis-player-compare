@@ -2,7 +2,6 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skil
 
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import scala.io.Source
@@ -31,8 +30,8 @@ case class SkillOverTimeCovFunc(params: Seq[Double]) extends CovFunc {
   private val timeDiffCovLong = new CovSEiso(sf = logSfLong, logEllLong)
 
   def covariance(player1: Player, player2: Player): Double = {
-    val timeDiffCovShortVal = timeDiffCovShort.cov(Matrix(player1.timestamp.getTime.toDouble / DAY_MILLIS), Matrix(player2.timestamp.getTime.toDouble / DAY_MILLIS))
-    val timeDiffCovLongVal = timeDiffCovLong.cov(Matrix(player1.timestamp.getTime.toDouble / DAY_MILLIS), Matrix(player2.timestamp.getTime.toDouble / DAY_MILLIS))
+    val timeDiffCovShortVal = timeDiffCovShort.cov(player1.timestamp.getTime.toDouble / DAY_MILLIS, player2.timestamp.getTime.toDouble / DAY_MILLIS)
+    val timeDiffCovLongVal = timeDiffCovLong.cov(player1.timestamp.getTime.toDouble / DAY_MILLIS, player2.timestamp.getTime.toDouble / DAY_MILLIS)
 
     val cov = timeDiffCovShortVal + timeDiffCovLongVal
     cov
@@ -52,22 +51,22 @@ case class SkillOverTimeCovFunc(params: Seq[Double]) extends CovFunc {
 
   private def cov_df_d0(player1: Player, player2: Player): Double = {
 
-    timeDiffCovShort.df_dSf(Matrix(player1.timestamp.getTime.toDouble / DAY_MILLIS), Matrix(player2.timestamp.getTime.toDouble / DAY_MILLIS)) + 0
+    timeDiffCovShort.df_dSf(player1.timestamp.getTime.toDouble / DAY_MILLIS, player2.timestamp.getTime.toDouble / DAY_MILLIS) + 0
   }
 
   private def cov_df_d1(player1: Player, player2: Player): Double = {
 
-    timeDiffCovShort.df_dEll(Matrix(player1.timestamp.getTime.toDouble / DAY_MILLIS), Matrix(player2.timestamp.getTime.toDouble / DAY_MILLIS)) + 0
+    timeDiffCovShort.df_dEll(player1.timestamp.getTime.toDouble / DAY_MILLIS, player2.timestamp.getTime.toDouble / DAY_MILLIS) + 0
   }
 
   private def cov_df_d2(player1: Player, player2: Player): Double = {
 
-    0 + timeDiffCovLong.df_dSf(Matrix(player1.timestamp.getTime.toDouble / DAY_MILLIS), Matrix(player2.timestamp.getTime.toDouble / DAY_MILLIS))
+    0 + timeDiffCovLong.df_dSf(player1.timestamp.getTime.toDouble / DAY_MILLIS, player2.timestamp.getTime.toDouble / DAY_MILLIS)
   }
 
   private def cov_df_d3(player1: Player, player2: Player): Double = {
 
-    0 + timeDiffCovLong.df_dEll(Matrix(player1.timestamp.getTime.toDouble / DAY_MILLIS), Matrix(player2.timestamp.getTime.toDouble / DAY_MILLIS)) + 0
+    0 + timeDiffCovLong.df_dEll(player1.timestamp.getTime.toDouble / DAY_MILLIS, player2.timestamp.getTime.toDouble / DAY_MILLIS) + 0
   }
 
   def save(file: String) = {

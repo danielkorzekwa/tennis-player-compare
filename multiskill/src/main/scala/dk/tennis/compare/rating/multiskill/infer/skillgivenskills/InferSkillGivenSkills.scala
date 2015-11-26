@@ -3,12 +3,13 @@ package dk.tennis.compare.rating.multiskill.infer.skillgivenskills
 import dk.bayes.math.gaussian.Gaussian
 import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.bayes.math.linear.Matrix
-import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import InferSkillGivenSkills._
+import breeze.linalg.DenseVector
+import breeze.linalg._
+import dk.bayes.math.linear.invchol
 
 /**
  * Infer player skill given other players skills
@@ -22,7 +23,7 @@ case class InferSkillGivenSkills(playerSkills: Option[PlayerSkills], playerCovFu
   def infer(z: Player): Gaussian = {
 
     val Kzz = playerCovFunc.covarianceMatrix(Array(z))
-    val zSkillMean = Matrix(skillMeanFunc(z))
+    val zSkillMean = DenseVector(skillMeanFunc(z))
 
     val skill = skillsPrior match {
       case Some(skillsPrior) => {
@@ -36,7 +37,7 @@ case class InferSkillGivenSkills(playerSkills: Option[PlayerSkills], playerCovFu
       }
 
       case None => {
-        Gaussian(zSkillMean(0), Kzz(0))
+        Gaussian(zSkillMean(0), Kzz(0,0))
       }
 
     }
@@ -52,9 +53,9 @@ object InferSkillGivenSkills {
     val players = playerSkills.players
     val x = playerSkills.skillsGaussian
 
-    val xPriorSkillMean = Matrix(players.map(p => skillMeanFunc(p)))
-    val xPriorSkillVarInv = playerCovFunc.covarianceMatrix(players).inv
-    val KxxInv = x.v.inv
+    val xPriorSkillMean = DenseVector(players.map(p => skillMeanFunc(p)))
+    val xPriorSkillVarInv = invchol(cholesky(playerCovFunc.covarianceMatrix(players)).t)
+    val KxxInv = invchol(cholesky(x.v).t)
   }
 }
 

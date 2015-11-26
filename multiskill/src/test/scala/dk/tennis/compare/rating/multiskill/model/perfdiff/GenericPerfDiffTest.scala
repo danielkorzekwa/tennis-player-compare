@@ -2,7 +2,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import scala.math.log
 import org.junit.Test
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import dk.bayes.math.gaussian.Gaussian
 import dk.tennis.compare.rating.multiskill.matchloader.MatchesLoader
 import scala.io.Source
@@ -15,7 +15,7 @@ import dk.tennis.compare.rating.multiskill.infer.matchprob.MatchPrediction
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
 
-class GenericPerfDiffTest extends Logging {
+class GenericPerfDiffTest extends LazyLogging {
 
   val (priorSkillOnServe, priorSkillOnReturn) = (5d, 0)
   val initialParams = DenseVector(-1.0394676060535801, 3.8382339487840085, 0.0032389722419957287, 8.282433925904247, 2.3)

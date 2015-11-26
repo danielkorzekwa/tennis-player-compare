@@ -1,28 +1,26 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import dk.bayes.math.gaussian.MultivariateGaussian
+import dk.bayes.math.gaussian.canonical.DenseCanonicalGaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerKey
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
-import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.bayes.math.linear.Matrix
-import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.bayes.math.gaussian.Gaussian
-import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
-import dk.tennis.compare.rating.multiskill.infer.skillgivenskills.InferSkillGivenSkills
 
-case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor], skillsMap: Map[PlayerKey, PlayerSkills] ) {
+case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKey, PlayerSkillsFactor], skillsMap: Map[PlayerKey, PlayerSkills]) {
 
   implicit def toPlayerKey(player: Player): PlayerKey = PlayerKey(player.playerName, player.onServe)
 
-  def getPlayerSkillsPriorMean(): Matrix = Matrix(players.toArray.map(p => priorSkillsByPlayersMap(p).priorPlayerSkills.marginal(p).m))
+  def getPlayerSkillsPriorMean(): DenseVector[Double] = DenseVector(players.toArray.map(p => priorSkillsByPlayersMap(p).priorPlayerSkills.marginal(p).m))
 
-  def getPlayerSkillsMarginalMean(): Matrix = {
+  def getPlayerSkillsMarginalMean(): DenseVector[Double] = {
 
     val skillsMarginalMeans = players.map { player =>
       skillsMap(player).marginal(player).m
     }.toArray
-    Matrix(skillsMarginalMeans)
+    DenseVector(skillsMarginalMeans)
   }
 
   /**
@@ -30,7 +28,7 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
    *
    * @param gameSkillsVarUpMsgs Messages send from game skills variables to skills variable for all players
    */
-  def getGameSkillsMarginals(): Seq[CanonicalGaussian] = {
+  def getGameSkillsMarginals(): Seq[DenseCanonicalGaussian] = {
     val gameSkillsMarginals = (0 until players.size / 2).map { gameIndex =>
 
       val player1 = players(2 * gameIndex)
@@ -40,17 +38,17 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
 
       val skillMarginal2 = skillsMap(player2).marginal(player2)
 
-      val m = Matrix(skillMarginal1.m, skillMarginal2.m)
-      val v = Matrix(2, 2, Array(skillMarginal1.v, 0, 0, skillMarginal2.v))
+      val m = DenseVector(skillMarginal1.m, skillMarginal2.m)
+      val v = new DenseMatrix(2, 2, Array(skillMarginal1.v, 0, 0, skillMarginal2.v)).t
 
-      CanonicalGaussian(m, v)
+      DenseCanonicalGaussian(m, v)
     }
 
     gameSkillsMarginals
 
   }
 
-  def getGameSkillsMarginalsWithD(): Tuple2[Seq[CanonicalGaussian], Seq[Seq[MultivariateGaussian]]] = {
+  def getGameSkillsMarginalsWithD(): Tuple2[Seq[DenseCanonicalGaussian], Seq[Seq[MultivariateGaussian]]] = {
 
     val gameSkillsMarginals = getGameSkillsMarginals()
     val gameSkillsMarginalsD = getGameSkillsMarginalsD()
@@ -83,8 +81,8 @@ case class AllSkills(players: Seq[Player], priorSkillsByPlayersMap: Map[PlayerKe
           val p1SkillMarginalD = p1SkillMarginalsD0.marginal(player1)
           val p2SkillMarginalD = p2SkillMarginalsD0.marginal(player2)
 
-          val m = Matrix(p1SkillMarginalD.m, p2SkillMarginalD.m)
-          val v = Matrix(2, 2, Array(p1SkillMarginalD.v, 0, 0, p2SkillMarginalD.v))
+          val m = DenseVector(p1SkillMarginalD.m, p2SkillMarginalD.m)
+          val v = new DenseMatrix(2, 2, Array(p1SkillMarginalD.v, 0, 0, p2SkillMarginalD.v)).t
 
           MultivariateGaussian(m, v)
       }

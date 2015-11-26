@@ -5,7 +5,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import dk.bayes.infer.gp.cov.CovSEiso
 import scala.math._
-import dk.bayes.math.linear.Matrix
+import breeze.linalg.DenseMatrix
 
 case class OpponentSeIsoCovFunc(params: Seq[Double]) extends CovFunc {
 
@@ -27,8 +27,8 @@ case class OpponentSeIsoCovFunc(params: Seq[Double]) extends CovFunc {
     val (player1Vec, player2Vec) = if (player1.opponentName.equals(player2.opponentName)) (Array(0d), Array(0d)) else (Array(0d, 1), Array(1d, 0))
 
     val covD = paramIndex match {
-      case 0 => opponentCovFunc.df_dSf(Matrix(player1Vec), Matrix(player2Vec))
-      case 1 => opponentCovFunc.df_dEll(Matrix(player1Vec), Matrix(player2Vec))
+      case 0 => opponentCovFunc.df_dSf(player1Vec, player2Vec)
+      case 1 => opponentCovFunc.df_dEll(player1Vec, player2Vec)
     }
 
     covD

@@ -1,19 +1,22 @@
 package dk.tennis.compare.rating.multiskill.model.pointcormodel
 
 import dk.bayes.math.gaussian.Gaussian
-import dk.bayes.math.gaussian.CanonicalGaussian
 import dk.bayes.math.linear._
 import dk.bayes.math.gaussian.MultivariateGaussian
 import scala.math._
 import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDiff
+import dk.bayes.math.gaussian.canonical.DenseCanonicalGaussian
+import breeze.linalg.DenseMatrix
+import breeze.linalg.Matrix
+import breeze.linalg.DenseVector
 
 case class GenericPointCorModel(perfVarianceOnServe: Double, perfVarianceOnReturn: Double) extends PointCorModel {
 
-  def skillMarginals(directSkills: CanonicalGaussian, p1Wins: Boolean): CanonicalGaussian = {
+  def skillMarginals(directSkills: DenseCanonicalGaussian, p1Wins: Boolean): DenseCanonicalGaussian = {
 
     //factors
-    val perf_factor = CanonicalGaussian(a = Matrix(2, 2, Array(1d, 0, 0, 1)), b = Matrix(0, 0), v = Matrix(2, 2, Array(perfVarianceOnServe, 0, 0, perfVarianceOnReturn)))
-    val perf_diff_factor = CanonicalGaussian(Matrix(1d, -1d).t, 0, 1e-12)
+    val perf_factor = DenseCanonicalGaussian(a = new DenseMatrix(2, 2, Array(1d, 0, 0, 1)).t, b = DenseVector(0.0, 0.0), v = new DenseMatrix(2, 2, Array(perfVarianceOnServe, 0, 0, perfVarianceOnReturn)).t)
+    val perf_diff_factor = DenseCanonicalGaussian(DenseMatrix(1d, -1d).t, 0, 1e-12)
 
     //message passing
     val perf_factor_down = (directSkills.extend(4, 0) * perf_factor).marginal(2, 3)
@@ -22,7 +25,7 @@ case class GenericPointCorModel(perfVarianceOnServe: Double, perfVarianceOnRetur
 
     val outcome_factor_up = (diff_factor_down.truncate(0, p1Wins)) / diff_factor_down
 
-    val diff_factor_up = (perf_diff_factor * CanonicalGaussian(outcome_factor_up.m, outcome_factor_up.v).extend(3, 2)).marginalise(2)
+    val diff_factor_up = (perf_diff_factor * DenseCanonicalGaussian(outcome_factor_up.m, outcome_factor_up.v).extend(3, 2)).marginalise(2)
 
     val perf_factor_up = (perf_factor * diff_factor_up.extend(4, 2)).marginalise(3).marginalise(2)
 
@@ -30,10 +33,10 @@ case class GenericPointCorModel(perfVarianceOnServe: Double, perfVarianceOnRetur
     skillsMarginal
   }
 
-  def pointProb(directSkills: CanonicalGaussian): Double = {
+  def pointProb(directSkills: DenseCanonicalGaussian): Double = {
 
-    val a = Matrix(1d, -1d).t
-    val v = Matrix(2, 2, Array(perfVarianceOnServe, 0, 0, perfVarianceOnReturn))
+    val a = DenseMatrix(1d, -1d).t
+    val v = new DenseMatrix(2, 2, Array(perfVarianceOnServe, 0, 0, perfVarianceOnReturn)).t
 
     val diff_factor_down = MultivariateGaussian((a * directSkills.mean), (a * (directSkills.variance + v) * a.t)).toGaussian
 

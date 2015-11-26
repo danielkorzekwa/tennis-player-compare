@@ -5,7 +5,6 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import scala.math._
 import dk.bayes.infer.gp.cov.CovSEiso
-import dk.bayes.math.linear.Matrix
 case class NumOfSetsCovFunc(params: Seq[Double]) extends CovFunc {
 
   private val Seq(logSf, logEll3Sets, logEll5Sets) = params
@@ -37,8 +36,8 @@ case class NumOfSetsCovFunc(params: Seq[Double]) extends CovFunc {
 
     val covD = paramIndex match {
       case 0 => 2 * exp(2 * logSf) * cov3Sets.cov(p1NumOfSets(0), p2NumOfSets(0)) * cov5Sets.cov(p1NumOfSets(1), p2NumOfSets(1))
-      case 1 => exp(2 * logSf) * cov3Sets.df_dEll(Matrix(p1NumOfSets(0)), Matrix(p2NumOfSets(0))) * cov5Sets.cov(Matrix(p1NumOfSets(1)), Matrix(p2NumOfSets(1)))
-      case 2 => exp(2 * logSf) * cov3Sets.cov(Matrix(p1NumOfSets(0)), Matrix(p2NumOfSets(0))) * cov5Sets.df_dEll(Matrix(p1NumOfSets(1)), Matrix(p2NumOfSets(1)))
+      case 1 => exp(2 * logSf) * cov3Sets.df_dEll(p1NumOfSets(0), p2NumOfSets(0)) * cov5Sets.cov(p1NumOfSets(1), p2NumOfSets(1))
+      case 2 => exp(2 * logSf) * cov3Sets.cov(p1NumOfSets(0), p2NumOfSets(0)) * cov5Sets.df_dEll(p1NumOfSets(1), p2NumOfSets(1))
 
     }
     covD

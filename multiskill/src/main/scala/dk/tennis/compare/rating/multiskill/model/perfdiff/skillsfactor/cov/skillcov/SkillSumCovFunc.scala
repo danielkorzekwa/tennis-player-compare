@@ -5,7 +5,6 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.infer.gp.cov.CovSEiso
 import scala.math._
-import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponentseiso.OpponentSeIsoCovFunc
 import dk.bayes.infer.gp.cov.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.surface.SurfaceCovFunc

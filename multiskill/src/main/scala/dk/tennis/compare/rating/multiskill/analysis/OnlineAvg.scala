@@ -1,6 +1,6 @@
 package dk.tennis.compare.rating.multiskill.analysis
 
-case class OnlineAvg {
+case class OnlineAvg() {
 
   var total = 0d
   var count = 0

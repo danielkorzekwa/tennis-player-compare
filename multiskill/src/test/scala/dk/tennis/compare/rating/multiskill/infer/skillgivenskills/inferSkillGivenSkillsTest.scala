@@ -4,14 +4,13 @@ import org.junit._
 import Assert._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import java.util.Date
-import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.bayes.math.linear.Matrix
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Surface
 import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
+import breeze.linalg.DenseVector
 
 class inferSkillGivenSkillsTest {
 
@@ -25,7 +24,7 @@ class inferSkillGivenSkillsTest {
     Player("p1", "p2", onServe = true, timestamp = new Date(30 * day),Surface.HARD,NumOfSets.THREE_SETS),
     Player("p1", "p3", onServe = true, timestamp = new Date(5 * day),Surface.HARD,NumOfSets.THREE_SETS))
 
-  val skillsMean = Matrix(0.2, 0.8, -0.1)
+  val skillsMean = DenseVector(0.2, 0.8, -0.1)
   val skillsVar = skillCovFunc.covarianceMatrix(players)
 
   val skillsGaussian = MultivariateGaussian(skillsMean, skillsVar)
@@ -68,7 +67,7 @@ class inferSkillGivenSkillsTest {
   @Test def perf_test {
 
     val allPlayers = (1 to 100).flatMap(i => players).toArray
-    val skillsMean = Matrix.zeros(allPlayers.size, 1)
+    val skillsMean = DenseVector.zeros[Double](allPlayers.size)
     val skillsVar = skillCovFunc.covarianceMatrix(allPlayers)
     val skillsGaussian = MultivariateGaussian(skillsMean, skillsVar)
     val playerSkills = PlayerSkills(skillsGaussian, allPlayers)

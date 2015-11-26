@@ -1,13 +1,14 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.factorops
 
+import scala.util.Random
+
+import breeze.linalg.DenseVector
+import dk.bayes.math.gaussian.MultivariateGaussian
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerKey
-import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
-import dk.bayes.math.linear.Matrix
-import dk.bayes.math.gaussian.MultivariateGaussian
+import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkillsFactor
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
-import scala.util.Random
 
 object sampleGameSkills {
 
@@ -25,7 +26,7 @@ object sampleGameSkills {
 
     val sampledSkillsByPlayerMap: Map[PlayerKey, PlayerSkills] = priorSkillsByPlayersMap.toMap.map {
       case (playerKey, factor) =>
-        val sampledSkillsMean = Matrix(factor.priorPlayerSkills.skillsGaussian.draw(rand.nextInt))
+        val sampledSkillsMean = DenseVector(factor.priorPlayerSkills.skillsGaussian.draw(rand.nextInt))
 
         val newPlayerSkillFactor = factor.priorPlayerSkills.copy(skillsGaussian = MultivariateGaussian(sampledSkillsMean, factor.priorPlayerSkills.skillsGaussian.v))
 

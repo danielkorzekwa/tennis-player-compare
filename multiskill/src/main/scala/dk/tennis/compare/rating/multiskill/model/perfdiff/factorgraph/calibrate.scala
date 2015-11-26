@@ -1,14 +1,18 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph
-import com.typesafe.scalalogging.slf4j.Logging
-import scala.annotation.tailrec
-import dk.bayes.math.linear.Matrix
 
-object calibrate extends Logging {
+import scala.annotation.tailrec
+
+import com.typesafe.scalalogging.slf4j.LazyLogging
+
+import breeze.linalg.DenseVector
+import dk.bayes.math.linear.isIdentical
+
+object calibrate extends LazyLogging {
 
   def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 10) {
 
     @tailrec
-    def calibrate(playerSkillsMarginal: Matrix, iterNum: Int) {
+    def calibrate(playerSkillsMarginal: DenseVector[Double], iterNum: Int) {
       logger.debug("Calibrating factor graph:" + iterNum)
       if (iterNum > maxIter) logger.warn(s"Skills not converged in less than ${maxIter} iterations")
 
@@ -23,7 +27,7 @@ object calibrate extends Logging {
 
   }
 
-  def equals(mean1: Matrix, mean2: Matrix, threshold: Double): Boolean = {
-    mean1.matrix.isIdentical(mean2.matrix, threshold)
+  def equals(mean1: DenseVector[Double], mean2: DenseVector[Double], tol: Double): Boolean = {
+   isIdentical(mean1,mean2,tol)
   }
 }

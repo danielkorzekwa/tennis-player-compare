@@ -2,7 +2,6 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppo
 
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.bayes.infer.gp.cov.CovSEiso
-import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score

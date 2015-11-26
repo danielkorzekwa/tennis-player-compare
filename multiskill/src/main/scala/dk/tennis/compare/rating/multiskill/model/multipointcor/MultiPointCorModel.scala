@@ -1,6 +1,6 @@
 package dk.tennis.compare.rating.multiskill.model.multipointcor
 
-import dk.bayes.math.gaussian.CanonicalGaussian
+import dk.bayes.math.gaussian.canonical.DenseCanonicalGaussian
 
 trait MultiPointCorModel {
 
@@ -12,5 +12,5 @@ trait MultiPointCorModel {
    * @param allPoints
    * @return Posterior for skills for player 1 and 2
    */
-  def skillMarginals(directSkills: CanonicalGaussian, pointsWon: Int, allPoints: Int, maxIter: Int = 100, threshold: Double): CanonicalGaussian
+  def skillMarginals(directSkills: DenseCanonicalGaussian, pointsWon: Int, allPoints: Int, maxIter: Int = 100, threshold: Double): DenseCanonicalGaussian
 }

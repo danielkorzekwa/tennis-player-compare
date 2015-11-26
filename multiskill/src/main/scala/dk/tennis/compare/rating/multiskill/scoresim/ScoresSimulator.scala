@@ -16,7 +16,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppon
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillcov.SkillCovFunc
 import dk.tennis.compare.rating.multiskill.infer.skillmodelparams.SkillsModelParams
 
-case class ScoresSimulator {
+case class ScoresSimulator() {
 
   def simulate(scores: Array[Score], opponentMap: Map[String, OpponentType], randSeed: Int,skillsModelParams:SkillsModelParams,logPerfStdDev:Double): Tuple2[Array[SimScore], Double] = {
 

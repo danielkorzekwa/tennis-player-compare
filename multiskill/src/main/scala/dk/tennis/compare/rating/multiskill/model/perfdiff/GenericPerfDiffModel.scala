@@ -1,21 +1,24 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff
 
-import scala.math._
-import com.typesafe.scalalogging.slf4j.Logging
-import dk.bayes.math.gaussian.CanonicalGaussian
-import dk.bayes.math.gaussian.Gaussian
+import com.typesafe.scalalogging.slf4j.LazyLogging
+
+import breeze.linalg._
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.numerics._
 import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.bayes.math.linear.Matrix
+import dk.bayes.math.gaussian.canonical.DenseCanonicalGaussian
+import dk.bayes.math.linear.invchol
+import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills.inferPerfDiffsGivenSkills
+import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.calibrate
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
-import dk.tennis.compare.rating.multiskill.model.perfdiff.factorgraph.SkillsFactorGraph
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
-import dk.tennis.compare.rating.multiskill.infer.perfdiffgivenskills.inferPerfDiffsGivenSkills
 
 case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFunc, logPerfStdDev: Double, scores: Array[Score],
-  threshold: Double = 1e-3) extends PerfDiffModel with Logging {
+                                threshold: Double = 1e-3) extends PerfDiffModel with LazyLogging {
 
   logger.debug("Creating factor graph")
   val skillsFactorGraph = SkillsFactorGraph(meanFunc, playerCovFunc, scores, logPerfStdDev)
@@ -40,7 +43,7 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
     skillsFactorGraph.allSkills.getPosteriorSkillsForPlayer(playerName, skillOnServe)
   }
 
-  def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix] = {
+  def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], DenseMatrix[Double], DenseMatrix[Double]] = {
 
     val (gameSkillsMarginals, gameSkillsMarginalsD) = skillsFactorGraph.allSkills.getGameSkillsMarginalsWithD()
     val skillsToGameMsgs = skillsFactorGraph.calcSkillsToGameMsgs(gameSkillsMarginals)
@@ -51,26 +54,26 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
     (perfDiffs, perfDiffsMeanD, perfDiffsVarD)
   }
 
-  private def getPerfDiffToOutcomeMsgsD(skillsToGameMsgs: Seq[CanonicalGaussian], gameSkillsMarginals: Seq[CanonicalGaussian],
-    gamesSkillsMarginalsD: Seq[Seq[MultivariateGaussian]]): Tuple2[Matrix, Matrix] = {
+  private def getPerfDiffToOutcomeMsgsD(skillsToGameMsgs: Seq[DenseCanonicalGaussian], gameSkillsMarginals: Seq[DenseCanonicalGaussian],
+                                        gamesSkillsMarginalsD: Seq[Seq[MultivariateGaussian]]): Tuple2[DenseMatrix[Double], DenseMatrix[Double]] = {
 
     val perfDiffToOutcomeMsgsD = (0 until scores.size).map { index =>
 
       val skillsToGameMsg = skillsToGameMsgs(index)
       val gameSkillsMarginal = gameSkillsMarginals(index)
       def perfDiffD(gameSkillsMarginalD: MultivariateGaussian): Tuple2[Double, Double] = {
-        val skillsToGameMsgVarD = skillsToGameMsg.variance * gameSkillsMarginal.variance.inv * gameSkillsMarginalD.v * gameSkillsMarginal.variance.inv * skillsToGameMsg.variance
+        val skillsToGameMsgVarD = skillsToGameMsg.variance * invchol(cholesky(gameSkillsMarginal.variance).t) * gameSkillsMarginalD.v * invchol(cholesky(gameSkillsMarginal.variance).t) * skillsToGameMsg.variance
 
-        val h_d = -1 * (gameSkillsMarginal.variance.inv * gameSkillsMarginalD.v * gameSkillsMarginal.variance.inv * gameSkillsMarginal.m) + gameSkillsMarginal.variance.inv * gameSkillsMarginalD.m
+        val h_d = -1d * (invchol(cholesky(gameSkillsMarginal.variance).t) * gameSkillsMarginalD.v * invchol(cholesky(gameSkillsMarginal.variance).t) * gameSkillsMarginal.m) + invchol(cholesky(gameSkillsMarginal.variance).t) * gameSkillsMarginalD.m
         val skillsToGameMsgMeanD = skillsToGameMsgVarD * skillsToGameMsg.h + skillsToGameMsg.variance * h_d
         val skillsToGameMsgD = MultivariateGaussian(skillsToGameMsgMeanD, skillsToGameMsgVarD)
 
-        val A = Matrix(1d, -1d).t
+        val A = DenseMatrix(1d, -1d).t
 
-        val muD = (A * skillsToGameMsgD.m).at(0)
-        val varD = (A * skillsToGameMsgD.v * A.t).at(0)
+        val muD = (A * skillsToGameMsgD.m)
+        val varD = (A * skillsToGameMsgD.v * A.t)
 
-        (muD, varD)
+        (muD(0), varD(0, 0))
       }
 
       val gameSkillsMarginalsDs = gamesSkillsMarginalsD(index)
@@ -80,21 +83,22 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
       val perfDiffDMean: Array[Double] = perfDiffDs.map(d => d._1).toArray
       val perfDiffDVar: Array[Double] = perfDiffDs.map(d => d._2).toArray
 
-      val A = Matrix(1d, -1d).t
+      val A = DenseMatrix(1d, -1d).t
       val muD_perfVar = 0d
-      val varD_perfVar = (A * Matrix(2, 2, Array(2 * exp(2 * logPerfStdDev), 0, 0, 2 * exp(2 * logPerfStdDev))) * A.t).at(0)
-      (perfDiffDMean :+ muD_perfVar, perfDiffDVar :+ varD_perfVar)
+
+      val varD_perfVar = (A * new DenseMatrix(2, 2, Array(2 * exp(2 * logPerfStdDev), 0, 0, 2 * exp(2 * logPerfStdDev))).t * A.t)
+      (perfDiffDMean :+ muD_perfVar, perfDiffDVar :+ varD_perfVar(0, 0))
 
     }.toArray
 
     val hypSize = perfDiffToOutcomeMsgsD.head._1.size
-    val perfDiffToOutcomeMsgsMeanD = Matrix(scores.size, hypSize, perfDiffToOutcomeMsgsD.flatMap(_._1))
-    val perfDiffToOutcomeMsgsVarD = Matrix(scores.size, hypSize, perfDiffToOutcomeMsgsD.flatMap(_._2))
+    val perfDiffToOutcomeMsgsMeanD = new DenseMatrix(hypSize, scores.size, perfDiffToOutcomeMsgsD.flatMap(_._1)).t
+    val perfDiffToOutcomeMsgsVarD = new DenseMatrix(hypSize, scores.size, perfDiffToOutcomeMsgsD.flatMap(_._2)).t
     (perfDiffToOutcomeMsgsMeanD, perfDiffToOutcomeMsgsVarD)
 
   }
 
-  private implicit def toMvnGaussian(canon: CanonicalGaussian): MultivariateGaussian = {
+  private implicit def toMvnGaussian(canon: DenseCanonicalGaussian): MultivariateGaussian = {
     MultivariateGaussian(canon.mean, canon.variance)
   }
 

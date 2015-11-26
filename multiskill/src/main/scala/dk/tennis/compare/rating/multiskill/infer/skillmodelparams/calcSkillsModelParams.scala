@@ -3,12 +3,12 @@ package dk.tennis.compare.rating.multiskill.infer.skillmodelparams
 import breeze.optimize.LBFGS
 import breeze.linalg.DenseVector
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import dk.tennis.compare.rating.multiskill.infer.skillgivenplayer.InferSkillGivenPlayer
 
-object calcSkillsModelParams extends Logging {
+object calcSkillsModelParams extends LazyLogging {
 
   def apply(priorSkillParams: SkillsModelParams, scores: Array[Score], gradientMask: Array[Double],
     progressListener: (SkillDiffFuncState) => Unit = (state) => {}, iterNum: Int, logPerfStdDev: Double): SkillsModelParams = {

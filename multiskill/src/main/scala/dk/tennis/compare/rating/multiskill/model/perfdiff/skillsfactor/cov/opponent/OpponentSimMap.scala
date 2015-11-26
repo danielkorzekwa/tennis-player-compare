@@ -3,7 +3,6 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppo
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.Map
 import dk.bayes.infer.gp.cov.CovSEiso
-import dk.bayes.math.linear.Matrix
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
 
@@ -31,8 +30,8 @@ case class OpponentSimMap(id: String, getPlayerSkills: String => Array[Gaussian]
 //      val skillsGivenOpponent2 = skills2.map(v => 0d)
 
       val covVal = opponentCovFunc.cov(skillsGivenOpponent1, skillsGivenOpponent2)
-      val df_dSf = opponentCovFunc.df_dSf(Matrix(skillsGivenOpponent1), Matrix(skillsGivenOpponent2))
-      val df_dEll = opponentCovFunc.df_dEll(Matrix(skillsGivenOpponent1), Matrix(skillsGivenOpponent2))
+      val df_dSf = opponentCovFunc.df_dSf(skillsGivenOpponent1, skillsGivenOpponent2)
+      val df_dEll = opponentCovFunc.df_dEll(skillsGivenOpponent1, skillsGivenOpponent2)
 
       if (!id.equals("onServe")) OpponentCovValue(covVal, df_dSf, df_dEll)
       else OpponentCovValue(0, 0, 0)

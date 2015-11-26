@@ -3,9 +3,9 @@ package dk.tennis.compare.rating.multiskill.model.multipoint
 import scala.annotation.tailrec
 import scala.math.abs
 import dk.bayes.math.gaussian.Gaussian
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 
-case class GenericMultiPointModel(p1PerfVariance: Double, p2PerfVariance: Double) extends MultiPointModel with Logging {
+case class GenericMultiPointModel(p1PerfVariance: Double, p2PerfVariance: Double) extends MultiPointModel with LazyLogging {
 
   def skillMarginals(player1Skill: Gaussian, player2Skill: Gaussian, pointsWon: Int, allPoints: Int, maxIter: Int = 100, threshold: Double = 1e-5): Tuple3[Gaussian, Gaussian, PointsFactorGraph] = {
 

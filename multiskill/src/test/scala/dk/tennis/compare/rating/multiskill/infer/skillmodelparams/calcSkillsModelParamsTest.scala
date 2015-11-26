@@ -4,7 +4,7 @@ import scala.Array.canBuildFrom
 import scala.math.log
 import scala.util.Random
 import org.junit.Test
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import dk.tennis.compare.rating.multiskill.matchloader.generateMatches
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Score
@@ -29,7 +29,7 @@ import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDi
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillcov.SkillSumCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.NumOfSets
 
-class calcSkillsModelParamsTest extends Logging {
+class calcSkillsModelParamsTest extends LazyLogging {
 
   val scores = getATPScores()
   // val (simScores, scoresSimulator, opponentMap) = getATPSimulatedScores(randSeed = 576576)

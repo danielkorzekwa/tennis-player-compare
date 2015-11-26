@@ -1,8 +1,9 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff
 
 import dk.bayes.math.gaussian.Gaussian
-import dk.bayes.math.linear.Matrix
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.PlayerSkills
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 
 trait PerfDiffModel {
 
@@ -19,7 +20,7 @@ trait PerfDiffModel {
    * - Partial derivatives for the variance of the game performance difference with respect to some hyper parameters
    * )
    */
-  def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], Matrix, Matrix]
+  def inferPerfDiffsWithD(): Tuple3[Array[PerfDiff], DenseMatrix[Double], DenseMatrix[Double]]
 
   def calcPosteriorSkillsForPlayer(playerName: String, skillOnServe: Boolean): Option[PlayerSkills]
   
