@@ -2,5 +2,7 @@
 /.cache
 /.classpath
 /.project
-/.settings
 /bin/
+/.settings/
+/.cache-main
+/.cache-tests
