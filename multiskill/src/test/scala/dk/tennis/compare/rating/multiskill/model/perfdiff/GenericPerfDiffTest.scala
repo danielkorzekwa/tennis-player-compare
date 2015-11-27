@@ -23,7 +23,7 @@ class GenericPerfDiffTest extends LazyLogging {
   val logPerfStdDev = initialParams.data.last
 
   val matchesFile = "./src/test/resources/atp_historical_data/match_data_2006_2013.csv"
-  val matchResults = MatchesLoader.loadMatches(matchesFile, 2008, 2011)
+  val matchResults = MatchesLoader.loadMatches(matchesFile, 2011, 2011)
 
   val realScores: Array[Score] = Score.toScores(matchResults)
 

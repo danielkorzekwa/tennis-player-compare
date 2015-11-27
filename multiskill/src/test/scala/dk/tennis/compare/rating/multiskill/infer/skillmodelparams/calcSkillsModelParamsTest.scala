@@ -62,16 +62,22 @@ class calcSkillsModelParamsTest extends LazyLogging {
 //    val priorModelParams = SkillsModelParams(playerSkillMeanPrior, priorSkillCovFunc)
 //    val gradientMask = Array(1d, 1, 1, 1, 1, 1, 1, 1, 0)
 
-        val skillCovParams = Array(
-          log(1), //main
-          log(1), log(10), //opponent 
-          log(1), log(10), log(10), log(10), //surface
-          log(1), log(30), log(1), log(365) //time
-          )
-        val priorSkillCovFunc = SkillSumCovFunc(skillCovParams)
-        val priorModelParams = SkillsModelParams(playerSkillMeanPrior, priorSkillCovFunc)
-        val gradientMask = Array(1d, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+//        val skillCovParams = Array(
+//          log(1), //main
+//          log(1), log(10), //opponent 
+//          log(1), log(10), log(10), log(10), //surface
+//          log(1), log(30), log(1), log(365) //time
+//          )
+//        val priorSkillCovFunc = SkillSumCovFunc(skillCovParams)
+//        val priorModelParams = SkillsModelParams(playerSkillMeanPrior, priorSkillCovFunc)
+//        val gradientMask = Array(1d, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
+        val skillCovParams = Array(log(1), log(30), log(1), log(365) )
+          
+        val priorSkillCovFunc = SkillOverTimeCovFunc(skillCovParams)
+        val priorModelParams = SkillsModelParams(playerSkillMeanPrior, priorSkillCovFunc)
+        val gradientMask = Array(1d, 1, 1, 1, 0)
+    
     val skillsModelParams = calcSkillsModelParams(priorModelParams, scores.toArray, gradientMask, progressListener,
       iterNum = 10, logPerfStdDev)
 
