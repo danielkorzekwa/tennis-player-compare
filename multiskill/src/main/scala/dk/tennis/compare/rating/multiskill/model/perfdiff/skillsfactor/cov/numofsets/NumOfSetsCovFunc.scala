@@ -4,7 +4,7 @@ import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFu
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import scala.math._
-import dk.bayes.infer.gp.cov.CovSEiso
+import dk.bayes.math.covfunc.CovSEiso
 case class NumOfSetsCovFunc(params: Seq[Double]) extends CovFunc {
 
   private val Seq(logSf, logEll3Sets, logEll5Sets) = params

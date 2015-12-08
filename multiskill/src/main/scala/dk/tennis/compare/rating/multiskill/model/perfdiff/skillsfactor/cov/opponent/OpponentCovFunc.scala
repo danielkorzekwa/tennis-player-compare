@@ -1,6 +1,6 @@
 package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent
 
-import dk.bayes.infer.gp.cov.CovSEiso
+import dk.bayes.math.covfunc.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import scala.collection.mutable.Set
 import scala.collection.mutable.HashSet

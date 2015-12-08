@@ -2,7 +2,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppo
 
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.Map
-import dk.bayes.infer.gp.cov.CovSEiso
+import dk.bayes.math.covfunc.CovSEiso
 import dk.bayes.math.gaussian.Gaussian
 import scala.math._
 

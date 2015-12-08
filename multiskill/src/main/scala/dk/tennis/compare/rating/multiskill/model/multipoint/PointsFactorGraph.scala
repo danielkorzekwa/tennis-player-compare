@@ -1,11 +1,11 @@
 package dk.tennis.compare.rating.multiskill.model.multipoint
 
 import dk.bayes.math.gaussian.Gaussian
-import dk.bayes.model.factor.BivariateGaussianFactor
+import dk.bayes.factorgraph.factor.BivariateGaussianFactor
 import dk.bayes.math.gaussian.MultivariateGaussian
-import dk.bayes.model.factor.LinearGaussianFactor
-import dk.bayes.model.factor.GaussianFactor
-import dk.bayes.model.factor.BivariateGaussianFactor
+import dk.bayes.factorgraph.factor.LinearGaussianFactor
+import dk.bayes.factorgraph.factor.GaussianFactor
+import dk.bayes.factorgraph.factor.BivariateGaussianFactor
 
 case class PointsFactorGraph(p1SkillFactor: Gaussian, p2SkillFactor: Gaussian, p1PerfVariance: Double, p2PerfVariance: Double, pointsWon: Int, allPoints: Int) {
 

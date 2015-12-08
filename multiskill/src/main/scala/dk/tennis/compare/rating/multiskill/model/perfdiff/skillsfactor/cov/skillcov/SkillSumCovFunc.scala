@@ -3,10 +3,10 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skil
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
-import dk.bayes.infer.gp.cov.CovSEiso
+import dk.bayes.math.covfunc.CovSEiso
 import scala.math._
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponentseiso.OpponentSeIsoCovFunc
-import dk.bayes.infer.gp.cov.CovSEiso
+import dk.bayes.math.covfunc.CovSEiso
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.surface.SurfaceCovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.skillovertime.SkillOverTimeCovFunc
 import java.util.concurrent.atomic.AtomicInteger

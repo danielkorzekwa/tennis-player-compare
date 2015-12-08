@@ -3,7 +3,7 @@ package dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.oppo
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.CovFunc
 import dk.tennis.compare.rating.multiskill.model.perfdiff.Player
 import dk.tennis.compare.rating.multiskill.model.perfdiff.skillsfactor.cov.opponent.PlayerSkill
-import dk.bayes.infer.gp.cov.CovSEiso
+import dk.bayes.math.covfunc.CovSEiso
 import scala.math._
 import breeze.linalg.DenseMatrix
 
