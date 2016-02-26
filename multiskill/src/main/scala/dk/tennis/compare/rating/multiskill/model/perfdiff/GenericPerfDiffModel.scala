@@ -23,10 +23,11 @@ case class GenericPerfDiffModel(meanFunc: Player => Double, playerCovFunc: CovFu
   logger.debug("Creating factor graph")
   val skillsFactorGraph = SkillsFactorGraph(meanFunc, playerCovFunc, scores, logPerfStdDev)
 
-  def calibrateModel() {
-    logger.debug("Calibrating factor graph")
+  def calibrateModel() = {
+    val now = System.currentTimeMillis()
+    logger.info("Calibrating factor graph")
     calibrate(skillsFactorGraph, threshold)
-    logger.debug("Calibrating factor graph - completed")
+    logger.info("Calibrating factor graph - completed: " + (System.currentTimeMillis()-now))
   }
 
   def inferPerfDiffs(): Array[PerfDiff] = {

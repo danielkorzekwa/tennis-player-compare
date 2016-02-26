@@ -9,12 +9,12 @@ import dk.bayes.math.linear.isIdentical
 
 object calibrate extends LazyLogging {
 
-  def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 10) {
+  def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 100) {
 
     @tailrec
     def calibrate(playerSkillsMarginal: DenseVector[Double], iterNum: Int) {
-      logger.debug("Calibrating factor graph:" + iterNum)
-      if (iterNum > maxIter) logger.warn(s"Skills not converged in less than ${maxIter} iterations")
+      logger.info("Calibrating factor graph:" + iterNum)
+      if (iterNum >= maxIter) logger.warn(s"Skills not converged in less than ${maxIter} iterations")
 
       factorGraph.sendMsgs()
 

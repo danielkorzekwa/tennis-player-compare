@@ -22,7 +22,7 @@ lazy val root = (project in file(".")).
     libraryDependencies ++= Seq(
       "com.github.danielkorzekwa" %% "tennis-probability-calculator" % "0.1-SNAPSHOT", 
 	  "com.github.danielkorzekwa" %% "atpworldtour-api" % "0.2-SNAPSHOT",
-	  "com.github.danielkorzekwa" %% "bayes-scala" % "0.6-SNAPSHOT", 
+	  "com.github.danielkorzekwa" %% "bayes-scala" % "0.7-SNAPSHOT", 
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
 	  
       // test scoped
