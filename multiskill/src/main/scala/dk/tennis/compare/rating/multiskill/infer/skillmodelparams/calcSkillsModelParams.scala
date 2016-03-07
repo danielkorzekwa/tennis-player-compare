@@ -18,7 +18,8 @@ object calcSkillsModelParams extends LazyLogging {
 
     val optimizer = new LBFGS[DenseVector[Double]](maxIter = iterNum, m = 6, tolerance = 1.0E-9)
 
-    val optIters = optimizer.iterations(diffFunction, DenseVector(priorSkillParams.skillCovFunc.getParams().toArray :+ logPerfStdDev)).toList
+    val optIters = optimizer.iterations(diffFunction, DenseVector(priorSkillParams.skillCovFunc.getParams().toArray :+ logPerfStdDev)).map
+     { state => println("iter=%d, loglik=%.4f, params=%s".format(state.iter, state.value, state.x)); state }.toList
     val newParams = optIters.last.x
 
     val newSkillCovFunc = priorSkillParams.skillCovFunc.withParams(newParams.data.dropRight(1))

@@ -17,8 +17,11 @@ import dk.tennis.compare.rating.multiskill.infer.outcome.InferOutcomeGivenPerfDi
 
 class GenericPerfDiffTest extends LazyLogging {
 
-  val (priorSkillOnServe, priorSkillOnReturn) = (5d, 0)
-  val initialParams = DenseVector(-1.0394676060535801, 3.8382339487840085, 0.0032389722419957287, 8.282433925904247, 2.3)
+   val (priorSkillOnServe, priorSkillOnReturn) = (4.61d, 0)
+  val initialParams = DenseVector(log(1), log(30), log(1), log(365), 2.3)
+  
+//  val (priorSkillOnServe, priorSkillOnReturn) = (4.59d, 0)
+//  val initialParams = DenseVector(-0.5014044059042678, 2.6478899229820803, 0.10034927453586179, 6.40731965340222, 2.3)
   val covarianceParams = initialParams.data.dropRight(1)
   val logPerfStdDev = initialParams.data.last
 

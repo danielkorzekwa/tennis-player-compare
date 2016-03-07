@@ -9,7 +9,7 @@ import dk.bayes.math.linear.isIdentical
 
 object calibrate extends LazyLogging {
 
-  def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 100) {
+  def apply(factorGraph: SkillsFactorGraph, threshold: Double = 1e-4, maxIter: Int = 10) {
 
     @tailrec
     def calibrate(playerSkillsMarginal: DenseVector[Double], iterNum: Int) {
